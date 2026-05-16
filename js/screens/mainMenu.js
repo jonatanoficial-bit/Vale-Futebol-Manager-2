@@ -1,0 +1,2 @@
+import { screenWrap, brand } from './common.js';
+export function mainMenu(){ return screenWrap('mainMenu', `<section class="cover-layout">${brand('cover-logo')}<div class="menu-actions"><button class="main-btn" data-route="newGame">⚽ Novo jogo</button><button class="secondary-btn" data-route="lobby">📁 Continuar</button><button class="secondary-btn" data-route="settings">⚙️ Configuração</button></div><p class="alert">Build inicial com sistema anti-quebra, placeholders e rotas seguras. As próximas builds ampliarão cada módulo.</p></section>`, false); }

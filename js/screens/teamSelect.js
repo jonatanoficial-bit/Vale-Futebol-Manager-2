@@ -1,0 +1,5 @@
+import { screenWrap, topbar } from './common.js';
+import { teams } from '../data/gameData.js';
+import { safeImg, clubLogo, country } from '../systems/assets.js';
+import { money } from '../utils/dom.js';
+export function teamSelect(){ return screenWrap('teamSelect', `${topbar('Escolha seu time','Filtros por país e liga','newGame')}<section class="stack"><div class="panel grid grid-2"><label class="field"><span>País</span><select class="select"><option>Brasil</option><option>Todos</option></select></label><label class="field"><span>Liga</span><select class="select"><option>Brasileirão Série A</option><option>Todas</option></select></label></div><div class="grid grid-2 desktop-4">${teams.map((t,i)=>`<button class="club-card ${i===0?'selected':''}" data-route="confirmCareer">${safeImg(clubLogo(t.id),'club',t.name,'club-logo')}<strong>${t.name}</strong><div class="small">${safeImg(country(t.country),'country',t.countryName,'','')} ${t.league}</div><div class="row space"><span>Geral ${t.level}</span><span>${money(t.budget)}</span></div></button>`).join('')}</div><button class="main-btn" data-route="confirmCareer">Continuar</button></section>`, true); }
