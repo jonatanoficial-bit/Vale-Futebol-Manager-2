@@ -1,12 +1,22 @@
-# Changelog
+# Changelog - Vale Futebol Manager: Gold Edition
 
-## v0.2.0 - 2026-05-16 13:05 UTC
-- Evolucao da tela inicial para padrao premium AAA mobile-first.
-- Novo menu principal com Novo Jogo, Continuar e Configuracoes.
-- Continuar usa save quando existir e cai com seguranca para novo jogo quando nao existir.
-- Adicionada vitrine de competicoes e aviso do sistema de assets substituiveis.
-- Reforco no save local com compatibilidade com chave da build anterior.
-- Build info atualizado.
+## v1.6.0 - 2026-05-16 16:09 UTC
 
-## v0.1.0
-- Fundacao tecnica, pastas, placeholders, asset map e navegacao base.
+### Fase
+Integração real entre partida, calendário, classificação e save.
+
+### Incluído
+- Motor seguro para avançar partida em blocos de 5 minutos.
+- Botão Finalizar partida grava resultado no save local.
+- Resultado integrado ao histórico da carreira.
+- Lobby passa a exibir último resultado e próximo compromisso real da agenda.
+- Calendário marca jogos concluídos e exibe placar salvo.
+- Classificação recalcula pontos, jogos, gols, saldo e forma recente após resultado salvo.
+- Save migrável com chave nova v160 e suporte a saves antigos.
+- Log interno de integração anti-quebra.
+
+### Anti-quebra
+- Fallback de save corrompido preservado.
+- Rotas seguras preservadas.
+- Botões de partida não quebram quando a partida já terminou.
+- Cálculo de classificação só altera clubes existentes; se algum clube não existir na tabela, o jogo ignora com segurança.

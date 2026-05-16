@@ -1,4 +1,107 @@
-import { screenWrap, brand, clubHeader, moneyCard } from './common.js';
-import { teams, screens } from '../data/gameData.js';
-import { safeImg, clubLogo } from '../systems/assets.js';
-export function lobby(state){ const t=teams.find(x=>x.id===state.clubId)||teams[0]; const menu=[['championship','Campeonato','🏆','Agenda anual e competições'],['formation','Tática','🧩','Formação e instruções'],['sponsorship','Patrocínio','🤝','Contratos e marca'],['staff','Staff','👥','Comissão e funcionários'],['training','Treino','🔶','Evolução do elenco'],['standings','Classificação','📊','Tabelas e estatísticas'],['transfers','Transferências','🔁','Mercado e contratos'],['settings','Configuração','⚙️','Preferências e save']]; return screenWrap('lobby', `<div class="topbar"><div>${brand()}</div><div class="row"><div class="resource">💵 € ${state.money}M</div><div class="resource">🪙 ${state.coins}</div><button class="icon-btn">🔔</button></div></div><section class="lobby-hero panel"><div class="row">${safeImg(state.manager.avatar,'avatar','Manager','manager-pic')}<div><h2>${state.manager.name}</h2><p class="gold-text">Manager</p><p class="small">Temporada ${state.season} · ${state.month}</p></div></div><div style="text-align:center">${safeImg(clubLogo(t.id),'club',t.name,'club-logo')}<h1>${t.name}</h1><p class="gold-text">O maior brasileiro do mundo</p></div><div class="grid">${moneyCard('Valor do time',t.value)}<div class="card"><div class="small">Próximo jogo</div><strong>Santos x Palmeiras</strong><div class="small">Vila Belmiro · 20/07 · 19:00</div></div></div></section><section class="quick-summary"><div class="panel"><div class="small">Força do time</div><h2>${t.level} Geral</h2><div class="meter"><span style="width:${t.level}%"></span></div></div><div class="panel"><div class="small">Forma recente</div><h2>V V E D V</h2></div><div class="panel"><div class="small">Objetivo</div><h3>Terminar no G4</h3></div></section><section class="grid menu-grid">${menu.map(([r,title,icon,desc])=>`<button class="card menu-tile" data-route="${r}"><span class="tile-icon">${icon}</span><strong>${title}</strong><span class="small">${desc}</span></button>`).join('')}</section><button class="main-btn" data-route="match">⚽ Iniciar jogo</button><section class="panel"><strong>Notícias</strong><p class="small">Diretoria espera competitividade, equilíbrio financeiro e evolução do elenco.</p></section>`, true); }
+import { screenWrap, brand, moneyCard } from './common.js';
+import { teams } from '../data/gameData.js';
+import { safeImg, clubLogo, country } from '../systems/assets.js';
+import { money } from '../utils/dom.js';
+import { schedule, eventTitle } from '../data/seasonData.js';
+
+export function lobby(state){
+  const t = teams.find(x => x.id === state.clubId) || teams[0];
+  const managerCountry = state.manager.country || 'br';
+  const menu = [
+    ['championship','Campeonato','🏆','Competições, copa, continental e agenda anual','Essencial'],
+    ['calendar','Agenda','📅','Calendário completo, treinos e jogos','Temporada'],
+    ['formation','Tática','🧩','Escalação, campo, banco e desenho tático','Pré-jogo'],
+    ['instructions','Instruções','🎯','Pressão, passes, mentalidade e bolas paradas','Avançado'],
+    ['training','Treino','🔶','Plano semanal, evolução, fadiga e lesões','Elenco'],
+    ['standings','Classificação','📊','Tabela, estatísticas e disputa por objetivos','Dados'],
+    ['transfers','Transferências','🔁','Mercado, compra, venda, empréstimo e renovação','Janela'],
+    ['contracts','Contratos','📝','Salários, vencimentos, luvas e renovações','Gestão'],
+    ['staff','Staff','👥','Comissão técnica, médico, olheiro e diretor comercial','Clube'],
+    ['sponsorship','Patrocínio','🤝','Receitas comerciais, bônus e exposição de marca','Finanças'],
+    ['finances','Financeiro','💼','Orçamento, receitas, despesas e folha salarial','Diretoria'],
+    ['messages','E-mail','✉️','Diretoria, imprensa, empresário e possíveis seleções','Carreira'],
+    ['club','Clube','🛡️','Resumo institucional, estádio, torcida e estrutura','Perfil'],
+    ['settings','Configuração','⚙️','Save, qualidade, sons, acessibilidade e segurança','Sistema']
+  ];
+  const boardTrust = Number(state.boardTrust || 76);
+  const fanMood = Number(state.fanMood || 82);
+  const completedIds = new Set((state.career?.completedMatches || []).map(m=>m.id));
+  const nextEvent = schedule.find(ev => ev.type === 'match' && !completedIds.has(`${ev.date}-${slug(ev.home)}-${slug(ev.away)}`));
+  const lastResult = state.career?.lastResult;
+  const nextTitle = nextEvent ? eventTitle(nextEvent) : 'Temporada sem jogo pendente';
+  const nextInfo = nextEvent ? `${nextEvent.venue} · ${nextEvent.stage} · ${nextEvent.date.slice(8,10)}/${nextEvent.date.slice(5,7)}` : 'Calendário concluído';
+  return screenWrap('lobby', `
+    <section class="lobby-shell">
+      <div class="premium-topbar panel">
+        <div class="top-left-brand">${brand()}</div>
+        <div class="top-status">
+          <div class="resource">💵 ${money(t.budget || state.money)}</div>
+          <div class="resource">⭐ Rep. ${t.reputation || 78}</div>
+          <button class="icon-btn mail-alert" data-route="messages" aria-label="E-mail do treinador">✉<span>${state.notifications || 0}</span></button>
+        </div>
+      </div>
+
+      <section class="lobby-hero-v050 panel">
+        <div class="manager-card">
+          ${safeImg(state.manager.avatar,'avatar','Manager','manager-pic')}
+          <div>
+            <span class="tag">${state.manager.mode === 'sandbox' ? 'Sandbox livre' : 'Carreira completa'}</span>
+            <h1>${state.manager.name}</h1>
+            <p class="small">${safeImg(country(managerCountry),'country','País do manager','inline-flag')} Manager · Temporada ${state.season} · ${state.month}</p>
+          </div>
+        </div>
+        <div class="club-identity-card">
+          ${safeImg(clubLogo(t.id),'club',t.name,'club-logo xl')}
+          <div>
+            <span class="tag">${t.league}</span>
+            <h2>${t.name}</h2>
+            <p class="small">${t.stadium} · ${t.countryName} · Dificuldade: ${t.difficulty}</p>
+          </div>
+        </div>
+        <div class="next-match-card">
+          <div class="small">Próximo jogo oficial</div>
+          <strong>${nextTitle}</strong>
+          <p class="small">${nextInfo}</p>
+          ${lastResult ? `<p class="small">Último resultado: ${lastResult.homeGoals} x ${lastResult.awayGoals} · ${lastResult.competition}</p>` : ''}
+          <button class="main-btn compact" data-route="match">⚽ Iniciar jogo</button>
+        </div>
+      </section>
+
+      <section class="command-grid">
+        <article class="panel command-card wide">
+          <div class="row space"><div><span class="tag">Diretoria</span><h3>Meta principal</h3></div><strong>${boardTrust}%</strong></div>
+          <p>${t.board}</p>
+          <div class="meter"><span style="width:${boardTrust}%"></span></div>
+          <div class="small">Segurança no cargo: ${state.jobSecurity || 'Seguro'}</div>
+        </article>
+        <article class="panel command-card">
+          <div class="small">Torcida</div><h2>${fanMood}%</h2><div class="meter"><span style="width:${fanMood}%"></span></div>
+        </article>
+        <article class="panel command-card">
+          <div class="small">Força do time</div><h2>${t.level}</h2><div class="meter"><span style="width:${t.level}%"></span></div>
+        </article>
+      </section>
+
+      <section class="quick-summary v050">
+        ${moneyCard('Valor do elenco', t.value)}
+        ${moneyCard('Orçamento disponível', t.budget)}
+        <div class="card"><div class="small">Forma recente</div><strong>V V E D V</strong><p class="small">Últimos 5 jogos</p></div>
+        <div class="card"><div class="small">Competições</div><strong>${t.competitions?.length || 0}</strong><p class="small">${(t.competitions || []).slice(0,3).join(' · ')}</p></div>
+      </section>
+
+      <section class="panel inbox-preview">
+        <div class="row space"><div><span class="tag">Central do treinador</span><h3>E-mail e notícias</h3></div><button class="secondary-btn mini" data-route="messages">Abrir e-mail</button></div>
+        <div class="news-list">
+          <div class="news-item"><strong>Diretoria</strong><span>Conselho cobra evolução sem quebrar o orçamento.</span></div>
+          <div class="news-item"><strong>Imprensa</strong><span>Torcida espera vitória no clássico e melhor aproveitamento em casa.</span></div>
+          <div class="news-item"><strong>Seleção nacional</strong><span>Seu perfil será observado para futuras propostas internacionais.</span></div>
+        </div>
+      </section>
+
+      <section class="grid menu-grid command-menu">
+        ${menu.map(([r,title,icon,desc,badge])=>`<button class="card menu-tile premium-tile" data-route="${r}"><span class="tile-badge">${badge}</span><span class="tile-icon">${icon}</span><strong>${title}</strong><span class="small">${desc}</span></button>`).join('')}
+      </section>
+    </section>`, true);
+}
+
+function slug(name=''){ return String(name).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/fc|futebol clube|club de regatas|sport club/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') || 'santos'; }

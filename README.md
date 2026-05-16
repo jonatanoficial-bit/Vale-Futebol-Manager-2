@@ -25,3 +25,14 @@ Consulte `build/build-info.json`.
 - Placeholders criados.
 - Save local protegido.
 - Auditoria automatizada incluída.
+
+## Build v1.0.0 - Formação, tática e instruções avançadas
+
+Inclui tela de formação premium, mesa tática mobile-first, seleção de esquema, banco de reservas, painel de entrosamento, instruções avançadas, perfis de jogo, bolas paradas e save migrável da v0.9.0. O sistema mantém fallback visual para todos os jogadores e assets.
+
+### Build v1.6.0
+Adiciona a partida simulada premium com mesa tática 2D, eventos por minuto, estatísticas ao vivo, narração, momentum, substituições preparadas e controles de avanço/finalização.
+
+
+### Build v1.6.0
+Integração entre partida, calendário, classificação e save local. A partida agora grava resultado, atualiza histórico da carreira, exibe último resultado no lobby, marca jogo concluído no calendário e recalcula a tabela com segurança.

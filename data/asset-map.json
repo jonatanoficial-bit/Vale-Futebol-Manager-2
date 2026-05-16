@@ -58,7 +58,9 @@
     "nl": "assets/countries/nl.png",
     "be": "assets/countries/be.png",
     "tr": "assets/countries/tr.png",
-    "sa": "assets/countries/sa.png"
+    "sa": "assets/countries/sa.png",
+    "ve": "assets/countries/ve.png",
+    "bo": "assets/countries/bo.png"
   },
   "competitions": {
     "brasileirao_a": "assets/competitions/brasileirao_a.png",
@@ -78,14 +80,389 @@
       "awayKit": "assets/clubs/brazil/santos/away-kit.png",
       "stadium": "assets/stadiums/brazil/santos.jpg"
     },
-    "palmeiras": { "logo": "assets/clubs/brazil/palmeiras/logo.png", "stadium": "assets/stadiums/brazil/palmeiras.jpg" },
-    "flamengo": { "logo": "assets/clubs/brazil/flamengo/logo.png", "stadium": "assets/stadiums/brazil/flamengo.jpg" },
-    "sao-paulo": { "logo": "assets/clubs/brazil/sao-paulo/logo.png", "stadium": "assets/stadiums/brazil/sao-paulo.jpg" },
-    "corinthians": { "logo": "assets/clubs/brazil/corinthians/logo.png", "stadium": "assets/stadiums/brazil/corinthians.jpg" },
-    "gremio": { "logo": "assets/clubs/brazil/gremio/logo.png", "stadium": "assets/stadiums/brazil/gremio.jpg" },
-    "internacional": { "logo": "assets/clubs/brazil/internacional/logo.png", "stadium": "assets/stadiums/brazil/internacional.jpg" },
-    "atletico-mg": { "logo": "assets/clubs/brazil/atletico-mg/logo.png", "stadium": "assets/stadiums/brazil/atletico-mg.jpg" },
-    "cruzeiro": { "logo": "assets/clubs/brazil/cruzeiro/logo.png", "stadium": "assets/stadiums/brazil/cruzeiro.jpg" },
-    "botafogo": { "logo": "assets/clubs/brazil/botafogo/logo.png", "stadium": "assets/stadiums/brazil/botafogo.jpg" }
+    "palmeiras": {
+      "logo": "assets/clubs/brazil/palmeiras/logo.png",
+      "stadium": "assets/stadiums/brazil/palmeiras.jpg",
+      "badge": "assets/clubs/brazil/palmeiras/badge.png",
+      "homeKit": "assets/clubs/brazil/palmeiras/home-kit.png",
+      "awayKit": "assets/clubs/brazil/palmeiras/away-kit.png"
+    },
+    "flamengo": {
+      "logo": "assets/clubs/brazil/flamengo/logo.png",
+      "stadium": "assets/stadiums/brazil/flamengo.jpg",
+      "badge": "assets/clubs/brazil/flamengo/badge.png",
+      "homeKit": "assets/clubs/brazil/flamengo/home-kit.png",
+      "awayKit": "assets/clubs/brazil/flamengo/away-kit.png"
+    },
+    "sao-paulo": {
+      "logo": "assets/clubs/brazil/sao-paulo/logo.png",
+      "stadium": "assets/stadiums/brazil/sao-paulo.jpg",
+      "badge": "assets/clubs/brazil/sao-paulo/badge.png",
+      "homeKit": "assets/clubs/brazil/sao-paulo/home-kit.png",
+      "awayKit": "assets/clubs/brazil/sao-paulo/away-kit.png"
+    },
+    "corinthians": {
+      "logo": "assets/clubs/brazil/corinthians/logo.png",
+      "stadium": "assets/stadiums/brazil/corinthians.jpg",
+      "badge": "assets/clubs/brazil/corinthians/badge.png",
+      "homeKit": "assets/clubs/brazil/corinthians/home-kit.png",
+      "awayKit": "assets/clubs/brazil/corinthians/away-kit.png"
+    },
+    "gremio": {
+      "logo": "assets/clubs/brazil/gremio/logo.png",
+      "stadium": "assets/stadiums/brazil/gremio.jpg",
+      "badge": "assets/clubs/brazil/gremio/badge.png",
+      "homeKit": "assets/clubs/brazil/gremio/home-kit.png",
+      "awayKit": "assets/clubs/brazil/gremio/away-kit.png"
+    },
+    "internacional": {
+      "logo": "assets/clubs/brazil/internacional/logo.png",
+      "stadium": "assets/stadiums/brazil/internacional.jpg",
+      "badge": "assets/clubs/brazil/internacional/badge.png",
+      "homeKit": "assets/clubs/brazil/internacional/home-kit.png",
+      "awayKit": "assets/clubs/brazil/internacional/away-kit.png"
+    },
+    "atletico-mg": {
+      "logo": "assets/clubs/brazil/atletico-mg/logo.png",
+      "stadium": "assets/stadiums/brazil/atletico-mg.jpg",
+      "badge": "assets/clubs/brazil/atletico-mg/badge.png",
+      "homeKit": "assets/clubs/brazil/atletico-mg/home-kit.png",
+      "awayKit": "assets/clubs/brazil/atletico-mg/away-kit.png"
+    },
+    "cruzeiro": {
+      "logo": "assets/clubs/brazil/cruzeiro/logo.png",
+      "stadium": "assets/stadiums/brazil/cruzeiro.jpg",
+      "badge": "assets/clubs/brazil/cruzeiro/badge.png",
+      "homeKit": "assets/clubs/brazil/cruzeiro/home-kit.png",
+      "awayKit": "assets/clubs/brazil/cruzeiro/away-kit.png"
+    },
+    "botafogo": {
+      "logo": "assets/clubs/brazil/botafogo/logo.png",
+      "stadium": "assets/stadiums/brazil/botafogo.jpg",
+      "badge": "assets/clubs/brazil/botafogo/badge.png",
+      "homeKit": "assets/clubs/brazil/botafogo/home-kit.png",
+      "awayKit": "assets/clubs/brazil/botafogo/away-kit.png"
+    },
+    "fluminense": {
+      "logo": "assets/clubs/brazil/fluminense/logo.png",
+      "badge": "assets/clubs/brazil/fluminense/badge.png",
+      "homeKit": "assets/clubs/brazil/fluminense/home-kit.png",
+      "awayKit": "assets/clubs/brazil/fluminense/away-kit.png",
+      "stadium": "assets/stadiums/brazil/fluminense.jpg"
+    },
+    "vasco": {
+      "logo": "assets/clubs/brazil/vasco/logo.png",
+      "badge": "assets/clubs/brazil/vasco/badge.png",
+      "homeKit": "assets/clubs/brazil/vasco/home-kit.png",
+      "awayKit": "assets/clubs/brazil/vasco/away-kit.png",
+      "stadium": "assets/stadiums/brazil/vasco.jpg"
+    },
+    "bahia": {
+      "logo": "assets/clubs/brazil/bahia/logo.png",
+      "badge": "assets/clubs/brazil/bahia/badge.png",
+      "homeKit": "assets/clubs/brazil/bahia/home-kit.png",
+      "awayKit": "assets/clubs/brazil/bahia/away-kit.png",
+      "stadium": "assets/stadiums/brazil/bahia.jpg"
+    },
+    "fortaleza": {
+      "logo": "assets/clubs/brazil/fortaleza/logo.png",
+      "badge": "assets/clubs/brazil/fortaleza/badge.png",
+      "homeKit": "assets/clubs/brazil/fortaleza/home-kit.png",
+      "awayKit": "assets/clubs/brazil/fortaleza/away-kit.png",
+      "stadium": "assets/stadiums/brazil/fortaleza.jpg"
+    },
+    "real-madrid": {
+      "logo": "assets/clubs/spain/real-madrid/logo.png",
+      "badge": "assets/clubs/spain/real-madrid/badge.png",
+      "homeKit": "assets/clubs/spain/real-madrid/home-kit.png",
+      "awayKit": "assets/clubs/spain/real-madrid/away-kit.png",
+      "stadium": "assets/stadiums/spain/real-madrid.jpg"
+    },
+    "barcelona": {
+      "logo": "assets/clubs/spain/barcelona/logo.png",
+      "badge": "assets/clubs/spain/barcelona/badge.png",
+      "homeKit": "assets/clubs/spain/barcelona/home-kit.png",
+      "awayKit": "assets/clubs/spain/barcelona/away-kit.png",
+      "stadium": "assets/stadiums/spain/barcelona.jpg"
+    },
+    "manchester-city": {
+      "logo": "assets/clubs/england/manchester-city/logo.png",
+      "badge": "assets/clubs/england/manchester-city/badge.png",
+      "homeKit": "assets/clubs/england/manchester-city/home-kit.png",
+      "awayKit": "assets/clubs/england/manchester-city/away-kit.png",
+      "stadium": "assets/stadiums/england/manchester-city.jpg"
+    },
+    "liverpool": {
+      "logo": "assets/clubs/england/liverpool/logo.png",
+      "badge": "assets/clubs/england/liverpool/badge.png",
+      "homeKit": "assets/clubs/england/liverpool/home-kit.png",
+      "awayKit": "assets/clubs/england/liverpool/away-kit.png",
+      "stadium": "assets/stadiums/england/liverpool.jpg"
+    },
+    "arsenal": {
+      "logo": "assets/clubs/england/arsenal/logo.png",
+      "badge": "assets/clubs/england/arsenal/badge.png",
+      "homeKit": "assets/clubs/england/arsenal/home-kit.png",
+      "awayKit": "assets/clubs/england/arsenal/away-kit.png",
+      "stadium": "assets/stadiums/england/arsenal.jpg"
+    },
+    "inter-milan": {
+      "logo": "assets/clubs/italy/inter-milan/logo.png",
+      "badge": "assets/clubs/italy/inter-milan/badge.png",
+      "homeKit": "assets/clubs/italy/inter-milan/home-kit.png",
+      "awayKit": "assets/clubs/italy/inter-milan/away-kit.png",
+      "stadium": "assets/stadiums/italy/inter-milan.jpg"
+    },
+    "ac-milan": {
+      "logo": "assets/clubs/italy/ac-milan/logo.png",
+      "badge": "assets/clubs/italy/ac-milan/badge.png",
+      "homeKit": "assets/clubs/italy/ac-milan/home-kit.png",
+      "awayKit": "assets/clubs/italy/ac-milan/away-kit.png",
+      "stadium": "assets/stadiums/italy/ac-milan.jpg"
+    },
+    "bayern-munich": {
+      "logo": "assets/clubs/germany/bayern-munich/logo.png",
+      "badge": "assets/clubs/germany/bayern-munich/badge.png",
+      "homeKit": "assets/clubs/germany/bayern-munich/home-kit.png",
+      "awayKit": "assets/clubs/germany/bayern-munich/away-kit.png",
+      "stadium": "assets/stadiums/germany/bayern-munich.jpg"
+    },
+    "borussia-dortmund": {
+      "logo": "assets/clubs/germany/borussia-dortmund/logo.png",
+      "badge": "assets/clubs/germany/borussia-dortmund/badge.png",
+      "homeKit": "assets/clubs/germany/borussia-dortmund/home-kit.png",
+      "awayKit": "assets/clubs/germany/borussia-dortmund/away-kit.png",
+      "stadium": "assets/stadiums/germany/borussia-dortmund.jpg"
+    },
+    "psg": {
+      "logo": "assets/clubs/france/psg/logo.png",
+      "badge": "assets/clubs/france/psg/badge.png",
+      "homeKit": "assets/clubs/france/psg/home-kit.png",
+      "awayKit": "assets/clubs/france/psg/away-kit.png",
+      "stadium": "assets/stadiums/france/psg.jpg"
+    },
+    "benfica": {
+      "logo": "assets/clubs/portugal/benfica/logo.png",
+      "badge": "assets/clubs/portugal/benfica/badge.png",
+      "homeKit": "assets/clubs/portugal/benfica/home-kit.png",
+      "awayKit": "assets/clubs/portugal/benfica/away-kit.png",
+      "stadium": "assets/stadiums/portugal/benfica.jpg"
+    },
+    "boca-juniors": {
+      "logo": "assets/clubs/argentina/boca-juniors/logo.png",
+      "badge": "assets/clubs/argentina/boca-juniors/badge.png",
+      "homeKit": "assets/clubs/argentina/boca-juniors/home-kit.png",
+      "awayKit": "assets/clubs/argentina/boca-juniors/away-kit.png",
+      "stadium": "assets/stadiums/argentina/boca-juniors.jpg"
+    },
+    "river-plate": {
+      "logo": "assets/clubs/argentina/river-plate/logo.png",
+      "badge": "assets/clubs/argentina/river-plate/badge.png",
+      "homeKit": "assets/clubs/argentina/river-plate/home-kit.png",
+      "awayKit": "assets/clubs/argentina/river-plate/away-kit.png",
+      "stadium": "assets/stadiums/argentina/river-plate.jpg"
+    },
+    "inter-miami": {
+      "logo": "assets/clubs/usa/inter-miami/logo.png",
+      "badge": "assets/clubs/usa/inter-miami/badge.png",
+      "homeKit": "assets/clubs/usa/inter-miami/home-kit.png",
+      "awayKit": "assets/clubs/usa/inter-miami/away-kit.png",
+      "stadium": "assets/stadiums/usa/inter-miami.jpg"
+    },
+    "al-hilal": {
+      "logo": "assets/clubs/saudi/al-hilal/logo.png",
+      "badge": "assets/clubs/saudi/al-hilal/badge.png",
+      "homeKit": "assets/clubs/saudi/al-hilal/home-kit.png",
+      "awayKit": "assets/clubs/saudi/al-hilal/away-kit.png",
+      "stadium": "assets/stadiums/saudi/al-hilal.jpg"
+    }
+  },
+  "leagues": {
+    "brasileirao-a": "assets/leagues/brazil/brasileirao-serie-a.png",
+    "brasileirao-b": "assets/leagues/brazil/brasileirao-serie-b.png",
+    "argentina-liga": "assets/leagues/argentina/liga-profesional.png",
+    "premier-league": "assets/leagues/england/premier-league.png",
+    "laliga": "assets/leagues/spain/laliga.png",
+    "serie-a-italia": "assets/leagues/italy/serie-a.png",
+    "bundesliga": "assets/leagues/germany/bundesliga.png",
+    "ligue-1": "assets/leagues/france/ligue-1.png",
+    "liga-portugal": "assets/leagues/portugal/liga-portugal.png",
+    "eredivisie": "assets/leagues/netherlands/eredivisie.png",
+    "mls": "assets/leagues/usa/mls.png",
+    "saudi-pro-league": "assets/leagues/saudi/saudi-pro-league.png"
+  },
+  "players": {
+    "joao-paulo": {
+      "photo": "assets/players/brazil/santos/joao-paulo.png",
+      "fallback": "assets/placeholders/player-generic.png"
+    },
+    "gabriel-brazao": {
+      "photo": "assets/players/brazil/santos/gabriel-brazao.png",
+      "fallback": "assets/placeholders/player-generic.png"
+    },
+    "joaquim": {
+      "photo": "assets/players/brazil/santos/joaquim.png",
+      "fallback": "assets/placeholders/player-generic.png"
+    },
+    "gil": {
+      "photo": "assets/players/brazil/santos/gil.png",
+      "fallback": "assets/placeholders/player-generic.png"
+    },
+    "alex-nascimento": {
+      "photo": "assets/players/brazil/santos/alex-nascimento.png",
+      "fallback": "assets/placeholders/player-generic.png"
+    },
+    "escobar": {
+      "photo": "assets/players/brazil/santos/escobar.png",
+      "fallback": "assets/placeholders/player-generic.png"
+    },
+    "hayner": {
+      "photo": "assets/players/brazil/santos/hayner.png",
+      "fallback": "assets/placeholders/player-generic.png"
+    },
+    "aderlan": {
+      "photo": "assets/players/brazil/santos/aderlan.png",
+      "fallback": "assets/placeholders/player-generic.png"
+    },
+    "joao-schmidt": {
+      "photo": "assets/players/brazil/santos/joao-schmidt.png",
+      "fallback": "assets/placeholders/player-generic.png"
+    },
+    "tomas-rincon": {
+      "photo": "assets/players/brazil/santos/tomas-rincon.png",
+      "fallback": "assets/placeholders/player-generic.png"
+    },
+    "diego-pituca": {
+      "photo": "assets/players/brazil/santos/diego-pituca.png",
+      "fallback": "assets/placeholders/player-generic.png"
+    },
+    "giuliano": {
+      "photo": "assets/players/brazil/santos/giuliano.png",
+      "fallback": "assets/placeholders/player-generic.png"
+    },
+    "serginho": {
+      "photo": "assets/players/brazil/santos/serginho.png",
+      "fallback": "assets/placeholders/player-generic.png"
+    },
+    "pedrinho": {
+      "photo": "assets/players/brazil/santos/pedrinho.png",
+      "fallback": "assets/placeholders/player-generic.png"
+    },
+    "soteldo": {
+      "photo": "assets/players/brazil/santos/soteldo.png",
+      "fallback": "assets/placeholders/player-generic.png"
+    },
+    "guilherme": {
+      "photo": "assets/players/brazil/santos/guilherme.png",
+      "fallback": "assets/placeholders/player-generic.png"
+    },
+    "willian-bigode": {
+      "photo": "assets/players/brazil/santos/willian-bigode.png",
+      "fallback": "assets/placeholders/player-generic.png"
+    },
+    "julio-furch": {
+      "photo": "assets/players/brazil/santos/julio-furch.png",
+      "fallback": "assets/placeholders/player-generic.png"
+    },
+    "weslley-patati": {
+      "photo": "assets/players/brazil/santos/weslley-patati.png",
+      "fallback": "assets/placeholders/player-generic.png"
+    },
+    "miguelito": {
+      "photo": "assets/players/brazil/santos/miguelito.png",
+      "fallback": "assets/placeholders/player-generic.png"
+    },
+    "deivid-washington": {
+      "photo": "assets/players/brazil/santos/deivid-washington.png",
+      "fallback": "assets/placeholders/player-generic.png"
+    },
+    "angelo": {
+      "photo": "assets/players/brazil/santos/angelo.png",
+      "fallback": "assets/placeholders/player-generic.png"
+    },
+    "lucas-almada": {
+      "photo": "assets/players/scouted/lucas-almada.png",
+      "fallback": "assets/placeholders/player-generic.png"
+    },
+    "matias-rojas": {
+      "photo": "assets/players/scouted/matias-rojas.png",
+      "fallback": "assets/placeholders/player-generic.png"
+    },
+    "juan-sforza": {
+      "photo": "assets/players/scouted/juan-sforza.png",
+      "fallback": "assets/placeholders/player-generic.png"
+    },
+    "renan-lodi": {
+      "photo": "assets/players/scouted/renan-lodi.png",
+      "fallback": "assets/placeholders/player-generic.png"
+    },
+    "kaio-jorge": {
+      "photo": "assets/players/scouted/kaio-jorge.png",
+      "fallback": "assets/placeholders/player-generic.png"
+    },
+    "gabriel-veron": {
+      "photo": "assets/players/scouted/gabriel-veron.png",
+      "fallback": "assets/placeholders/player-generic.png"
+    },
+    "lucas-esquivel": {
+      "photo": "assets/players/scouted/lucas-esquivel.png",
+      "fallback": "assets/placeholders/player-generic.png"
+    },
+    "joao-victor": {
+      "photo": "assets/players/scouted/joao-victor.png",
+      "fallback": "assets/placeholders/player-generic.png"
+    }
+  },
+  "staff": {
+    "santos": {
+      "treinador": "assets/staff/brazil/santos/treinador.png",
+      "auxiliar01": "assets/staff/brazil/santos/auxiliar-01.png",
+      "preparadorFisico": "assets/staff/brazil/santos/preparador-fisico.png",
+      "medico": "assets/staff/brazil/santos/medico.png",
+      "fisioterapeuta": "assets/staff/brazil/santos/fisioterapeuta.png",
+      "olheiro": "assets/staff/brazil/santos/olheiro.png",
+      "diretorComercial": "assets/staff/brazil/santos/diretor-comercial.png",
+      "analista": "assets/staff/brazil/santos/analista-desempenho.png",
+      "fallback": "assets/placeholders/staff-generic.png"
+    }
+  },
+  "sponsors": {
+    "active": {
+      "umbro": "assets/sponsors/umbro.png",
+      "philco": "assets/sponsors/philco.png",
+      "kodilar": "assets/sponsors/kodilar.png",
+      "tekbond": "assets/sponsors/tekbond.png",
+      "pixbet": "assets/sponsors/pixbet.png",
+      "binance": "assets/sponsors/binance.png",
+      "brahma": "assets/sponsors/brahma.png",
+      "one-x-bet": "assets/sponsors/one-x-bet.png",
+      "fallback": "assets/placeholders/sponsor-generic.png"
+    }
+  },
+  "nationalTeams": {
+    "br": {
+      "flag": "assets/countries/br.png",
+      "fallback": "assets/placeholders/country-flag-generic.png"
+    },
+    "ar": {
+      "flag": "assets/countries/ar.png",
+      "fallback": "assets/placeholders/country-flag-generic.png"
+    },
+    "uy": {
+      "flag": "assets/countries/uy.png",
+      "fallback": "assets/placeholders/country-flag-generic.png"
+    },
+    "co": {
+      "flag": "assets/countries/co.png",
+      "fallback": "assets/placeholders/country-flag-generic.png"
+    },
+    "cl": {
+      "flag": "assets/countries/cl.png",
+      "fallback": "assets/placeholders/country-flag-generic.png"
+    },
+    "us": {
+      "flag": "assets/countries/us.png",
+      "fallback": "assets/placeholders/country-flag-generic.png"
+    }
   }
 }

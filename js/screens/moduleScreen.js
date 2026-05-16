@@ -1,20 +1,438 @@
 import { screenWrap, topbar, clubHeader } from './common.js';
-import { players, tableRows } from '../data/gameData.js';
-import { safeImg } from '../systems/assets.js';
+import { players, tableRows, teams } from '../data/gameData.js';
+import { squadPlayers, squadSummary, contractAlerts, squadNeeds } from '../data/squadData.js';
+import { formations, tacticalProfiles, playerInstructions, setPieces } from '../data/tacticsData.js';
+import { standingsCompetitions, standingsTables, scorers, competitionStats } from '../data/standingsData.js';
+import { competitions, seasonMonths, schedule, calendarDays, eventTitle, eventClass } from '../data/seasonData.js';
+import { trainingThemes, weeklyPlan, developmentFocus, trainingStaffImpact, trainingAlerts } from '../data/trainingData.js';
+import { staffBudget, currentStaff, staffCandidates, staffDepartmentKpis, sponsorsOverview, activeSponsors, sponsorProposals, financeSnapshot } from '../data/staffData.js';
+import { transferWindow, transferShortlist, outgoingList, negotiations, scoutingReports, contractRules } from '../data/transferData.js';
+import { inboxMessages, careerProfile, jobOffers, nationalTeams, callUpPool, seasonObjectives } from '../data/careerData.js';
+import { safeImg, clubLogo, country, stadium } from '../systems/assets.js';
 export function moduleScreen(route,title,subtitle,state){
-  const extra = content(route);
+  const extra = content(route, state);
   return screenWrap(route, `${topbar(title,subtitle,'lobby')}${clubHeader(state)}${extra}`, true);
 }
-function content(route){
-  if(route==='formation') return `<section class="grid grid-2"><div class="pitch">${players.map((p,i)=>`<div class="player-dot" style="left:${20+(i%3)*28}%;top:${12+Math.floor(i/3)*20}%">${p[1]}</div>`).join('')}</div><div class="panel stack"><h3>4-3-3 Ofensivo</h3><div class="stat-line"><span>Estilo</span><strong>Posse de bola</strong></div><div class="stat-line"><span>Mentalidade</span><strong>Ofensiva</strong></div><button class="main-btn" data-route="instructions">Instruções</button></div></section>`;
-  if(route==='instructions') return `<section class="grid grid-2"><div class="panel stack"><h3>Esquema tático</h3><div class="pitch"></div><button class="secondary-btn">Mentalidade: Ofensiva</button></div><div class="panel stack"><h3>Estilo de jogo</h3>${['Ritmo alto','Largura aberta','Passes curtos','Pressão alta','Linha defensiva alta'].map(x=>`<div class="stat-line"><span>${x}</span><strong>Ativo</strong></div>`).join('')}<button class="main-btn">Salvar instruções</button></div></section>`;
-  if(route==='standings') return `<section class="panel"><h3>Selecione a competição</h3><div class="grid grid-3"><button class="card">Brasileirão</button><button class="card">Copa do Brasil</button><button class="card">Sul-Americana</button></div><table class="table"><thead><tr><th>Pos</th><th>Time</th><th>J</th><th>PTS</th></tr></thead><tbody>${tableRows.map((t,i)=>`<tr><td>${i+1}</td><td>${t}</td><td>10</td><td>${23-i}</td></tr>`).join('')}</tbody></table></section>`;
-  if(route==='transfers') return `<section class="grid grid-2"><div class="panel"><h3>Jogadores disponíveis</h3>${['Matias Rojas','Gabriel Veron','Lucas Esquivel','Juan Sforza','Rony Lopes'].map((p,i)=>`<div class="stat-line"><span>${p}</span><strong>€ ${(6-i*.7).toFixed(1)}M</strong></div>`).join('')}</div><div class="panel"><h3>Negociações</h3><p class="alert">Mercado preparado para compra, venda, empréstimo e renovação nas próximas builds.</p><button class="main-btn">Buscar jogadores</button></div></section>`;
-  if(route==='training') return `<section class="grid grid-2"><div class="panel"><h3>Tema do treino</h3><h2>Posse de bola</h2><p class="small">Melhora circulação, passe e movimentação.</p><div class="meter"><span style="width:65%"></span></div></div><div class="panel"><h3>Jogadores em foco</h3>${players.slice(0,5).map(p=>`<div class="stat-line"><span>${p[0]}</span><strong>${p[2]}</strong></div>`).join('')}</div></section>`;
-  if(route==='staff') return `<section class="grid grid-2"><div class="panel"><h3>Equipe atual</h3>${['Treinador','Auxiliar','Médico','Fisioterapeuta','Olheiro','Diretor Comercial'].map(x=>`<div class="stat-line"><span>${x}</span><strong>Contratado</strong></div>`).join('')}</div><div class="panel"><h3>Contratações disponíveis</h3>${['Vagner Mancini','Jair Ventura','Pablo Fernandez','Lucas Itaberaba'].map(x=>`<div class="stat-line"><span>${x}</span><button class="secondary-btn">Contratar</button></div>`).join('')}</div></section>`;
-  if(route==='sponsorship') return `<section class="grid grid-2"><div class="panel"><h3>Patrocinadores ativos</h3>${['Blaze','Binance','Umbro','Philco'].map(x=>`<div class="stat-line"><span>${x}</span><strong>Ativo</strong></div>`).join('')}</div><div class="panel"><h3>Propostas</h3>${['Pixbet','1XBet','Brahma'].map(x=>`<div class="card"><strong>${x}</strong><p class="small">Proposta disponível</p></div>`).join('')}</div></section>`;
-  if(route==='championship'||route==='calendar') return `<section class="grid"><div class="panel"><h3>Agenda anual</h3><div class="grid grid-2 desktop-4">${['Brasileirão Série A','Copa do Brasil','Sul-Americana','Paulistão'].map(x=>`<div class="card"><h3>${x}</h3><p class="small">Fase atual preparada</p></div>`).join('')}</div></div><div class="panel"><h3>Próximos jogos</h3>${['Santos x Palmeiras','Santos x Flamengo','Grêmio x Santos','Unión x Santos'].map(x=>`<div class="stat-line"><span>${x}</span><strong>20:00</strong></div>`).join('')}</div></section>`;
-  if(route==='club') return `<section class="grid grid-2"><div class="panel"><h3>Resumo do clube</h3><div class="stat-line"><span>Reputação</span><strong>★★★★★</strong></div><div class="stat-line"><span>Torcida</span><strong>Fanática</strong></div><div class="stat-line"><span>Estádio</span><strong>Vila Belmiro</strong></div></div><div class="panel"><h3>Finanças</h3><div class="stat-line"><span>Saldo</span><strong>€ 92.5M</strong></div><div class="stat-line"><span>Receita</span><strong>€ 128.4M</strong></div><div class="stat-line"><span>Salários</span><strong>€ 5.32M</strong></div></div></section>`;
+
+function slug(name=''){
+  return String(name).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/fc|futebol clube|club de regatas|sport club/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') || 'santos';
+}
+function scheduleWithState(state={}){
+  const history = new Map((state.career?.completedMatches || []).map(m=>[m.id,m]));
+  return schedule.map(ev=>{
+    if(ev.type !== 'match') return ev;
+    const id = `${ev.date}-${slug(ev.home)}-${slug(ev.away)}`;
+    const done = history.get(id);
+    return done ? {...ev, status:'Concluído', result:`${done.homeGoals} x ${done.awayGoals}`, completed:true, id} : {...ev, id};
+  });
+}
+function applyIntegratedStandings(rows=[], compId='brasileirao-a', state={}){
+  const history = (state.career?.completedMatches || []).filter(m=>m.competitionId === compId);
+  if(!history.length) return rows;
+  const cloned = rows.map(r=>({...r, form:[...(r.form||[])]}));
+  const byId = new Map(cloned.map(r=>[r.id,r]));
+  history.forEach(m=>{
+    const home = byId.get(m.home);
+    const away = byId.get(m.away);
+    if(!home || !away || home.__integrated?.includes(m.id)) return;
+    home.__integrated = [...(home.__integrated||[]), m.id];
+    away.__integrated = [...(away.__integrated||[]), m.id];
+    home.p++; away.p++;
+    home.gf += m.homeGoals; home.ga += m.awayGoals;
+    away.gf += m.awayGoals; away.ga += m.homeGoals;
+    if(m.homeGoals > m.awayGoals){ home.w++; away.l++; home.pts += 3; home.form = ['V', ...home.form].slice(0,5); away.form = ['D', ...away.form].slice(0,5); }
+    else if(m.homeGoals < m.awayGoals){ away.w++; home.l++; away.pts += 3; away.form = ['V', ...away.form].slice(0,5); home.form = ['D', ...home.form].slice(0,5); }
+    else { home.d++; away.d++; home.pts++; away.pts++; home.form = ['E', ...home.form].slice(0,5); away.form = ['E', ...away.form].slice(0,5); }
+  });
+  return cloned.sort((a,b)=>(b.pts-a.pts)||((b.gf-b.ga)-(a.gf-a.ga))||(b.gf-a.gf)).map((r,i)=>({...r,pos:i+1}));
+}
+
+function content(route,state={}){
+  if(route==='formation') return formationScreen(state);
+  if(route==='instructions') return instructionsScreen(state);
+  if(route==='standings') {
+    const selected = state.ui?.standingsCompetition || 'brasileirao-a';
+    const comp = standingsCompetitions.find(c=>c.id===selected) || standingsCompetitions[0];
+    const rows = applyIntegratedStandings(standingsTables[comp.id] || standingsTables['brasileirao-a'] || [], comp.id, state);
+    const userRow = rows.find(r=>r.user) || rows[0] || {pos:0, pts:0, p:0, w:0, d:0, l:0, gf:0, ga:0, club:'Clube'};
+    const zone = userRow.pos <= 4 ? 'Zona continental' : userRow.pos <= 8 ? 'Meio competitivo' : 'Pressão de recuperação';
+    const table = rows.map(r=>`<tr class="${r.user?'user-row':''}">
+      <td><strong>${r.pos}</strong></td>
+      <td><div class="team-cell">${safeImg(clubLogo(r.id),'club',r.club,'mini-logo')}<span>${r.club}</span></div></td>
+      <td>${r.p}</td><td>${r.w}</td><td>${r.d}</td><td>${r.l}</td><td>${r.gf}</td><td>${r.ga}</td><td>${r.gf-r.ga}</td><td><strong>${r.pts}</strong></td>
+      <td><div class="form-strip">${(r.form||[]).map(f=>`<span class="form-${f}">${f}</span>`).join('')}</div></td>
+    </tr>`).join('');
+    const select = `<select class="select" data-action="standings-select">${standingsCompetitions.map(c=>`<option value="${c.id}" ${c.id===comp.id?'selected':''}>${c.name}</option>`).join('')}</select>`;
+    const scorersHtml = scorers.map((s,i)=>`<div class="scorer-row ${s.club==='Santos FC'?'highlight':''}"><strong>${i+1}</strong><div><span>${s.player}</span><small>${s.club}</small></div><b>${s.goals} G</b><em>${s.assists} A</em></div>`).join('');
+    return `<section class="standings-v080">
+      <div class="panel standings-hero"><div><span class="tag">Classificação e estatísticas</span><h1>${comp.name}</h1><p class="small">Tabela dinâmica por competição, com forma recente, saldo, zona de campanha e estatísticas do torneio. Preparado para atualizar automaticamente após cada partida.</p></div><div class="standings-selector"><label>Competição</label>${select}</div></div>
+      <section class="grid desktop-4"><div class="card kpi-card"><span>Posição do clube</span><strong>${userRow.pos}º</strong><small>${zone}</small></div><div class="card kpi-card"><span>Pontos</span><strong>${userRow.pts}</strong><small>${userRow.p} jogos disputados</small></div><div class="card kpi-card"><span>Saldo</span><strong>${userRow.gf-userRow.ga > 0 ? '+' : ''}${userRow.gf-userRow.ga}</strong><small>${userRow.gf} pró · ${userRow.ga} contra</small></div><div class="card kpi-card"><span>Aproveitamento</span><strong>${Math.round((userRow.pts/Math.max(1,userRow.p*3))*100)}%</strong><small>${userRow.w}V ${userRow.d}E ${userRow.l}D</small></div></section>
+      <section class="panel table-panel"><div class="row space"><div><span class="tag">Tabela</span><h2>Classificação completa</h2></div><span class="status-pill">Integração v1.6 ativa</span></div><div class="table-scroll"><table class="table standings-table"><thead><tr><th>Pos</th><th>Time</th><th>J</th><th>V</th><th>E</th><th>D</th><th>GP</th><th>GC</th><th>SG</th><th>PTS</th><th>Forma</th></tr></thead><tbody>${table}</tbody></table></div></section>
+      <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Artilharia</span><h2>Líderes ofensivos</h2></div><strong class="grade">Top 6</strong></div><div class="scorer-list">${scorersHtml}</div></article><article class="panel"><div class="row space"><div><span class="tag">Radar do torneio</span><h2>Indicadores</h2></div><strong class="grade">${competitionStats.avgGoals}</strong></div><div class="stats-radar"><div><span>Gols</span><strong>${competitionStats.goals}</strong></div><div><span>Cartões</span><strong>${competitionStats.cards}</strong></div><div><span>Clean sheets</span><strong>${competitionStats.cleanSheets}</strong></div><div><span>Melhor ataque</span><strong>${competitionStats.bestAttack}</strong></div><div><span>Melhor defesa</span><strong>${competitionStats.bestDefense}</strong></div><div><span>Mais posse</span><strong>${competitionStats.mostPossession}</strong></div></div></article></section>
+    </section>`;
+  }
+  if(route==='transfers') return transfersScreen(state);
+  if(route==='messages') return messagesScreen(state);
+  if(route==='nationalTeam') return nationalTeamScreen(state);
+  if(route==='training') return trainingScreen(state);
+  if(route==='staff') return staffScreen(state);
+  if(route==='sponsorship') return sponsorshipScreen(state);
+  if(route==='championship') {
+    const compCards = competitions.map(c=>`<article class="competition-card ${c.color}">
+      <div class="comp-icon">${c.short}</div>
+      <div><span class="tag">${c.type} · ${c.scope}</span><h3>${c.name}</h3><p class="small">${c.status} · ${c.round}</p></div>
+      <div class="comp-meta"><strong>${c.priority}</strong><small>${c.objective}</small></div>
+    </article>`).join('');
+    const nextMatches = scheduleWithState(state).filter(e=>e.type==='match').slice(0,6).map(ev=>`<div class="fixture-row ${ev.completed?'completed-fixture':''}">
+      <div class="fixture-date"><strong>${ev.date.slice(8,10)}</strong><small>${ev.day}</small></div>
+      <div class="fixture-main"><strong>${eventTitle(ev)} ${ev.result ? '· '+ev.result : ''}</strong><span>${ev.competition} · ${ev.stage}</span><small>${ev.venue}</small></div>
+      <div class="fixture-importance"><span>${ev.importance}</span><div class="meter"><span style="width:${ev.importance}%"></span></div></div>
+    </div>`).join('');
+    return `<section class="championship-v070">
+      <div class="panel championship-hero"><div><span class="tag">Agenda anual esportiva</span><h1>Competições do clube</h1><p class="small">Visão executiva das competições que o time disputa, com fase atual, prioridade, objetivo e próximos compromissos.</p></div><button class="main-btn" data-route="calendar">Abrir calendário completo</button></div>
+      <section class="competition-grid">${compCards}</section>
+      <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Próximos jogos</span><h2>Sequência decisiva</h2></div><button class="secondary-btn mini" data-route="match">Iniciar jogo</button></div><div class="fixture-list">${nextMatches}</div></article>
+      <article class="panel"><div class="row space"><div><span class="tag">Temporada</span><h2>Mapa anual</h2></div><strong class="grade">12 meses</strong></div><div class="month-mini-grid">${seasonMonths.map(m=>`<div class="month-mini"><strong>${m.name}</strong><span>${m.matches} eventos</span><small>${m.focus}</small></div>`).join('')}</div></article></section>
+    </section>`;
+  }
+  if(route==='calendar') {
+    const integratedSchedule = scheduleWithState(state);
+    const integratedDays = Array.from({length:31}, (_,i)=>{ const day=i+1; return {day, events: integratedSchedule.filter(ev => Number(ev.date.slice(-2)) === day)}; });
+    const dayCells = integratedDays.map(d=>`<div class="calendar-day ${d.events.length?'has-event':''}"><div class="day-number">${d.day}</div>${d.events.slice(0,2).map(ev=>`<span class="calendar-event ${eventClass(ev)} ${ev.completed?'event-completed':''}">${ev.result || (ev.type==='match' ? ev.competition.replace('Brasileirão Série A','Brasileirão').replace('Copa do Brasil','Copa BR') : ev.competition)}</span>`).join('')}${d.events.length>2?`<small>+${d.events.length-2}</small>`:''}</div>`).join('');
+    const timeline = integratedSchedule.slice().sort((a,b)=>a.date.localeCompare(b.date)).map(ev=>`<div class="timeline-item ${eventClass(ev)} ${ev.completed?'completed-fixture':''}">
+      <div class="fixture-date"><strong>${ev.date.slice(8,10)}</strong><small>${ev.day}</small></div>
+      <div class="fixture-main"><strong>${eventTitle(ev)} ${ev.result ? '· '+ev.result : ''}</strong><span>${ev.competition} · ${ev.stage}</span><small>${ev.venue}</small></div>
+      <div class="status-pill">${ev.status}</div>
+    </div>`).join('');
+    return `<section class="calendar-v070">
+      <div class="panel championship-hero"><div><span class="tag">Julho · Temporada ${state.season || 2024}</span><h1>Calendário completo</h1><p class="small">Agenda com partidas, treinos, reuniões, mercado e eventos de imprensa. Esta tela já nasce preparada para puxar temporadas completas nas próximas builds.</p></div><button class="secondary-btn" data-route="championship">Ver competições</button></div>
+      <section class="grid grid-2 calendar-layout"><article class="panel"><div class="row space"><h2>Visão mensal</h2><span class="tag">31 dias</span></div><div class="calendar-weekdays"><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span><span>Dom</span></div><div class="calendar-grid-full">${dayCells}</div></article>
+      <article class="panel"><div class="row space"><div><span class="tag">Linha do tempo</span><h2>Compromissos do mês</h2></div><strong class="grade">${schedule.length}</strong></div><div class="timeline-list">${timeline}</div></article></section>
+      <section class="grid desktop-4"><div class="card kpi-card"><span>Jogos oficiais</span><strong>${schedule.filter(e=>e.type==='match').length}</strong><small>partidas no mês</small></div><div class="card kpi-card"><span>Treinos</span><strong>${schedule.filter(e=>e.type==='training').length}</strong><small>sessões planejadas</small></div><div class="card kpi-card"><span>Decisões</span><strong>${schedule.filter(e=>e.importance>=90).length}</strong><small>alta pressão</small></div><div class="card kpi-card"><span>Viagens</span><strong>${schedule.filter(e=>e.type==='match' && e.away==='Santos FC').length}</strong><small>fora de casa</small></div></section>
+    </section>`;
+  }
+  if(route==='club') {
+    const t = teams.find(x => x.id === state.clubId) || teams[0];
+    const boardTrust = Number(state.boardTrust || 76);
+    const fanMood = Number(state.fanMood || 82);
+    const structure = [
+      ['Centro de treinamento','78','Base técnica sólida, ainda com espaço para modernização.'],
+      ['Categorias de base','84','Tradição forte em formação e venda de talentos.'],
+      ['Departamento médico','71','Precisa melhorar recuperação e prevenção de lesões.'],
+      ['Análise de desempenho','68','Área preparada para evolução nas próximas temporadas.'],
+      ['Comercial/marketing','74','Potencial de crescimento com patrocínios e resultados.']
+    ];
+    const trophyShelf = ['Nacionais','Copas','Continentais','Base'].map((label,i)=>`<div class="club-trophy"><span>${['🏆','🥇','🌎','⭐'][i]}</span><strong>${label}</strong><small>histórico preparado</small></div>`).join('');
+    const competitions = (t.competitions || []).map(c=>`<span class="chip">${c}</span>`).join('');
+    return `<section class="club-dashboard-v060">
+      <div class="panel club-hero-panel">
+        <div class="club-hero-bg" style="background-image:url('${stadium(t.id)}')"></div>
+        <div class="club-hero-content">
+          <div class="club-mark-xl">${safeImg(clubLogo(t.id),'club',t.name,'club-logo xl')}</div>
+          <div class="club-title-block">
+            <span class="tag">Resumo institucional</span>
+            <h1>${t.name}</h1>
+            <p class="small">${safeImg(country(t.country),'country',t.countryName,'inline-flag')} ${t.countryName} · ${t.league} · Estádio: ${t.stadium}</p>
+            <div class="competition-row">${competitions}</div>
+          </div>
+          <div class="club-score-block">
+            <span>Reputação</span>
+            <strong>${t.reputation}</strong>
+            <div class="meter"><span style="width:${t.reputation}%"></span></div>
+          </div>
+        </div>
+      </div>
+
+      <section class="grid desktop-4 club-kpi-grid">
+        <div class="card kpi-card"><span>Valor do clube/elenco</span><strong>€ ${Number(t.value || 0).toFixed(1)}M</strong><small>base econômica atual</small></div>
+        <div class="card kpi-card"><span>Orçamento</span><strong>€ ${Number(t.budget || 0).toFixed(1)}M</strong><small>transferências + operação</small></div>
+        <div class="card kpi-card"><span>Força esportiva</span><strong>${t.level}</strong><div class="meter"><span style="width:${t.level}%"></span></div></div>
+        <div class="card kpi-card"><span>Dificuldade</span><strong>${t.difficulty}</strong><small>pressão da carreira</small></div>
+      </section>
+
+      <section class="grid grid-2">
+        <article class="panel board-panel">
+          <div class="row space"><div><span class="tag">Diretoria</span><h2>Metas e avaliação</h2></div><strong class="grade">${boardTrust}%</strong></div>
+          <p>${t.board}</p>
+          <div class="meter tall"><span style="width:${boardTrust}%"></span></div>
+          <div class="board-objectives">
+            <div class="objective ok"><strong>Meta esportiva</strong><span>${t.board}</span></div>
+            <div class="objective"><strong>Meta financeira</strong><span>Manter folha salarial controlada e evitar saldo negativo.</span></div>
+            <div class="objective"><strong>Meta de elenco</strong><span>Valorizar jogadores jovens e manter moral acima de 70%.</span></div>
+            <div class="objective"><strong>Risco no cargo</strong><span>${state.jobSecurity || 'Seguro'} · acompanha resultados, torcida e caixa.</span></div>
+          </div>
+        </article>
+
+        <article class="panel fan-panel">
+          <div class="row space"><div><span class="tag">Torcida</span><h2>Clima social</h2></div><strong class="grade">${fanMood}%</strong></div>
+          <div class="meter tall"><span style="width:${fanMood}%"></span></div>
+          <div class="news-list compact">
+            <div class="news-item"><strong>Expectativa</strong><span>Competir com identidade ofensiva e bom desempenho em casa.</span></div>
+            <div class="news-item"><strong>Pressão</strong><span>Clássicos, sequência sem vitória e eliminações podem derrubar confiança.</span></div>
+            <div class="news-item"><strong>Oportunidade</strong><span>Boa campanha aumenta patrocínio, público e reputação do manager.</span></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="grid grid-2">
+        <article class="panel">
+          <div class="row space"><div><span class="tag">Estrutura</span><h2>Departamentos do clube</h2></div><button class="secondary-btn mini" data-route="staff">Staff</button></div>
+          <div class="structure-list">
+            ${structure.map(([name,score,desc])=>`<div class="structure-row"><div><strong>${name}</strong><small>${desc}</small></div><span>${score}</span><div class="meter"><span style="width:${score}%"></span></div></div>`).join('')}
+          </div>
+        </article>
+        <article class="panel">
+          <div class="row space"><div><span class="tag">História</span><h2>Sala de troféus</h2></div><button class="secondary-btn mini" data-route="championship">Competições</button></div>
+          <div class="trophy-grid">${trophyShelf}</div>
+          <p class="alert">A vitrine histórica usa dados preparados agora e será conectada a conquistas reais da carreira nas próximas builds.</p>
+        </article>
+      </section>
+
+      <section class="grid grid-2">
+        <article class="panel">
+          <div class="row space"><div><span class="tag">Finanças resumidas</span><h2>Controle executivo</h2></div><button class="secondary-btn mini" data-route="finances">Abrir financeiro</button></div>
+          <div class="stat-line"><span>Saldo operacional</span><strong>€ ${Number(t.budget || 0).toFixed(1)}M</strong></div>
+          <div class="stat-line"><span>Receita projetada</span><strong>€ ${(Number(t.value||0)*0.62).toFixed(1)}M</strong></div>
+          <div class="stat-line"><span>Folha salarial estimada</span><strong>€ ${(Number(t.value||0)*0.043).toFixed(1)}M</strong></div>
+          <div class="stat-line"><span>Saúde financeira</span><strong>${(t.budget || 0) > 90 ? 'Forte' : 'Controlada'}</strong></div>
+        </article>
+        <article class="panel">
+          <div class="row space"><div><span class="tag">Identidade esportiva</span><h2>Plano do manager</h2></div><button class="secondary-btn mini" data-route="formation">Tática</button></div>
+          <div class="stat-line"><span>Modelo inicial</span><strong>4-3-3 ofensivo</strong></div>
+          <div class="stat-line"><span>DNA desejado</span><strong>Posse, pressão e base</strong></div>
+          <div class="stat-line"><span>Prioridade da semana</span><strong>Treino de criação</strong></div>
+          <button class="main-btn" data-route="lobby">Voltar ao lobby operacional</button>
+        </article>
+      </section>
+    </section>`;
+  }
+
+  if(route==='finances') return `<section class="grid grid-2"><div class="panel"><h3>Orçamento do clube</h3><div class="stat-line"><span>Saldo disponível</span><strong>€ 92.5M</strong></div><div class="stat-line"><span>Folha salarial mensal</span><strong>€ 5.32M</strong></div><div class="stat-line"><span>Receita projetada</span><strong>€ 128.4M</strong></div><div class="stat-line"><span>Risco financeiro</span><strong>Baixo</strong></div></div><div class="panel"><h3>Diretoria financeira</h3><p class="alert">Build v0.5 prepara o painel para que patrocínio, mercado e premiações influenciem o caixa nas próximas fases.</p><button class="main-btn" data-route="sponsorship">Ver patrocínios</button></div></section>`;
+  if(route==='contracts') {
+    const alerts = contractAlerts.map(a=>`<div class="contract-alert-row"><div><strong>${a.player}</strong><small>${a.type} · ${a.action}</small></div><b>${a.months} meses</b><button class="secondary-btn mini">Analisar</button></div>`).join('');
+    const wageRisk = squadPlayers.filter(p=>p.salary>200).map(p=>`<div class="stat-line"><span>${p.name}</span><strong>€ ${p.salary}k/mês</strong></div>`).join('');
+    return `<section class="contracts-v090"><div class="panel contract-hero"><div><span class="tag">Contratos e folha salarial</span><h1>Controle do elenco</h1><p class="small">Módulo preparado para renovação, venda, empréstimo, liberação e pressão salarial. Todos os jogadores funcionam com foto genérica até você subir as imagens reais.</p></div><button class="main-btn" data-route="transfers">Abrir mercado</button></div><section class="grid desktop-4"><div class="card kpi-card"><span>Folha mensal</span><strong>€ ${(squadSummary.monthlyWages/1000).toFixed(2)}M</strong><small>estimativa atual</small></div><div class="card kpi-card"><span>Risco contratual</span><strong>${squadSummary.contractRisk}</strong><small>jogadores em alerta</small></div><div class="card kpi-card"><span>Valor do elenco</span><strong>€ ${squadSummary.totalValue.toFixed(1)}M</strong><small>base inicial</small></div><div class="card kpi-card"><span>Espaço salarial</span><strong>€ 1.8M</strong><small>margem segura</small></div></section><section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Alertas</span><h2>Contratos próximos do fim</h2></div><strong class="grade">${contractAlerts.length}</strong></div><div class="contract-alert-list">${alerts}</div></article><article class="panel"><div class="row space"><div><span class="tag">Folha</span><h2>Maiores salários</h2></div><span class="status-pill">Anti-quebra ativo</span></div>${wageRisk}<p class="alert">O sistema de renovação será ligado ao mercado nas próximas builds. Nesta versão, a leitura de risco já orienta as decisões do manager.</p></article></section></section>`;
+  }
+  if(route==='squad') {
+    const starters = squadPlayers.slice(0,11);
+    const bench = squadPlayers.slice(11);
+    const rows = squadPlayers.map(p=>`<tr><td><div class="player-cell">${safeImg(p.photo,'player',p.name,'player-face mini-face')}<div><strong>${p.name}</strong><small>${p.role} · ${safeImg(country(p.nationality),'country',p.nationality,'inline-flag')}</small></div></div></td><td>${p.pos}</td><td><strong>${p.overall}</strong></td><td>${p.potential}</td><td>${p.age}</td><td>${p.morale}%</td><td>${p.fitness}%</td><td>€ ${p.value.toFixed(1)}M</td><td>${p.contract}m</td></tr>`).join('');
+    const startersHtml = starters.map(p=>`<div class="squad-card"><div class="squad-face-wrap">${safeImg(p.photo,'player',p.name,'player-face')}</div><div><strong>${p.name}</strong><span>${p.pos} · ${p.status}</span></div><b>${p.overall}</b></div>`).join('');
+    const needsHtml = squadNeeds.map(n=>`<div class="need-row"><div><strong>${n.sector}</strong><small>${n.reason}</small></div><span>${n.urgency}</span><div class="meter"><span style="width:${n.urgency}%"></span></div></div>`).join('');
+    return `<section class="squad-v090"><div class="panel squad-hero"><div><span class="tag">Elenco e contratos</span><h1>Gestão do plantel</h1><p class="small">Visão completa de atletas, fotos com fallback, moral, forma, valor, contrato e necessidades do elenco. Preparado para milhares de jogadores sem quebrar imagens.</p></div><button class="main-btn" data-route="contracts">Contratos</button></div><section class="grid desktop-4"><div class="card kpi-card"><span>Overall médio</span><strong>${squadSummary.averageOverall}</strong><small>elenco principal</small></div><div class="card kpi-card"><span>Idade média</span><strong>${squadSummary.averageAge}</strong><small>equilíbrio experiência/base</small></div><div class="card kpi-card"><span>Moral</span><strong>${squadSummary.morale}%</strong><div class="meter"><span style="width:${squadSummary.morale}%"></span></div></div><div class="card kpi-card"><span>Condicionamento</span><strong>${squadSummary.fitness}%</strong><div class="meter"><span style="width:${squadSummary.fitness}%"></span></div></div></section><section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Titulares prováveis</span><h2>Base competitiva</h2></div><strong class="grade">11</strong></div><div class="squad-card-grid">${startersHtml}</div></article><article class="panel"><div class="row space"><div><span class="tag">Planejamento</span><h2>Necessidades do elenco</h2></div><button class="secondary-btn mini" data-route="transfers">Mercado</button></div><div class="needs-list">${needsHtml}</div><p class="alert">As necessidades serão usadas pelo mercado para sugerir alvos, empréstimos e renovações.</p></article></section><section class="panel table-panel"><div class="row space"><div><span class="tag">Elenco completo</span><h2>Jogadores, moral, forma e contratos</h2></div><span class="status-pill">${squadPlayers.length} atletas</span></div><div class="table-scroll"><table class="table squad-table"><thead><tr><th>Jogador</th><th>Pos</th><th>GER</th><th>POT</th><th>Idade</th><th>Moral</th><th>Forma</th><th>Valor</th><th>Contrato</th></tr></thead><tbody>${rows}</tbody></table></div></section></section>`;
+  }
+
   if(route==='settings') return `<section class="grid grid-2"><div class="panel"><h3>Geral</h3>${['Salvar automaticamente','Dicas','Negociações realistas','Lesões','Progresso offline'].map(x=>`<div class="stat-line"><span>${x}</span><strong>Ativo</strong></div>`).join('')}<button class="secondary-btn" data-action="reset-save">Resetar save</button></div><div class="panel"><h3>Qualidade</h3><p class="alert">Build anti-quebra: fallbacks de assets, rotas seguras, salvamento local protegido e auditoria de arquivos.</p></div></section>`;
   return `<section class="module-placeholder panel"><h1>Módulo preparado</h1><p class="subtitle">Esta tela já possui rota segura e será expandida nas próximas builds.</p><button class="main-btn" data-route="lobby">Voltar ao lobby</button></section>`;
+}
+function staffScreen(state={}){
+  const usedPct = Math.round((staffBudget.used / staffBudget.monthlyLimit) * 100);
+  const current = currentStaff.map(s=>`<article class="staff-card">
+    ${safeImg(s.photo,'staff',s.name,'staff-photo')}
+    <div><span class="tag">${s.role}</span><h3>${s.name}</h3><p>${s.effect}</p><small>Salário mensal: ${money(s.salary)}</small></div>
+    <strong class="grade">${s.grade}</strong>
+    <div class="meter"><span style="width:${s.impact}%"></span></div>
+  </article>`).join('');
+  const candidates = staffCandidates.map(c=>`<article class="candidate-card">
+    <div><span class="tag">${c.role} · ${c.country}</span><h3>${c.name}</h3><p>${c.style}</p><small>${c.bonus}</small></div>
+    <div class="candidate-side"><strong>${c.grade}</strong><span>${money(c.salary)}/mês</span><em>${c.fit}% encaixe</em><button class="secondary-btn mini" data-action="safe-toast" data-message="Negociação de staff preparada para build financeira.">Analisar</button></div>
+  </article>`).join('');
+  const kpis = staffDepartmentKpis.map(k=>`<div class="department-kpi"><div class="row space"><span>${k.label}</span><strong>${k.value}</strong></div><div class="meter"><span style="width:${k.value}%"></span></div><small>${k.status}</small></div>`).join('');
+  return `<section class="staff-v120">
+    <div class="panel staff-hero"><div><span class="tag">Staff e departamento</span><h1>Comissão técnica profissional</h1><p class="small">Controle treinadores auxiliares, médico, fisioterapeuta, preparador físico, olheiro, analista e diretor comercial. Tudo com fallback de imagem e preparado para contratação real em builds futuras.</p></div><button class="main-btn" data-route="training">Ver impacto no treino</button></div>
+    <section class="grid desktop-4"><div class="card kpi-card"><span>Orçamento mensal</span><strong>${money(staffBudget.monthlyLimit)}</strong><small>${usedPct}% utilizado</small></div><div class="card kpi-card"><span>Disponível</span><strong>${money(staffBudget.remaining)}</strong><small>Margem para contratação</small></div><div class="card kpi-card"><span>Confiança da diretoria</span><strong>${staffBudget.boardConfidence}%</strong><small>${staffBudget.departmentLevel}</small></div><div class="card kpi-card"><span>Recomendação</span><strong>Olheiro</strong><small>Prioridade estratégica</small></div></section>
+    <section class="grid grid-2 staff-layout"><article class="panel"><div class="row space"><div><span class="tag">Equipe atual</span><h2>Departamentos do clube</h2></div><span class="status-pill">Anti-quebra ativo</span></div><div class="staff-list">${current}</div></article><article class="panel"><div class="row space"><div><span class="tag">Contratações possíveis</span><h2>Mercado de staff</h2></div><strong class="grade">6 alvos</strong></div><div class="candidate-list">${candidates}</div></article></section>
+    <section class="panel"><div class="row space"><div><span class="tag">Diagnóstico interno</span><h2>Qualidade por departamento</h2></div><button class="secondary-btn mini" data-route="club">Ver clube</button></div><div class="department-grid">${kpis}</div><div class="training-note"><strong>Diretoria:</strong> ${staffBudget.recommendation}</div></section>
+  </section>`;
+}
+
+function sponsorshipScreen(state={}){
+  const targetPct = Math.round((sponsorsOverview.annualRevenue / sponsorsOverview.boardTarget) * 100);
+  const active = activeSponsors.map(s=>`<article class="sponsor-card active-sponsor">
+    ${safeImg(s.logo,'sponsor',s.name,'sponsor-logo')}
+    <div><span class="tag">${s.slot}</span><h3>${s.name}</h3><p>${s.bonus}</p><small>Contrato até ${s.contract} · ${s.status}</small></div>
+    <strong>${money(s.value)}</strong>
+  </article>`).join('');
+  const proposals = sponsorProposals.map(s=>`<article class="sponsor-card proposal-sponsor">
+    ${safeImg(s.logo,'sponsor',s.name,'sponsor-logo')}
+    <div><span class="tag">${s.slot}</span><h3>${s.name}</h3><p>${s.bonus}</p><small>${s.demand}</small></div>
+    <div class="candidate-side"><strong>${money(s.value)}</strong><em>${s.fit}% encaixe</em><button class="secondary-btn mini" data-action="safe-toast" data-message="Proposta comercial registrada para negociação futura.">Negociar</button></div>
+  </article>`).join('');
+  const finance = financeSnapshot.map(f=>`<div class="finance-mini"><span>${f.label}</span><strong>${f.value}</strong><small>${f.trend}</small></div>`).join('');
+  return `<section class="sponsorship-v120">
+    <div class="panel sponsorship-hero"><div><span class="tag">Patrocínio e financeiro</span><h1>Receita comercial do clube</h1><p class="small">Gestão de patrocinadores ativos, propostas comerciais, exposição de marca, bônus por performance e impacto direto no orçamento de transferências.</p></div><button class="main-btn" data-route="finances">Abrir financeiro</button></div>
+    <section class="grid desktop-4"><div class="card kpi-card"><span>Receita anual</span><strong>${money(sponsorsOverview.annualRevenue)}</strong><small>${targetPct}% da meta da diretoria</small></div><div class="card kpi-card"><span>Potencial disponível</span><strong>${money(sponsorsOverview.availableBoost)}</strong><small>Propostas em aberto</small></div><div class="card kpi-card"><span>Exposição</span><strong>${sponsorsOverview.exposure}%</strong><small>Marca em crescimento</small></div><div class="card kpi-card"><span>Espaços de camisa</span><strong>${sponsorsOverview.filledSlots}/${sponsorsOverview.shirtSlots}</strong><small>Slots preenchidos</small></div></section>
+    <section class="grid grid-2 sponsorship-layout"><article class="panel"><div class="row space"><div><span class="tag">Contratos ativos</span><h2>Patrocinadores atuais</h2></div><span class="status-pill">Fallback PNG</span></div><div class="sponsor-list">${active}</div></article><article class="panel"><div class="row space"><div><span class="tag">Propostas</span><h2>Novas receitas</h2></div><strong class="grade">${money(sponsorsOverview.availableBoost)}</strong></div><div class="sponsor-list">${proposals}</div></article></section>
+    <section class="panel"><div class="row space"><div><span class="tag">Painel executivo</span><h2>Resumo financeiro</h2></div><button class="secondary-btn mini" data-route="transfers">Mercado</button></div><div class="finance-grid">${finance}</div><div class="training-note"><strong>Risco comercial:</strong> ${sponsorsOverview.risk}</div></section>
+  </section>`;
+}
+
+
+function messagesScreen(state={}){
+  const unread = inboxMessages.filter(m=>m.status==='Novo').length;
+  const important = inboxMessages.filter(m=>m.priority==='Alta').length;
+  const list = inboxMessages.map(m=>`<article class="mail-card ${m.status==='Novo'?'unread':''}">
+    <div class="mail-icon">${m.type.slice(0,2).toUpperCase()}</div>
+    <div class="mail-body"><div class="row space"><span class="tag">${m.type} · ${m.priority}</span><small>${m.date}</small></div><h3>${m.subject}</h3><p>${m.body}</p><small>De: ${m.from}</small></div>
+    <button class="secondary-btn mini" data-route="${m.route}">${m.action}</button>
+  </article>`).join('');
+  const goals = seasonObjectives.map(o=>`<div class="objective-row"><div><strong>${o.area}</strong><small>${o.goal}</small></div><b>${o.progress}%</b><div class="meter"><span style="width:${o.progress}%"></span></div><em>${o.risk}</em></div>`).join('');
+  const offers = jobOffers.map(o=>`<article class="offer-row">
+    ${safeImg(country(o.country),'flag',o.country,'mini-flag')}
+    <div><span class="tag">${o.type} · ${o.status}</span><h3>${o.club}</h3><p>${o.role} · ${o.objective}</p><small>${o.calendar} · Pressão ${o.pressure}</small></div>
+    <div class="candidate-side"><strong>${o.fit}%</strong><small>encaixe</small><button class="secondary-btn mini" data-route="${o.type==='Seleção nacional'?'nationalTeam':'club'}">Analisar</button></div>
+  </article>`).join('');
+  return `<section class="career-v150">
+    <div class="panel career-hero"><div><span class="tag">Carreira e e-mail do treinador</span><h1>Central executiva do manager</h1><p class="small">Diretoria, imprensa, empresários, departamento médico e federações passam a enviar mensagens que orientam o rumo da carreira. Esta build prepara a carreira dupla clube + seleção.</p></div><button class="main-btn" data-route="nationalTeam">Seleções nacionais</button></div>
+    <section class="grid desktop-4"><div class="card kpi-card"><span>Mensagens novas</span><strong>${unread}</strong><small>${important} de alta prioridade</small></div><div class="card kpi-card"><span>Reputação</span><strong>${careerProfile.managerReputation}</strong><small>${careerProfile.reputationLabel}</small></div><div class="card kpi-card"><span>Segurança no cargo</span><strong>${careerProfile.jobSecurity}%</strong><small>Diretoria confiante</small></div><div class="card kpi-card"><span>Radar internacional</span><strong>${careerProfile.internationalRadar}%</strong><small>${careerProfile.license}</small></div></section>
+    <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Inbox</span><h2>E-mail do treinador</h2></div><span class="status-pill">Save seguro</span></div><div class="mail-list">${list}</div></article><article class="panel"><div class="row space"><div><span class="tag">Metas</span><h2>Painel de carreira</h2></div><strong class="grade">${careerProfile.boardTrust}</strong></div><div class="objectives-list">${goals}</div><div class="training-note"><strong>Próximo marco:</strong> ${careerProfile.nextMilestone}</div></article></section>
+    <section class="panel"><div class="row space"><div><span class="tag">Mercado de trabalho</span><h2>Propostas e sondagens</h2></div><button class="secondary-btn mini" data-route="club">Ver diretoria</button></div><div class="offer-list">${offers}</div></section>
+  </section>`;
+}
+
+function nationalTeamScreen(state={}){
+  const rep = careerProfile.managerReputation;
+  const teamsHtml = nationalTeams.map(t=>{
+    const unlocked = rep >= t.reputationRequired;
+    return `<article class="national-card ${unlocked?'available':'locked'}">
+      ${safeImg(t.flag,'flag',t.name,'flag-large')}
+      <div><span class="tag">${unlocked?'Disponível':'Bloqueada'} · Nível ${t.level}</span><h3>${t.name}</h3><p>${t.expectation}</p><small>Reputação exigida: ${t.reputationRequired} · Pool observado: ${t.pool}</small></div>
+      <button class="secondary-btn mini" data-action="safe-toast" data-message="${unlocked?'Interesse registrado.':'Aumente a reputação para desbloquear esta seleção.'}">${unlocked?'Registrar interesse':'Bloqueada'}</button>
+    </article>`;
+  }).join('');
+  const pool = callUpPool.map(p=>`<div class="callup-row"><div><strong>${p.name}</strong><small>${p.pos} · ${p.club}</small></div><b>${p.overall}</b><em>${p.form}% forma</em><span>${p.status}</span></div>`).join('');
+  const calendar = ['Data FIFA: amistoso internacional','Eliminatórias: rodada dupla','Observação de jogadores no clube','Lista preliminar de convocados','Convocação final e preparação'].map((e,i)=>`<div class="timeline-row"><strong>${i+1}</strong><span>${e}</span><small>${i<2?'Próxima temporada':'Sistema preparado'}</small></div>`).join('');
+  return `<section class="national-v150">
+    <div class="panel national-hero"><div><span class="tag">Carreira internacional</span><h1>Seleções nacionais</h1><p class="small">O treinador pode receber sondagens para comandar seleção em paralelo ao clube. Convocação, calendário FIFA e reputação internacional foram preparados com proteção anti-quebra.</p></div><button class="main-btn" data-route="messages">Voltar ao e-mail</button></div>
+    <section class="grid desktop-4"><div class="card kpi-card"><span>Reputação atual</span><strong>${rep}</strong><small>${careerProfile.license}</small></div><div class="card kpi-card"><span>Radar internacional</span><strong>${careerProfile.internationalRadar}%</strong><small>cresce com títulos</small></div><div class="card kpi-card"><span>Pressão da mídia</span><strong>${careerProfile.mediaPressure}%</strong><small>impacta entrevistas</small></div><div class="card kpi-card"><span>Ambiente do elenco</span><strong>${careerProfile.dressingRoom}%</strong><small>liderança interna</small></div></section>
+    <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Federações</span><h2>Seleções monitoradas</h2></div><span class="status-pill">Bandeiras por código</span></div><div class="national-list">${teamsHtml}</div></article><article class="panel"><div class="row space"><div><span class="tag">Convocação</span><h2>Pool de jogadores</h2></div><strong class="grade">Pré-lista</strong></div><div class="callup-list">${pool}</div></article></section>
+    <section class="panel"><div class="row space"><div><span class="tag">Calendário paralelo</span><h2>Clube + seleção</h2></div><button class="secondary-btn mini" data-route="calendar">Agenda do clube</button></div><div class="timeline-list">${calendar}</div><p class="alert">Nas próximas builds, estes blocos serão conectados ao calendário real do save, reputação, convocações e desempenho em competições internacionais.</p></section>
+  </section>`;
+}
+
+
+function money(value){
+  const n = Number(value||0);
+  if(!n) return 'R$ 0';
+  if(n >= 1000000) return `R$ ${(n/1000000).toFixed(n%1000000===0?0:1)}M`;
+  return `R$ ${Math.round(n/1000)}k`;
+}
+
+
+function transfersScreen(state={}){
+  const selectedFilter = state.ui?.transferFilter || 'all';
+  const filtered = selectedFilter==='all' ? transferShortlist : transferShortlist.filter(p=>p.pos===selectedFilter || p.status.toLowerCase().includes(selectedFilter));
+  const filters = ['all','ATA','MEI','VOL','ZAG','LE','PD','livre'].map(f=>`<button class="filter-chip ${selectedFilter===f?'active':''}" data-action="set-ui" data-ui-key="transferFilter" data-ui-value="${f}">${f==='all'?'Todos':f}</button>`).join('');
+  const cards = filtered.map(p=>`<article class="transfer-card ${p.status==='Prioridade'?'priority':''}">
+    <div class="transfer-face">${safeImg(p.photo,'player',p.name,'player-face')}</div>
+    <div class="transfer-main"><div class="row space"><div><strong>${p.name}</strong><small>${p.pos} · ${p.age} anos · ${p.club}</small></div><span class="status-pill">${p.status}</span></div>
+      <p>${p.role} · Risco ${p.risk}</p>
+      <div class="transfer-metrics"><span>OVR <b>${p.overall}</b></span><span>POT <b>${p.potential}</b></span><span>Interesse <b>${p.interest}%</b></span></div>
+      <div class="meter"><span style="width:${p.interest}%"></span></div>
+    </div>
+    <div class="transfer-price"><strong>${p.value===0?'Livre':'€ '+p.value.toFixed(1)+'M'}</strong><small>Salário € ${p.wage.toFixed(2)}M</small><button class="secondary-btn mini" data-action="safe-toast" data-message="Relatorio salvo para ${p.name}">Negociar</button></div>
+  </article>`).join('');
+  const outgoing = outgoingList.map(p=>`<div class="outgoing-row"><div><strong>${p.name}</strong><small>${p.pos} · ${p.age} anos · ${p.market}</small></div><b>€ ${p.value.toFixed(1)}M</b><span>${p.status}</span></div>`).join('');
+  const negs = negotiations.map(n=>`<div class="negotiation-row"><div><strong>${n.player}</strong><small>${n.type} · ${n.stage}</small></div><div><b>${n.chance}%</b><div class="meter"><span style="width:${n.chance}%"></span></div><small>${n.next}</small></div></div>`).join('');
+  const scout = scoutingReports.map(r=>`<div class="scout-row"><strong>${r.area}</strong><span>${r.grade}</span><p>${r.note}</p></div>`).join('');
+  const rules = contractRules.map(r=>`<div class="stat-line"><span>${r.label}</span><strong>${r.value}</strong></div>`).join('');
+  return `<section class="transfers-v130">
+    <div class="panel transfer-hero"><div><span class="tag">Mercado de transferências</span><h1>Central de negociações</h1><p class="small">Compra, venda, empréstimo, mercado livre e observação. A tela já está preparada para receber fotos reais dos atletas sem alterar código.</p></div><button class="main-btn" data-route="contracts">Ver contratos</button></div>
+    <section class="grid desktop-4"><div class="card kpi-card"><span>Janela</span><strong>${transferWindow.status}</strong><small>${transferWindow.daysLeft} dias restantes</small></div><div class="card kpi-card"><span>Orçamento</span><strong>€ ${transferWindow.budget.toFixed(1)}M</strong><small>Limite € ${transferWindow.boardLimit.toFixed(1)}M</small></div><div class="card kpi-card"><span>Folha livre</span><strong>€ ${transferWindow.wageRoom.toFixed(1)}M</strong><small>mês para salários</small></div><div class="card kpi-card"><span>Atração</span><strong>${transferWindow.reputationPull}</strong><small>reputação no mercado</small></div></section>
+    <section class="grid grid-2 transfer-layout"><article class="panel transfer-market"><div class="row space"><div><span class="tag">Radar</span><h2>Alvos disponíveis</h2></div><div class="filter-row">${filters}</div></div><div class="transfer-list">${cards}</div></article>
+    <article class="panel"><div class="row space"><div><span class="tag">Negociações</span><h2>Em andamento</h2></div><span class="status-pill">Anti-quebra</span></div><div class="negotiation-list">${negs}</div><div class="transfer-note"><strong>Necessidades da diretoria:</strong> ${transferWindow.needs.join(', ')}.</div></article></section>
+    <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Saídas</span><h2>Atletas negociáveis</h2></div><button class="secondary-btn mini" data-action="safe-toast" data-message="Lista de saidas atualizada">Atualizar lista</button></div><div class="outgoing-list">${outgoing}</div></article>
+    <article class="panel"><div class="row space"><div><span class="tag">Olheiros</span><h2>Relatórios por mercado</h2></div><button class="secondary-btn mini" data-route="staff">Olheiros</button></div><div class="scout-list">${scout}</div></article></section>
+    <section class="panel"><div class="row space"><div><span class="tag">Política contratual</span><h2>Diretrizes para não quebrar o clube</h2></div><button class="secondary-btn mini" data-route="finances">Financeiro</button></div><div class="grid desktop-4">${rules}</div><p class="alert">Build com proteção: propostas simuladas não reduzem orçamento ainda. A integração financeira real entra na build de integração total.</p></section>
+  </section>`;
+}
+
+function trainingScreen(state={}){
+  const selectedId = state.ui?.trainingTheme || 'possession';
+  const active = trainingThemes.find(t=>t.id===selectedId) || trainingThemes[0];
+  const themeButtons = trainingThemes.map(t=>`<button class="training-theme-card ${t.id===active.id?'active':''}" data-action="set-ui" data-ui-key="trainingTheme" data-ui-value="${t.id}"><span>${t.icon}</span><strong>${t.name}</strong><small>${t.focus}</small><em>${t.gain}</em></button>`).join('');
+  const week = weeklyPlan.map(d=>`<article class="training-day ${d.type==='Jogo'?'match-day':''}"><div><strong>${d.day}</strong><span>${d.type}</span></div><h3>${d.title}</h3><p>${d.effect}</p><div class="meter"><span style="width:${d.load}%"></span></div><small>Carga ${d.load}%</small></article>`).join('');
+  const focus = developmentFocus.map(p=>`<div class="development-row"><div class="dev-avatar">${p.role}</div><div><strong>${p.player}</strong><small>${p.age} anos · ${p.focus}</small></div><b>${p.progress}%</b><em>${p.potential}</em><div class="meter"><span style="width:${p.progress}%"></span></div></div>`).join('');
+  const staff = trainingStaffImpact.map(s=>`<div class="staff-impact"><div><span>${s.area}</span><strong>${s.grade}</strong></div><p>${s.effect}</p><div class="meter"><span style="width:${s.value}%"></span></div></div>`).join('');
+  const alerts = trainingAlerts.map(a=>`<div class="training-alert"><span>${a.level}</span><strong>${a.title}</strong><p>${a.text}</p></div>`).join('');
+  const readiness = Math.max(42, Math.min(96, 88 - Math.round(active.fatigue/4) - Math.round(active.risk/5)));
+  return `<section class="training-v110">
+    <div class="panel training-hero"><div><span class="tag">Treino e evolução</span><h1>Centro de performance</h1><p class="small">Plano semanal, carga física, evolução individual, risco de lesão e influência direta no desempenho de partida. Tudo preparado para integrar com staff, calendário e motor de jogo nas próximas builds.</p></div><button class="main-btn" data-route="match">Testar no jogo</button></div>
+    <section class="grid desktop-4"><div class="card kpi-card"><span>Tema ativo</span><strong>${active.name}</strong><small>${active.gain}</small></div><div class="card kpi-card"><span>Intensidade</span><strong>${active.intensity}%</strong><small>Carga semanal controlada</small></div><div class="card kpi-card"><span>Risco de lesão</span><strong>${active.risk}%</strong><small>${active.risk>35?'Alto cuidado':'Sob controle'}</small></div><div class="card kpi-card"><span>Prontidão</span><strong>${readiness}%</strong><small>Elenco para próximo jogo</small></div></section>
+    <section class="grid grid-2 training-main-grid"><article class="panel"><div class="row space"><div><span class="tag">Tema da semana</span><h2>Escolha o foco</h2></div><span class="status-pill">Salvo local</span></div><div class="training-theme-list">${themeButtons}</div><div class="training-note"><strong>Impacto atual:</strong> ${active.focus}. Ganho principal: ${active.gain}. Carga estimada: ${active.fatigue}%.</div></article><article class="panel"><div class="row space"><div><span class="tag">Calendário de treino</span><h2>Microciclo</h2></div><strong class="grade">7 dias</strong></div><div class="week-plan">${week}</div></article></section>
+    <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Desenvolvimento</span><h2>Jogadores em foco</h2></div><strong class="grade">Subida técnica</strong></div><div class="development-list">${focus}</div></article><article class="panel"><div class="row space"><div><span class="tag">Staff</span><h2>Impacto no treino</h2></div><button class="secondary-btn mini" data-route="staff">Gerir staff</button></div><div class="staff-impact-list">${staff}</div></article></section>
+    <section class="panel"><div class="row space"><div><span class="tag">Relatório do centro de performance</span><h2>Alertas e recomendações</h2></div><button class="secondary-btn mini" data-route="calendar">Ver agenda</button></div><div class="training-alerts">${alerts}</div></section>
+  </section>`;
+}
+
+
+function formationScreen(state={}){
+  const selectedId = state.ui?.selectedFormation || '433-possession';
+  const formation = formations.find(f=>f.id===selectedId) || formations[0];
+  const starters = squadPlayers.slice(0,11);
+  const bench = squadPlayers.slice(11,18);
+  const tacticButtons = formations.map(f=>`<button class="tactic-choice ${f.id===formation.id?'active':''}" data-action="set-ui" data-ui-key="selectedFormation" data-ui-value="${f.id}"><strong>${f.shape}</strong><span>${f.name}</span></button>`).join('');
+  const pitchPlayers = formation.slots.map((slot,i)=>{
+    const p = starters[i] || {name:slot.role, overall:70, pos:slot.role, photo:''};
+    return `<button class="tactic-player-dot" style="left:${slot.x}%;top:${slot.y}%" title="${p.name}">
+      <span>${slot.label}</span><strong>${shortName(p.name)}</strong><em>${p.overall}</em>
+    </button>`;
+  }).join('');
+  const startersList = starters.map((p,i)=>`<div class="lineup-row"><div>${safeImg(p.photo,'player',p.name,'mini-face')}<span><strong>${p.name}</strong><small>${formation.slots[i]?.label || p.pos} · ${p.pos} · ${p.role}</small></span></div><b>${p.overall}</b><em>${p.fitness}%</em></div>`).join('');
+  const benchList = bench.map(p=>`<div class="bench-chip">${safeImg(p.photo,'player',p.name,'mini-face')}<span>${p.name}</span><b>${p.overall}</b></div>`).join('');
+  const chemistry = Number(formation.chemistry || 75);
+  return `<section class="tactics-v100">
+    <div class="panel tactic-hero"><div><span class="tag">Tática e formação</span><h1>Mesa tática do manager</h1><p class="small">Escalação visual em campo, banco, encaixe tático e preparação para a partida. Build anti-quebra: todos os atletas usam imagem genérica até você subir as fotos reais.</p></div><button class="main-btn" data-route="instructions">Abrir instruções</button></div>
+    <section class="grid grid-2 tactic-main-grid">
+      <article class="panel tactic-board-panel">
+        <div class="row space"><div><span class="tag">Formação ativa</span><h2>${formation.name}</h2></div><strong class="grade">${formation.shape}</strong></div>
+        <div class="tactic-pitch"><div class="pitch-lines"></div>${pitchPlayers}</div>
+      </article>
+      <article class="panel tactic-control-panel">
+        <div class="row space"><div><span class="tag">Planos de jogo</span><h2>Escolha rápida</h2></div><span class="status-pill">Salvo local</span></div>
+        <div class="tactic-choice-list">${tacticButtons}</div>
+        <div class="tactic-note"><strong>Recomendação:</strong> ${formation.recommended}</div>
+        <div class="tactic-kpis">
+          <div><span>Entrosamento</span><strong>${chemistry}%</strong><div class="meter"><span style="width:${chemistry}%"></span></div></div>
+          <div><span>Ataque</span><strong>+${formation.attackBonus}</strong><div class="meter"><span style="width:${formation.attackBonus*10}%"></span></div></div>
+          <div><span>Defesa</span><strong>+${formation.defenseBonus}</strong><div class="meter"><span style="width:${formation.defenseBonus*10}%"></span></div></div>
+          <div><span>Risco</span><strong>${formation.risk}</strong><div class="meter"><span style="width:${formation.risk==='Alto'?78:formation.risk==='Medio'?52:30}%"></span></div></div>
+        </div>
+      </article>
+    </section>
+    <section class="grid grid-2">
+      <article class="panel"><div class="row space"><div><span class="tag">Onze inicial</span><h2>Escalação provável</h2></div><button class="secondary-btn mini" data-route="squad">Elenco</button></div><div class="lineup-list">${startersList}</div></article>
+      <article class="panel"><div class="row space"><div><span class="tag">Banco</span><h2>Opções de substituição</h2></div><button class="secondary-btn mini" data-route="match">Ir para jogo</button></div><div class="bench-list">${benchList}</div><div class="tactic-note">O motor de partida usará forma, moral, posição e instruções para calcular desempenho, eventos e necessidade de substituição.</div></article>
+    </section>
+  </section>`;
+}
+
+function instructionsScreen(state={}){
+  const profileId = state.ui?.tacticalProfile || 'possession';
+  const profile = tacticalProfiles[profileId] || tacticalProfiles.possession;
+  const profileButtons = Object.entries(tacticalProfiles).map(([id,p])=>`<button class="tactic-choice ${id===profileId?'active':''}" data-action="set-ui" data-ui-key="tacticalProfile" data-ui-value="${id}"><strong>${p.name}</strong><span>Ritmo ${p.tempo} · Risco ${p.risk}</span></button>`).join('');
+  const sliders = [
+    ['Ritmo', profile.tempo], ['Largura', profile.width], ['Pressão', profile.press], ['Linha defensiva', profile.line], ['Passes curtos', profile.passing], ['Verticalidade', profile.directness], ['Risco criativo', profile.risk]
+  ].map(([label,val])=>`<div class="instruction-slider"><div class="row space"><span>${label}</span><strong>${val}%</strong></div><div class="meter"><span style="width:${val}%"></span></div></div>`).join('');
+  const individual = playerInstructions.map(item=>`<div class="instruction-row"><div><strong>${item.sector}</strong><small>${item.instruction}</small></div><span>${item.impact}</span></div>`).join('');
+  const balls = setPieces.map(item=>`<div class="setpiece-row"><div><strong>${item.name}</strong><small>${item.setup}</small></div><b>${item.efficiency}%</b><div class="meter"><span style="width:${item.efficiency}%"></span></div></div>`).join('');
+  const projection = Math.round((profile.tempo + profile.press + profile.passing + (100-profile.risk))/4);
+  return `<section class="instructions-v100">
+    <div class="panel instruction-hero"><div><span class="tag">Instruções avançadas</span><h1>Modelo de jogo</h1><p class="small">Configure comportamento coletivo, setores, bolas paradas e plano de partida. Tudo fica salvo no save local migrável e preparado para influenciar o motor de jogo.</p></div><button class="main-btn" data-route="formation">Voltar à formação</button></div>
+    <section class="grid grid-2">
+      <article class="panel"><div class="row space"><div><span class="tag">Perfil coletivo</span><h2>${profile.name}</h2></div><span class="status-pill">Plano A</span></div><div class="tactic-choice-list compact">${profileButtons}</div></article>
+      <article class="panel"><div class="row space"><div><span class="tag">Impacto previsto</span><h2>Leitura pré-jogo</h2></div><strong class="grade">${projection}</strong></div><div class="stats-radar"><div><span>Posse esperada</span><strong>${Math.min(68, Math.round(45+profile.passing/4))}%</strong></div><div><span>Volume ofensivo</span><strong>${Math.round((profile.tempo+profile.directness)/2)}</strong></div><div><span>Proteção defensiva</span><strong>${Math.round((100-profile.risk+100-profile.line)/2)}</strong></div><div><span>Desgaste</span><strong>${Math.round((profile.tempo+profile.press)/2)}</strong></div></div></article>
+    </section>
+    <section class="grid grid-2">
+      <article class="panel"><div class="row space"><div><span class="tag">Comportamento</span><h2>Controles táticos</h2></div><button class="secondary-btn mini">Aplicado</button></div><div class="instruction-slider-list">${sliders}</div></article>
+      <article class="panel"><div class="row space"><div><span class="tag">Setores</span><h2>Instruções individuais</h2></div><span class="status-pill">7 setores</span></div><div class="instruction-list">${individual}</div></article>
+    </section>
+    <section class="panel"><div class="row space"><div><span class="tag">Bolas paradas</span><h2>Rotinas especiais</h2></div><button class="secondary-btn mini" data-route="match">Testar na partida</button></div><div class="setpiece-grid">${balls}</div><p class="alert">Na próxima build de partida, estas instruções alimentarão narração, pressão, chances, posse, faltas, escanteios e substituições recomendadas.</p></section>
+  </section>`;
+}
+
+function shortName(name=''){
+  const parts = String(name).trim().split(/\s+/).filter(Boolean);
+  if(parts.length<=1) return parts[0] || 'Atleta';
+  return parts[parts.length-1].slice(0,12);
 }
