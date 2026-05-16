@@ -1,4 +1,20 @@
-AUDIT REPORT - Vale Futebol Manager
-Files: 229
-Errors: 0
-Warnings: 0
+AUDITORIA DA BUILD v0.2.0
+Data: 2026-05-16 13:05 UTC
+
+Checklist:
+[OK] index.html presente
+[OK] js/app.js presente
+[OK] CSS principal presente
+[OK] build/build-info.json atualizado
+[OK] sistema anti-quebra de rotas preservado
+[OK] sistema de fallback de imagens preservado
+[OK] tela de capa carregavel
+[OK] menu principal carregavel
+[OK] novo jogo acessivel
+[OK] continuar protegido quando nao ha save
+[OK] placeholders essenciais mantidos
+[OK] asset guide e asset map mantidos
+[OK] compatibilidade GitHub/Vercel preservada
+
+Resultado: 0 erros criticos encontrados.
+Observacao: as imagens finais ainda podem ser substituidas pelo usuario seguindo ASSET_GUIDE.md e ASSET_MAP.md.

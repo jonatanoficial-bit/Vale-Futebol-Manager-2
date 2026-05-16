@@ -1,8 +1,8 @@
 {
   "game": "Vale Futebol Manager: Gold Edition",
-  "version": "v0.1.0",
+  "version": "v0.2.0",
   "buildDate": "2026-05-16",
-  "buildTime": "12:53 UTC",
-  "buildLabel": "Build v0.1.0 - 2026-05-16 - 12:53 UTC",
-  "phase": "Build 0.1 - Fundacao tecnica, anti-quebra, assets e navegacao base"
+  "buildTime": "13:05 UTC",
+  "buildLabel": "Build v0.2.0 - 2026-05-16 - 13:05 UTC",
+  "phase": "Build 0.2 - Tela inicial premium, menu Novo Jogo/Continuar e UX anti-quebra reforcada"
 }
