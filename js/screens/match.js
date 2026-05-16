@@ -1,7 +1,9 @@
 import { screenWrap, topbar } from './common.js';
 import { teams } from '../data/gameData.js';
 import { matchTimeline, matchActionTips, playerRatings } from '../data/matchData.js';
+import { squadPlayers } from '../data/squadData.js';
 import { safeImg, clubLogo, stadium } from '../systems/assets.js';
+import { computeMatchAI, buildBalanceSummary } from '../systems/balance.js';
 
 function scoreUntil(minute){
   return matchTimeline.filter(e=>e.type==='goal' && e.minute<=minute).reduce((acc,e)=>{
@@ -11,19 +13,23 @@ function scoreUntil(minute){
   }, {home:0, away:0});
 }
 function pct(n){ return `${Math.max(0, Math.min(100, Math.round(n)))}%`; }
-function buildStats(minute, score){
+function buildStats(minute, score, matchState={}, state={}){
   const phase = Math.max(0.1, Math.min(1, minute/90));
-  const homePoss = 54 + (score.home>score.away ? -3 : 2) + Math.round(Math.sin(minute/11)*2);
+  const ai = computeMatchAI(matchState, state);
+  const boost = Number(matchState.tacticalBoost || 0);
+  const subBoost = Array.isArray(matchState.substitutions) ? Math.min(5, matchState.substitutions.length * 2) : 0;
+  const edgeBoost = Math.max(-6, Math.min(6, ai.edge / 2));
+  const homePoss = Math.max(35, Math.min(68, Math.round(52 + edgeBoost + boost + subBoost/2 + (score.home>score.away ? -2 : 2) + Math.sin(minute/11)*2)));
   const awayPoss = 100 - homePoss;
   return {
-    homePoss, awayPoss,
-    shots:[Math.round(5 + phase*8 + score.home*2), Math.round(3 + phase*7 + score.away*2)],
-    onTarget:[Math.round(2 + phase*4 + score.home), Math.round(1 + phase*3 + score.away)],
-    xg:[(0.6 + phase*1.4 + score.home*.35).toFixed(2), (0.35 + phase*1.05 + score.away*.30).toFixed(2)],
-    corners:[Math.round(1 + phase*4), Math.round(phase*3)],
-    fouls:[Math.round(5 + phase*8), Math.round(7 + phase*9)],
-    cards:[0, minute>=27?1:0],
-    momentum: pct(48 + Math.sin(minute/8)*18 + (score.home-score.away)*10)
+    homePoss, awayPoss, ai,
+    shots:[Math.round(4 + phase*7 + ai.homeExpected*1.5 + score.home*1.5 + Math.max(0, boost)), Math.round(3 + phase*6 + ai.awayExpected*1.4 + score.away*1.5)],
+    onTarget:[Math.round(1 + phase*3 + ai.homeExpected + score.home + Math.max(0, subBoost/3)), Math.round(1 + phase*2.5 + ai.awayExpected + score.away)],
+    xg:[(ai.homeExpected * (0.45 + phase*.75) + score.home*.20).toFixed(2), (ai.awayExpected * (0.45 + phase*.75) + score.away*.20).toFixed(2)],
+    corners:[Math.round(1 + phase*4 + Math.max(0, ai.edge/18)), Math.round(phase*3 + Math.max(0, -ai.edge/20))],
+    fouls:[Math.round(5 + phase*8 + (matchState.decision==='pressure'?2:0)), Math.round(7 + phase*9 + (ai.league.cardRisk-70)/20)],
+    cards:[minute>=76 && matchState.decision==='pressure'?1:0, minute>=27?1:0],
+    momentum: pct(48 + edgeBoost + boost + subBoost + Math.sin(minute/8)*18 + (score.home-score.away)*10)
   };
 }
 function eventIcon(type){
@@ -34,7 +40,8 @@ export function match(state){
   const home = teams.find(t=>t.id===state.match?.home) || teams.find(t=>t.id==='santos') || teams[0];
   const away = teams.find(t=>t.id===state.match?.away) || teams.find(t=>t.id==='palmeiras') || teams[1] || home;
   const score = scoreUntil(minute);
-  const stats = buildStats(minute, score);
+  const stats = buildStats(minute, score, state.match || {}, state);
+  const balanceLines = buildBalanceSummary(state.match || {}, state);
   const events = matchTimeline.filter(e=>e.minute<=minute).slice(-7).reverse();
   const fieldEvents = matchTimeline.filter(e=>e.x && e.y && e.minute<=minute).slice(-8);
   const isOver = minute >= 90;
@@ -42,7 +49,16 @@ export function match(state){
   const commentary = events.map(e=>`<p class="live-event ${e.type}"><strong>${e.minute}' ${eventIcon(e.type)}</strong><span><b>${e.title}</b>${e.text}</span></p>`).join('');
   const fieldDots = fieldEvents.map(e=>`<div class="event-dot ${e.type}" style="left:${e.x}%;top:${e.y}%"><span>${eventIcon(e.type)}</span><small>${e.minute}'</small></div>`).join('');
   const ratingRows = playerRatings.map(p=>`<div class="rating-row"><strong>${p.rating.toFixed(1)}</strong><div><b>${p.name}</b><small>${p.role} · ${p.note}</small></div></div>`).join('');
-  const tips = matchActionTips.map(t=>`<button class="tactical-action" data-action="safe-toast" data-message="${t.label}: ${t.impact}"><strong>${t.label}</strong><small>${t.impact}</small></button>`).join('');
+  const decisionMap = { 'Manter posse':'possession', 'Pressionar saída':'pressure', 'Explorar direita':'right', 'Baixar bloco':'lowblock' };
+  const tips = matchActionTips.map(t=>`<button class="tactical-action ${state.match?.decision===decisionMap[t.label]?'active':''}" data-action="match-decision" data-decision="${decisionMap[t.label] || 'balanced'}"><strong>${t.label}</strong><small>${t.impact}</small></button>`).join('');
+  const subs = Array.isArray(state.match?.substitutions) ? state.match.substitutions : [];
+  const subsLeft = Math.max(0, Number(state.match?.maxSubs || 5) - subs.length);
+  const starters = ['giuliano','lucas-lima','julio-furch','tomas-rincon','guilherme'];
+  const bench = ['miguelito','weslley-patati','deivid-washington','angelo','pedrinho'];
+  const byId = new Map(squadPlayers.map(p=>[p.id,p]));
+  const subOptions = starters.map((outId,i)=>{ const inId = bench[i] || bench[0]; const outP = byId.get(outId) || {name:outId,pos:'--',fitness:68}; const inP = byId.get(inId) || {name:inId,pos:'--',fitness:90}; const done = subs.some(x=>x.out===outId) || subs.some(x=>x.in===inId); return `<button class="sub-card ${done?'disabled':''}" ${done || subsLeft<=0 || isOver ? 'disabled' : ''} data-action="match-substitution" data-out="${outId}" data-in="${inId}"><strong>${outP.name} ↔ ${inP.name}</strong><small>${outP.pos} ${Math.max(50, Math.round((outP.fitness||80)-minute/4))}% → ${inP.pos} ${inP.fitness||92}%</small></button>`; }).join('');
+  const subHistory = subs.length ? subs.map(x=>`<p class="live-event sub"><strong>${x.minute}' 🔁</strong><span><b>Substituição</b>${(byId.get(x.out)||{}).name || x.out} sai para entrada de ${(byId.get(x.in)||{}).name || x.in}.</span></p>`).join('') : '<p class="muted">Nenhuma substituição realizada.</p>';
+  const decisionLog = (state.match?.decisionLog || []).slice(-3).reverse().map(x=>`<div class="stat-line"><span>${x.minute}' ${x.label}</span><strong>Ativo</strong></div>`).join('') || '<p class="muted">Plano equilibrado ativo.</p>'; 
   return screenWrap('match', `${topbar('Partida ao vivo','Simulação premium · mesa tática 2D','lobby')}
     <section class="match-v140">
       <article class="panel match-score-hero">
@@ -74,11 +90,11 @@ export function match(state){
 
       <section class="grid grid-3 match-control-grid">
         <article class="panel"><span class="tag">Controles</span><h3>Ritmo da simulação</h3><div class="row wrap"><button class="secondary-btn" data-action="match-speed" data-speed="1">1x</button><button class="secondary-btn" data-action="match-speed" data-speed="2">2x</button><button class="secondary-btn" data-action="match-speed" data-speed="3">3x</button></div><button class="main-btn" data-action="match-advance">${controlLabel}</button><button class="secondary-btn danger" data-action="match-finish">Finalizar partida</button></article>
-        <article class="panel"><span class="tag">Substituições</span><h3>Banco e leitura física</h3><div class="stat-line"><span>Jogador cansado</span><strong>Lucas Lima 68%</strong></div><div class="stat-line"><span>Opção ofensiva</span><strong>Weslley Patati</strong></div><button class="secondary-btn" data-action="safe-toast" data-message="Tela de substituições detalhada preparada para a build de integração.">Abrir substituições</button></article>
-        <article class="panel"><span class="tag">Ações táticas</span><h3>Comandos rápidos</h3><div class="tactical-actions">${tips}</div></article>
+        <article class="panel substitutions-panel"><span class="tag">Substituições funcionais</span><h3>Banco e leitura física</h3><div class="stat-line"><span>Trocas restantes</span><strong>${subsLeft}/${state.match?.maxSubs || 5}</strong></div><div class="sub-list">${subOptions}</div><div class="commentary compact">${subHistory}</div></article>
+        <article class="panel"><span class="tag">Decisões em jogo</span><h3>Comandos rápidos</h3><div class="tactical-actions">${tips}</div><div class="decision-log">${decisionLog}</div></article>
       </section>
 
-      <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Notas ao vivo</span><h2>Destaques individuais</h2></div><strong class="grade">8.3</strong></div><div class="rating-list">${ratingRows}</div></article><article class="panel"><div class="row space"><div><span class="tag">Leitura do assistente</span><h2>Diagnóstico</h2></div><span class="status-pill">Anti-quebra ativo</span></div><p class="alert">O motor de partida agora calcula placar, eventos, estatísticas, momentum e narrativa por minuto. Sem imagens reais, logos e estádios usam fallback automático sem travar o jogo.</p><div class="stat-line"><span>Recomendação</span><strong>${score.home>=score.away?'Controlar transição':'Aumentar pressão'}</strong></div><div class="stat-line"><span>Risco atual</span><strong>${minute>75?'Alto':'Médio'}</strong></div></article></section>
+      <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Notas ao vivo</span><h2>Destaques individuais</h2></div><strong class="grade">8.3</strong></div><div class="rating-list">${ratingRows}</div></article><article class="panel ai-balance-live"><div class="row space"><div><span class="tag">IA v1.9</span><h2>Leitura realista da partida</h2></div><strong class="grade">${stats.ai.diff.name}</strong></div>${balanceLines.map(x=>`<div class="stat-line"><span>${x}</span><strong>OK</strong></div>`).join('')}<p class="alert">O motor considera força do elenco, mando, tática, moral, fadiga, ritmo da liga e variação controlada.</p></article><article class="panel"><div class="row space"><div><span class="tag">Leitura do assistente</span><h2>Diagnóstico</h2></div><span class="status-pill">Anti-quebra ativo</span></div><p class="alert">O motor de partida agora registra decisões táticas e substituições reais no estado da partida. Tudo continua com fallback automático para não quebrar quando assets finais ainda não existirem.</p><div class="stat-line"><span>Recomendação</span><strong>${score.home>=score.away?'Controlar transição':'Aumentar pressão'}</strong></div><div class="stat-line"><span>Risco atual</span><strong>${minute>75?'Alto':'Médio'}</strong></div></article></section>
     </section>`, true);
 }
 function awayPossLabel(value, name){ return `<b>${name}</b> ${value}%`; }

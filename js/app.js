@@ -12,7 +12,7 @@ import { moduleScreen } from './screens/moduleScreen.js';
 
 async function boot(){
   const app = document.getElementById('app');
-  let buildInfo = { buildLabel:'Build v1.6.0' };
+  let buildInfo = { buildLabel:'Build v1.9.0' };
   try { buildInfo = await (await fetch('build/build-info.json', {cache:'no-store'})).json(); } catch(err) { console.warn('[VFM] build-info fallback', err); }
   await loadAssetMap();
   load();
@@ -40,7 +40,8 @@ async function boot(){
     messages:['E-mail','Diretoria, imprensa, empresários, propostas e seleção nacional'],
     nationalTeam:['Seleções','Carreira internacional, convocação e calendário FIFA'],
     squad:['Elenco','Jogadores, forma, moral e contratos'],
-    settings:['Configurações','Preferências e segurança']
+    settings:['Configurações','Preferências e segurança'],
+    aiBalance:['IA e Balanceamento','Dificuldade, realismo, pesos da simulação e diagnóstico esportivo']
   };
   Object.entries(modules).forEach(([route,[title,sub]]) => register(route, (state)=> moduleScreen(route,title,sub,state)));
   render();

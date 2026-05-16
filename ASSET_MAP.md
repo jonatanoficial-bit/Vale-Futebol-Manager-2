@@ -242,3 +242,7 @@ Fallback:
 
 ## Build v1.6.0 - Integração de sistemas
 Esta build não exige novos assets obrigatórios. Mantém os mesmos caminhos de clubes, bandeiras, competições e estádios.
+
+
+## Build v1.9.0
+Mantidos caminhos de fotos de jogadores observados em `assets/players/scouted/`. O mercado funciona com placeholder caso a foto real não exista.

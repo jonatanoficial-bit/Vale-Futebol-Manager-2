@@ -20,6 +20,7 @@ export function lobby(state){
     ['sponsorship','Patrocínio','🤝','Receitas comerciais, bônus e exposição de marca','Finanças'],
     ['finances','Financeiro','💼','Orçamento, receitas, despesas e folha salarial','Diretoria'],
     ['messages','E-mail','✉️','Diretoria, imprensa, empresário e possíveis seleções','Carreira'],
+    ['aiBalance','IA / Realismo','🧠','Balanceamento esportivo, dificuldade e leitura da simulação','Motor'],
     ['club','Clube','🛡️','Resumo institucional, estádio, torcida e estrutura','Perfil'],
     ['settings','Configuração','⚙️','Save, qualidade, sons, acessibilidade e segurança','Sistema']
   ];

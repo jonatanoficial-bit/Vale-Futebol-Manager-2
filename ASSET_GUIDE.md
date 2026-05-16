@@ -52,3 +52,7 @@ assets/avatars/manager-01.png ... manager-12.png
 ```
 
 O jogo continua funcionando se qualquer imagem estiver ausente, pois usa automaticamente os placeholders.
+
+
+## Build v1.9.0
+Mantidos caminhos de fotos de jogadores observados em `assets/players/scouted/`. O mercado funciona com placeholder caso a foto real não exista.

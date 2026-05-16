@@ -29,6 +29,18 @@ export const scoutingReports = [
   {area:'Europa retorno', grade:'B', note:'Atletas valorizados, mas chance de empréstimo é alta no meio da temporada.'},
   {area:'Mercado livre', grade:'A', note:'Oportunidade imediata para compor elenco sem custo de transferência.'}
 ];
+export const renewalTargets = [
+  {id:'gil', player:'Gil', expires:'6 meses', wage:0.32, demand:0.44, risk:'Alto', recommendation:'Renovar por 1 ano com bônus por jogos'},
+  {id:'giuliano', player:'Giuliano', expires:'12 meses', wage:0.28, demand:0.40, risk:'Médio', recommendation:'Renovar se aceitar redução de luvas'},
+  {id:'joao-paulo', player:'João Paulo', expires:'18 meses', wage:0.35, demand:0.47, risk:'Baixo', recommendation:'Prioridade por liderança e identificação'}
+];
+export const boardTransferPolicy = [
+  {label:'Contratações imediatas', value:'Até 3 atletas'},
+  {label:'Exigência financeira', value:'Folha abaixo de 82%'},
+  {label:'Perfil preferido', value:'Revenda + base'},
+  {label:'Trava anti-quebra', value:'Bloqueio automático sem verba'}
+];
+
 export const contractRules = [
   {label:'Teto salarial recomendado', value:'€ 0.65M/mês'},
   {label:'Idade ideal de compra', value:'18 a 26 anos'},

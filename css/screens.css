@@ -70,3 +70,21 @@
   color: var(--gold-soft);
   font-weight: 600;
 }
+
+/* v1.7.0 - Substituições e decisões durante a partida */
+.substitutions-panel .sub-list{display:grid;gap:.65rem;margin:.8rem 0;}
+.sub-card{width:100%;text-align:left;border:1px solid rgba(247,198,83,.25);background:rgba(255,255,255,.055);color:var(--text,#f7f1dd);border-radius:16px;padding:.78rem .85rem;display:flex;flex-direction:column;gap:.2rem;cursor:pointer;transition:transform .18s ease,border-color .18s ease,background .18s ease;}
+.sub-card:hover,.sub-card:focus{transform:translateY(-1px);border-color:rgba(247,198,83,.62);background:rgba(247,198,83,.11);outline:none;}
+.sub-card small{color:var(--muted,#bdb5a3);font-size:.78rem;}
+.sub-card.disabled,.sub-card:disabled{opacity:.48;cursor:not-allowed;transform:none;}
+.tactical-action.active{border-color:rgba(247,198,83,.9)!important;box-shadow:0 0 0 1px rgba(247,198,83,.22),0 10px 24px rgba(247,198,83,.08);background:linear-gradient(135deg,rgba(247,198,83,.18),rgba(255,255,255,.06));}
+.decision-log{margin-top:.85rem;display:grid;gap:.45rem;}
+.commentary.compact{max-height:150px;overflow:auto;padding-right:.25rem;}
+@media (max-width:640px){.sub-card{padding:.7rem}.substitutions-panel .sub-list{gap:.5rem}.commentary.compact{max-height:120px}}
+
+
+/* v1.9.0 - IA e balanceamento esportivo */
+.ai-balance-v190 .candidate-card.selected{border-color:rgba(255,215,122,.7);box-shadow:0 0 0 1px rgba(255,215,122,.25),0 18px 34px rgba(0,0,0,.28)}
+.ai-balance-live{border-color:rgba(125,211,252,.26)}
+.small-list{margin:14px 0 0;padding-left:18px;color:var(--muted);line-height:1.55;font-size:.9rem}
+.small-list li{margin-bottom:6px}

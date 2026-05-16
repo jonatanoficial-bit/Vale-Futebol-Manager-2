@@ -1,4 +1,4 @@
-import { getState, setState, setManager, setUI, startCareer, advanceMatch, finishMatch, setMatchSpeed } from './state.js';
+import { getState, setState, setManager, setUI, startCareer, advanceMatch, finishMatch, setMatchSpeed, makeSubstitution, setMatchDecision, openTransferNegotiation, acceptTransferDeal, rejectTransferDeal, sellOutgoingPlayer, renewPlayerContract } from './state.js';
 const routes = new Map(); let rootEl = null; let buildInfo = null;
 export function register(name, renderer){ routes.set(name, renderer); }
 export function initRouter(root, build){ rootEl = root; buildInfo = build; }
@@ -8,8 +8,8 @@ export function render(){
   try { rootEl.innerHTML = renderer(state); wire(rootEl); fillBuildBadges(); }
   catch(err){ console.error('[VFM] erro na tela, tela segura acionada', err); rootEl.innerHTML = `<main class="screen"><div class="module-placeholder"><h1>Modo seguro</h1><p>Uma tela apresentou erro, mas o jogo continua funcionando.</p><button class="main-btn" data-route="lobby">Voltar ao lobby</button></div>${build()}</main>`; wire(rootEl); }
 }
-function build(){ return `<div class="build-badge">${buildInfo?.buildLabel || 'Build v1.6.0'}</div>`; }
-function fillBuildBadges(){ rootEl.querySelectorAll('#buildBadge,.build-badge').forEach(el=>{ if(!el.textContent.trim()) el.textContent = buildInfo?.buildLabel || 'Build v1.6.0'; }); }
+function build(){ return `<div class="build-badge">${buildInfo?.buildLabel || 'Build v1.9.0'}</div>`; }
+function fillBuildBadges(){ rootEl.querySelectorAll('#buildBadge,.build-badge').forEach(el=>{ if(!el.textContent.trim()) el.textContent = buildInfo?.buildLabel || 'Build v1.9.0'; }); }
 function wire(scope){
   scope.querySelectorAll('[data-route]').forEach(btn => btn.addEventListener('click', () => go(btn.dataset.route)));
   scope.querySelectorAll('[data-action="reset-save"]').forEach(btn => btn.addEventListener('click', () => { localStorage.clear(); location.reload(); }));
@@ -26,6 +26,13 @@ function wire(scope){
   scope.querySelectorAll('[data-action="match-advance"]').forEach(btn => btn.addEventListener('click', () => { advanceMatch(5); render(); }));
   scope.querySelectorAll('[data-action="match-finish"]').forEach(btn => btn.addEventListener('click', () => { finishMatch(); render(); }));
   scope.querySelectorAll('[data-action="match-speed"]').forEach(btn => btn.addEventListener('click', () => { setMatchSpeed(btn.dataset.speed || 1); render(); }));
+  scope.querySelectorAll('[data-action="match-substitution"]').forEach(btn => btn.addEventListener('click', () => { makeSubstitution(btn.dataset.out, btn.dataset.in); render(); }));
+  scope.querySelectorAll('[data-action="transfer-negotiate"]').forEach(btn => btn.addEventListener('click', () => { openTransferNegotiation(btn.dataset.player); render(); }));
+  scope.querySelectorAll('[data-action="transfer-accept"]').forEach(btn => btn.addEventListener('click', () => { acceptTransferDeal(btn.dataset.player); render(); }));
+  scope.querySelectorAll('[data-action="transfer-reject"]').forEach(btn => btn.addEventListener('click', () => { rejectTransferDeal(btn.dataset.player); render(); }));
+  scope.querySelectorAll('[data-action="transfer-sell"]').forEach(btn => btn.addEventListener('click', () => { sellOutgoingPlayer(btn.dataset.player); render(); }));
+  scope.querySelectorAll('[data-action="transfer-renew"]').forEach(btn => btn.addEventListener('click', () => { renewPlayerContract(btn.dataset.player); render(); }));
+  scope.querySelectorAll('[data-action="match-decision"]').forEach(btn => btn.addEventListener('click', () => { setMatchDecision(btn.dataset.decision); render(); }));
 
   scope.querySelectorAll('[data-action="set-ui-select"]').forEach(sel => sel.addEventListener('change', () => { const key=sel.dataset.uiKey; if(key) { setUI({[key]:sel.value}); render(); } }));
   scope.querySelectorAll('[data-action="select-country"]').forEach(sel => sel.addEventListener('change', () => { setUI({selectedCountry:sel.value}); render(); }));

@@ -36,3 +36,11 @@ Adiciona a partida simulada premium com mesa tática 2D, eventos por minuto, est
 
 ### Build v1.6.0
 Integração entre partida, calendário, classificação e save local. A partida agora grava resultado, atualiza histórico da carreira, exibe último resultado no lobby, marca jogo concluído no calendário e recalcula a tabela com segurança.
+
+
+### Build v1.7.0
+Esta build adiciona substituições funcionais e decisões táticas durante a partida. O jogo continua preparado para receber assets reais futuramente sem alteração de código, usando fallbacks automáticos quando imagens ainda não existirem.
+
+
+### Build v1.9.0
+Mercado interativo com propostas, compras, vendas, renovações, orçamento vivo e proteção anti-quebra.

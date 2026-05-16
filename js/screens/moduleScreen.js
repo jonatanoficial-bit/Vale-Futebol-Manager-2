@@ -6,8 +6,9 @@ import { standingsCompetitions, standingsTables, scorers, competitionStats } fro
 import { competitions, seasonMonths, schedule, calendarDays, eventTitle, eventClass } from '../data/seasonData.js';
 import { trainingThemes, weeklyPlan, developmentFocus, trainingStaffImpact, trainingAlerts } from '../data/trainingData.js';
 import { staffBudget, currentStaff, staffCandidates, staffDepartmentKpis, sponsorsOverview, activeSponsors, sponsorProposals, financeSnapshot } from '../data/staffData.js';
-import { transferWindow, transferShortlist, outgoingList, negotiations, scoutingReports, contractRules } from '../data/transferData.js';
+import { transferWindow, transferShortlist, outgoingList, negotiations, scoutingReports, contractRules, renewalTargets, boardTransferPolicy } from '../data/transferData.js';
 import { inboxMessages, careerProfile, jobOffers, nationalTeams, callUpPool, seasonObjectives } from '../data/careerData.js';
+import { difficultyProfiles, aiWeights, leaguePaceProfiles, balanceDiagnostics, aiTuningNotes } from '../data/balanceData.js';
 import { safeImg, clubLogo, country, stadium } from '../systems/assets.js';
 export function moduleScreen(route,title,subtitle,state){
   const extra = content(route, state);
@@ -48,6 +49,7 @@ function applyIntegratedStandings(rows=[], compId='brasileirao-a', state={}){
 }
 
 function content(route,state={}){
+  if(route==='aiBalance') return aiBalanceScreen(state);
   if(route==='formation') return formationScreen(state);
   if(route==='instructions') return instructionsScreen(state);
   if(route==='standings') {
@@ -225,6 +227,25 @@ function content(route,state={}){
   if(route==='settings') return `<section class="grid grid-2"><div class="panel"><h3>Geral</h3>${['Salvar automaticamente','Dicas','Negociações realistas','Lesões','Progresso offline'].map(x=>`<div class="stat-line"><span>${x}</span><strong>Ativo</strong></div>`).join('')}<button class="secondary-btn" data-action="reset-save">Resetar save</button></div><div class="panel"><h3>Qualidade</h3><p class="alert">Build anti-quebra: fallbacks de assets, rotas seguras, salvamento local protegido e auditoria de arquivos.</p></div></section>`;
   return `<section class="module-placeholder panel"><h1>Módulo preparado</h1><p class="subtitle">Esta tela já possui rota segura e será expandida nas próximas builds.</p><button class="main-btn" data-route="lobby">Voltar ao lobby</button></section>`;
 }
+function aiBalanceScreen(state={}){
+  const active = state.gameplay?.difficulty || 'realistic';
+  const profiles = difficultyProfiles.map(p=>`<article class="candidate-card ${p.id===active?'selected':''}"><div><span class="tag">${p.name}</span><h3>${p.realism}% realismo</h3><p>${p.description}</p><small>Pressão da diretoria ${p.boardPressure}% · Mercado ${p.transferStrictness}% · Variação ${p.variance}%</small></div><div class="candidate-side"><strong>${p.id===active?'ATIVO':'OK'}</strong><button class="secondary-btn mini" data-action="safe-toast" data-message="Perfil ${p.name} preparado. Troca real de dificuldade será ligada na build de integração total.">Ver</button></div></article>`).join('');
+  const weights = Object.entries(aiWeights).map(([k,v])=>`<div class="department-kpi"><div class="row space"><span>${labelWeight(k)}</span><strong>${v}%</strong></div><div class="meter"><span style="width:${v}%"></span></div></div>`).join('');
+  const leagues = leaguePaceProfiles.map(l=>`<tr><td><strong>${l.name}</strong></td><td>${l.tempo}</td><td>${l.physicality}</td><td>${l.parity}</td><td>${l.cardRisk}</td></tr>`).join('');
+  const diagnostics = balanceDiagnostics.map(d=>`<div class="need-row"><div><strong>${d.label}</strong><small>${d.note}</small></div><span>${d.value}</span><div class="meter"><span style="width:${d.value}%"></span></div></div>`).join('');
+  const notes = aiTuningNotes.map(n=>`<li>${n}</li>`).join('');
+  const logs = (state.gameplay?.balanceLog || []).slice(-5).reverse().map(x=>`<div class="news-item"><strong>${x.result}</strong><span>${(x.report||[]).join(' · ')}</span></div>`).join('') || '<p class="muted">Nenhuma partida finalizada com o motor v1.9 ainda.</p>';
+  return `<section class="ai-balance-v190">
+    <div class="panel standings-hero"><div><span class="tag">IA e balanceamento v1.9</span><h1>Motor esportivo realista</h1><p class="small">Esta build adiciona uma camada de inteligência para deixar resultados, estatísticas, mando de campo, decisões táticas, moral e variação mais coerentes. Tudo mantém fallback seguro para não quebrar saves antigos.</p></div><strong class="grade">${active.toUpperCase()}</strong></div>
+    <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Dificuldade</span><h2>Perfis de simulação</h2></div><button class="secondary-btn mini" data-route="match">Testar em partida</button></div><div class="candidate-list">${profiles}</div></article><article class="panel"><div class="row space"><div><span class="tag">Pesos da IA</span><h2>Como o resultado é calculado</h2></div><strong class="grade">100%</strong></div>${weights}</article></section>
+    <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Diagnóstico</span><h2>Coerência esportiva</h2></div><span class="status-pill">Anti-quebra ativo</span></div><div class="needs-list">${diagnostics}</div></article><article class="panel"><div class="row space"><div><span class="tag">Últimas partidas</span><h2>Log do balanceamento</h2></div><button class="secondary-btn mini" data-route="standings">Classificação</button></div><div class="news-list">${logs}</div><ul class="small-list">${notes}</ul></article></section>
+    <section class="panel table-panel"><div class="row space"><div><span class="tag">Ritmo por competição</span><h2>Perfis de liga preparados</h2></div><span class="status-pill">v1.9.0</span></div><div class="table-scroll"><table class="table"><thead><tr><th>Competição</th><th>Ritmo</th><th>Físico</th><th>Equilíbrio</th><th>Cartões</th></tr></thead><tbody>${leagues}</tbody></table></div></section>
+  </section>`;
+}
+function labelWeight(key){
+  return {squadQuality:'Qualidade do elenco', tacticalFit:'Encaixe tático', morale:'Moral', fitness:'Condição física', homeAdvantage:'Mando de campo', form:'Forma recente', staff:'Staff', randomness:'Variação controlada'}[key] || key;
+}
+
 function staffScreen(state={}){
   const usedPct = Math.round((staffBudget.used / staffBudget.monthlyLimit) * 100);
   const current = currentStaff.map(s=>`<article class="staff-card">
@@ -321,29 +342,47 @@ function money(value){
 
 function transfersScreen(state={}){
   const selectedFilter = state.ui?.transferFilter || 'all';
+  const transferState = state.transfer || {budget:42.8, wageRoom:2.4, activeNegotiations:[], acceptedDeals:[], rejectedDeals:[], outgoingDeals:[], renewals:[], negotiationLog:[]};
+  const activeMap = new Map([...(baseNegotiations||[]), ...(transferState.activeNegotiations||[])].map(n=>[n.id || n.player, n]));
+  const accepted = new Set((transferState.acceptedDeals||[]).map(d=>d.id));
+  const rejected = new Set((transferState.rejectedDeals||[]).map(d=>d.id));
+  const soldNames = new Set((transferState.outgoingDeals||[]).map(d=>d.name));
+  const renewed = new Set((transferState.renewals||[]).map(r=>r.id));
   const filtered = selectedFilter==='all' ? transferShortlist : transferShortlist.filter(p=>p.pos===selectedFilter || p.status.toLowerCase().includes(selectedFilter));
   const filters = ['all','ATA','MEI','VOL','ZAG','LE','PD','livre'].map(f=>`<button class="filter-chip ${selectedFilter===f?'active':''}" data-action="set-ui" data-ui-key="transferFilter" data-ui-value="${f}">${f==='all'?'Todos':f}</button>`).join('');
-  const cards = filtered.map(p=>`<article class="transfer-card ${p.status==='Prioridade'?'priority':''}">
-    <div class="transfer-face">${safeImg(p.photo,'player',p.name,'player-face')}</div>
-    <div class="transfer-main"><div class="row space"><div><strong>${p.name}</strong><small>${p.pos} · ${p.age} anos · ${p.club}</small></div><span class="status-pill">${p.status}</span></div>
-      <p>${p.role} · Risco ${p.risk}</p>
-      <div class="transfer-metrics"><span>OVR <b>${p.overall}</b></span><span>POT <b>${p.potential}</b></span><span>Interesse <b>${p.interest}%</b></span></div>
-      <div class="meter"><span style="width:${p.interest}%"></span></div>
-    </div>
-    <div class="transfer-price"><strong>${p.value===0?'Livre':'€ '+p.value.toFixed(1)+'M'}</strong><small>Salário € ${p.wage.toFixed(2)}M</small><button class="secondary-btn mini" data-action="safe-toast" data-message="Relatorio salvo para ${p.name}">Negociar</button></div>
-  </article>`).join('');
-  const outgoing = outgoingList.map(p=>`<div class="outgoing-row"><div><strong>${p.name}</strong><small>${p.pos} · ${p.age} anos · ${p.market}</small></div><b>€ ${p.value.toFixed(1)}M</b><span>${p.status}</span></div>`).join('');
-  const negs = negotiations.map(n=>`<div class="negotiation-row"><div><strong>${n.player}</strong><small>${n.type} · ${n.stage}</small></div><div><b>${n.chance}%</b><div class="meter"><span style="width:${n.chance}%"></span></div><small>${n.next}</small></div></div>`).join('');
+  const cards = filtered.map(p=>{
+    const n = activeMap.get(p.id) || activeMap.get(p.name);
+    const isAccepted = accepted.has(p.id);
+    const isRejected = rejected.has(p.id);
+    const disabled = isAccepted ? 'disabled' : '';
+    const status = isAccepted ? 'Assinado' : isRejected ? 'Encerrado' : n ? n.stage : p.status;
+    const chance = n?.chance ?? p.interest;
+    const offer = n ? (p.value===0 ? 'Livre' : `Oferta € ${Number(n.offer||0).toFixed(1)}M`) : (p.value===0?'Livre':'€ '+p.value.toFixed(1)+'M');
+    return `<article class="transfer-card ${p.status==='Prioridade'?'priority':''} ${isAccepted?'deal-done':''}">
+      <div class="transfer-face">${safeImg(p.photo,'player',p.name,'player-face')}</div>
+      <div class="transfer-main"><div class="row space"><div><strong>${p.name}</strong><small>${p.pos} · ${p.age} anos · ${p.club}</small></div><span class="status-pill">${status}</span></div>
+        <p>${p.role} · Risco ${p.risk}</p>
+        <div class="transfer-metrics"><span>OVR <b>${p.overall}</b></span><span>POT <b>${p.potential}</b></span><span>Chance <b>${chance}%</b></span></div>
+        <div class="meter"><span style="width:${chance}%"></span></div>
+      </div>
+      <div class="transfer-price"><strong>${offer}</strong><small>Salário € ${(n?.wageOffer ?? p.wage).toFixed(2)}M</small><div class="transfer-actions"><button class="secondary-btn mini" ${disabled} data-action="transfer-negotiate" data-player="${p.id}">${n?'Melhorar':'Negociar'}</button><button class="main-btn mini" ${disabled} data-action="transfer-accept" data-player="${p.id}">Fechar</button><button class="secondary-btn mini danger" ${isAccepted?'disabled':''} data-action="transfer-reject" data-player="${p.id}">Encerrar</button></div></div>
+    </article>`;
+  }).join('');
+  const outgoing = outgoingList.map(p=>`<div class="outgoing-row ${soldNames.has(p.name)?'deal-done':''}"><div><strong>${p.name}</strong><small>${p.pos} · ${p.age} anos · ${p.market}</small></div><b>€ ${p.value.toFixed(1)}M</b><span>${soldNames.has(p.name)?'Concluído':p.status}</span><button class="secondary-btn mini" ${soldNames.has(p.name)?'disabled':''} data-action="transfer-sell" data-player="${p.name}">Negociar saída</button></div>`).join('');
+  const negRows = [...(baseNegotiations||[]), ...(transferState.activeNegotiations||[])].filter((n,i,arr)=>arr.findIndex(x=>(x.id||x.player)===(n.id||n.player))===i).map(n=>`<div class="negotiation-row"><div><strong>${n.player}</strong><small>${n.type} · ${n.stage}</small></div><div><b>${n.chance}%</b><div class="meter"><span style="width:${n.chance}%"></span></div><small>${n.next}</small></div></div>`).join('');
+  const renewals = renewalTargets.map(r=>`<div class="renewal-row ${renewed.has(r.id)?'deal-done':''}"><div><strong>${r.player}</strong><small>Vence em ${r.expires} · risco ${r.risk}</small><p>${r.recommendation}</p></div><b>€ ${r.demand.toFixed(2)}M</b><button class="secondary-btn mini" ${renewed.has(r.id)?'disabled':''} data-action="transfer-renew" data-player="${r.id}">${renewed.has(r.id)?'Renovado':'Renovar'}</button></div>`).join('');
   const scout = scoutingReports.map(r=>`<div class="scout-row"><strong>${r.area}</strong><span>${r.grade}</span><p>${r.note}</p></div>`).join('');
-  const rules = contractRules.map(r=>`<div class="stat-line"><span>${r.label}</span><strong>${r.value}</strong></div>`).join('');
-  return `<section class="transfers-v130">
-    <div class="panel transfer-hero"><div><span class="tag">Mercado de transferências</span><h1>Central de negociações</h1><p class="small">Compra, venda, empréstimo, mercado livre e observação. A tela já está preparada para receber fotos reais dos atletas sem alterar código.</p></div><button class="main-btn" data-route="contracts">Ver contratos</button></div>
-    <section class="grid desktop-4"><div class="card kpi-card"><span>Janela</span><strong>${transferWindow.status}</strong><small>${transferWindow.daysLeft} dias restantes</small></div><div class="card kpi-card"><span>Orçamento</span><strong>€ ${transferWindow.budget.toFixed(1)}M</strong><small>Limite € ${transferWindow.boardLimit.toFixed(1)}M</small></div><div class="card kpi-card"><span>Folha livre</span><strong>€ ${transferWindow.wageRoom.toFixed(1)}M</strong><small>mês para salários</small></div><div class="card kpi-card"><span>Atração</span><strong>${transferWindow.reputationPull}</strong><small>reputação no mercado</small></div></section>
+  const rules = [...contractRules, ...boardTransferPolicy].map(r=>`<div class="stat-line"><span>${r.label}</span><strong>${r.value}</strong></div>`).join('');
+  const log = (transferState.negotiationLog||[]).slice(-6).reverse().map(l=>`<div class="mail-row compact"><strong>${l.message || l}</strong><small>${l.time ? new Date(l.time).toLocaleString('pt-BR') : 'Registro local'}</small></div>`).join('') || '<p class="small">Nenhuma negociação registrada nesta sessão.</p>';
+  return `<section class="transfers-v180">
+    <div class="panel transfer-hero"><div><span class="tag">Mercado interativo v1.8</span><h1>Central de negociações</h1><p class="small">Agora o mercado altera estado real: propostas, contrapropostas, contratações, vendas e renovações são gravadas no save local com travas anti-quebra.</p></div><button class="main-btn" data-route="contracts">Ver contratos</button></div>
+    <section class="grid desktop-4"><div class="card kpi-card"><span>Janela</span><strong>${transferWindow.status}</strong><small>${transferWindow.daysLeft} dias restantes</small></div><div class="card kpi-card"><span>Orçamento vivo</span><strong>€ ${Number(transferState.budget).toFixed(1)}M</strong><small>Limite seguro € ${transferWindow.boardLimit.toFixed(1)}M</small></div><div class="card kpi-card"><span>Folha livre</span><strong>€ ${Number(transferState.wageRoom).toFixed(2)}M</strong><small>bloqueio automático se estourar</small></div><div class="card kpi-card"><span>Movimentos</span><strong>${(transferState.acceptedDeals||[]).length + (transferState.outgoingDeals||[]).length}</strong><small>fechados no save</small></div></section>
     <section class="grid grid-2 transfer-layout"><article class="panel transfer-market"><div class="row space"><div><span class="tag">Radar</span><h2>Alvos disponíveis</h2></div><div class="filter-row">${filters}</div></div><div class="transfer-list">${cards}</div></article>
-    <article class="panel"><div class="row space"><div><span class="tag">Negociações</span><h2>Em andamento</h2></div><span class="status-pill">Anti-quebra</span></div><div class="negotiation-list">${negs}</div><div class="transfer-note"><strong>Necessidades da diretoria:</strong> ${transferWindow.needs.join(', ')}.</div></article></section>
-    <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Saídas</span><h2>Atletas negociáveis</h2></div><button class="secondary-btn mini" data-action="safe-toast" data-message="Lista de saidas atualizada">Atualizar lista</button></div><div class="outgoing-list">${outgoing}</div></article>
-    <article class="panel"><div class="row space"><div><span class="tag">Olheiros</span><h2>Relatórios por mercado</h2></div><button class="secondary-btn mini" data-route="staff">Olheiros</button></div><div class="scout-list">${scout}</div></article></section>
-    <section class="panel"><div class="row space"><div><span class="tag">Política contratual</span><h2>Diretrizes para não quebrar o clube</h2></div><button class="secondary-btn mini" data-route="finances">Financeiro</button></div><div class="grid desktop-4">${rules}</div><p class="alert">Build com proteção: propostas simuladas não reduzem orçamento ainda. A integração financeira real entra na build de integração total.</p></section>
+    <article class="panel"><div class="row space"><div><span class="tag">Negociações</span><h2>Em andamento</h2></div><span class="status-pill">Estado real</span></div><div class="negotiation-list">${negRows}</div><div class="transfer-note"><strong>Necessidades da diretoria:</strong> ${transferWindow.needs.join(', ')}.</div></article></section>
+    <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Saídas</span><h2>Atletas negociáveis</h2></div><span class="status-pill">Receita soma no orçamento</span></div><div class="outgoing-list">${outgoing}</div></article>
+    <article class="panel"><div class="row space"><div><span class="tag">Renovações</span><h2>Contratos críticos</h2></div><button class="secondary-btn mini" data-route="contracts">Contratos</button></div><div class="renewal-list">${renewals}</div></article></section>
+    <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Olheiros</span><h2>Relatórios por mercado</h2></div><button class="secondary-btn mini" data-route="staff">Olheiros</button></div><div class="scout-list">${scout}</div></article><article class="panel"><div class="row space"><div><span class="tag">Diário de mercado</span><h2>Últimas ações</h2></div><span class="status-pill">Save local</span></div><div class="premium-list">${log}</div></article></section>
+    <section class="panel"><div class="row space"><div><span class="tag">Política contratual</span><h2>Diretrizes anti-quebra</h2></div><button class="secondary-btn mini" data-route="finances">Financeiro</button></div><div class="grid desktop-4">${rules}</div><p class="alert">Proteção v1.8: a diretoria bloqueia automaticamente contratações acima do orçamento ou da folha salarial livre. Cada negociação é reversível por save/reset.</p></section>
   </section>`;
 }
 

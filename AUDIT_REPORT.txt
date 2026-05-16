@@ -1,16 +1,6 @@
-AUDIT REPORT - Vale Futebol Manager: Gold Edition
-Build: v1.6.0 | 2026-05-16 | 16:09 UTC
-Fase: Integração partida-calendário-classificação-save
+AUDIT REPORT - Vale Futebol Manager
+Files: 245
+Errors: 0
+Warnings: 0
 
-Erros críticos: 0
-Avisos: 0
-
-Checagens concluídas:
-- match advance action: OK
-- finish match action: OK
-- state finishMatch: OK
-- integrated standings: OK
-- schedule state: OK
-- save key v160: OK
-
-Resultado: APROVADO
+Build v1.9.0 auditada com camada de IA e balanceamento esportivo.

@@ -1,14 +1,18 @@
 import { matchTimeline } from '../data/matchData.js';
 import { schedule } from '../data/seasonData.js';
+import { transferShortlist, negotiations as baseNegotiations, outgoingList } from '../data/transferData.js';
+import { scoreFromTimeline, buildBalanceSummary } from './balance.js';
 
-const key = 'vfm_gold_save_v160';
-const legacyKeys = ['vfm_gold_save_v150', 'vfm_gold_save_v140', 'vfm_gold_save_v130', 'vfm_gold_save_v120', 'vfm_gold_save_v110', 'vfm_gold_save_v100', 'vfm_gold_save_v090', 'vfm_gold_save_v080', 'vfm_gold_save_v050', 'vfm_gold_save_v040', 'vfm_gold_save_v030', 'vfm_gold_save_v020', 'vfm_gold_save_v010'];
+const key = 'vfm_gold_save_v190';
+const legacyKeys = ['vfm_gold_save_v180', 'vfm_gold_save_v170', 'vfm_gold_save_v160', 'vfm_gold_save_v150', 'vfm_gold_save_v140', 'vfm_gold_save_v130', 'vfm_gold_save_v120', 'vfm_gold_save_v110', 'vfm_gold_save_v100', 'vfm_gold_save_v090', 'vfm_gold_save_v080', 'vfm_gold_save_v050', 'vfm_gold_save_v040', 'vfm_gold_save_v030', 'vfm_gold_save_v020', 'vfm_gold_save_v010'];
 export const defaultState = () => ({
   route:'cover',
   manager:{ name:'Joao Victor', country:'br', avatar:'assets/avatars/manager-01.png', reputation:82, mode:'career' },
   clubId:'santos', season:2024, month:'Julho', money:92.5, coins:250, notifications:6, boardTrust:76, fanMood:82, jobSecurity:'Seguro',
-  match:{ id:'2024-07-03-santos-palmeiras', date:'2024-07-03', competitionId:'brasileirao-a', competition:'Brasileirão Série A', stage:'Rodada 12', minute:57, home:'santos', away:'palmeiras', homeGoals:1, awayGoals:0, speed:1, finalized:false },
-  career:{ currentDate:'2024-07-03', matchday:12, completedMatches:[], lastResult:null, integrationLog:['Carreira carregada com integração segura v1.6.0.'] },
+  match:{ id:'2024-07-03-santos-palmeiras', date:'2024-07-03', competitionId:'brasileirao-a', competition:'Brasileirão Série A', stage:'Rodada 12', minute:57, home:'santos', away:'palmeiras', homeGoals:1, awayGoals:0, speed:1, finalized:false, substitutions:[], maxSubs:5, decision:'balanced', tacticalBoost:0, usedSubPlayers:[] },
+  career:{ currentDate:'2024-07-03', matchday:12, completedMatches:[], lastResult:null, integrationLog:['Carreira carregada com IA e balanceamento seguro v1.9.0.'] },
+  gameplay:{ difficulty:'realistic', aiVersion:'v1.9.0', realism:84, variance:22, balanceLog:[] },
+  transfer:{ budget:42.8, wageRoom:2.4, negotiationLog:[], activeNegotiations:[], acceptedDeals:[], rejectedDeals:[], outgoingDeals:[], renewals:[] },
   ui:{ selectedAvatar:'assets/avatars/manager-01.png', selectedMode:'career', selectedCountry:'br', selectedClub:'santos', teamCountryFilter:'all', teamLeagueFilter:'all', teamSort:'level', standingsCompetition:'brasileirao-a', selectedFormation:'433-possession', tacticalProfile:'possession', trainingTheme:'possession', transferFilter:'all' }
 });
 let state = defaultState();
@@ -28,9 +32,26 @@ function normalize(next){
   merged.manager = sanitizeManager({...base.manager, ...(next?.manager || {})});
   merged.ui = {...base.ui, ...(next?.ui || {})};
   merged.match = {...base.match, ...(next?.match || {})};
+  if(!Array.isArray(merged.match.substitutions)) merged.match.substitutions = [];
+  if(!Array.isArray(merged.match.usedSubPlayers)) merged.match.usedSubPlayers = [];
+  merged.match.maxSubs = Math.max(3, Math.min(5, Number(merged.match.maxSubs || 5)));
+  merged.match.decision = String(merged.match.decision || 'balanced');
+  merged.match.tacticalBoost = Number(merged.match.tacticalBoost || 0);
   merged.career = {...base.career, ...(next?.career || {})};
   if(!Array.isArray(merged.career.completedMatches)) merged.career.completedMatches = [];
   if(!Array.isArray(merged.career.integrationLog)) merged.career.integrationLog = [];
+  merged.gameplay = {...base.gameplay, ...(next?.gameplay || {})};
+  if(!Array.isArray(merged.gameplay.balanceLog)) merged.gameplay.balanceLog = [];
+  if(!['easy','realistic','hardcore'].includes(merged.gameplay.difficulty)) merged.gameplay.difficulty = 'realistic';
+  merged.transfer = {...base.transfer, ...(next?.transfer || {})};
+  merged.transfer.budget = Math.max(0, Number(merged.transfer.budget || base.transfer.budget));
+  merged.transfer.wageRoom = Math.max(0, Number(merged.transfer.wageRoom || base.transfer.wageRoom));
+  if(!Array.isArray(merged.transfer.negotiationLog)) merged.transfer.negotiationLog = [];
+  if(!Array.isArray(merged.transfer.activeNegotiations)) merged.transfer.activeNegotiations = [];
+  if(!Array.isArray(merged.transfer.acceptedDeals)) merged.transfer.acceptedDeals = [];
+  if(!Array.isArray(merged.transfer.rejectedDeals)) merged.transfer.rejectedDeals = [];
+  if(!Array.isArray(merged.transfer.outgoingDeals)) merged.transfer.outgoingDeals = [];
+  if(!Array.isArray(merged.transfer.renewals)) merged.transfer.renewals = [];
   merged.match.minute = Math.max(1, Math.min(90, Number(merged.match.minute || 1)));
   if(typeof merged.match.finalized !== 'boolean') merged.match.finalized = merged.match.minute >= 90 && merged.career.completedMatches.some(m=>m.id===merged.match.id);
   if(!merged.ui.selectedAvatar) merged.ui.selectedAvatar = merged.manager.avatar;
@@ -67,14 +88,7 @@ export function startCareer(){
 }
 
 function scoreUntilMinute(match){
-  const minute = Math.max(1, Math.min(90, Number(match?.minute || 1)));
-  const homeId = match?.home || 'santos';
-  const awayId = match?.away || 'palmeiras';
-  return matchTimeline.filter(e => e.type === 'goal' && e.minute <= minute).reduce((acc,e)=>{
-    if(e.team === homeId) acc.home += 1;
-    if(e.team === awayId) acc.away += 1;
-    return acc;
-  }, {home:0, away:0});
+  return scoreFromTimeline(matchTimeline, match, state);
 }
 function findNextMatch(afterId){
   const completed = new Set((state.career?.completedMatches || []).map(m=>m.id));
@@ -93,7 +107,12 @@ function findNextMatch(afterId){
     homeGoals:0,
     awayGoals:0,
     speed:1,
-    finalized:false
+    finalized:false,
+    substitutions:[],
+    maxSubs:5,
+    decision:'balanced',
+    tacticalBoost:0,
+    usedSubPlayers:[]
   };
 }
 function slug(name=''){
@@ -147,6 +166,8 @@ export function finishMatch(){
   const moneyBonus = result.points === 3 ? 2.5 : result.points === 1 ? 0.8 : 0.2;
   const trustDelta = result.points === 3 ? 2 : result.points === 1 ? 0 : -2;
   const fanDelta = result.points === 3 ? 3 : result.points === 1 ? 0 : -3;
+  const balanceLog = Array.isArray(state.gameplay?.balanceLog) ? state.gameplay.balanceLog.slice(-9) : [];
+  balanceLog.push({date:result.date, match:result.id, report:buildBalanceSummary(current, state), result:result.summary});
   const career = {...state.career, completedMatches:completed, lastResult:result, currentDate: next?.date || result.date};
   state = normalize({
     ...state,
@@ -155,14 +176,166 @@ export function finishMatch(){
     money: Number((Number(state.money || 0) + (already ? 0 : moneyBonus)).toFixed(1)),
     boardTrust: Math.max(0, Math.min(100, Number(state.boardTrust || 76) + (already ? 0 : trustDelta))),
     fanMood: Math.max(0, Math.min(100, Number(state.fanMood || 82) + (already ? 0 : fanDelta))),
-    notifications: Number(state.notifications || 0) + (already ? 0 : 1)
+    notifications: Number(state.notifications || 0) + (already ? 0 : 1),
+    gameplay:{...state.gameplay, balanceLog}
   });
   logIntegration(`Resultado integrado: ${result.competition} ${result.stage} terminou ${result.summary}. Calendário, lobby, classificação e save foram atualizados.`);
   persist();
   return result;
 }
+
+export function setMatchDecision(decision='balanced'){
+  const allowed = {
+    possession:{label:'Manter posse', boost:2, note:'Time reduz risco, preserva energia e controla melhor o relógio.'},
+    pressure:{label:'Pressionar saída', boost:3, note:'Time sobe a marcação, cria mais roubadas e aumenta fadiga.'},
+    right:{label:'Explorar direita', boost:2, note:'Ataques passam a buscar o corredor direito contra lateral cansado.'},
+    lowblock:{label:'Baixar bloco', boost:-1, note:'Time protege a área e aceita menos posse para defender vantagem.'},
+    balanced:{label:'Equilibrado', boost:0, note:'Time mantém plano base sem exposição extra.'}
+  };
+  const item = allowed[decision] || allowed.balanced;
+  const current = {...(state.match || defaultState().match)};
+  current.decision = decision in allowed ? decision : 'balanced';
+  current.tacticalBoost = item.boost;
+  const log = Array.isArray(current.decisionLog) ? current.decisionLog.slice(-4) : [];
+  log.push({minute:Number(current.minute||1), label:item.label, note:item.note});
+  current.decisionLog = log;
+  state = normalize({...state, match:current});
+  logIntegration(`Decisão em jogo aplicada aos ${current.minute}': ${item.label}.`);
+  persist();
+}
+
+export function makeSubstitution(outPlayer='giuliano', inPlayer='miguelito'){
+  const current = {...(state.match || defaultState().match)};
+  const substitutions = Array.isArray(current.substitutions) ? current.substitutions.slice() : [];
+  const used = new Set(Array.isArray(current.usedSubPlayers) ? current.usedSubPlayers : []);
+  const minute = Math.max(1, Math.min(90, Number(current.minute || 1)));
+  const maxSubs = Math.max(3, Math.min(5, Number(current.maxSubs || 5)));
+  if(current.finalized || minute >= 90){
+    logIntegration('Substituição bloqueada com segurança: partida encerrada.');
+    return false;
+  }
+  if(substitutions.length >= maxSubs){
+    logIntegration('Substituição bloqueada com segurança: limite máximo atingido.');
+    return false;
+  }
+  if(!outPlayer || !inPlayer || outPlayer === inPlayer || used.has(inPlayer)){
+    logIntegration('Substituição ignorada: combinação inválida ou atleta já utilizado.');
+    return false;
+  }
+  const record = {minute, out:outPlayer, in:inPlayer, id:`sub-${minute}-${outPlayer}-${inPlayer}`};
+  substitutions.push(record);
+  used.add(inPlayer);
+  current.substitutions = substitutions;
+  current.usedSubPlayers = [...used];
+  current.tacticalBoost = Number(current.tacticalBoost || 0) + 1;
+  const subLog = Array.isArray(current.subLog) ? current.subLog.slice(-4) : [];
+  subLog.push(record);
+  current.subLog = subLog;
+  state = normalize({...state, match:current});
+  logIntegration(`Substituição realizada aos ${minute}': ${outPlayer} por ${inPlayer}.`);
+  persist();
+  return true;
+}
+
 export function getCompletedMatchMap(){
   return new Map((state.career?.completedMatches || []).map(m => [m.id, m]));
+}
+
+
+function transferLog(message){
+  const transfer = {...(state.transfer || defaultState().transfer)};
+  const log = Array.isArray(transfer.negotiationLog) ? transfer.negotiationLog.slice(-7) : [];
+  log.push({time:new Date().toISOString(), message});
+  transfer.negotiationLog = log;
+  state = normalize({...state, transfer});
+  logIntegration(message);
+}
+function findTarget(playerId){
+  return transferShortlist.find(p => p.id === playerId) || null;
+}
+function findOutgoing(name){
+  return outgoingList.find(p => slug(p.name) === slug(name) || p.name === name) || null;
+}
+export function openTransferNegotiation(playerId){
+  const target = findTarget(playerId);
+  if(!target){ transferLog('Negociação bloqueada: atleta não encontrado no radar.'); persist(); return false; }
+  const transfer = {...(state.transfer || defaultState().transfer)};
+  if(transfer.acceptedDeals.some(d=>d.id===target.id)){ transferLog(`Negociação bloqueada: ${target.name} já foi contratado.`); persist(); return false; }
+  let active = Array.isArray(transfer.activeNegotiations) ? [...transfer.activeNegotiations] : [];
+  const existing = active.find(n=>n.id===target.id);
+  const baseOffer = target.value === 0 ? 0 : Number((target.value * 0.82).toFixed(1));
+  const wageOffer = Number((target.wage * 0.88).toFixed(2));
+  if(existing){
+    existing.offer = Number(Math.min(target.value || existing.offer + 0.1, existing.offer + Math.max(0.3, (target.value||1)*0.08)).toFixed(1));
+    existing.wageOffer = Number(Math.min(target.wage, existing.wageOffer + 0.04).toFixed(2));
+    existing.chance = Math.min(96, existing.chance + 7);
+    existing.stage = 'Contraproposta enviada';
+    existing.next = existing.chance >= 78 ? 'Pode aceitar com bônus por metas' : 'Aumentar luvas ou reduzir risco';
+  } else {
+    active.push({id:target.id, player:target.name, type:target.value===0?'Livre':'Compra', stage:'Proposta formal enviada', chance:Math.max(35, Math.min(92, target.interest - 8)), offer:baseOffer, demand:target.value, wageOffer, wageDemand:target.wage, next:'Aguardar resposta do empresário'});
+  }
+  transfer.activeNegotiations = active;
+  transferLog(`Proposta enviada por ${target.name}.`);
+  persist();
+  return true;
+}
+export function acceptTransferDeal(playerId){
+  const target = findTarget(playerId);
+  if(!target){ transferLog('Aceite bloqueado: atleta não encontrado.'); persist(); return false; }
+  const transfer = {...(state.transfer || defaultState().transfer)};
+  const active = Array.isArray(transfer.activeNegotiations) ? transfer.activeNegotiations : [];
+  const deal = active.find(n=>n.id===target.id) || {id:target.id, player:target.name, offer:target.value, wageOffer:target.wage, chance:target.interest, type:target.value===0?'Livre':'Compra'};
+  if(transfer.acceptedDeals.some(d=>d.id===target.id)){ transferLog(`${target.name} já está marcado como contratado.`); persist(); return false; }
+  const fee = Number(deal.offer || 0);
+  const wage = Number(deal.wageOffer || target.wage || 0);
+  if(fee > transfer.budget || wage > transfer.wageRoom){ transferLog(`Diretoria bloqueou ${target.name}: orçamento ou folha insuficiente.`); persist(); return false; }
+  transfer.budget = Number((transfer.budget - fee).toFixed(1));
+  transfer.wageRoom = Number((transfer.wageRoom - wage).toFixed(2));
+  transfer.acceptedDeals = [...(transfer.acceptedDeals || []), {...deal, finalFee:fee, finalWage:wage, status:'Assinado'}];
+  transfer.activeNegotiations = active.filter(n=>n.id!==target.id);
+  state = normalize({...state, transfer, notifications:Number(state.notifications||0)+1});
+  transferLog(`Contrato fechado com ${target.name}: taxa € ${fee.toFixed(1)}M e salário € ${wage.toFixed(2)}M.`);
+  persist();
+  return true;
+}
+export function rejectTransferDeal(playerId){
+  const target = findTarget(playerId);
+  if(!target){ transferLog('Recusa bloqueada: atleta não encontrado.'); persist(); return false; }
+  const transfer = {...(state.transfer || defaultState().transfer)};
+  const active = Array.isArray(transfer.activeNegotiations) ? transfer.activeNegotiations : [];
+  transfer.rejectedDeals = [...(transfer.rejectedDeals || []), {id:target.id, player:target.name, reason:'Encerrado pelo manager'}].slice(-12);
+  transfer.activeNegotiations = active.filter(n=>n.id!==target.id);
+  state = normalize({...state, transfer});
+  transferLog(`Negociação encerrada com ${target.name}.`);
+  persist();
+  return true;
+}
+export function sellOutgoingPlayer(name){
+  const player = findOutgoing(name);
+  if(!player){ transferLog('Venda bloqueada: jogador não encontrado na lista de saídas.'); persist(); return false; }
+  const transfer = {...(state.transfer || defaultState().transfer)};
+  if(transfer.outgoingDeals.some(d=>d.name===player.name)){ transferLog(`${player.name} já possui venda/empréstimo registrado.`); persist(); return false; }
+  const revenue = Number((player.value * 0.92).toFixed(1));
+  transfer.budget = Number((transfer.budget + revenue).toFixed(1));
+  transfer.wageRoom = Number((transfer.wageRoom + Number(player.wage || 0)).toFixed(2));
+  transfer.outgoingDeals = [...(transfer.outgoingDeals || []), {...player, revenue, status:'Negociação concluída'}];
+  state = normalize({...state, transfer, money:Number((Number(state.money||0)+revenue).toFixed(1))});
+  transferLog(`Saída concluída: ${player.name}. Receita € ${revenue.toFixed(1)}M e folha liberada.`);
+  persist();
+  return true;
+}
+export function renewPlayerContract(playerId='giuliano'){
+  const transfer = {...(state.transfer || defaultState().transfer)};
+  const id = String(playerId || 'giuliano');
+  if(transfer.renewals.some(r=>r.id===id)){ transferLog('Renovação já registrada para este atleta.'); persist(); return false; }
+  const cost = 0.12;
+  if(transfer.wageRoom < cost){ transferLog('Renovação bloqueada: folha salarial livre insuficiente.'); persist(); return false; }
+  transfer.wageRoom = Number((transfer.wageRoom - cost).toFixed(2));
+  transfer.renewals = [...(transfer.renewals || []), {id, years:2, wageIncrease:cost, status:'Renovado'}];
+  state = normalize({...state, transfer});
+  transferLog(`Renovação registrada para ${id}: +2 anos de contrato.`);
+  persist();
+  return true;
 }
 
 export function persist(){ try { localStorage.setItem(key, JSON.stringify(state)); } catch(err){ console.warn('[VFM] save local indisponivel', err); } }

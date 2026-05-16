@@ -1,7 +1,5 @@
 Vale Futebol Manager: Gold Edition
-Build: v1.6.0
-Data: 2026-05-16
-Hora: 16:09 UTC
-Fase: Integração partida-calendário-classificação-save
-Entrega: ZIP completo do jogo inteiro
-Hospedagem alvo: GitHub Pages / Vercel
+Build: Build v1.9.0 | 2026-05-16 | 18:45 UTC
+Fase: Mercado interativo: propostas, compras, vendas e renovações reais
+Conteúdo: ZIP completo do jogo inteiro para GitHub Pages e Vercel.
+Anti-quebra: rotas seguras, fallbacks de assets, save migrável, bloqueio financeiro de transferências, auditoria JS.
