@@ -4,16 +4,16 @@ import { transferShortlist, negotiations as baseNegotiations, outgoingList } fro
 import { scoreFromTimeline, buildBalanceSummary } from './balance.js';
 import { squadPlayers as defaultRosterPlayers, rosterMeta as defaultRosterMeta, normalizeRoster } from '../data/squadData.js';
 
-const key = 'vfm_gold_save_v250';
+const key = 'vfm_gold_save_v251';
 const legacyKeys = ['vfm_gold_save_v240', 'vfm_gold_save_v230', 'vfm_gold_save_v220', 'vfm_gold_save_v210', 'vfm_gold_save_v200', 'vfm_gold_save_v190', 'vfm_gold_save_v180', 'vfm_gold_save_v170', 'vfm_gold_save_v160', 'vfm_gold_save_v150', 'vfm_gold_save_v140', 'vfm_gold_save_v130', 'vfm_gold_save_v120', 'vfm_gold_save_v110', 'vfm_gold_save_v100', 'vfm_gold_save_v090', 'vfm_gold_save_v080', 'vfm_gold_save_v050', 'vfm_gold_save_v040', 'vfm_gold_save_v030', 'vfm_gold_save_v020', 'vfm_gold_save_v010'];
 export const defaultState = () => ({
   route:'cover',
   manager:{ name:'Joao Victor', country:'br', avatar:'assets/avatars/manager-01.png', reputation:82, mode:'career' },
   clubId:'santos', season:2026, month:'Maio', money:92.5, coins:250, notifications:6, boardTrust:76, fanMood:82, jobSecurity:'Seguro',
   match:{ id:'2026-05-24-santos-palmeiras', date:'2026-05-24', competitionId:'brasileirao-a', competition:'Brasileirão Série A', stage:'Rodada 12', minute:57, home:'santos', away:'palmeiras', homeGoals:1, awayGoals:0, speed:1, finalized:false, substitutions:[], maxSubs:5, decision:'balanced', tacticalBoost:0, usedSubPlayers:[] },
-  career:{ currentDate:'2026-05-19', matchday:12, completedMatches:[], lastResult:null, integrationLog:['Carreira migrada para v2.5.0 com central de atualização de elencos, importação JSON segura e Santos 2026 atualizado.'] },
-  gameplay:{ difficulty:'realistic', aiVersion:'v2.5.0', realism:84, variance:22, balanceLog:[] },
-  stability:{ autosave:true, lastBackup:null, backupCount:0, lastExport:null, lastImport:null, safeModeEvents:0, health:'Excelente', auditVersion:'v2.5.0', commercialAudit:'ok', fullscreenMobile:true, overflowGuard:true, rosterSafeMode:true },
+  career:{ currentDate:'2026-05-19', matchday:12, completedMatches:[], lastResult:null, integrationLog:['Carreira migrada para v2.5.1 com central de atualização de elencos, importação JSON segura e Santos 2026 atualizado.'] },
+  gameplay:{ difficulty:'realistic', aiVersion:'v2.5.1', realism:84, variance:22, balanceLog:[] },
+  stability:{ autosave:true, lastBackup:null, backupCount:0, lastExport:null, lastImport:null, safeModeEvents:0, health:'Excelente', auditVersion:'v2.5.1', commercialAudit:'ok', fullscreenMobile:true, overflowGuard:true, rosterSafeMode:true },
   roster:{ meta: defaultRosterMeta, players: defaultRosterPlayers, lastImport:null, lastExport:null, validationLog:['Elenco base Santos 2026 carregado com proteção anti-quebra.'] },
   transfer:{ budget:42.8, wageRoom:2.4, negotiationLog:[], activeNegotiations:[], acceptedDeals:[], rejectedDeals:[], outgoingDeals:[], renewals:[] },
   ui:{ selectedAvatar:'assets/avatars/manager-01.png', selectedMode:'career', selectedCountry:'br', selectedClub:'santos', teamCountryFilter:'all', teamLeagueFilter:'all', teamSort:'level', standingsCompetition:'brasileirao-a', selectedFormation:'433-possession', tacticalProfile:'possession', trainingTheme:'possession', transferFilter:'all' }
@@ -399,7 +399,7 @@ export function reset(){ state = defaultState(); persist(); }
 export function createManualBackup(slot=1){
   try {
     const safeSlot = Math.max(1, Math.min(3, Number(slot || 1)));
-    const payload = JSON.stringify({...state, backupMeta:{version:'v2.5.0', createdAt:new Date().toISOString(), slot:safeSlot}});
+    const payload = JSON.stringify({...state, backupMeta:{version:'v2.5.1', createdAt:new Date().toISOString(), slot:safeSlot}});
     localStorage.setItem(`vfm_gold_backup_${safeSlot}`, payload);
     state = normalize({...state, stability:{...(state.stability||{}), lastBackup:new Date().toISOString(), backupCount:Number(state.stability?.backupCount||0)+1, health:'Backup atualizado'}});
     persist();
@@ -419,7 +419,7 @@ export function restoreManualBackup(slot=1){
 }
 export function exportSaveText(){
   try {
-    const payload = JSON.stringify({...state, exportMeta:{version:'v2.5.0', exportedAt:new Date().toISOString()}}, null, 2);
+    const payload = JSON.stringify({...state, exportMeta:{version:'v2.5.1', exportedAt:new Date().toISOString()}}, null, 2);
     state = normalize({...state, stability:{...(state.stability||{}), lastExport:new Date().toISOString(), health:'Exportacao pronta'}});
     persist();
     return payload;

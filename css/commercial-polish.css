@@ -1,55 +1,55 @@
-/* Vale Futebol Manager Gold Edition - Commercial Polish v2.5.0 */
+/* Vale Futebol Manager Gold Edition - Commercial Polish v2.5.1 */
 :root{
   --premium-shadow: 0 18px 42px rgba(0,0,0,.42), inset 0 1px 0 rgba(255,255,255,.07);
   --premium-glow: 0 0 28px rgba(236,190,72,.16);
   --touch-min: 44px;
 }
-.vfm-commercial-v250 body{background:#020307;}
-.vfm-commercial-v250 .panel,
-.vfm-commercial-v250 .card,
-.vfm-commercial-v250 .competition-card,
-.vfm-commercial-v250 .fixture-row,
-.vfm-commercial-v250 .scorer-row,
-.vfm-commercial-v250 .structure-row,
-.vfm-commercial-v250 .contract-alert-row{
+.vfm-commercial-v251 body{background:#020307;}
+.vfm-commercial-v251 .panel,
+.vfm-commercial-v251 .card,
+.vfm-commercial-v251 .competition-card,
+.vfm-commercial-v251 .fixture-row,
+.vfm-commercial-v251 .scorer-row,
+.vfm-commercial-v251 .structure-row,
+.vfm-commercial-v251 .contract-alert-row{
   box-shadow:var(--premium-shadow);
   border-color:rgba(255,214,102,.16)!important;
   backdrop-filter: blur(14px) saturate(1.16);
 }
-.vfm-commercial-v250 .main-btn,
-.vfm-commercial-v250 .primary-btn{
+.vfm-commercial-v251 .main-btn,
+.vfm-commercial-v251 .primary-btn{
   box-shadow:0 12px 28px rgba(236,190,72,.22), inset 0 1px 0 rgba(255,255,255,.22);
   min-height:var(--touch-min);
   letter-spacing:.02em;
 }
-.vfm-commercial-v250 .secondary-btn,
-.vfm-commercial-v250 .nav-btn,
-.vfm-commercial-v250 button{
+.vfm-commercial-v251 .secondary-btn,
+.vfm-commercial-v251 .nav-btn,
+.vfm-commercial-v251 button{
   min-height:var(--touch-min);
 }
-.vfm-commercial-v250 .table-scroll{max-width:100%; overflow:auto; -webkit-overflow-scrolling:touch; border-radius:18px;}
-.vfm-commercial-v250 .table{min-width:620px;}
-.vfm-commercial-v250 .screen{padding-left:max(14px, env(safe-area-inset-left)); padding-right:max(14px, env(safe-area-inset-right));}
-.vfm-commercial-v250 .build-badge{font-weight:700; text-shadow:0 2px 8px #000;}
-.vfm-commercial-v250 .tap-feedback{transform:scale(.985); filter:brightness(1.14);}
-.vfm-commercial-v250 .match-pitch,
-.vfm-commercial-v250 .tactical-board{box-shadow:var(--premium-glow), inset 0 0 40px rgba(255,255,255,.04);}
+.vfm-commercial-v251 .table-scroll{max-width:100%; overflow:auto; -webkit-overflow-scrolling:touch; border-radius:18px;}
+.vfm-commercial-v251 .table{min-width:620px;}
+.vfm-commercial-v251 .screen{padding-left:max(14px, env(safe-area-inset-left)); padding-right:max(14px, env(safe-area-inset-right));}
+.vfm-commercial-v251 .build-badge{font-weight:700; text-shadow:0 2px 8px #000;}
+.vfm-commercial-v251 .tap-feedback{transform:scale(.985); filter:brightness(1.14);}
+.vfm-commercial-v251 .match-pitch,
+.vfm-commercial-v251 .tactical-board{box-shadow:var(--premium-glow), inset 0 0 40px rgba(255,255,255,.04);}
 @media(max-width:430px){
-  .vfm-commercial-v250 .screen{padding-top:calc(10px + env(safe-area-inset-top));}
-  .vfm-commercial-v250 .grid,
-  .vfm-commercial-v250 .grid-2,
-  .vfm-commercial-v250 .desktop-4{grid-template-columns:1fr!important; gap:10px!important;}
-  .vfm-commercial-v250 h1{font-size:clamp(1.55rem, 8vw, 2.35rem);}
-  .vfm-commercial-v250 .brand{font-size:clamp(2.1rem, 11vw, 3.6rem);}
-  .vfm-commercial-v250 .panel{border-radius:18px;}
+  .vfm-commercial-v251 .screen{padding-top:calc(10px + env(safe-area-inset-top));}
+  .vfm-commercial-v251 .grid,
+  .vfm-commercial-v251 .grid-2,
+  .vfm-commercial-v251 .desktop-4{grid-template-columns:1fr!important; gap:10px!important;}
+  .vfm-commercial-v251 h1{font-size:clamp(1.55rem, 8vw, 2.35rem);}
+  .vfm-commercial-v251 .brand{font-size:clamp(2.1rem, 11vw, 3.6rem);}
+  .vfm-commercial-v251 .panel{border-radius:18px;}
 }
 @media(orientation:landscape) and (max-height:520px){
-  .vfm-commercial-v250 .screen{min-height:100svh; padding-bottom:72px;}
+  .vfm-commercial-v251 .screen{min-height:100svh; padding-bottom:72px;}
 }
-/* v2.5.0 - Central de Atualização de Elencos */
-.roster-v250 .asset-hero{background:linear-gradient(135deg,rgba(231,183,77,.18),rgba(8,12,18,.92)),var(--panel-bg,rgba(9,13,20,.9));border:1px solid rgba(231,183,77,.26)}
+/* v2.5.1 - Central de Atualização de Elencos */
+.roster-v251 .asset-hero{background:linear-gradient(135deg,rgba(231,183,77,.18),rgba(8,12,18,.92)),var(--panel-bg,rgba(9,13,20,.9));border:1px solid rgba(231,183,77,.26)}
 .roster-box{min-height:220px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.78rem;line-height:1.45;white-space:pre;overflow:auto}
 .code-block{max-height:280px;overflow:auto;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px;font-size:.72rem;line-height:1.35;color:#e9eef7;white-space:pre-wrap}
 .table td code,.asset-path-row code{font-size:.68rem;word-break:break-all;color:#f4d58d}
 .player-cell .mini-face{width:36px;height:36px;border-radius:50%;object-fit:cover;background:rgba(255,255,255,.08)}
-@media(max-width:560px){.roster-box{min-height:180px}.code-block{font-size:.66rem}.roster-v250 .table th:nth-child(5),.roster-v250 .table td:nth-child(5){min-width:220px}}
+@media(max-width:560px){.roster-box{min-height:180px}.code-block{font-size:.66rem}.roster-v251 .table th:nth-child(5),.roster-v251 .table td:nth-child(5){min-width:220px}}

@@ -49,7 +49,7 @@ Para trocar a foto de um jogador do Santos, coloque:
 ## Checklist visual da v2.3.0
 Dentro do jogo existe a rota `assetChecklist`, acessível pelo sistema de rotas, que mostra caminhos mapeados, fallbacks e resumo do manifesto.
 
-## Atualização de fotos de jogadores — v2.5.0
+## Atualização de fotos de jogadores — v2.5.1
 
 Cada jogador do elenco possui um `id`. A foto deve seguir o caminho definido no JSON do elenco.
 

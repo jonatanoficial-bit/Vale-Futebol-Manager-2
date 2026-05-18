@@ -14,12 +14,12 @@ import { runRuntimeAudit } from './systems/auditLogger.js';
 
 async function boot(){
   const app = document.getElementById('app');
-  let buildInfo = { buildLabel:'Build v2.5.0' };
+  let buildInfo = { buildLabel:'Build v2.5.1' };
   try { buildInfo = await (await fetch('build/build-info.json', {cache:'no-store'})).json(); } catch(err) { console.warn('[VFM] build-info fallback', err); }
   await loadAssetMap();
   applyCommercialPolish();
   load();
-  runRuntimeAudit(getState(), {phase:'v2.5.0 boot'});
+  runRuntimeAudit(getState(), {phase:'v2.5.1 boot'});
   validateCommercialState(getState());
   initRouter(app, buildInfo);
   register('cover', cover);

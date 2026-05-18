@@ -1,5 +1,5 @@
-Build v2.5.0 roster update center
-Date: 2026-05-19 00:40 UTC
+Build v2.5.1 roster update center
+Date: 2026-05-19 01:15 UTC
 Base: v2.4.0 consolidated
 
 Core additions:
@@ -8,7 +8,7 @@ Core additions:
 - ROSTER_GUIDE.md
 - Central de Atualização de Elenco route: rosterUpdate
 - JSON roster import/export/reset/sample
-- safe roster migration v2.4.0 -> v2.5.0
+- safe roster migration v2.4.0 -> v2.5.1
 - player photo paths prepared for future avatars
 - fallback if player image is missing
 - audit report updated

@@ -1,6 +1,6 @@
 # ROSTER_GUIDE.md — Atualização segura de elencos
 
-Build: v2.5.0
+Build: v2.5.1
 
 ## Objetivo
 Permitir trocar elencos sem mexer no código do jogo.

@@ -1,5 +1,5 @@
 export const commercialQuality = {
-  version: 'v2.5.0',
+  version: 'v2.5.1',
   status: 'Primeira versão comercial sólida',
   mobile: { fullscreen: true, safeArea: true, touchMinimum: 44, overflowGuard: true },
   visual: { cards: 'premium', contrast: 'high', hierarchy: 'commercial', shadows: 'soft-gold' },
@@ -9,7 +9,7 @@ export const commercialQuality = {
 
 export function applyCommercialPolish(){
   try {
-    document.documentElement.classList.add('vfm-commercial-v250');
+    document.documentElement.classList.add('vfm-commercial-v251');
     document.documentElement.style.setProperty('--touch-min', '44px');
     document.documentElement.style.setProperty('--screen-max-mobile', '540px');
     const metaViewport = document.querySelector('meta[name="viewport"]');
@@ -20,7 +20,7 @@ export function applyCommercialPolish(){
     installButtonGuards();
     return true;
   } catch(err){
-    console.warn('[VFM v2.5.0] polimento comercial aplicado em modo seguro', err);
+    console.warn('[VFM v2.5.1] polimento comercial aplicado em modo seguro', err);
     return false;
   }
 }
@@ -30,10 +30,10 @@ export function installScrollGuards(){
     const style = document.createElement('style');
     style.dataset.vfmRuntime = 'commercial-polish';
     style.textContent = `
-      html.vfm-commercial-v250, html.vfm-commercial-v250 body { min-height: 100%; overflow-x: hidden; overscroll-behavior-y: contain; }
-      html.vfm-commercial-v250 .screen { overflow-x: hidden; touch-action: manipulation; }
-      html.vfm-commercial-v250 button, html.vfm-commercial-v250 [data-route], html.vfm-commercial-v250 [data-action] { min-height: var(--touch-min, 44px); }
-      html.vfm-commercial-v250 img { max-width: 100%; height: auto; }
+      html.vfm-commercial-v251, html.vfm-commercial-v251 body { min-height: 100%; overflow-x: hidden; overscroll-behavior-y: contain; }
+      html.vfm-commercial-v251 .screen { overflow-x: hidden; touch-action: manipulation; }
+      html.vfm-commercial-v251 button, html.vfm-commercial-v251 [data-route], html.vfm-commercial-v251 [data-action] { min-height: var(--touch-min, 44px); }
+      html.vfm-commercial-v251 img { max-width: 100%; height: auto; }
     `;
     if(!document.querySelector('style[data-vfm-runtime="commercial-polish"]')) document.head.appendChild(style);
   } catch(err){ console.warn('[VFM] scroll guard fallback', err); }
@@ -57,5 +57,5 @@ export function validateCommercialState(state={}){
   if(!state.match) issues.push('match ausente');
   if(!state.career) issues.push('career ausente');
   if(!state.ui) issues.push('ui ausente');
-  return { ok: issues.length === 0, issues, checkedAt: new Date().toISOString(), version:'v2.5.0' };
+  return { ok: issues.length === 0, issues, checkedAt: new Date().toISOString(), version:'v2.5.1' };
 }

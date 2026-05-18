@@ -358,7 +358,7 @@ Este arquivo lista os caminhos principais que o jogo reconhece. Quando a imagem 
 - `stadiums.river-plate` -> `assets/stadiums/argentina/river-plate.jpg`
 - `stadiums.inter-miami` -> `assets/stadiums/usa/inter-miami.jpg`
 - `stadiums.al-hilal` -> `assets/stadiums/saudi/al-hilal.jpg`
-## v2.5.0 — Fotos do elenco Santos 2026
+## v2.5.1 — Fotos do elenco Santos 2026
 
 As fotos abaixo podem ser adicionadas depois sem alterar código. Use PNG transparente quando possível.
 

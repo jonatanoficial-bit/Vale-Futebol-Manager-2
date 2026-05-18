@@ -1,26 +1,27 @@
-AUDIT REPORT — Vale Futebol Manager: Gold Edition
-Build: v2.5.0 | 2026-05-19 | 00:40 UTC
+Vale Futebol Manager: Gold Edition
+Build v2.5.1 | 2026-05-19 | 01:15 UTC
+Fase: Hotfix anti-quebra da Central de Atualização de Elencos 2026
 
-Escopo auditado:
-- Sintaxe JS via node --check em todos os módulos
-- JSON: data/asset-map.json
-- JSON: data/rosters/2026/santos.json
-- Renderização offline das telas principais
-- Tela de partida
-- Tela de elenco
-- Tela de transferências
-- Tela Atualização de Elenco
-- Fallback de imagem de jogador
-- Migração de save v2.4.0 -> v2.5.0
+Problema corrigido:
+- A v2.5.0 publicada no Vercel travava no carregamento por erro no arquivo js/systems/router.js.
+- Linha corrigida: ligação do botão data-action="toggle-autosave".
 
-Resultado:
-- 0 erros críticos
-- 0 falhas bloqueantes
-- 0 conflitos de sintaxe JS
-- Roster base Santos 2026: 37 atletas
-- Importação inválida de elenco: bloqueada por segurança
-- Fallback de avatar de jogador: ativo
-- Compatibilidade GitHub/Vercel: OK
+Auditoria executada:
+- node --check em todos os arquivos JS: OK.
+- JSON validado: build/build-info.json, data/asset-map.json, data/rosters/2026/santos.json.
+- Runtime smoke test em ambiente DOM simulado: OK.
+- Rotas testadas no smoke test: mainMenu, newGame, teamSelect, lobby, rosterUpdate, saveCenter, match, assetChecklist.
+- Modo seguro não foi acionado nas rotas testadas.
 
-Observação:
-A base de elenco Santos 2026 foi montada com referências públicas consultadas em 2026-05-19. Como futebol muda com frequência, esta build prioriza o sistema seguro de atualização por JSON para permitir correções futuras sem alterar código.
+Sistemas preservados:
+- Central de atualização de elenco.
+- Importação/exportação de elenco por JSON.
+- Validação anti-quebra de elenco.
+- Fallback de fotos de jogadores.
+- Fallback de escudos, bandeiras, ligas, estádios, patrocinadores, staff e fundos.
+- Save migrável.
+- Compatibilidade com GitHub Pages e Vercel.
+
+Status final:
+- 0 erros críticos detectados.
+- Build recomendada para substituir imediatamente a v2.5.0 no GitHub/Vercel.

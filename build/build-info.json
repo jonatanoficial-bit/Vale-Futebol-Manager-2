@@ -1,10 +1,10 @@
 {
-  "version": "v2.5.0",
+  "version": "v2.5.1",
   "date": "2026-05-19",
-  "time": "00:40 UTC",
-  "buildLabel": "Build v2.5.0 | 2026-05-19 | 00:40 UTC",
-  "phase": "Central de Atualização de Elencos 2026",
+  "time": "01:15 UTC",
+  "buildLabel": "Build v2.5.1 | 2026-05-19 | 01:15 UTC",
+  "phase": "Hotfix anti-quebra da Central de Atualização de Elencos 2026",
   "platform": "GitHub Pages / Vercel static site",
   "commercialStatus": "Primeira versão comercial sólida + manutenção de elenco segura",
-  "source": "Reconstruída a partir da v2.4.0 consolidada"
+  "source": "Reconstruída a partir da v2.5.0 com correção de router e auditoria de navegador"
 }

@@ -6,9 +6,9 @@ Status: Primeira versão comercial sólida + Central de Atualização de Elencos
 
 ## Build atual
 
-v2.5.0 — 2026-05-19 00:40 UTC
+v2.5.1 — 2026-05-19 01:15 UTC
 
-## Incluído na v2.5.0
+## Incluído na v2.5.1
 
 - Santos 2026 atualizado como base inicial.
 - Central de Atualização de Elenco no lobby.
@@ -18,7 +18,7 @@ v2.5.0 — 2026-05-19 00:40 UTC
 - Fallback automático para fotos de jogadores ausentes.
 - Guia `ROSTER_GUIDE.md`.
 - Arquivo editável `data/rosters/2026/santos.json`.
-- Save migrável v2.4.0 -> v2.5.0.
+- Save migrável v2.4.0 -> v2.5.1.
 
 ## Próximas expansões opcionais
 
