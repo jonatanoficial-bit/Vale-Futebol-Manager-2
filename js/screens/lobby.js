@@ -16,6 +16,7 @@ export function lobby(state){
     ['standings','Classificação','📊','Tabela, estatísticas e disputa por objetivos','Dados'],
     ['transfers','Transferências','🔁','Mercado, compra, venda, empréstimo e renovação','Janela'],
     ['contracts','Contratos','📝','Salários, vencimentos, luvas e renovações','Gestão'],
+    ['rosterUpdate','Atualizar elenco','🧾','Importar JSON, exportar plantel e trocar avatares depois','Dados'],
     ['staff','Staff','👥','Comissão técnica, médico, olheiro e diretor comercial','Clube'],
     ['sponsorship','Patrocínio','🤝','Receitas comerciais, bônus e exposição de marca','Finanças'],
     ['finances','Financeiro','💼','Orçamento, receitas, despesas e folha salarial','Diretoria'],

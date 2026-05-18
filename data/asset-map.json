@@ -70,7 +70,11 @@
     "libertadores": "assets/competitions/libertadores.png",
     "sulamericana": "assets/competitions/sulamericana.png",
     "champions": "assets/competitions/champions.png",
-    "europa_league": "assets/competitions/europa_league.png"
+    "europa_league": "assets/competitions/europa_league.png",
+    "brasileirao-a": "assets/competitions/brasileirao_a.png",
+    "brasileirao-b": "assets/competitions/brasileirao_b.png",
+    "copa-do-brasil": "assets/competitions/copa_do_brasil.png",
+    "europa-league": "assets/competitions/europa_league.png"
   },
   "clubs": {
     "santos": {
@@ -289,155 +293,112 @@
     "liga-portugal": "assets/leagues/portugal/liga-portugal.png",
     "eredivisie": "assets/leagues/netherlands/eredivisie.png",
     "mls": "assets/leagues/usa/mls.png",
-    "saudi-pro-league": "assets/leagues/saudi/saudi-pro-league.png"
+    "saudi-pro-league": "assets/leagues/saudi/saudi-pro-league.png",
+    "brasileirao_serie_a": "assets/leagues/brazil/brasileirao-serie-a.png",
+    "brasileirao_serie_b": "assets/leagues/brazil/brasileirao-serie-b.png",
+    "paulistao": "assets/leagues/brazil/paulistao.png",
+    "liga_profesional": "assets/leagues/argentina/liga-profesional.png",
+    "premier_league": "assets/leagues/england/premier-league.png",
+    "championship": "assets/leagues/england/championship.png",
+    "serie_a_italy": "assets/leagues/italy/serie-a.png",
+    "ligue_1": "assets/leagues/france/ligue-1.png",
+    "liga_portugal": "assets/leagues/portugal/liga-portugal.png",
+    "saudi_pro_league": "assets/leagues/saudi/saudi-pro-league.png",
+    "liga_mx": "assets/leagues/mexico/liga-mx.png"
   },
   "players": {
-    "joao-paulo": {
-      "photo": "assets/players/brazil/santos/joao-paulo.png",
-      "fallback": "assets/placeholders/player-generic.png"
-    },
-    "gabriel-brazao": {
-      "photo": "assets/players/brazil/santos/gabriel-brazao.png",
-      "fallback": "assets/placeholders/player-generic.png"
-    },
-    "joaquim": {
-      "photo": "assets/players/brazil/santos/joaquim.png",
-      "fallback": "assets/placeholders/player-generic.png"
-    },
-    "gil": {
-      "photo": "assets/players/brazil/santos/gil.png",
-      "fallback": "assets/placeholders/player-generic.png"
-    },
-    "alex-nascimento": {
-      "photo": "assets/players/brazil/santos/alex-nascimento.png",
-      "fallback": "assets/placeholders/player-generic.png"
-    },
-    "escobar": {
-      "photo": "assets/players/brazil/santos/escobar.png",
-      "fallback": "assets/placeholders/player-generic.png"
-    },
-    "hayner": {
-      "photo": "assets/players/brazil/santos/hayner.png",
-      "fallback": "assets/placeholders/player-generic.png"
-    },
-    "aderlan": {
-      "photo": "assets/players/brazil/santos/aderlan.png",
-      "fallback": "assets/placeholders/player-generic.png"
-    },
-    "joao-schmidt": {
-      "photo": "assets/players/brazil/santos/joao-schmidt.png",
-      "fallback": "assets/placeholders/player-generic.png"
-    },
-    "tomas-rincon": {
-      "photo": "assets/players/brazil/santos/tomas-rincon.png",
-      "fallback": "assets/placeholders/player-generic.png"
-    },
-    "diego-pituca": {
-      "photo": "assets/players/brazil/santos/diego-pituca.png",
-      "fallback": "assets/placeholders/player-generic.png"
-    },
-    "giuliano": {
-      "photo": "assets/players/brazil/santos/giuliano.png",
-      "fallback": "assets/placeholders/player-generic.png"
-    },
-    "serginho": {
-      "photo": "assets/players/brazil/santos/serginho.png",
-      "fallback": "assets/placeholders/player-generic.png"
-    },
-    "pedrinho": {
-      "photo": "assets/players/brazil/santos/pedrinho.png",
-      "fallback": "assets/placeholders/player-generic.png"
-    },
-    "soteldo": {
-      "photo": "assets/players/brazil/santos/soteldo.png",
-      "fallback": "assets/placeholders/player-generic.png"
-    },
-    "guilherme": {
-      "photo": "assets/players/brazil/santos/guilherme.png",
-      "fallback": "assets/placeholders/player-generic.png"
-    },
-    "willian-bigode": {
-      "photo": "assets/players/brazil/santos/willian-bigode.png",
-      "fallback": "assets/placeholders/player-generic.png"
-    },
-    "julio-furch": {
-      "photo": "assets/players/brazil/santos/julio-furch.png",
-      "fallback": "assets/placeholders/player-generic.png"
-    },
-    "weslley-patati": {
-      "photo": "assets/players/brazil/santos/weslley-patati.png",
-      "fallback": "assets/placeholders/player-generic.png"
-    },
-    "miguelito": {
-      "photo": "assets/players/brazil/santos/miguelito.png",
-      "fallback": "assets/placeholders/player-generic.png"
-    },
-    "deivid-washington": {
-      "photo": "assets/players/brazil/santos/deivid-washington.png",
-      "fallback": "assets/placeholders/player-generic.png"
-    },
-    "angelo": {
-      "photo": "assets/players/brazil/santos/angelo.png",
-      "fallback": "assets/placeholders/player-generic.png"
-    },
-    "lucas-almada": {
-      "photo": "assets/players/scouted/lucas-almada.png",
-      "fallback": "assets/placeholders/player-generic.png"
-    },
-    "matias-rojas": {
-      "photo": "assets/players/scouted/matias-rojas.png",
-      "fallback": "assets/placeholders/player-generic.png"
-    },
-    "juan-sforza": {
-      "photo": "assets/players/scouted/juan-sforza.png",
-      "fallback": "assets/placeholders/player-generic.png"
-    },
-    "renan-lodi": {
-      "photo": "assets/players/scouted/renan-lodi.png",
-      "fallback": "assets/placeholders/player-generic.png"
-    },
-    "kaio-jorge": {
-      "photo": "assets/players/scouted/kaio-jorge.png",
-      "fallback": "assets/placeholders/player-generic.png"
-    },
-    "gabriel-veron": {
-      "photo": "assets/players/scouted/gabriel-veron.png",
-      "fallback": "assets/placeholders/player-generic.png"
-    },
-    "lucas-esquivel": {
-      "photo": "assets/players/scouted/lucas-esquivel.png",
-      "fallback": "assets/placeholders/player-generic.png"
-    },
-    "joao-victor": {
-      "photo": "assets/players/scouted/joao-victor.png",
-      "fallback": "assets/placeholders/player-generic.png"
+    "joao-paulo": "assets/players/brazil/santos/joao-paulo.png",
+    "gil": "assets/players/brazil/santos/gil.png",
+    "joaquim": "assets/players/brazil/santos/joaquim.png",
+    "escobar": "assets/players/brazil/santos/escobar.png",
+    "madson": "assets/players/brazil/santos/madson.png",
+    "tomas-rincon": "assets/players/brazil/santos/tomas-rincon.png",
+    "joao-schmidt": "assets/players/brazil/santos/joao-schmidt.png",
+    "giuliano": "assets/players/brazil/santos/giuliano.png",
+    "soteldo": "assets/players/brazil/santos/soteldo.png",
+    "guilherme": "assets/players/brazil/santos/guilherme.png",
+    "furch": "assets/players/brazil/santos/furch.png",
+    "miguelito": "assets/players/brazil/santos/miguelito.png",
+    "weslley-patati": "assets/players/brazil/santos/weslley-patati.png",
+    "hayner": "assets/players/brazil/santos/hayner.png",
+    "willian-biglode": "assets/players/brazil/santos/willian-biglode.png",
+    "gabriel-brazão": "assets/players/brazil/santos/gabriel-brazão.png",
+    "alex": "assets/players/brazil/santos/alex.png",
+    "cherem": "assets/players/brazil/santos/cherem.png",
+    "kevyn": "assets/players/brazil/santos/kevyn.png",
+    "julio-furch": "assets/players/brazil/santos/julio-furch.png",
+    "diego-pituca": "assets/players/brazil/santos/diego-pituca.png",
+    "pedrinho": "assets/players/brazil/santos/pedrinho.png",
+    "gabriel-brazao": "assets/players/brazil/santos/gabriel-brazao.png",
+    "meia-criativo-livre": "assets/players/scouted/meia-criativo-livre.png",
+    "lateral-direito-promessa": "assets/players/scouted/lateral-direito-promessa.png",
+    "volante-marcador": "assets/players/scouted/volante-marcador.png",
+    "zagueiro-experiente": "assets/players/scouted/zagueiro-experiente.png",
+    "atacante-velocidade": "assets/players/scouted/atacante-velocidade.png",
+    "santos2026": {
+      "gabriel-brazao": "assets/players/brazil/santos/gabriel-brazao.png",
+      "diogenes": "assets/players/brazil/santos/diogenes.png",
+      "joao-pedro-gk": "assets/players/brazil/santos/joao-pedro-gk.png",
+      "lucas-verissimo": "assets/players/brazil/santos/lucas-verissimo.png",
+      "adonis-frias": "assets/players/brazil/santos/adonis-frias.png",
+      "luan-peres": "assets/players/brazil/santos/luan-peres.png",
+      "ze-ivaldo": "assets/players/brazil/santos/ze-ivaldo.png",
+      "vinicius-lira": "assets/players/brazil/santos/vinicius-lira.png",
+      "joao-ananias": "assets/players/brazil/santos/joao-ananias.png",
+      "rafael-gonzaga": "assets/players/brazil/santos/rafael-gonzaga.png",
+      "igor-vinicius": "assets/players/brazil/santos/igor-vinicius.png",
+      "mayke": "assets/players/brazil/santos/mayke.png",
+      "gonzalo-escobar": "assets/players/brazil/santos/gonzalo-escobar.png",
+      "joao-schmidt": "assets/players/brazil/santos/joao-schmidt.png",
+      "ze-rafael": "assets/players/brazil/santos/ze-rafael.png",
+      "gabriel-menino": "assets/players/brazil/santos/gabriel-menino.png",
+      "alvaro-barreal": "assets/players/brazil/santos/alvaro-barreal.png",
+      "christian-oliva": "assets/players/brazil/santos/christian-oliva.png",
+      "willian-arao": "assets/players/brazil/santos/willian-arao.png",
+      "thaciano": "assets/players/brazil/santos/thaciano.png",
+      "tomas-rincon": "assets/players/brazil/santos/tomas-rincon.png",
+      "miguel-terceros": "assets/players/brazil/santos/miguel-terceros.png",
+      "gabriel-bontempo": "assets/players/brazil/santos/gabriel-bontempo.png",
+      "gustavo-henrique-mid": "assets/players/brazil/santos/gustavo-henrique.png",
+      "pepe-fermino": "assets/players/brazil/santos/pepe-fermino.png",
+      "neymar": "assets/players/brazil/santos/neymar.png",
+      "gabriel-barbosa": "assets/players/brazil/santos/gabriel-barbosa.png",
+      "rony": "assets/players/brazil/santos/rony.png",
+      "benjamin-rollheiser": "assets/players/brazil/santos/benjamin-rollheiser.png",
+      "lautaro-diaz": "assets/players/brazil/santos/lautaro-diaz.png",
+      "moises": "assets/players/brazil/santos/moises.png",
+      "robinho-junior": "assets/players/brazil/santos/robinho-junior.png",
+      "pedro-assis": "assets/players/brazil/santos/pedro-assis.png",
+      "rafael-freitas": "assets/players/brazil/santos/rafael-freitas.png",
+      "mateus-xavier": "assets/players/brazil/santos/mateus-xavier.png",
+      "fernando-pradella-rocha": "assets/players/brazil/santos/fernando-pradella-rocha.png",
+      "nadson": "assets/players/brazil/santos/nadson.png"
     }
   },
   "staff": {
-    "santos": {
-      "treinador": "assets/staff/brazil/santos/treinador.png",
-      "auxiliar01": "assets/staff/brazil/santos/auxiliar-01.png",
-      "preparadorFisico": "assets/staff/brazil/santos/preparador-fisico.png",
-      "medico": "assets/staff/brazil/santos/medico.png",
-      "fisioterapeuta": "assets/staff/brazil/santos/fisioterapeuta.png",
-      "olheiro": "assets/staff/brazil/santos/olheiro.png",
-      "diretorComercial": "assets/staff/brazil/santos/diretor-comercial.png",
-      "analista": "assets/staff/brazil/santos/analista-desempenho.png",
-      "fallback": "assets/placeholders/staff-generic.png"
-    }
+    "treinador": "assets/staff/brazil/santos/treinador.png",
+    "auxiliar-01": "assets/staff/brazil/santos/auxiliar-01.png",
+    "auxiliar-02": "assets/staff/brazil/santos/auxiliar-02.png",
+    "medico": "assets/staff/brazil/santos/medico.png",
+    "fisioterapeuta": "assets/staff/brazil/santos/fisioterapeuta.png",
+    "preparador-fisico": "assets/staff/brazil/santos/preparador-fisico.png",
+    "preparador-goleiros": "assets/staff/brazil/santos/preparador-goleiros.png",
+    "olheiro": "assets/staff/brazil/santos/olheiro.png",
+    "diretor-comercial": "assets/staff/brazil/santos/diretor-comercial.png",
+    "analista-desempenho": "assets/staff/brazil/santos/analista-desempenho.png"
   },
   "sponsors": {
-    "active": {
-      "umbro": "assets/sponsors/umbro.png",
-      "philco": "assets/sponsors/philco.png",
-      "kodilar": "assets/sponsors/kodilar.png",
-      "tekbond": "assets/sponsors/tekbond.png",
-      "pixbet": "assets/sponsors/pixbet.png",
-      "binance": "assets/sponsors/binance.png",
-      "brahma": "assets/sponsors/brahma.png",
-      "one-x-bet": "assets/sponsors/one-x-bet.png",
-      "fallback": "assets/placeholders/sponsor-generic.png"
-    }
+    "blaze": "assets/sponsors/blaze.png",
+    "binance": "assets/sponsors/binance.png",
+    "umbro": "assets/sponsors/umbro.png",
+    "philco": "assets/sponsors/philco.png",
+    "kodilar": "assets/sponsors/kodilar.png",
+    "tekbond": "assets/sponsors/tekbond.png",
+    "pixbet": "assets/sponsors/pixbet.png",
+    "one-x-bet": "assets/sponsors/one-x-bet.png",
+    "corr-plastik": "assets/sponsors/corr-plastik.png",
+    "brahma": "assets/sponsors/brahma.png",
+    "sponsor-generic": "assets/sponsors/sponsor-generic.png"
   },
   "nationalTeams": {
     "br": {
@@ -464,5 +425,70 @@
       "flag": "assets/countries/us.png",
       "fallback": "assets/placeholders/country-flag-generic.png"
     }
+  },
+  "meta": {
+    "version": "v2.3.0",
+    "description": "Mapa definitivo de assets com fallback inteligente. Substitua ou adicione arquivos nestes caminhos sem alterar codigo.",
+    "naming": "lowercase, sem acentos, hifen ou underline conforme nomes existentes do pacote"
+  },
+  "icons": {
+    "home": "assets/icons/home.png",
+    "lobby": "assets/icons/lobby.png",
+    "championship": "assets/icons/championship.png",
+    "tactics": "assets/icons/tactics.png",
+    "sponsorship": "assets/icons/sponsorship.png",
+    "staff": "assets/icons/staff.png",
+    "training": "assets/icons/training.png",
+    "standings": "assets/icons/standings.png",
+    "transfers": "assets/icons/transfers.png",
+    "settings": "assets/icons/settings.png",
+    "club": "assets/icons/club.png",
+    "calendar": "assets/icons/calendar.png",
+    "messages": "assets/icons/messages.png",
+    "store": "assets/icons/store.png",
+    "finance": "assets/icons/finance.png",
+    "play-match": "assets/icons/play-match.png",
+    "substitution": "assets/icons/substitution.png",
+    "statistics": "assets/icons/statistics.png",
+    "finish-match": "assets/icons/finish-match.png",
+    "back": "assets/icons/back.png",
+    "help": "assets/icons/help.png",
+    "notification": "assets/icons/notification.png",
+    "save": "assets/icons/save.png",
+    "load": "assets/icons/load.png"
+  },
+  "stadiums": {
+    "santos": "assets/stadiums/brazil/santos.jpg",
+    "palmeiras": "assets/stadiums/brazil/palmeiras.jpg",
+    "flamengo": "assets/stadiums/brazil/flamengo.jpg",
+    "sao-paulo": "assets/stadiums/brazil/sao-paulo.jpg",
+    "corinthians": "assets/stadiums/brazil/corinthians.jpg",
+    "gremio": "assets/stadiums/brazil/gremio.jpg",
+    "internacional": "assets/stadiums/brazil/internacional.jpg",
+    "atletico-mg": "assets/stadiums/brazil/atletico-mg.jpg",
+    "cruzeiro": "assets/stadiums/brazil/cruzeiro.jpg",
+    "botafogo": "assets/stadiums/brazil/botafogo.jpg",
+    "fluminense": "assets/stadiums/brazil/fluminense.jpg",
+    "vasco": "assets/stadiums/brazil/vasco.jpg",
+    "bahia": "assets/stadiums/brazil/bahia.jpg",
+    "fortaleza": "assets/stadiums/brazil/fortaleza.jpg",
+    "real-madrid": "assets/stadiums/spain/real-madrid.jpg",
+    "barcelona": "assets/stadiums/spain/barcelona.jpg",
+    "manchester-city": "assets/stadiums/england/manchester-city.jpg",
+    "liverpool": "assets/stadiums/england/liverpool.jpg",
+    "arsenal": "assets/stadiums/england/arsenal.jpg",
+    "inter-milan": "assets/stadiums/italy/inter-milan.jpg",
+    "ac-milan": "assets/stadiums/italy/ac-milan.jpg",
+    "bayern-munich": "assets/stadiums/germany/bayern-munich.jpg",
+    "borussia-dortmund": "assets/stadiums/germany/borussia-dortmund.jpg",
+    "psg": "assets/stadiums/france/psg.jpg",
+    "benfica": "assets/stadiums/portugal/benfica.jpg",
+    "boca-juniors": "assets/stadiums/argentina/boca-juniors.jpg",
+    "river-plate": "assets/stadiums/argentina/river-plate.jpg",
+    "inter-miami": "assets/stadiums/usa/inter-miami.jpg",
+    "al-hilal": "assets/stadiums/saudi/al-hilal.jpg"
+  },
+  "rosters": {
+    "santos2026": "data/rosters/2026/santos.json"
   }
 }

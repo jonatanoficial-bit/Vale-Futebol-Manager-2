@@ -2,16 +2,19 @@ import { matchTimeline } from '../data/matchData.js';
 import { schedule } from '../data/seasonData.js';
 import { transferShortlist, negotiations as baseNegotiations, outgoingList } from '../data/transferData.js';
 import { scoreFromTimeline, buildBalanceSummary } from './balance.js';
+import { squadPlayers as defaultRosterPlayers, rosterMeta as defaultRosterMeta, normalizeRoster } from '../data/squadData.js';
 
-const key = 'vfm_gold_save_v190';
-const legacyKeys = ['vfm_gold_save_v180', 'vfm_gold_save_v170', 'vfm_gold_save_v160', 'vfm_gold_save_v150', 'vfm_gold_save_v140', 'vfm_gold_save_v130', 'vfm_gold_save_v120', 'vfm_gold_save_v110', 'vfm_gold_save_v100', 'vfm_gold_save_v090', 'vfm_gold_save_v080', 'vfm_gold_save_v050', 'vfm_gold_save_v040', 'vfm_gold_save_v030', 'vfm_gold_save_v020', 'vfm_gold_save_v010'];
+const key = 'vfm_gold_save_v250';
+const legacyKeys = ['vfm_gold_save_v240', 'vfm_gold_save_v230', 'vfm_gold_save_v220', 'vfm_gold_save_v210', 'vfm_gold_save_v200', 'vfm_gold_save_v190', 'vfm_gold_save_v180', 'vfm_gold_save_v170', 'vfm_gold_save_v160', 'vfm_gold_save_v150', 'vfm_gold_save_v140', 'vfm_gold_save_v130', 'vfm_gold_save_v120', 'vfm_gold_save_v110', 'vfm_gold_save_v100', 'vfm_gold_save_v090', 'vfm_gold_save_v080', 'vfm_gold_save_v050', 'vfm_gold_save_v040', 'vfm_gold_save_v030', 'vfm_gold_save_v020', 'vfm_gold_save_v010'];
 export const defaultState = () => ({
   route:'cover',
   manager:{ name:'Joao Victor', country:'br', avatar:'assets/avatars/manager-01.png', reputation:82, mode:'career' },
-  clubId:'santos', season:2024, month:'Julho', money:92.5, coins:250, notifications:6, boardTrust:76, fanMood:82, jobSecurity:'Seguro',
-  match:{ id:'2024-07-03-santos-palmeiras', date:'2024-07-03', competitionId:'brasileirao-a', competition:'Brasileirão Série A', stage:'Rodada 12', minute:57, home:'santos', away:'palmeiras', homeGoals:1, awayGoals:0, speed:1, finalized:false, substitutions:[], maxSubs:5, decision:'balanced', tacticalBoost:0, usedSubPlayers:[] },
-  career:{ currentDate:'2024-07-03', matchday:12, completedMatches:[], lastResult:null, integrationLog:['Carreira carregada com IA e balanceamento seguro v1.9.0.'] },
-  gameplay:{ difficulty:'realistic', aiVersion:'v1.9.0', realism:84, variance:22, balanceLog:[] },
+  clubId:'santos', season:2026, month:'Maio', money:92.5, coins:250, notifications:6, boardTrust:76, fanMood:82, jobSecurity:'Seguro',
+  match:{ id:'2026-05-24-santos-palmeiras', date:'2026-05-24', competitionId:'brasileirao-a', competition:'Brasileirão Série A', stage:'Rodada 12', minute:57, home:'santos', away:'palmeiras', homeGoals:1, awayGoals:0, speed:1, finalized:false, substitutions:[], maxSubs:5, decision:'balanced', tacticalBoost:0, usedSubPlayers:[] },
+  career:{ currentDate:'2026-05-19', matchday:12, completedMatches:[], lastResult:null, integrationLog:['Carreira migrada para v2.5.0 com central de atualização de elencos, importação JSON segura e Santos 2026 atualizado.'] },
+  gameplay:{ difficulty:'realistic', aiVersion:'v2.5.0', realism:84, variance:22, balanceLog:[] },
+  stability:{ autosave:true, lastBackup:null, backupCount:0, lastExport:null, lastImport:null, safeModeEvents:0, health:'Excelente', auditVersion:'v2.5.0', commercialAudit:'ok', fullscreenMobile:true, overflowGuard:true, rosterSafeMode:true },
+  roster:{ meta: defaultRosterMeta, players: defaultRosterPlayers, lastImport:null, lastExport:null, validationLog:['Elenco base Santos 2026 carregado com proteção anti-quebra.'] },
   transfer:{ budget:42.8, wageRoom:2.4, negotiationLog:[], activeNegotiations:[], acceptedDeals:[], rejectedDeals:[], outgoingDeals:[], renewals:[] },
   ui:{ selectedAvatar:'assets/avatars/manager-01.png', selectedMode:'career', selectedCountry:'br', selectedClub:'santos', teamCountryFilter:'all', teamLeagueFilter:'all', teamSort:'level', standingsCompetition:'brasileirao-a', selectedFormation:'433-possession', tacticalProfile:'possession', trainingTheme:'possession', transferFilter:'all' }
 });
@@ -43,6 +46,14 @@ function normalize(next){
   merged.gameplay = {...base.gameplay, ...(next?.gameplay || {})};
   if(!Array.isArray(merged.gameplay.balanceLog)) merged.gameplay.balanceLog = [];
   if(!['easy','realistic','hardcore'].includes(merged.gameplay.difficulty)) merged.gameplay.difficulty = 'realistic';
+  merged.stability = {...base.stability, ...(next?.stability || {})};
+  merged.stability.backupCount = Math.max(0, Number(merged.stability.backupCount || 0));
+  if(typeof merged.stability.autosave !== 'boolean') merged.stability.autosave = true;
+  merged.roster = {...base.roster, ...(next?.roster || {})};
+  const normalizedRoster = normalizeRoster(merged.roster.players);
+  if(normalizedRoster.length >= 11) merged.roster.players = normalizedRoster; else { merged.roster.players = base.roster.players; merged.roster.validationLog = [...(merged.roster.validationLog||[]), 'Roster importado recusado: menos de 11 jogadores validos.']; }
+  merged.roster.meta = {...base.roster.meta, ...(merged.roster.meta || {})};
+  if(!Array.isArray(merged.roster.validationLog)) merged.roster.validationLog = [];
   merged.transfer = {...base.transfer, ...(next?.transfer || {})};
   merged.transfer.budget = Math.max(0, Number(merged.transfer.budget || base.transfer.budget));
   merged.transfer.wageRoom = Math.max(0, Number(merged.transfer.wageRoom || base.transfer.wageRoom));
@@ -150,7 +161,7 @@ export function finishMatch(){
   const already = (state.career?.completedMatches || []).some(m => m.id === current.id);
   const result = {
     id: current.id,
-    date: current.date || state.career?.currentDate || '2024-07-03',
+    date: current.date || state.career?.currentDate || '2026-05-19',
     competitionId: current.competitionId || 'brasileirao-a',
     competition: current.competition || 'Brasileirão Série A',
     stage: current.stage || 'Rodada',
@@ -338,6 +349,40 @@ export function renewPlayerContract(playerId='giuliano'){
   return true;
 }
 
+export function exportRosterText(){
+  try {
+    const payload = JSON.stringify({meta:{...(state.roster?.meta||defaultRosterMeta), exportedAt:new Date().toISOString()}, players: normalizeRoster(state.roster?.players || defaultRosterPlayers)}, null, 2);
+    state = normalize({...state, roster:{...(state.roster||{}), lastExport:new Date().toISOString()}});
+    persist();
+    return payload;
+  } catch(err){ console.warn('[VFM] exportacao de elenco falhou', err); return ''; }
+}
+export function importRosterText(text=''){
+  try {
+    const parsed = JSON.parse(String(text || '{}'));
+    const players = normalizeRoster(parsed.players || parsed);
+    if(players.length < 11) throw new Error('Elenco precisa de pelo menos 11 jogadores validos.');
+    const ids = new Set(players.map(p=>p.id));
+    if(ids.size !== players.length) throw new Error('IDs duplicados detectados apos normalizacao.');
+    state = normalize({...state, roster:{meta:{...defaultRosterMeta, ...(parsed.meta||{}), importedAt:new Date().toISOString()}, players, lastImport:new Date().toISOString(), validationLog:[`Importacao OK: ${players.length} jogadores validados.`]}, stability:{...(state.stability||{}), health:'Elenco importado com seguranca'}});
+    persist();
+    return true;
+  } catch(err){
+    console.warn('[VFM] importacao de elenco invalida bloqueada', err);
+    state = normalize({...state, roster:{...(state.roster||{}), validationLog:[...((state.roster||{}).validationLog||[]).slice(-5), `Importacao bloqueada: ${err.message}`]}, stability:{...(state.stability||{}), health:'Importacao de elenco bloqueada com seguranca'}});
+    persist();
+    return false;
+  }
+}
+export function resetRosterToDefault(){
+  state = normalize({...state, roster:{meta: defaultRosterMeta, players: defaultRosterPlayers, lastImport:null, validationLog:['Elenco restaurado para Santos 2026 base.']}, stability:{...(state.stability||{}), health:'Elenco base 2026 restaurado'}});
+  persist();
+  return true;
+}
+export function sampleRosterText(){
+  return JSON.stringify({meta:{clubId:'santos', season:2026, version:'exemplo-edicao'}, players: defaultRosterPlayers.slice(0,11)}, null, 2);
+}
+
 export function persist(){ try { localStorage.setItem(key, JSON.stringify(state)); } catch(err){ console.warn('[VFM] save local indisponivel', err); } }
 export function hasSave(){ try { return !!localStorage.getItem(key) || legacyKeys.some(k=>!!localStorage.getItem(k)); } catch(err){ return false; } }
 export function load(){
@@ -349,3 +394,48 @@ export function load(){
   return state;
 }
 export function reset(){ state = defaultState(); persist(); }
+
+
+export function createManualBackup(slot=1){
+  try {
+    const safeSlot = Math.max(1, Math.min(3, Number(slot || 1)));
+    const payload = JSON.stringify({...state, backupMeta:{version:'v2.5.0', createdAt:new Date().toISOString(), slot:safeSlot}});
+    localStorage.setItem(`vfm_gold_backup_${safeSlot}`, payload);
+    state = normalize({...state, stability:{...(state.stability||{}), lastBackup:new Date().toISOString(), backupCount:Number(state.stability?.backupCount||0)+1, health:'Backup atualizado'}});
+    persist();
+    return true;
+  } catch(err){ console.warn('[VFM] backup manual falhou', err); return false; }
+}
+export function restoreManualBackup(slot=1){
+  try {
+    const safeSlot = Math.max(1, Math.min(3, Number(slot || 1)));
+    const raw = localStorage.getItem(`vfm_gold_backup_${safeSlot}`);
+    if(!raw) return false;
+    state = normalize(JSON.parse(raw));
+    state.stability = {...(state.stability||{}), health:`Backup ${safeSlot} restaurado`, lastImport:new Date().toISOString()};
+    persist();
+    return true;
+  } catch(err){ console.warn('[VFM] restauracao falhou', err); state = normalize({...state, stability:{...(state.stability||{}), health:'Restauracao bloqueada com seguranca'}}); persist(); return false; }
+}
+export function exportSaveText(){
+  try {
+    const payload = JSON.stringify({...state, exportMeta:{version:'v2.5.0', exportedAt:new Date().toISOString()}}, null, 2);
+    state = normalize({...state, stability:{...(state.stability||{}), lastExport:new Date().toISOString(), health:'Exportacao pronta'}});
+    persist();
+    return payload;
+  } catch(err){ console.warn('[VFM] exportacao falhou', err); return ''; }
+}
+export function importSaveText(text=''){
+  try {
+    const parsed = JSON.parse(String(text || '{}'));
+    state = normalize(parsed);
+    state.stability = {...(state.stability||{}), lastImport:new Date().toISOString(), health:'Save importado e normalizado'};
+    persist();
+    return true;
+  } catch(err){ console.warn('[VFM] importacao invalida bloqueada', err); state = normalize({...state, stability:{...(state.stability||{}), health:'Importacao invalida bloqueada'}}); persist(); return false; }
+}
+export function toggleAutosave(){
+  state = normalize({...state, stability:{...(state.stability||{}), autosave:!state.stability?.autosave, health:'Preferencia de autosave atualizada'}});
+  persist();
+  return state.stability.autosave;
+}

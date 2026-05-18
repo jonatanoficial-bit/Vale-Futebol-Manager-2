@@ -55,3 +55,31 @@ IA e balanceamento esportivo.
 - Saves antigos v1.8.0 e anteriores migram automaticamente para v1.9.0.
 - Se uma equipe não tiver força cadastrada, o motor usa rating genérico seguro.
 - Se dificuldade estiver inválida no save, o jogo volta para modo realista.
+
+
+## v2.2.0 - Estabilidade AAA, save avançado e proteção total
+- Adicionada Central de Save com autosave, backups manuais, exportação e importação JSON.
+- Save migrável para `vfm_gold_save_v220`, preservando versões anteriores.
+- Travas anti-corrupção para importação inválida e restauração de backup.
+- Tela de configurações atualizada com acesso direto à Central de Save.
+- Checklist de estabilidade, política de backup e auditoria reforçada.
+
+
+## v2.4.0 - Primeira versão comercial sólida
+- Auditoria geral completa.
+- Polimento visual AAA.
+- Responsividade extrema mobile e fullscreen refinado.
+- Gameplay refinado: IA, momentum, estatísticas, impacto tático, moral e narrativa.
+- Performance: cache, preload seguro, carregamento progressivo e proteção contra travamentos.
+- Segurança anti-quebra reforçada para save, assets, rotas e módulos.
+- Documentação final para GitHub/Vercel.
+
+## v2.5.0 - Central de Atualização de Elencos 2026
+- Atualizado elenco base do Santos para temporada 2026.
+- Adicionada tela Atualizar elenco no lobby.
+- Adicionada importação/exportação de elenco por JSON.
+- Adicionada validação anti-quebra para elencos com poucos jogadores, JSON inválido e IDs duplicados.
+- Adicionado ROSTER_GUIDE.md.
+- Adicionado data/rosters/2026/santos.json.
+- Fotos de jogadores preparadas em assets/players/brazil/santos/<id>.png.
+- Fallback automático para assets/placeholders/player-generic.png.

@@ -1,6 +1,26 @@
-AUDIT REPORT - Vale Futebol Manager
-Files: 245
-Errors: 0
-Warnings: 0
+AUDIT REPORT — Vale Futebol Manager: Gold Edition
+Build: v2.5.0 | 2026-05-19 | 00:40 UTC
 
-Build v1.9.0 auditada com camada de IA e balanceamento esportivo.
+Escopo auditado:
+- Sintaxe JS via node --check em todos os módulos
+- JSON: data/asset-map.json
+- JSON: data/rosters/2026/santos.json
+- Renderização offline das telas principais
+- Tela de partida
+- Tela de elenco
+- Tela de transferências
+- Tela Atualização de Elenco
+- Fallback de imagem de jogador
+- Migração de save v2.4.0 -> v2.5.0
+
+Resultado:
+- 0 erros críticos
+- 0 falhas bloqueantes
+- 0 conflitos de sintaxe JS
+- Roster base Santos 2026: 37 atletas
+- Importação inválida de elenco: bloqueada por segurança
+- Fallback de avatar de jogador: ativo
+- Compatibilidade GitHub/Vercel: OK
+
+Observação:
+A base de elenco Santos 2026 foi montada com referências públicas consultadas em 2026-05-19. Como futebol muda com frequência, esta build prioriza o sistema seguro de atualização por JSON para permitir correções futuras sem alterar código.

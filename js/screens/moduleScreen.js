@@ -1,6 +1,6 @@
 import { screenWrap, topbar, clubHeader } from './common.js';
 import { players, tableRows, teams } from '../data/gameData.js';
-import { squadPlayers, squadSummary, contractAlerts, squadNeeds } from '../data/squadData.js';
+import { squadNeeds, getActiveSquad, getSquadSummary, getContractAlerts, getRosterMeta } from '../data/squadData.js';
 import { formations, tacticalProfiles, playerInstructions, setPieces } from '../data/tacticsData.js';
 import { standingsCompetitions, standingsTables, scorers, competitionStats } from '../data/standingsData.js';
 import { competitions, seasonMonths, schedule, calendarDays, eventTitle, eventClass } from '../data/seasonData.js';
@@ -9,7 +9,8 @@ import { staffBudget, currentStaff, staffCandidates, staffDepartmentKpis, sponso
 import { transferWindow, transferShortlist, outgoingList, negotiations, scoutingReports, contractRules, renewalTargets, boardTransferPolicy } from '../data/transferData.js';
 import { inboxMessages, careerProfile, jobOffers, nationalTeams, callUpPool, seasonObjectives } from '../data/careerData.js';
 import { difficultyProfiles, aiWeights, leaguePaceProfiles, balanceDiagnostics, aiTuningNotes } from '../data/balanceData.js';
-import { safeImg, clubLogo, country, stadium } from '../systems/assets.js';
+import { stabilityChecklist, savePolicies } from '../data/stabilityData.js';
+import { safeImg, clubLogo, country, stadium, assetStatusSummary, flattenAssetMap, fallback } from '../systems/assets.js';
 export function moduleScreen(route,title,subtitle,state){
   const extra = content(route, state);
   return screenWrap(route, `${topbar(title,subtitle,'lobby')}${clubHeader(state)}${extra}`, true);
@@ -49,6 +50,13 @@ function applyIntegratedStandings(rows=[], compId='brasileirao-a', state={}){
 }
 
 function content(route,state={}){
+  const squadPlayers = getActiveSquad(state);
+  const squadSummary = getSquadSummary(state);
+  const contractAlerts = getContractAlerts(state);
+  const rosterMeta = getRosterMeta(state);
+  if(route==='rosterUpdate') return rosterUpdateScreen(state, squadPlayers, squadSummary, rosterMeta);
+  if(route==='assetChecklist') return assetChecklistScreen(state);
+  if(route==='saveCenter') return saveCenterScreen(state);
   if(route==='aiBalance') return aiBalanceScreen(state);
   if(route==='formation') return formationScreen(state);
   if(route==='instructions') return instructionsScreen(state);
@@ -107,7 +115,7 @@ function content(route,state={}){
       <div class="status-pill">${ev.status}</div>
     </div>`).join('');
     return `<section class="calendar-v070">
-      <div class="panel championship-hero"><div><span class="tag">Julho · Temporada ${state.season || 2024}</span><h1>Calendário completo</h1><p class="small">Agenda com partidas, treinos, reuniões, mercado e eventos de imprensa. Esta tela já nasce preparada para puxar temporadas completas nas próximas builds.</p></div><button class="secondary-btn" data-route="championship">Ver competições</button></div>
+      <div class="panel championship-hero"><div><span class="tag">Maio · Temporada ${state.season || 2026}</span><h1>Calendário completo</h1><p class="small">Agenda com partidas, treinos, reuniões, mercado e eventos de imprensa. Esta tela já nasce preparada para puxar temporadas completas nas próximas builds.</p></div><button class="secondary-btn" data-route="championship">Ver competições</button></div>
       <section class="grid grid-2 calendar-layout"><article class="panel"><div class="row space"><h2>Visão mensal</h2><span class="tag">31 dias</span></div><div class="calendar-weekdays"><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span><span>Dom</span></div><div class="calendar-grid-full">${dayCells}</div></article>
       <article class="panel"><div class="row space"><div><span class="tag">Linha do tempo</span><h2>Compromissos do mês</h2></div><strong class="grade">${schedule.length}</strong></div><div class="timeline-list">${timeline}</div></article></section>
       <section class="grid desktop-4"><div class="card kpi-card"><span>Jogos oficiais</span><strong>${schedule.filter(e=>e.type==='match').length}</strong><small>partidas no mês</small></div><div class="card kpi-card"><span>Treinos</span><strong>${schedule.filter(e=>e.type==='training').length}</strong><small>sessões planejadas</small></div><div class="card kpi-card"><span>Decisões</span><strong>${schedule.filter(e=>e.importance>=90).length}</strong><small>alta pressão</small></div><div class="card kpi-card"><span>Viagens</span><strong>${schedule.filter(e=>e.type==='match' && e.away==='Santos FC').length}</strong><small>fora de casa</small></div></section>
@@ -224,9 +232,63 @@ function content(route,state={}){
     return `<section class="squad-v090"><div class="panel squad-hero"><div><span class="tag">Elenco e contratos</span><h1>Gestão do plantel</h1><p class="small">Visão completa de atletas, fotos com fallback, moral, forma, valor, contrato e necessidades do elenco. Preparado para milhares de jogadores sem quebrar imagens.</p></div><button class="main-btn" data-route="contracts">Contratos</button></div><section class="grid desktop-4"><div class="card kpi-card"><span>Overall médio</span><strong>${squadSummary.averageOverall}</strong><small>elenco principal</small></div><div class="card kpi-card"><span>Idade média</span><strong>${squadSummary.averageAge}</strong><small>equilíbrio experiência/base</small></div><div class="card kpi-card"><span>Moral</span><strong>${squadSummary.morale}%</strong><div class="meter"><span style="width:${squadSummary.morale}%"></span></div></div><div class="card kpi-card"><span>Condicionamento</span><strong>${squadSummary.fitness}%</strong><div class="meter"><span style="width:${squadSummary.fitness}%"></span></div></div></section><section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Titulares prováveis</span><h2>Base competitiva</h2></div><strong class="grade">11</strong></div><div class="squad-card-grid">${startersHtml}</div></article><article class="panel"><div class="row space"><div><span class="tag">Planejamento</span><h2>Necessidades do elenco</h2></div><button class="secondary-btn mini" data-route="transfers">Mercado</button></div><div class="needs-list">${needsHtml}</div><p class="alert">As necessidades serão usadas pelo mercado para sugerir alvos, empréstimos e renovações.</p></article></section><section class="panel table-panel"><div class="row space"><div><span class="tag">Elenco completo</span><h2>Jogadores, moral, forma e contratos</h2></div><span class="status-pill">${squadPlayers.length} atletas</span></div><div class="table-scroll"><table class="table squad-table"><thead><tr><th>Jogador</th><th>Pos</th><th>GER</th><th>POT</th><th>Idade</th><th>Moral</th><th>Forma</th><th>Valor</th><th>Contrato</th></tr></thead><tbody>${rows}</tbody></table></div></section></section>`;
   }
 
-  if(route==='settings') return `<section class="grid grid-2"><div class="panel"><h3>Geral</h3>${['Salvar automaticamente','Dicas','Negociações realistas','Lesões','Progresso offline'].map(x=>`<div class="stat-line"><span>${x}</span><strong>Ativo</strong></div>`).join('')}<button class="secondary-btn" data-action="reset-save">Resetar save</button></div><div class="panel"><h3>Qualidade</h3><p class="alert">Build anti-quebra: fallbacks de assets, rotas seguras, salvamento local protegido e auditoria de arquivos.</p></div></section>`;
+  if(route==='settings') return `<section class="grid grid-2"><div class="panel"><h3>Geral</h3>${['Salvar automaticamente','Dicas','Negociações realistas','Lesões','Progresso offline'].map(x=>`<div class="stat-line"><span>${x}</span><strong>Ativo</strong></div>`).join('')}<button class="main-btn" data-route="saveCenter">Central de save</button><button class="secondary-btn danger" data-action="reset-save">Resetar save</button></div><div class="panel"><h3>Qualidade</h3><p class="alert">Build anti-quebra v2.2: fallbacks de assets, rotas seguras, salvamento local protegido, backups manuais, exportação/importação e auditoria de arquivos.</p></div></section>`;
   return `<section class="module-placeholder panel"><h1>Módulo preparado</h1><p class="subtitle">Esta tela já possui rota segura e será expandida nas próximas builds.</p><button class="main-btn" data-route="lobby">Voltar ao lobby</button></section>`;
 }
+
+
+function rosterUpdateScreen(state={}, squadPlayers=[], squadSummary={}, rosterMeta={}){
+  const sample = {
+    meta:{clubId:'santos', season:2026, version:'meu-elenco-v1', updatedAt:'2026-05-19'},
+    players:squadPlayers.slice(0,3).map(p=>({id:p.id,name:p.name,pos:p.pos,overall:p.overall,potential:p.potential,age:p.age,nationality:p.nationality,shirt:p.shirt,photo:p.photo,value:p.value,salary:p.salary,contract:p.contract,status:p.status}))
+  };
+  const rows = squadPlayers.slice(0,12).map(p=>`<tr><td><div class="player-cell">${safeImg(p.photo,'player',p.name,'player-face mini-face')}<div><strong>${p.name}</strong><small>${p.id} · ${p.status || 'Elenco'}</small></div></div></td><td>${p.pos}</td><td>${p.overall}</td><td>${p.age}</td><td><code>${p.photo}</code></td></tr>`).join('');
+  const sampleText = JSON.stringify(sample,null,2).replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+  return `<section class="roster-v250">
+    <div class="panel asset-hero"><div><span class="tag">Elencos v2.5.0</span><h1>Central de Atualização de Elenco</h1><p class="small">Atualize jogadores por JSON sem mexer no código. O jogo valida campos, impede elenco com menos de 11 atletas, remove IDs duplicados e usa foto genérica se o avatar do jogador ainda não existir.</p></div><div class="asset-hero-kpis"><strong>${squadPlayers.length}</strong><span>atletas ativos</span><small>${rosterMeta.version || 'base interna'}</small></div></div>
+    <section class="grid desktop-4"><div class="card kpi-card"><span>Overall médio</span><strong>${squadSummary.averageOverall}</strong><small>recalculado automaticamente</small></div><div class="card kpi-card"><span>Idade média</span><strong>${squadSummary.averageAge}</strong><small>plantel ativo</small></div><div class="card kpi-card"><span>Valor total</span><strong>€ ${Number(squadSummary.totalValue||0).toFixed(1)}M</strong><small>somatório do JSON</small></div><div class="card kpi-card"><span>Risco contratos</span><strong>${squadSummary.contractRisk}</strong><small>contratos até 12 meses</small></div></section>
+    <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Importar</span><h2>Cole um JSON de elenco</h2></div><button class="main-btn mini" data-action="roster-import">Importar com segurança</button></div><textarea id="rosterImportBox" class="save-textarea roster-box" placeholder='Cole aqui { "meta": {...}, "players": [...] }'></textarea><p class="alert">Importação inválida não quebra o jogo: ela é recusada e o elenco atual continua intacto.</p></article><article class="panel"><div class="row space"><div><span class="tag">Exportar</span><h2>Copiar elenco ativo</h2></div><button class="secondary-btn mini" data-action="roster-export">Gerar JSON</button></div><textarea id="rosterExportBox" class="save-textarea roster-box" placeholder="Clique em Gerar JSON para copiar o elenco atual."></textarea><button class="secondary-btn mini danger" data-action="roster-reset">Restaurar elenco base 2026</button></article></section>
+    <section class="panel table-panel"><div class="row space"><div><span class="tag">Prévia</span><h2>Jogadores ativos e caminhos de foto</h2></div><span class="status-pill">Fallback de avatar ativo</span></div><div class="table-scroll"><table class="table squad-table"><thead><tr><th>Jogador</th><th>Pos</th><th>GER</th><th>Idade</th><th>Foto reconhecida pelo jogo</th></tr></thead><tbody>${rows}</tbody></table></div><p class="alert">Para adicionar avatar depois, suba a imagem em exatamente: <code>assets/players/brazil/santos/id-do-jogador.png</code>. Exemplo: <code>assets/players/brazil/santos/neymar.png</code>.</p></section>
+    <section class="panel"><div class="row space"><div><span class="tag">Modelo rápido</span><h2>Exemplo aceito pelo importador</h2></div><button class="secondary-btn mini" data-action="roster-sample">Inserir exemplo</button></div><pre class="code-block">${sampleText}</pre></section>
+  </section>`;
+}
+
+
+function assetChecklistScreen(state={}){
+  const summary = assetStatusSummary();
+  const manifest = flattenAssetMap();
+  const priority = [
+    ['Fundos principais', 'assets/backgrounds/bg-cover.jpg', 'assets/backgrounds/bg-lobby.jpg', 'assets/backgrounds/bg-match.jpg'],
+    ['Clube escolhido', `assets/clubs/brazil/${state.clubId || 'santos'}/logo.png`, `assets/stadiums/brazil/${state.clubId || 'santos'}.jpg`, `assets/clubs/brazil/${state.clubId || 'santos'}/home-kit.png`],
+    ['Jogadores', 'assets/players/brazil/santos/joao-paulo.png', 'assets/players/brazil/santos/giuliano.png', 'assets/players/brazil/santos/guilherme.png'],
+    ['Bandeiras', 'assets/countries/br.png', 'assets/countries/ar.png', 'assets/countries/gb.png'],
+    ['Patrocinadores', 'assets/sponsors/umbro.png', 'assets/sponsors/binance.png', 'assets/sponsors/pixbet.png']
+  ];
+  const groups = priority.map(([title,...paths])=>`<article class="asset-check-card"><div class="row space"><h3>${title}</h3><span class="tag">fallback ativo</span></div>${paths.map(p=>`<div class="asset-path-row"><code>${p}</code><span>se ausente: protegido</span></div>`).join('')}</article>`).join('');
+  const folders = Object.entries(summary.byFolder || {}).sort((a,b)=>b[1]-a[1]).map(([folder,count])=>`<div class="stat-line"><span>${folder}</span><strong>${count}</strong></div>`).join('');
+  const samples = manifest.slice(0,80).map(item=>`<tr><td>${item.key}</td><td><code>${item.path}</code></td></tr>`).join('');
+  return `<section class="asset-v230">
+    <div class="panel asset-hero"><div><span class="tag">Assets v2.3.0</span><h1>Checklist visual e caminhos oficiais</h1><p class="small">O jogo agora carrega imagens por caminhos padronizados, usa cache seguro, protege imagens quebradas e mantém fallback inteligente para clubes, jogadores, bandeiras, ligas, estádios, patrocinadores, staff e fundos.</p></div><div class="asset-hero-kpis"><strong>${summary.total}</strong><span>caminhos mapeados</span><small>${summary.fallbacks} fallbacks obrigatórios</small></div></div>
+    <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Resumo</span><h2>Manifesto de imagens</h2></div><span class="status-pill">Cache: ${summary.cached}</span></div>${folders}<p class="alert">Você pode adicionar imagens no GitHub usando exatamente estes caminhos. Se a imagem não existir, o jogo usa placeholder automaticamente sem quebrar a tela.</p></article><article class="panel"><div class="row space"><div><span class="tag">Fallbacks</span><h2>Proteção anti-imagem quebrada</h2></div><span class="status-pill">Ativo</span></div><div class="asset-fallback-grid">${['club','player','country','stadium','background','sponsor','staff','competition'].map(t=>`<div>${safeImg(fallback(t), t, t, 'asset-fallback-icon')}<span>${t}</span></div>`).join('')}</div></article></section>
+    <section class="asset-check-grid">${groups}</section>
+    <section class="panel table-panel"><div class="row space"><div><span class="tag">Mapa técnico</span><h2>Primeiros caminhos reconhecidos</h2></div><button class="secondary-btn mini" data-route="settings">Configurações</button></div><div class="table-scroll"><table class="table"><thead><tr><th>Chave</th><th>Caminho</th></tr></thead><tbody>${samples}</tbody></table></div></section>
+  </section>`;
+}
+
+function saveCenterScreen(state={}){
+  const stability = state.stability || {};
+  const checklist = stabilityChecklist.map(item=>`<div class="stat-line"><span><strong>${item.area}</strong><small>${item.detail}</small></span><b>${item.status}</b></div>`).join('');
+  const policies = savePolicies.map(p=>`<li>${p}</li>`).join('');
+  const slots = [1,2,3].map(slot=>`<article class="candidate-card"><div><span class="tag">Backup ${slot}</span><h3>Slot seguro ${slot}</h3><p>Grave uma cópia manual antes de subir assets, testar builds novas ou publicar no GitHub/Vercel.</p></div><div class="candidate-side"><button class="main-btn mini" data-action="save-backup" data-slot="${slot}">Criar</button><button class="secondary-btn mini" data-action="save-restore" data-slot="${slot}">Restaurar</button></div></article>`).join('');
+  return `<section class="save-center-v220">
+    <div class="panel championship-hero"><div><span class="tag">Estabilidade AAA v2.2</span><h1>Central de Save e Proteção</h1><p class="small">Esta fase reforça a segurança da carreira para você poder evoluir o jogo sem testar cada build no momento: autosave, backups, exportação, importação e modo seguro.</p></div><strong class="grade">${stability.health || 'Excelente'}</strong></div>
+    <section class="grid desktop-4"><div class="card kpi-card"><span>Autosave</span><strong>${stability.autosave ? 'Ativo' : 'Pausado'}</strong><button class="secondary-btn mini" data-action="toggle-autosave">Alternar</button></div><div class="card kpi-card"><span>Backups</span><strong>${stability.backupCount || 0}</strong><small>criados nesta carreira</small></div><div class="card kpi-card"><span>Último backup</span><strong>${stability.lastBackup ? 'OK' : 'Nenhum'}</strong><small>${stability.lastBackup || 'crie antes de publicar'}</small></div><div class="card kpi-card"><span>Auditoria</span><strong>${stability.auditVersion || 'v2.2.0'}</strong><small>proteção ativa</small></div></section>
+    <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Backups manuais</span><h2>Slots de carreira</h2></div><button class="secondary-btn mini" data-route="lobby">Lobby</button></div><div class="candidate-list">${slots}</div></article><article class="panel"><div class="row space"><div><span class="tag">Checklist técnico</span><h2>Anti-quebra</h2></div><strong class="grade">8/8</strong></div>${checklist}</article></section>
+    <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Exportar</span><h2>Guardar save fora do navegador</h2></div><button class="main-btn mini" data-action="save-export">Gerar JSON</button></div><textarea id="saveExportBox" class="save-textarea" placeholder="Clique em Gerar JSON e copie o texto para guardar."></textarea></article><article class="panel"><div class="row space"><div><span class="tag">Importar</span><h2>Restaurar por JSON</h2></div><button class="secondary-btn mini" data-action="save-import">Importar</button></div><textarea id="saveImportBox" class="save-textarea" placeholder="Cole aqui o JSON exportado anteriormente."></textarea></article></section>
+    <section class="panel"><div class="row space"><div><span class="tag">Política de estabilidade</span><h2>Regras da build</h2></div><strong class="grade">AAA SAFE</strong></div><ul class="policy-list">${policies}</ul><p class="alert">Importação inválida não derruba o jogo: ela é bloqueada, registrada e o save atual continua protegido.</p></section>
+  </section>`;
+}
+
 function aiBalanceScreen(state={}){
   const active = state.gameplay?.difficulty || 'realistic';
   const profiles = difficultyProfiles.map(p=>`<article class="candidate-card ${p.id===active?'selected':''}"><div><span class="tag">${p.name}</span><h3>${p.realism}% realismo</h3><p>${p.description}</p><small>Pressão da diretoria ${p.boardPressure}% · Mercado ${p.transferStrictness}% · Variação ${p.variance}%</small></div><div class="candidate-side"><strong>${p.id===active?'ATIVO':'OK'}</strong><button class="secondary-btn mini" data-action="safe-toast" data-message="Perfil ${p.name} preparado. Troca real de dificuldade será ligada na build de integração total.">Ver</button></div></article>`).join('');
@@ -343,7 +405,7 @@ function money(value){
 function transfersScreen(state={}){
   const selectedFilter = state.ui?.transferFilter || 'all';
   const transferState = state.transfer || {budget:42.8, wageRoom:2.4, activeNegotiations:[], acceptedDeals:[], rejectedDeals:[], outgoingDeals:[], renewals:[], negotiationLog:[]};
-  const activeMap = new Map([...(baseNegotiations||[]), ...(transferState.activeNegotiations||[])].map(n=>[n.id || n.player, n]));
+  const activeMap = new Map([...(negotiations||[]), ...(transferState.activeNegotiations||[])].map(n=>[n.id || n.player, n]));
   const accepted = new Set((transferState.acceptedDeals||[]).map(d=>d.id));
   const rejected = new Set((transferState.rejectedDeals||[]).map(d=>d.id));
   const soldNames = new Set((transferState.outgoingDeals||[]).map(d=>d.name));
@@ -369,7 +431,7 @@ function transfersScreen(state={}){
     </article>`;
   }).join('');
   const outgoing = outgoingList.map(p=>`<div class="outgoing-row ${soldNames.has(p.name)?'deal-done':''}"><div><strong>${p.name}</strong><small>${p.pos} · ${p.age} anos · ${p.market}</small></div><b>€ ${p.value.toFixed(1)}M</b><span>${soldNames.has(p.name)?'Concluído':p.status}</span><button class="secondary-btn mini" ${soldNames.has(p.name)?'disabled':''} data-action="transfer-sell" data-player="${p.name}">Negociar saída</button></div>`).join('');
-  const negRows = [...(baseNegotiations||[]), ...(transferState.activeNegotiations||[])].filter((n,i,arr)=>arr.findIndex(x=>(x.id||x.player)===(n.id||n.player))===i).map(n=>`<div class="negotiation-row"><div><strong>${n.player}</strong><small>${n.type} · ${n.stage}</small></div><div><b>${n.chance}%</b><div class="meter"><span style="width:${n.chance}%"></span></div><small>${n.next}</small></div></div>`).join('');
+  const negRows = [...(negotiations||[]), ...(transferState.activeNegotiations||[])].filter((n,i,arr)=>arr.findIndex(x=>(x.id||x.player)===(n.id||n.player))===i).map(n=>`<div class="negotiation-row"><div><strong>${n.player}</strong><small>${n.type} · ${n.stage}</small></div><div><b>${n.chance}%</b><div class="meter"><span style="width:${n.chance}%"></span></div><small>${n.next}</small></div></div>`).join('');
   const renewals = renewalTargets.map(r=>`<div class="renewal-row ${renewed.has(r.id)?'deal-done':''}"><div><strong>${r.player}</strong><small>Vence em ${r.expires} · risco ${r.risk}</small><p>${r.recommendation}</p></div><b>€ ${r.demand.toFixed(2)}M</b><button class="secondary-btn mini" ${renewed.has(r.id)?'disabled':''} data-action="transfer-renew" data-player="${r.id}">${renewed.has(r.id)?'Renovado':'Renovar'}</button></div>`).join('');
   const scout = scoutingReports.map(r=>`<div class="scout-row"><strong>${r.area}</strong><span>${r.grade}</span><p>${r.note}</p></div>`).join('');
   const rules = [...contractRules, ...boardTransferPolicy].map(r=>`<div class="stat-line"><span>${r.label}</span><strong>${r.value}</strong></div>`).join('');
@@ -406,6 +468,7 @@ function trainingScreen(state={}){
 
 
 function formationScreen(state={}){
+  const squadPlayers = getActiveSquad(state);
   const selectedId = state.ui?.selectedFormation || '433-possession';
   const formation = formations.find(f=>f.id===selectedId) || formations[0];
   const starters = squadPlayers.slice(0,11);

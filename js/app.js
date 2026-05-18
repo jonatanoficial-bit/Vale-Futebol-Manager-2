@@ -9,13 +9,18 @@ import { confirmCareer } from './screens/confirmCareer.js';
 import { lobby } from './screens/lobby.js';
 import { match } from './screens/match.js';
 import { moduleScreen } from './screens/moduleScreen.js';
+import { applyCommercialPolish, validateCommercialState } from './systems/commercialPolish.js';
+import { runRuntimeAudit } from './systems/auditLogger.js';
 
 async function boot(){
   const app = document.getElementById('app');
-  let buildInfo = { buildLabel:'Build v1.9.0' };
+  let buildInfo = { buildLabel:'Build v2.5.0' };
   try { buildInfo = await (await fetch('build/build-info.json', {cache:'no-store'})).json(); } catch(err) { console.warn('[VFM] build-info fallback', err); }
   await loadAssetMap();
+  applyCommercialPolish();
   load();
+  runRuntimeAudit(getState(), {phase:'v2.5.0 boot'});
+  validateCommercialState(getState());
   initRouter(app, buildInfo);
   register('cover', cover);
   register('mainMenu', mainMenu);
@@ -41,7 +46,10 @@ async function boot(){
     nationalTeam:['Seleções','Carreira internacional, convocação e calendário FIFA'],
     squad:['Elenco','Jogadores, forma, moral e contratos'],
     settings:['Configurações','Preferências e segurança'],
-    aiBalance:['IA e Balanceamento','Dificuldade, realismo, pesos da simulação e diagnóstico esportivo']
+    aiBalance:['IA e Balanceamento','Dificuldade, realismo, pesos da simulação e diagnóstico esportivo'],
+    saveCenter:['Central de Save','Autosave, backups, exportação, importação e proteção de carreira'],
+    assetChecklist:['Assets','Checklist visual, caminhos oficiais, cache e fallbacks'],
+    rosterUpdate:['Atualização de Elenco','Importar, exportar e validar elencos por JSON']
   };
   Object.entries(modules).forEach(([route,[title,sub]]) => register(route, (state)=> moduleScreen(route,title,sub,state)));
   render();

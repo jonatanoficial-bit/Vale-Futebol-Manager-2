@@ -1,4 +1,4 @@
-import { getState, setState, setManager, setUI, startCareer, advanceMatch, finishMatch, setMatchSpeed, makeSubstitution, setMatchDecision, openTransferNegotiation, acceptTransferDeal, rejectTransferDeal, sellOutgoingPlayer, renewPlayerContract } from './state.js';
+import { getState, setState, setManager, setUI, startCareer, advanceMatch, finishMatch, setMatchSpeed, makeSubstitution, setMatchDecision, openTransferNegotiation, acceptTransferDeal, rejectTransferDeal, sellOutgoingPlayer, renewPlayerContract, createManualBackup, restoreManualBackup, exportSaveText, importSaveText, toggleAutosave, exportRosterText, importRosterText, resetRosterToDefault, sampleRosterText } from './state.js';
 const routes = new Map(); let rootEl = null; let buildInfo = null;
 export function register(name, renderer){ routes.set(name, renderer); }
 export function initRouter(root, build){ rootEl = root; buildInfo = build; }
@@ -8,10 +8,21 @@ export function render(){
   try { rootEl.innerHTML = renderer(state); wire(rootEl); fillBuildBadges(); }
   catch(err){ console.error('[VFM] erro na tela, tela segura acionada', err); rootEl.innerHTML = `<main class="screen"><div class="module-placeholder"><h1>Modo seguro</h1><p>Uma tela apresentou erro, mas o jogo continua funcionando.</p><button class="main-btn" data-route="lobby">Voltar ao lobby</button></div>${build()}</main>`; wire(rootEl); }
 }
-function build(){ return `<div class="build-badge">${buildInfo?.buildLabel || 'Build v1.9.0'}</div>`; }
-function fillBuildBadges(){ rootEl.querySelectorAll('#buildBadge,.build-badge').forEach(el=>{ if(!el.textContent.trim()) el.textContent = buildInfo?.buildLabel || 'Build v1.9.0'; }); }
+function build(){ return `<div class="build-badge">${buildInfo?.buildLabel || 'Build v2.5.0'}</div>`; }
+function fillBuildBadges(){ rootEl.querySelectorAll('#buildBadge,.build-badge').forEach(el=>{ if(!el.textContent.trim()) el.textContent = buildInfo?.buildLabel || 'Build v2.5.0'; }); }
 function wire(scope){
   scope.querySelectorAll('[data-route]').forEach(btn => btn.addEventListener('click', () => go(btn.dataset.route)));
+
+  scope.querySelectorAll('[data-action="save-backup"]').forEach(btn => btn.addEventListener('click', () => { createManualBackup(btn.dataset.slot || 1); render(); }));
+  scope.querySelectorAll('[data-action="save-restore"]').forEach(btn => btn.addEventListener('click', () => { restoreManualBackup(btn.dataset.slot || 1); render(); }));
+  scope.querySelectorAll('[data-action="save-export"]').forEach(btn => btn.addEventListener('click', () => { const box = scope.querySelector('#saveExportBox'); if(box){ box.value = exportSaveText(); box.focus(); box.select(); } render(); }));
+  scope.querySelectorAll('[data-action="save-import"]').forEach(btn => btn.addEventListener('click', () => { const box = scope.querySelector('#saveImportBox'); importSaveText(box?.value || ''); render(); }));
+
+  scope.querySelectorAll('[data-action="roster-export"]').forEach(btn => btn.addEventListener('click', () => { const box = scope.querySelector('#rosterExportBox'); if(box){ box.value = exportRosterText(); box.focus(); box.select(); } render(); }));
+  scope.querySelectorAll('[data-action="roster-import"]').forEach(btn => btn.addEventListener('click', () => { const box = scope.querySelector('#rosterImportBox'); importRosterText(box?.value || ''); render(); }));
+  scope.querySelectorAll('[data-action="roster-reset"]').forEach(btn => btn.addEventListener('click', () => { resetRosterToDefault(); render(); }));
+  scope.querySelectorAll('[data-action="roster-sample"]').forEach(btn => btn.addEventListener('click', () => { const box = scope.querySelector('#rosterImportBox'); if(box){ box.value = sampleRosterText(); box.focus(); } }));
+  scope.querySelectorAll('[data-action="toggle-autosave"]'.forEach(btn => btn.addEventListener('click', () => { toggleAutosave(); render(); }));
   scope.querySelectorAll('[data-action="reset-save"]').forEach(btn => btn.addEventListener('click', () => { localStorage.clear(); location.reload(); }));
   scope.querySelectorAll('[data-action="select-avatar"]').forEach(btn => btn.addEventListener('click', () => { setUI({selectedAvatar:btn.dataset.avatar}); render(); }));
   scope.querySelectorAll('[data-action="select-mode"]').forEach(btn => btn.addEventListener('click', () => { setUI({selectedMode:btn.dataset.mode}); render(); }));

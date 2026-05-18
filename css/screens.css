@@ -88,3 +88,7 @@
 .ai-balance-live{border-color:rgba(125,211,252,.26)}
 .small-list{margin:14px 0 0;padding-left:18px;color:var(--muted);line-height:1.55;font-size:.9rem}
 .small-list li{margin-bottom:6px}
+
+.save-center-v220 .save-textarea{width:100%;min-height:180px;border-radius:18px;border:1px solid rgba(246,197,92,.28);background:rgba(0,0,0,.42);color:#f8f0d2;padding:14px;font:12px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;resize:vertical;outline:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.04)}
+.save-center-v220 .save-textarea:focus{border-color:rgba(246,197,92,.75);box-shadow:0 0 0 3px rgba(246,197,92,.14)}
+.policy-list{margin:14px 0 0;padding-left:20px;color:var(--muted);display:grid;gap:8px}.policy-list li{line-height:1.35}.danger{border-color:rgba(255,80,80,.45)!important;color:#ffb4b4!important}

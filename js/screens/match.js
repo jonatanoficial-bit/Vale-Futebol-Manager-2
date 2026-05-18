@@ -1,7 +1,7 @@
 import { screenWrap, topbar } from './common.js';
 import { teams } from '../data/gameData.js';
 import { matchTimeline, matchActionTips, playerRatings } from '../data/matchData.js';
-import { squadPlayers } from '../data/squadData.js';
+import { getActiveSquad } from '../data/squadData.js';
 import { safeImg, clubLogo, stadium } from '../systems/assets.js';
 import { computeMatchAI, buildBalanceSummary } from '../systems/balance.js';
 
@@ -36,6 +36,7 @@ function eventIcon(type){
   return {goal:'⚽', chance:'🎯', danger:'⚠️', card:'🟨', sub:'🔁', pressure:'🔥', halftime:'⏱️', fulltime:'🏁', kickoff:'▶'}[type] || '•';
 }
 export function match(state){
+  const squadPlayers = getActiveSquad(state);
   const minute = Math.min(90, Math.max(1, Number(state.match?.minute || 57)));
   const home = teams.find(t=>t.id===state.match?.home) || teams.find(t=>t.id==='santos') || teams[0];
   const away = teams.find(t=>t.id===state.match?.away) || teams.find(t=>t.id==='palmeiras') || teams[1] || home;
@@ -53,8 +54,8 @@ export function match(state){
   const tips = matchActionTips.map(t=>`<button class="tactical-action ${state.match?.decision===decisionMap[t.label]?'active':''}" data-action="match-decision" data-decision="${decisionMap[t.label] || 'balanced'}"><strong>${t.label}</strong><small>${t.impact}</small></button>`).join('');
   const subs = Array.isArray(state.match?.substitutions) ? state.match.substitutions : [];
   const subsLeft = Math.max(0, Number(state.match?.maxSubs || 5) - subs.length);
-  const starters = ['giuliano','lucas-lima','julio-furch','tomas-rincon','guilherme'];
-  const bench = ['miguelito','weslley-patati','deivid-washington','angelo','pedrinho'];
+  const starters = ['neymar','gabriel-barbosa','rony','gabriel-menino','ze-rafael'];
+  const bench = ['benjamin-rollheiser','lautaro-diaz','moises','miguel-terceros','thaciano'];
   const byId = new Map(squadPlayers.map(p=>[p.id,p]));
   const subOptions = starters.map((outId,i)=>{ const inId = bench[i] || bench[0]; const outP = byId.get(outId) || {name:outId,pos:'--',fitness:68}; const inP = byId.get(inId) || {name:inId,pos:'--',fitness:90}; const done = subs.some(x=>x.out===outId) || subs.some(x=>x.in===inId); return `<button class="sub-card ${done?'disabled':''}" ${done || subsLeft<=0 || isOver ? 'disabled' : ''} data-action="match-substitution" data-out="${outId}" data-in="${inId}"><strong>${outP.name} ↔ ${inP.name}</strong><small>${outP.pos} ${Math.max(50, Math.round((outP.fitness||80)-minute/4))}% → ${inP.pos} ${inP.fitness||92}%</small></button>`; }).join('');
   const subHistory = subs.length ? subs.map(x=>`<p class="live-event sub"><strong>${x.minute}' 🔁</strong><span><b>Substituição</b>${(byId.get(x.out)||{}).name || x.out} sai para entrada de ${(byId.get(x.in)||{}).name || x.in}.</span></p>`).join('') : '<p class="muted">Nenhuma substituição realizada.</p>';
