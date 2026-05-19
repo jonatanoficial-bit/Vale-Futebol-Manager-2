@@ -12,16 +12,17 @@ import { moduleScreen } from './screens/moduleScreen.js';
 import { applyCommercialPolish, validateCommercialState } from './systems/commercialPolish.js';
 import { runRuntimeAudit } from './systems/auditLogger.js';
 import { loadVisualLibrary } from './systems/visualAssetManager.js';
+import { runtimeSafetySnapshot } from './systems/uxEngine.js';
 
 async function boot(){
   const app = document.getElementById('app');
-  let buildInfo = { buildLabel:'Build v3.3.0' };
+  let buildInfo = { buildLabel:'Build v3.4.0' };
   try { buildInfo = await (await fetch('build/build-info.json', {cache:'no-store'})).json(); } catch(err) { console.warn('[VFM] build-info fallback', err); }
   await loadAssetMap();
   await loadVisualLibrary();
   applyCommercialPolish();
   load();
-  runRuntimeAudit(getState(), {phase:'v3.3.0 boot'});
+  runRuntimeAudit(getState(), {phase:'v3.4.0 boot', ux: runtimeSafetySnapshot(getState())});
   validateCommercialState(getState());
   initRouter(app, buildInfo);
   register('cover', cover);
@@ -34,6 +35,7 @@ async function boot(){
   const modules = {
     seasonCenter:['Temporada','Tabela viva, rodada completa, acesso, queda e vagas continentais'],
     financeCenter:['Economia','Diretoria, orçamento, patrocínio e crise financeira realista'],
+    polishCenter:['Polimento AAA','Auditoria visual, UX mobile, performance e prontidão comercial'],
     worldCompetitions:['Competições Globais','Libertadores, Sul-Americana, Mundial de Clubes e calendário de seleções'],
     championship:['Campeonato','Competições e agenda anual'],
     calendar:['Calendário','Agenda completa da temporada'],

@@ -1,16 +1,21 @@
-Vale Futebol Manager: Gold Edition
-Build v3.3.0 | 2026-05-20 | 00:40 UTC
-Fase: Economia, diretoria, patrocínio e crise financeira realistas
-Base: v3.2.0
+Vale Futebol Manager Gold Edition
+Build v3.4.0 | 2026-05-20 | 01:35 UTC
 
-Novos arquivos:
-- js/data/financeData.js
-- js/systems/financeEngine.js
-- FINANCE_ENGINE_V33_GUIDE.md
+Fase: Polimento premium, UX, responsividade extrema e auditoria visual final.
+Base: v3.3.0.
 
-Principais integrações:
-- nova rota financeCenter
-- novo botão Economia no lobby
-- receitas, despesas, folha, patrocínio e diretoria conectados ao estado do clube
-- gatilhos de crise financeira com fallback seguro
-- save migrável v3.2.0 -> v3.3.0
+Arquivos novos:
+- js/data/uxData.js
+- js/systems/uxEngine.js
+- UX_POLISH_V34_GUIDE.md
+
+Arquivos atualizados:
+- index.html
+- js/app.js
+- js/screens/moduleScreen.js
+- js/systems/state.js
+- js/systems/commercialPolish.js
+- css/commercial-polish.css
+- build/build-info.json
+- AUDIT_REPORT.txt
+- PROJECT_STATUS.md

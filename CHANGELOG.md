@@ -100,3 +100,10 @@ IA e balanceamento esportivo.
 ## v3.3.0
 - Adicionado Centro de Economia, diretoria, patrocínio e crise financeira realistas.
 - Novo financeEngine com receitas, despesas, risco, limite de mercado e patrocínios por reputação.
+
+
+## v3.4.0 - Polimento premium AAA
+- Central Polimento AAA adicionada ao lobby.
+- Auditoria visual e tecnica interna.
+- Responsividade mobile fullscreen refinada.
+- Performance e fallbacks revisados para GitHub/Vercel.

@@ -50,3 +50,10 @@ Mercado interativo com propostas, compras, vendas, renovações, orçamento vivo
 - Mercado funcional com compra, venda, emprestimo, propostas recebidas, renovacoes e IA de clubes.
 - Orçamento e folha vivos com bloqueio anti-quebra.
 - Diário de mercado persistente no save local.
+
+
+## v3.4.0 - Polimento premium AAA
+- Central Polimento AAA adicionada ao lobby.
+- Auditoria visual e tecnica interna.
+- Responsividade mobile fullscreen refinada.
+- Performance e fallbacks revisados para GitHub/Vercel.

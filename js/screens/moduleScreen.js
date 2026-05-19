@@ -17,6 +17,8 @@ import { buildRoundRobin, flattenFixtures, deriveStandings, leagueZones, qualifi
 import { continentalCompetitions, worldCompetitions, nationalTeamCompetitions, buildWorldCalendar, continentalStatusForClub, nextGlobalCycle, qualificationRules, renderCompetitionLogo, worldCompetitionSummary } from '../systems/worldCompetitionEngine.js';
 import { financeProfiles } from '../data/financeData.js';
 import { buildFinanceSnapshot, boardObjectiveStatus, financeEventFeed } from '../systems/financeEngine.js';
+import { uxAuditChecklist, premiumPolishNotes, releaseReadiness } from '../data/uxData.js';
+import { buildUXAudit } from '../systems/uxEngine.js';
 export function moduleScreen(route,title,subtitle,state){
   const extra = content(route, state);
   return screenWrap(route, `${topbar(title,subtitle,'lobby')}${clubHeader(state)}${extra}`, true);
@@ -64,6 +66,7 @@ function content(route,state={}){
   if(route==='seasonCenter') return seasonCenterScreen(state);
   if(route==='worldCompetitions') return worldCompetitionsScreenV320(state);
   if(route==='financeCenter') return financeCenterScreenV330(state);
+  if(route==='polishCenter') return polishCenterScreenV340(state);
   if(route==='visualLibrary') return visualLibraryScreen(state);
   if(route==='rosterUpdate') return rosterUpdateScreen(state, squadPlayers, squadSummary, rosterMeta);
   if(route==='assetChecklist') return assetChecklistScreen(state);
@@ -703,6 +706,18 @@ function financeCenterScreenV330(state={}){
     <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Receitas</span><h2>Entradas financeiras</h2></div><strong class="grade">€ ${snap.monthlyRevenue}M</strong></div><div class="finance-list">${revenueRows}</div></article><article class="panel"><div class="row space"><div><span class="tag">Custos</span><h2>Saídas e pressão</h2></div><strong class="grade">${snap.wagePressure}%</strong></div><div class="finance-list">${expenseRows}</div></article></section>
     <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Diretoria</span><h2>Mandatos e risco de cobrança</h2></div><strong class="grade">${snap.boardScore}%</strong></div><div class="objective-list">${objectiveRows}</div></article><article class="panel"><div class="row space"><div><span class="tag">Patrocínio</span><h2>Mercado comercial</h2></div><button class="secondary-btn mini" data-route="sponsorship">Tela de patrocínio</button></div><div class="sponsor-market-list">${sponsorRows}</div></article></section>
     <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Crises</span><h2>Gatilhos financeiros</h2></div><strong class="grade">${snap.debtRisk}%</strong></div><div class="crisis-list">${crisisRows}</div></article><article class="panel"><div class="row space"><div><span class="tag">Relatório vivo</span><h2>Eventos executivos</h2></div><span class="status-pill">Anti-quebra ativo</span></div><div class="finance-feed-list">${feedRows}</div><p class="alert">Na v3.3 o centro financeiro é seguro: se qualquer dado faltar, o motor usa projeções e fallbacks para não travar o jogo.</p></article></section>
+  </section>`;
+}
+
+function polishCenterScreenV340(state={}){
+  const audit = buildUXAudit(state);
+  const notes = premiumPolishNotes.map(n=>`<li>${n}</li>`).join('');
+  const rows = audit.rows.map(r=>`<div class="ux-audit-row ${r.score>=90?'ok':r.score>=75?'warn':'danger'}"><div><strong>${r.area}</strong><small>${r.detail}</small></div><b>${r.score}%</b><em>${r.status}</em><div class="meter"><span style="width:${r.score}%"></span></div></div>`).join('');
+  return `<section class="polish-v340">
+    <div class="panel polish-hero"><div><span class="tag">Polimento comercial v3.4</span><h1>Auditoria AAA e prontidão mobile</h1><p class="small">Esta central resume a revisão final de UX, visual, performance, assets, saves, rotas, gameplay e compatibilidade GitHub/Vercel. Se algo falhar, o jogo usa modo seguro e fallbacks.</p></div><div class="release-score"><strong>${audit.score}%</strong><small>${audit.status}</small></div></div>
+    <section class="grid desktop-4"><div class="card kpi-card"><span>Bloqueios críticos</span><strong>${audit.blockers}</strong><small>meta: zero</small></div><div class="card kpi-card"><span>Touch mobile</span><strong>44px+</strong><small>botões seguros</small></div><div class="card kpi-card"><span>Fullscreen</span><strong>100svh</strong><small>safe-area ativo</small></div><div class="card kpi-card"><span>Deploy</span><strong>Static</strong><small>GitHub + Vercel</small></div></section>
+    <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Checklist</span><h2>Auditoria visual e técnica</h2></div><span class="status-pill">${releaseReadiness.label}</span></div><div class="ux-audit-list">${rows}</div></article><article class="panel"><div class="row space"><div><span class="tag">Refinamentos</span><h2>O que foi melhorado</h2></div><strong class="grade">AAA</strong></div><ul class="premium-list bullets">${notes}</ul><div class="training-note"><strong>Recomendação:</strong> ${audit.recommendation}</div></article></section>
+    <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Rotas críticas</span><h2>Teste rápido</h2></div><span class="status-pill">Modo seguro</span></div><div class="quick-route-grid"><button class="secondary-btn" data-route="lobby">Lobby</button><button class="secondary-btn" data-route="seasonCenter">Temporada</button><button class="secondary-btn" data-route="match">Partida</button><button class="secondary-btn" data-route="transfers">Transferências</button><button class="secondary-btn" data-route="careerOffers">Propostas</button><button class="secondary-btn" data-route="financeCenter">Economia</button></div></article><article class="panel"><div class="row space"><div><span class="tag">Próximos upgrades</span><h2>Expansão após v3.4</h2></div><button class="secondary-btn mini" data-route="visualLibrary">Assets</button></div><div class="news-list compact"><div class="news-item"><strong>Base e categorias</strong><span>Sub-20, joias, promoção ao profissional e venda futura.</span></div><div class="news-item"><strong>Banco global</strong><span>Mais ligas, jogadores, staff e rankings internacionais.</span></div><div class="news-item"><strong>Experiência premium</strong><span>Sons, vibração opcional, animações e APK futuro.</span></div></div></article></section>
   </section>`;
 }
 

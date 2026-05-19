@@ -15,3 +15,10 @@
 
 ## Regras de assets
 Substitua imagens nas pastas `assets/` mantendo o mesmo nome e caminho. O código possui fallback automático.
+
+
+## v3.4.0 - Polimento premium AAA
+- Central Polimento AAA adicionada ao lobby.
+- Auditoria visual e tecnica interna.
+- Responsividade mobile fullscreen refinada.
+- Performance e fallbacks revisados para GitHub/Vercel.
