@@ -11,6 +11,7 @@ import { inboxMessages, careerProfile, jobOffers, nationalTeams, callUpPool, sea
 import { difficultyProfiles, aiWeights, leaguePaceProfiles, balanceDiagnostics, aiTuningNotes } from '../data/balanceData.js';
 import { stabilityChecklist, savePolicies } from '../data/stabilityData.js';
 import { safeImg, clubLogo, country, stadium, assetStatusSummary, flattenAssetMap, fallback } from '../systems/assets.js';
+import { visualSummary, visualLibrary } from '../systems/visualAssetManager.js';
 export function moduleScreen(route,title,subtitle,state){
   const extra = content(route, state);
   return screenWrap(route, `${topbar(title,subtitle,'lobby')}${clubHeader(state)}${extra}`, true);
@@ -54,6 +55,7 @@ function content(route,state={}){
   const squadSummary = getSquadSummary(state);
   const contractAlerts = getContractAlerts(state);
   const rosterMeta = getRosterMeta(state);
+  if(route==='visualLibrary') return visualLibraryScreen(state);
   if(route==='rosterUpdate') return rosterUpdateScreen(state, squadPlayers, squadSummary, rosterMeta);
   if(route==='assetChecklist') return assetChecklistScreen(state);
   if(route==='saveCenter') return saveCenterScreen(state);
@@ -537,4 +539,22 @@ function shortName(name=''){
   const parts = String(name).trim().split(/\s+/).filter(Boolean);
   if(parts.length<=1) return parts[0] || 'Atleta';
   return parts[parts.length-1].slice(0,12);
+}
+
+
+function visualLibraryScreen(state={}){
+  const summary = visualSummary();
+  const lib = visualLibrary();
+  const categories = summary.categories.map(cat=>`<article class="card"><div class="row space"><strong>${cat.key}</strong><span class="tag">${cat.total} fundos</span></div><p class="small">Primeiro caminho: <code>${cat.first || 'fallback'}</code></p></article>`).join('');
+  const leagues = Object.entries(lib.leagues || {}).slice(0,32).map(([id,l])=>`<div class="asset-row"><span>${safeImg(l.logo,'league',l.name,'mini-logo')}</span><div><strong>${l.name}</strong><small>${id} · ${l.country}</small></div></div>`).join('');
+  const countryRows = Object.entries(lib.countries || {}).slice(0,42).map(([code,path])=>`<span class="country-pill">${safeImg(path,'country',code,'mini-flag')} ${code}</span>`).join('');
+  const clubCountries = Object.entries(lib.clubs || {}).map(([countrySlug, clubs])=>`<article class="card"><strong>${countrySlug}</strong><p class="small">${Object.keys(clubs||{}).length} logos de clubes cadastrados</p></article>`).join('');
+  return `<section class="visual-library-v260 stack">
+    <div class="panel"><div class="row space"><div><span class="tag">v2.6.0</span><h1>Biblioteca Visual Dinâmica</h1><p class="small">O jogo agora entende os fundos extras, logos organizados, países e ligas pelo manifesto <code>data/asset-library.json</code>. Se uma imagem estiver ausente, quebrada ou com nome errado, o fallback preserva a tela.</p></div><strong class="grade">${summary.version}</strong></div></div>
+    <section class="grid desktop-4"><div class="card kpi-card"><span>Fundos por categorias</span><strong>${summary.categories.length}</strong><small>rotação diária segura</small></div><div class="card kpi-card"><span>Clubes com logos</span><strong>${summary.clubs}</strong><small>${summary.clubCountries} países/pastas</small></div><div class="card kpi-card"><span>Ligas preparadas</span><strong>${summary.leagues}</strong><small>com fallback se faltar logo</small></div><div class="card kpi-card"><span>Países/códigos</span><strong>${summary.countries}</strong><small>bandeiras e aliases</small></div></section>
+    <section class="panel"><div class="row space"><div><span class="tag">Fundos dinâmicos</span><h2>Categorias reconhecidas</h2></div><span class="status-pill">anti-quebra ativo</span></div><div class="grid desktop-4">${categories}</div></section>
+    <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Ligas</span><h2>Biblioteca de ligas preparada</h2></div><span class="small">adicione PNGs nos caminhos oficiais</span></div><div class="asset-list compact">${leagues}</div></article><article class="panel"><div class="row space"><div><span class="tag">Países</span><h2>Códigos reconhecidos</h2></div><span class="small">flags com fallback</span></div><div class="country-cloud">${countryRows}</div></article></section>
+    <section class="panel"><div class="row space"><div><span class="tag">Clubes importados</span><h2>Logos organizados por país</h2></div><span class="small">data/club-logo-library.json</span></div><div class="grid desktop-4">${clubCountries}</div></section>
+    <section class="panel"><h2>Como adicionar novos visuais sem mexer no código</h2><p class="small">Suba a imagem no caminho indicado pelo guia e cadastre no <code>data/asset-library.json</code>. Para logos, use <code>assets/clubs/pais/clube/logo.png</code> e <code>badge.png</code>. O jogo tentará a imagem, depois o fundo principal da tela, depois o fallback global.</p></section>
+  </section>`;
 }

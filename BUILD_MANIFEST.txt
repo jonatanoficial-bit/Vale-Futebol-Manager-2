@@ -1,14 +1,17 @@
-Build v2.5.1 roster update center
-Date: 2026-05-19 01:15 UTC
-Base: v2.4.0 consolidated
+Vale Futebol Manager: Gold Edition
+Build v2.6.0 | 2026-05-19 | 15:05 UTC
 
-Core additions:
-- Santos 2026 roster data refreshed
-- data/rosters/2026/santos.json
-- ROSTER_GUIDE.md
-- Central de Atualização de Elenco route: rosterUpdate
-- JSON roster import/export/reset/sample
-- safe roster migration v2.4.0 -> v2.5.1
-- player photo paths prepared for future avatars
-- fallback if player image is missing
-- audit report updated
+Fase: Biblioteca Visual Dinamica
+Base: v2.5.1
+
+Incluido:
+- data/asset-library.json
+- js/systems/visualAssetManager.js
+- tela Biblioteca Visual
+- fundos extras entendidos por categoria
+- logos organizados integrados ao asset-map
+- data/club-logo-library.json
+- data/world-league-library.json
+- ligas e paises preparados com fallback
+- rota visualLibrary no lobby
+- auditoria anti-quebra

@@ -1,30 +1,15 @@
-# PROJECT_STATUS.md
+# PROJECT STATUS - v2.6.0
 
-## Vale Futebol Manager: Gold Edition
+Status: build funcional baseada na v2.5.1, com Biblioteca Visual Dinamica integrada.
 
-Status: Primeira versão comercial sólida + Central de Atualização de Elencos.
+## Principal evolucao
+Os assets extras deixam de ser peso morto e passam a ser reconhecidos por `data/asset-library.json`.
 
-## Build atual
+## Logos
+Pacote de logos organizado integrado em `assets/clubs/` e manifesto `data/club-logo-library.json`.
 
-v2.5.1 — 2026-05-19 01:15 UTC
+## Paises e ligas
+Foram preparados aliases de paises e biblioteca de ligas em `data/world-league-library.json`.
 
-## Incluído na v2.5.1
-
-- Santos 2026 atualizado como base inicial.
-- Central de Atualização de Elenco no lobby.
-- Exportação de elenco ativo por JSON.
-- Importação segura de elenco por JSON.
-- Validação anti-quebra de elenco.
-- Fallback automático para fotos de jogadores ausentes.
-- Guia `ROSTER_GUIDE.md`.
-- Arquivo editável `data/rosters/2026/santos.json`.
-- Save migrável v2.4.0 -> v2.5.1.
-
-## Próximas expansões opcionais
-
-- Atualizador por múltiplos clubes.
-- Editor visual de jogador dentro do app.
-- Pacotes oficiais de elenco por temporada.
-- Categorias de base.
-- Modo presidente.
-- APK Android.
+## Seguranca
+Falha de imagem nao deve travar o jogo. Rotas novas usam fallback visual seguro.

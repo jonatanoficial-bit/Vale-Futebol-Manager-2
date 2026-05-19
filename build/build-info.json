@@ -1,10 +1,7 @@
 {
-  "version": "v2.5.1",
-  "date": "2026-05-19",
-  "time": "01:15 UTC",
-  "buildLabel": "Build v2.5.1 | 2026-05-19 | 01:15 UTC",
-  "phase": "Hotfix anti-quebra da Central de Atualização de Elencos 2026",
-  "platform": "GitHub Pages / Vercel static site",
-  "commercialStatus": "Primeira versão comercial sólida + manutenção de elenco segura",
-  "source": "Reconstruída a partir da v2.5.0 com correção de router e auditoria de navegador"
+  "version": "2.6.0",
+  "name": "Vale Futebol Manager: Gold Edition",
+  "buildLabel": "Build v2.6.0 | 2026-05-19 | 15:05 UTC",
+  "phase": "Biblioteca Visual Dinâmica + logos/paises/ligas integrados",
+  "date": "2026-05-19T15:05:00Z"
 }

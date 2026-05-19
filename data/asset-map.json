@@ -36,7 +36,25 @@
     "finances": "assets/backgrounds/bg-finances.jpg",
     "squad": "assets/backgrounds/bg-squad.jpg",
     "store": "assets/backgrounds/bg-store.jpg",
-    "messages": "assets/backgrounds/bg-messages.jpg"
+    "messages": "assets/backgrounds/bg-messages.jpg",
+    "avatar-create": "assets/backgrounds/bg-avatar-create.jpg",
+    "confirm-career": "assets/backgrounds/bg-confirm-career.jpg",
+    "full-calendar": "assets/backgrounds/bg-full-calendar.jpg",
+    "main-menu": "assets/backgrounds/bg-main-menu.jpg",
+    "new-game": "assets/backgrounds/bg-new-game.jpg",
+    "team-select": "assets/backgrounds/bg-team-select.jpg",
+    "visualLibrary": "assets/backgrounds/bg-settings.jpg",
+    "assetChecklist": "assets/backgrounds/bg-settings.jpg",
+    "rosterUpdate": "assets/backgrounds/bg-squad.jpg",
+    "saveCenter": "assets/backgrounds/bg-settings.jpg",
+    "aiBalance": "assets/backgrounds/bg-settings.jpg",
+    "nationalTeam": "assets/backgrounds/bg-club.jpg",
+    "contracts": "assets/backgrounds/bg-transfers.jpg",
+    "news": "assets/backgrounds/bg-messages.jpg",
+    "sandbox": "assets/backgrounds/bg-main-menu.jpg",
+    "scouting": "assets/backgrounds/bg-transfers.jpg",
+    "youthAcademy": "assets/backgrounds/bg-training.jpg",
+    "loading": "assets/backgrounds/bg-cover.jpg"
   },
   "countries": {
     "br": "assets/countries/br.png",
@@ -60,7 +78,19 @@
     "tr": "assets/countries/tr.png",
     "sa": "assets/countries/sa.png",
     "ve": "assets/countries/ve.png",
-    "bo": "assets/countries/bo.png"
+    "bo": "assets/countries/bo.png",
+    "spain": "assets/countries/es.png",
+    "england": "assets/countries/gb.png",
+    "argentina": "assets/countries/ar.png",
+    "germany": "assets/countries/de.png",
+    "brazil": "assets/countries/br.png",
+    "ecuador": "assets/countries/ec.png",
+    "italy": "assets/countries/it.png",
+    "colombia": "assets/countries/co.png",
+    "uruguay": "assets/countries/uy.png",
+    "chile": "assets/countries/cl.png",
+    "france": "assets/countries/fr.png",
+    "paraguay": "assets/countries/py.png"
   },
   "competitions": {
     "brasileirao_a": "assets/competitions/brasileirao_a.png",
@@ -82,168 +112,192 @@
       "badge": "assets/clubs/brazil/santos/badge.png",
       "homeKit": "assets/clubs/brazil/santos/home-kit.png",
       "awayKit": "assets/clubs/brazil/santos/away-kit.png",
-      "stadium": "assets/stadiums/brazil/santos.jpg"
+      "stadium": "assets/stadiums/brazil/santos.jpg",
+      "country": "brazil"
     },
     "palmeiras": {
       "logo": "assets/clubs/brazil/palmeiras/logo.png",
       "stadium": "assets/stadiums/brazil/palmeiras.jpg",
       "badge": "assets/clubs/brazil/palmeiras/badge.png",
       "homeKit": "assets/clubs/brazil/palmeiras/home-kit.png",
-      "awayKit": "assets/clubs/brazil/palmeiras/away-kit.png"
+      "awayKit": "assets/clubs/brazil/palmeiras/away-kit.png",
+      "country": "brazil"
     },
     "flamengo": {
       "logo": "assets/clubs/brazil/flamengo/logo.png",
       "stadium": "assets/stadiums/brazil/flamengo.jpg",
       "badge": "assets/clubs/brazil/flamengo/badge.png",
       "homeKit": "assets/clubs/brazil/flamengo/home-kit.png",
-      "awayKit": "assets/clubs/brazil/flamengo/away-kit.png"
+      "awayKit": "assets/clubs/brazil/flamengo/away-kit.png",
+      "country": "brazil"
     },
     "sao-paulo": {
       "logo": "assets/clubs/brazil/sao-paulo/logo.png",
       "stadium": "assets/stadiums/brazil/sao-paulo.jpg",
       "badge": "assets/clubs/brazil/sao-paulo/badge.png",
       "homeKit": "assets/clubs/brazil/sao-paulo/home-kit.png",
-      "awayKit": "assets/clubs/brazil/sao-paulo/away-kit.png"
+      "awayKit": "assets/clubs/brazil/sao-paulo/away-kit.png",
+      "country": "brazil"
     },
     "corinthians": {
       "logo": "assets/clubs/brazil/corinthians/logo.png",
       "stadium": "assets/stadiums/brazil/corinthians.jpg",
       "badge": "assets/clubs/brazil/corinthians/badge.png",
       "homeKit": "assets/clubs/brazil/corinthians/home-kit.png",
-      "awayKit": "assets/clubs/brazil/corinthians/away-kit.png"
+      "awayKit": "assets/clubs/brazil/corinthians/away-kit.png",
+      "country": "brazil"
     },
     "gremio": {
       "logo": "assets/clubs/brazil/gremio/logo.png",
       "stadium": "assets/stadiums/brazil/gremio.jpg",
       "badge": "assets/clubs/brazil/gremio/badge.png",
       "homeKit": "assets/clubs/brazil/gremio/home-kit.png",
-      "awayKit": "assets/clubs/brazil/gremio/away-kit.png"
+      "awayKit": "assets/clubs/brazil/gremio/away-kit.png",
+      "country": "brazil"
     },
     "internacional": {
       "logo": "assets/clubs/brazil/internacional/logo.png",
       "stadium": "assets/stadiums/brazil/internacional.jpg",
       "badge": "assets/clubs/brazil/internacional/badge.png",
       "homeKit": "assets/clubs/brazil/internacional/home-kit.png",
-      "awayKit": "assets/clubs/brazil/internacional/away-kit.png"
+      "awayKit": "assets/clubs/brazil/internacional/away-kit.png",
+      "country": "brazil"
     },
     "atletico-mg": {
       "logo": "assets/clubs/brazil/atletico-mg/logo.png",
       "stadium": "assets/stadiums/brazil/atletico-mg.jpg",
       "badge": "assets/clubs/brazil/atletico-mg/badge.png",
       "homeKit": "assets/clubs/brazil/atletico-mg/home-kit.png",
-      "awayKit": "assets/clubs/brazil/atletico-mg/away-kit.png"
+      "awayKit": "assets/clubs/brazil/atletico-mg/away-kit.png",
+      "country": "brazil"
     },
     "cruzeiro": {
       "logo": "assets/clubs/brazil/cruzeiro/logo.png",
       "stadium": "assets/stadiums/brazil/cruzeiro.jpg",
       "badge": "assets/clubs/brazil/cruzeiro/badge.png",
       "homeKit": "assets/clubs/brazil/cruzeiro/home-kit.png",
-      "awayKit": "assets/clubs/brazil/cruzeiro/away-kit.png"
+      "awayKit": "assets/clubs/brazil/cruzeiro/away-kit.png",
+      "country": "brazil"
     },
     "botafogo": {
       "logo": "assets/clubs/brazil/botafogo/logo.png",
       "stadium": "assets/stadiums/brazil/botafogo.jpg",
       "badge": "assets/clubs/brazil/botafogo/badge.png",
       "homeKit": "assets/clubs/brazil/botafogo/home-kit.png",
-      "awayKit": "assets/clubs/brazil/botafogo/away-kit.png"
+      "awayKit": "assets/clubs/brazil/botafogo/away-kit.png",
+      "country": "brazil"
     },
     "fluminense": {
       "logo": "assets/clubs/brazil/fluminense/logo.png",
       "badge": "assets/clubs/brazil/fluminense/badge.png",
       "homeKit": "assets/clubs/brazil/fluminense/home-kit.png",
       "awayKit": "assets/clubs/brazil/fluminense/away-kit.png",
-      "stadium": "assets/stadiums/brazil/fluminense.jpg"
+      "stadium": "assets/stadiums/brazil/fluminense.jpg",
+      "country": "brazil"
     },
     "vasco": {
       "logo": "assets/clubs/brazil/vasco/logo.png",
       "badge": "assets/clubs/brazil/vasco/badge.png",
       "homeKit": "assets/clubs/brazil/vasco/home-kit.png",
       "awayKit": "assets/clubs/brazil/vasco/away-kit.png",
-      "stadium": "assets/stadiums/brazil/vasco.jpg"
+      "stadium": "assets/stadiums/brazil/vasco.jpg",
+      "country": "brazil"
     },
     "bahia": {
       "logo": "assets/clubs/brazil/bahia/logo.png",
       "badge": "assets/clubs/brazil/bahia/badge.png",
       "homeKit": "assets/clubs/brazil/bahia/home-kit.png",
       "awayKit": "assets/clubs/brazil/bahia/away-kit.png",
-      "stadium": "assets/stadiums/brazil/bahia.jpg"
+      "stadium": "assets/stadiums/brazil/bahia.jpg",
+      "country": "brazil"
     },
     "fortaleza": {
       "logo": "assets/clubs/brazil/fortaleza/logo.png",
       "badge": "assets/clubs/brazil/fortaleza/badge.png",
       "homeKit": "assets/clubs/brazil/fortaleza/home-kit.png",
       "awayKit": "assets/clubs/brazil/fortaleza/away-kit.png",
-      "stadium": "assets/stadiums/brazil/fortaleza.jpg"
+      "stadium": "assets/stadiums/brazil/fortaleza.jpg",
+      "country": "brazil"
     },
     "real-madrid": {
       "logo": "assets/clubs/spain/real-madrid/logo.png",
       "badge": "assets/clubs/spain/real-madrid/badge.png",
       "homeKit": "assets/clubs/spain/real-madrid/home-kit.png",
       "awayKit": "assets/clubs/spain/real-madrid/away-kit.png",
-      "stadium": "assets/stadiums/spain/real-madrid.jpg"
+      "stadium": "assets/stadiums/spain/real-madrid.jpg",
+      "country": "spain"
     },
     "barcelona": {
       "logo": "assets/clubs/spain/barcelona/logo.png",
       "badge": "assets/clubs/spain/barcelona/badge.png",
       "homeKit": "assets/clubs/spain/barcelona/home-kit.png",
       "awayKit": "assets/clubs/spain/barcelona/away-kit.png",
-      "stadium": "assets/stadiums/spain/barcelona.jpg"
+      "stadium": "assets/stadiums/spain/barcelona.jpg",
+      "country": "spain"
     },
     "manchester-city": {
       "logo": "assets/clubs/england/manchester-city/logo.png",
       "badge": "assets/clubs/england/manchester-city/badge.png",
       "homeKit": "assets/clubs/england/manchester-city/home-kit.png",
       "awayKit": "assets/clubs/england/manchester-city/away-kit.png",
-      "stadium": "assets/stadiums/england/manchester-city.jpg"
+      "stadium": "assets/stadiums/england/manchester-city.jpg",
+      "country": "england"
     },
     "liverpool": {
       "logo": "assets/clubs/england/liverpool/logo.png",
       "badge": "assets/clubs/england/liverpool/badge.png",
       "homeKit": "assets/clubs/england/liverpool/home-kit.png",
       "awayKit": "assets/clubs/england/liverpool/away-kit.png",
-      "stadium": "assets/stadiums/england/liverpool.jpg"
+      "stadium": "assets/stadiums/england/liverpool.jpg",
+      "country": "england"
     },
     "arsenal": {
       "logo": "assets/clubs/england/arsenal/logo.png",
       "badge": "assets/clubs/england/arsenal/badge.png",
       "homeKit": "assets/clubs/england/arsenal/home-kit.png",
       "awayKit": "assets/clubs/england/arsenal/away-kit.png",
-      "stadium": "assets/stadiums/england/arsenal.jpg"
+      "stadium": "assets/stadiums/england/arsenal.jpg",
+      "country": "england"
     },
     "inter-milan": {
       "logo": "assets/clubs/italy/inter-milan/logo.png",
       "badge": "assets/clubs/italy/inter-milan/badge.png",
       "homeKit": "assets/clubs/italy/inter-milan/home-kit.png",
       "awayKit": "assets/clubs/italy/inter-milan/away-kit.png",
-      "stadium": "assets/stadiums/italy/inter-milan.jpg"
+      "stadium": "assets/stadiums/italy/inter-milan.jpg",
+      "country": "italy"
     },
     "ac-milan": {
       "logo": "assets/clubs/italy/ac-milan/logo.png",
       "badge": "assets/clubs/italy/ac-milan/badge.png",
       "homeKit": "assets/clubs/italy/ac-milan/home-kit.png",
       "awayKit": "assets/clubs/italy/ac-milan/away-kit.png",
-      "stadium": "assets/stadiums/italy/ac-milan.jpg"
+      "stadium": "assets/stadiums/italy/ac-milan.jpg",
+      "country": "italy"
     },
     "bayern-munich": {
       "logo": "assets/clubs/germany/bayern-munich/logo.png",
       "badge": "assets/clubs/germany/bayern-munich/badge.png",
       "homeKit": "assets/clubs/germany/bayern-munich/home-kit.png",
       "awayKit": "assets/clubs/germany/bayern-munich/away-kit.png",
-      "stadium": "assets/stadiums/germany/bayern-munich.jpg"
+      "stadium": "assets/stadiums/germany/bayern-munich.jpg",
+      "country": "germany"
     },
     "borussia-dortmund": {
       "logo": "assets/clubs/germany/borussia-dortmund/logo.png",
       "badge": "assets/clubs/germany/borussia-dortmund/badge.png",
       "homeKit": "assets/clubs/germany/borussia-dortmund/home-kit.png",
       "awayKit": "assets/clubs/germany/borussia-dortmund/away-kit.png",
-      "stadium": "assets/stadiums/germany/borussia-dortmund.jpg"
+      "stadium": "assets/stadiums/germany/borussia-dortmund.jpg",
+      "country": "germany"
     },
     "psg": {
       "logo": "assets/clubs/france/psg/logo.png",
       "badge": "assets/clubs/france/psg/badge.png",
       "homeKit": "assets/clubs/france/psg/home-kit.png",
       "awayKit": "assets/clubs/france/psg/away-kit.png",
-      "stadium": "assets/stadiums/france/psg.jpg"
+      "stadium": "assets/stadiums/france/psg.jpg",
+      "country": "france"
     },
     "benfica": {
       "logo": "assets/clubs/portugal/benfica/logo.png",
@@ -257,14 +311,16 @@
       "badge": "assets/clubs/argentina/boca-juniors/badge.png",
       "homeKit": "assets/clubs/argentina/boca-juniors/home-kit.png",
       "awayKit": "assets/clubs/argentina/boca-juniors/away-kit.png",
-      "stadium": "assets/stadiums/argentina/boca-juniors.jpg"
+      "stadium": "assets/stadiums/argentina/boca-juniors.jpg",
+      "country": "argentina"
     },
     "river-plate": {
       "logo": "assets/clubs/argentina/river-plate/logo.png",
       "badge": "assets/clubs/argentina/river-plate/badge.png",
       "homeKit": "assets/clubs/argentina/river-plate/home-kit.png",
       "awayKit": "assets/clubs/argentina/river-plate/away-kit.png",
-      "stadium": "assets/stadiums/argentina/river-plate.jpg"
+      "stadium": "assets/stadiums/argentina/river-plate.jpg",
+      "country": "argentina"
     },
     "inter-miami": {
       "logo": "assets/clubs/usa/inter-miami/logo.png",
@@ -279,6 +335,966 @@
       "homeKit": "assets/clubs/saudi/al-hilal/home-kit.png",
       "awayKit": "assets/clubs/saudi/al-hilal/away-kit.png",
       "stadium": "assets/stadiums/saudi/al-hilal.jpg"
+    },
+    "girona": {
+      "logo": "assets/clubs/spain/girona/logo.png",
+      "badge": "assets/clubs/spain/girona/badge.png",
+      "country": "spain"
+    },
+    "villarreal": {
+      "logo": "assets/clubs/spain/villarreal/logo.png",
+      "badge": "assets/clubs/spain/villarreal/badge.png",
+      "country": "spain"
+    },
+    "real-betis": {
+      "logo": "assets/clubs/spain/real-betis/logo.png",
+      "badge": "assets/clubs/spain/real-betis/badge.png",
+      "country": "spain"
+    },
+    "real-oviedo": {
+      "logo": "assets/clubs/spain/real-oviedo/logo.png",
+      "badge": "assets/clubs/spain/real-oviedo/badge.png",
+      "country": "spain"
+    },
+    "valencia": {
+      "logo": "assets/clubs/spain/valencia/logo.png",
+      "badge": "assets/clubs/spain/valencia/badge.png",
+      "country": "spain"
+    },
+    "rayo-vallecano": {
+      "logo": "assets/clubs/spain/rayo-vallecano/logo.png",
+      "badge": "assets/clubs/spain/rayo-vallecano/badge.png",
+      "country": "spain"
+    },
+    "atletico-madrid": {
+      "logo": "assets/clubs/spain/atletico-madrid/logo.png",
+      "badge": "assets/clubs/spain/atletico-madrid/badge.png",
+      "country": "spain"
+    },
+    "celta-vigo": {
+      "logo": "assets/clubs/spain/celta-vigo/logo.png",
+      "badge": "assets/clubs/spain/celta-vigo/badge.png",
+      "country": "spain"
+    },
+    "alaves": {
+      "logo": "assets/clubs/spain/alaves/logo.png",
+      "badge": "assets/clubs/spain/alaves/badge.png",
+      "country": "spain"
+    },
+    "osasuna": {
+      "logo": "assets/clubs/spain/osasuna/logo.png",
+      "badge": "assets/clubs/spain/osasuna/badge.png",
+      "country": "spain"
+    },
+    "real-sociedad": {
+      "logo": "assets/clubs/spain/real-sociedad/logo.png",
+      "badge": "assets/clubs/spain/real-sociedad/badge.png",
+      "country": "spain"
+    },
+    "levante": {
+      "logo": "assets/clubs/spain/levante/logo.png",
+      "badge": "assets/clubs/spain/levante/badge.png",
+      "country": "spain"
+    },
+    "mallorca": {
+      "logo": "assets/clubs/spain/mallorca/logo.png",
+      "badge": "assets/clubs/spain/mallorca/badge.png",
+      "country": "spain"
+    },
+    "sevilla": {
+      "logo": "assets/clubs/spain/sevilla/logo.png",
+      "badge": "assets/clubs/spain/sevilla/badge.png",
+      "country": "spain"
+    },
+    "espanyol": {
+      "logo": "assets/clubs/spain/espanyol/logo.png",
+      "badge": "assets/clubs/spain/espanyol/badge.png",
+      "country": "spain"
+    },
+    "elche": {
+      "logo": "assets/clubs/spain/elche/logo.png",
+      "badge": "assets/clubs/spain/elche/badge.png",
+      "country": "spain"
+    },
+    "athletic-bilbao": {
+      "logo": "assets/clubs/spain/athletic-bilbao/logo.png",
+      "badge": "assets/clubs/spain/athletic-bilbao/badge.png",
+      "country": "spain"
+    },
+    "getafe": {
+      "logo": "assets/clubs/spain/getafe/logo.png",
+      "badge": "assets/clubs/spain/getafe/badge.png",
+      "country": "spain"
+    },
+    "fulham": {
+      "logo": "assets/clubs/england/fulham/logo.png",
+      "badge": "assets/clubs/england/fulham/badge.png",
+      "country": "england"
+    },
+    "tottenham-hotspur": {
+      "logo": "assets/clubs/england/tottenham-hotspur/logo.png",
+      "badge": "assets/clubs/england/tottenham-hotspur/badge.png",
+      "country": "england"
+    },
+    "wolverhampton": {
+      "logo": "assets/clubs/england/wolverhampton/logo.png",
+      "badge": "assets/clubs/england/wolverhampton/badge.png",
+      "country": "england"
+    },
+    "watford": {
+      "logo": "assets/clubs/england/watford/logo.png",
+      "badge": "assets/clubs/england/watford/badge.png",
+      "country": "england"
+    },
+    "chelsea": {
+      "logo": "assets/clubs/england/chelsea/logo.png",
+      "badge": "assets/clubs/england/chelsea/badge.png",
+      "country": "england"
+    },
+    "burnley": {
+      "logo": "assets/clubs/england/burnley/logo.png",
+      "badge": "assets/clubs/england/burnley/badge.png",
+      "country": "england"
+    },
+    "newcastle-united": {
+      "logo": "assets/clubs/england/newcastle-united/logo.png",
+      "badge": "assets/clubs/england/newcastle-united/badge.png",
+      "country": "england"
+    },
+    "aston-villa": {
+      "logo": "assets/clubs/england/aston-villa/logo.png",
+      "badge": "assets/clubs/england/aston-villa/badge.png",
+      "country": "england"
+    },
+    "nottingham-forest": {
+      "logo": "assets/clubs/england/nottingham-forest/logo.png",
+      "badge": "assets/clubs/england/nottingham-forest/badge.png",
+      "country": "england"
+    },
+    "manchester-united": {
+      "logo": "assets/clubs/england/manchester-united/logo.png",
+      "badge": "assets/clubs/england/manchester-united/badge.png",
+      "country": "england"
+    },
+    "west-ham-united": {
+      "logo": "assets/clubs/england/west-ham-united/logo.png",
+      "badge": "assets/clubs/england/west-ham-united/badge.png",
+      "country": "england"
+    },
+    "brighton": {
+      "logo": "assets/clubs/england/brighton/logo.png",
+      "badge": "assets/clubs/england/brighton/badge.png",
+      "country": "england"
+    },
+    "everton": {
+      "logo": "assets/clubs/england/everton/logo.png",
+      "badge": "assets/clubs/england/everton/badge.png",
+      "country": "england"
+    },
+    "bournemouth": {
+      "logo": "assets/clubs/england/bournemouth/logo.png",
+      "badge": "assets/clubs/england/bournemouth/badge.png",
+      "country": "england"
+    },
+    "sheffield-united": {
+      "logo": "assets/clubs/england/sheffield-united/logo.png",
+      "badge": "assets/clubs/england/sheffield-united/badge.png",
+      "country": "england"
+    },
+    "luton-town": {
+      "logo": "assets/clubs/england/luton-town/logo.png",
+      "badge": "assets/clubs/england/luton-town/badge.png",
+      "country": "england"
+    },
+    "brentford": {
+      "logo": "assets/clubs/england/brentford/logo.png",
+      "badge": "assets/clubs/england/brentford/badge.png",
+      "country": "england"
+    },
+    "belgrano": {
+      "logo": "assets/clubs/argentina/belgrano/logo.png",
+      "badge": "assets/clubs/argentina/belgrano/badge.png",
+      "country": "argentina"
+    },
+    "lanus": {
+      "logo": "assets/clubs/argentina/lanus/logo.png",
+      "badge": "assets/clubs/argentina/lanus/badge.png",
+      "country": "argentina"
+    },
+    "defensa-y-justicia": {
+      "logo": "assets/clubs/argentina/defensa-y-justicia/logo.png",
+      "badge": "assets/clubs/argentina/defensa-y-justicia/badge.png",
+      "country": "argentina"
+    },
+    "independiente": {
+      "logo": "assets/clubs/argentina/independiente/logo.png",
+      "badge": "assets/clubs/argentina/independiente/badge.png",
+      "country": "argentina"
+    },
+    "san-lorenzo": {
+      "logo": "assets/clubs/argentina/san-lorenzo/logo.png",
+      "badge": "assets/clubs/argentina/san-lorenzo/badge.png",
+      "country": "argentina"
+    },
+    "deportivo-riestra": {
+      "logo": "assets/clubs/argentina/deportivo-riestra/logo.png",
+      "badge": "assets/clubs/argentina/deportivo-riestra/badge.png",
+      "country": "argentina"
+    },
+    "huracan": {
+      "logo": "assets/clubs/argentina/huracan/logo.png",
+      "badge": "assets/clubs/argentina/huracan/badge.png",
+      "country": "argentina"
+    },
+    "gimnasia-la-plata": {
+      "logo": "assets/clubs/argentina/gimnasia-la-plata/logo.png",
+      "badge": "assets/clubs/argentina/gimnasia-la-plata/badge.png",
+      "country": "argentina"
+    },
+    "estudiantes": {
+      "logo": "assets/clubs/argentina/estudiantes/logo.png",
+      "badge": "assets/clubs/argentina/estudiantes/badge.png",
+      "country": "argentina"
+    },
+    "racing-club": {
+      "logo": "assets/clubs/argentina/racing-club/logo.png",
+      "badge": "assets/clubs/argentina/racing-club/badge.png",
+      "country": "argentina"
+    },
+    "argentinos-juniors": {
+      "logo": "assets/clubs/argentina/argentinos-juniors/logo.png",
+      "badge": "assets/clubs/argentina/argentinos-juniors/badge.png",
+      "country": "argentina"
+    },
+    "tigre": {
+      "logo": "assets/clubs/argentina/tigre/logo.png",
+      "badge": "assets/clubs/argentina/tigre/badge.png",
+      "country": "argentina"
+    },
+    "sarmiento": {
+      "logo": "assets/clubs/argentina/sarmiento/logo.png",
+      "badge": "assets/clubs/argentina/sarmiento/badge.png",
+      "country": "argentina"
+    },
+    "central-cordoba": {
+      "logo": "assets/clubs/argentina/central-cordoba/logo.png",
+      "badge": "assets/clubs/argentina/central-cordoba/badge.png",
+      "country": "argentina"
+    },
+    "instituto": {
+      "logo": "assets/clubs/argentina/instituto/logo.png",
+      "badge": "assets/clubs/argentina/instituto/badge.png",
+      "country": "argentina"
+    },
+    "atletico-tucuman": {
+      "logo": "assets/clubs/argentina/atletico-tucuman/logo.png",
+      "badge": "assets/clubs/argentina/atletico-tucuman/badge.png",
+      "country": "argentina"
+    },
+    "newells-old-boys": {
+      "logo": "assets/clubs/argentina/newells-old-boys/logo.png",
+      "badge": "assets/clubs/argentina/newells-old-boys/badge.png",
+      "country": "argentina"
+    },
+    "barracas-central": {
+      "logo": "assets/clubs/argentina/barracas-central/logo.png",
+      "badge": "assets/clubs/argentina/barracas-central/badge.png",
+      "country": "argentina"
+    },
+    "union-santa-fe": {
+      "logo": "assets/clubs/argentina/union-santa-fe/logo.png",
+      "badge": "assets/clubs/argentina/union-santa-fe/badge.png",
+      "country": "argentina"
+    },
+    "platense": {
+      "logo": "assets/clubs/argentina/platense/logo.png",
+      "badge": "assets/clubs/argentina/platense/badge.png",
+      "country": "argentina"
+    },
+    "banfield": {
+      "logo": "assets/clubs/argentina/banfield/logo.png",
+      "badge": "assets/clubs/argentina/banfield/badge.png",
+      "country": "argentina"
+    },
+    "talleres": {
+      "logo": "assets/clubs/argentina/talleres/logo.png",
+      "badge": "assets/clubs/argentina/talleres/badge.png",
+      "country": "argentina"
+    },
+    "godoy-cruz": {
+      "logo": "assets/clubs/argentina/godoy-cruz/logo.png",
+      "badge": "assets/clubs/argentina/godoy-cruz/badge.png",
+      "country": "argentina"
+    },
+    "rosario-central": {
+      "logo": "assets/clubs/argentina/rosario-central/logo.png",
+      "badge": "assets/clubs/argentina/rosario-central/badge.png",
+      "country": "argentina"
+    },
+    "velez-sarsfield": {
+      "logo": "assets/clubs/argentina/velez-sarsfield/logo.png",
+      "badge": "assets/clubs/argentina/velez-sarsfield/badge.png",
+      "country": "argentina"
+    },
+    "wolfsburg": {
+      "logo": "assets/clubs/germany/wolfsburg/logo.png",
+      "badge": "assets/clubs/germany/wolfsburg/badge.png",
+      "country": "germany"
+    },
+    "stuttgart": {
+      "logo": "assets/clubs/germany/stuttgart/logo.png",
+      "badge": "assets/clubs/germany/stuttgart/badge.png",
+      "country": "germany"
+    },
+    "hoffenheim": {
+      "logo": "assets/clubs/germany/hoffenheim/logo.png",
+      "badge": "assets/clubs/germany/hoffenheim/badge.png",
+      "country": "germany"
+    },
+    "augsburg": {
+      "logo": "assets/clubs/germany/augsburg/logo.png",
+      "badge": "assets/clubs/germany/augsburg/badge.png",
+      "country": "germany"
+    },
+    "mainz": {
+      "logo": "assets/clubs/germany/mainz/logo.png",
+      "badge": "assets/clubs/germany/mainz/badge.png",
+      "country": "germany"
+    },
+    "darmstadt": {
+      "logo": "assets/clubs/germany/darmstadt/logo.png",
+      "badge": "assets/clubs/germany/darmstadt/badge.png",
+      "country": "germany"
+    },
+    "borussia-monchengladbach": {
+      "logo": "assets/clubs/germany/borussia-monchengladbach/logo.png",
+      "badge": "assets/clubs/germany/borussia-monchengladbach/badge.png",
+      "country": "germany"
+    },
+    "heidenheim": {
+      "logo": "assets/clubs/germany/heidenheim/logo.png",
+      "badge": "assets/clubs/germany/heidenheim/badge.png",
+      "country": "germany"
+    },
+    "eintracht-frankfurt": {
+      "logo": "assets/clubs/germany/eintracht-frankfurt/logo.png",
+      "badge": "assets/clubs/germany/eintracht-frankfurt/badge.png",
+      "country": "germany"
+    },
+    "koln": {
+      "logo": "assets/clubs/germany/koln/logo.png",
+      "badge": "assets/clubs/germany/koln/badge.png",
+      "country": "germany"
+    },
+    "bayer-leverkusen": {
+      "logo": "assets/clubs/germany/bayer-leverkusen/logo.png",
+      "badge": "assets/clubs/germany/bayer-leverkusen/badge.png",
+      "country": "germany"
+    },
+    "freiburg": {
+      "logo": "assets/clubs/germany/freiburg/logo.png",
+      "badge": "assets/clubs/germany/freiburg/badge.png",
+      "country": "germany"
+    },
+    "union-berlin": {
+      "logo": "assets/clubs/germany/union-berlin/logo.png",
+      "badge": "assets/clubs/germany/union-berlin/badge.png",
+      "country": "germany"
+    },
+    "bochum": {
+      "logo": "assets/clubs/germany/bochum/logo.png",
+      "badge": "assets/clubs/germany/bochum/badge.png",
+      "country": "germany"
+    },
+    "rb-leipzig": {
+      "logo": "assets/clubs/germany/rb-leipzig/logo.png",
+      "badge": "assets/clubs/germany/rb-leipzig/badge.png",
+      "country": "germany"
+    },
+    "goias": {
+      "logo": "assets/clubs/brazil/goias/logo.png",
+      "badge": "assets/clubs/brazil/goias/badge.png",
+      "country": "brazil"
+    },
+    "sport": {
+      "logo": "assets/clubs/brazil/sport/logo.png",
+      "badge": "assets/clubs/brazil/sport/badge.png",
+      "country": "brazil"
+    },
+    "novorizontino": {
+      "logo": "assets/clubs/brazil/novorizontino/logo.png",
+      "badge": "assets/clubs/brazil/novorizontino/badge.png",
+      "country": "brazil"
+    },
+    "amazonas": {
+      "logo": "assets/clubs/brazil/amazonas/logo.png",
+      "badge": "assets/clubs/brazil/amazonas/badge.png",
+      "country": "brazil"
+    },
+    "avai": {
+      "logo": "assets/clubs/brazil/avai/logo.png",
+      "badge": "assets/clubs/brazil/avai/badge.png",
+      "country": "brazil"
+    },
+    "vitoria": {
+      "logo": "assets/clubs/brazil/vitoria/logo.png",
+      "badge": "assets/clubs/brazil/vitoria/badge.png",
+      "country": "brazil"
+    },
+    "paysandu": {
+      "logo": "assets/clubs/brazil/paysandu/logo.png",
+      "badge": "assets/clubs/brazil/paysandu/badge.png",
+      "country": "brazil"
+    },
+    "remo": {
+      "logo": "assets/clubs/brazil/remo/logo.png",
+      "badge": "assets/clubs/brazil/remo/badge.png",
+      "country": "brazil"
+    },
+    "athletico-pr": {
+      "logo": "assets/clubs/brazil/athletico-pr/logo.png",
+      "badge": "assets/clubs/brazil/athletico-pr/badge.png",
+      "country": "brazil"
+    },
+    "mirassol": {
+      "logo": "assets/clubs/brazil/mirassol/logo.png",
+      "badge": "assets/clubs/brazil/mirassol/badge.png",
+      "country": "brazil"
+    },
+    "londrina": {
+      "logo": "assets/clubs/brazil/londrina/logo.png",
+      "badge": "assets/clubs/brazil/londrina/badge.png",
+      "country": "brazil"
+    },
+    "operario-pr": {
+      "logo": "assets/clubs/brazil/operario-pr/logo.png",
+      "badge": "assets/clubs/brazil/operario-pr/badge.png",
+      "country": "brazil"
+    },
+    "juventude": {
+      "logo": "assets/clubs/brazil/juventude/logo.png",
+      "badge": "assets/clubs/brazil/juventude/badge.png",
+      "country": "brazil"
+    },
+    "ceara": {
+      "logo": "assets/clubs/brazil/ceara/logo.png",
+      "badge": "assets/clubs/brazil/ceara/badge.png",
+      "country": "brazil"
+    },
+    "bragantino": {
+      "logo": "assets/clubs/brazil/bragantino/logo.png",
+      "badge": "assets/clubs/brazil/bragantino/badge.png",
+      "country": "brazil"
+    },
+    "criciuma": {
+      "logo": "assets/clubs/brazil/criciuma/logo.png",
+      "badge": "assets/clubs/brazil/criciuma/badge.png",
+      "country": "brazil"
+    },
+    "ponte-preta": {
+      "logo": "assets/clubs/brazil/ponte-preta/logo.png",
+      "badge": "assets/clubs/brazil/ponte-preta/badge.png",
+      "country": "brazil"
+    },
+    "sampaio-correa": {
+      "logo": "assets/clubs/brazil/sampaio-correa/logo.png",
+      "badge": "assets/clubs/brazil/sampaio-correa/badge.png",
+      "country": "brazil"
+    },
+    "cuiaba": {
+      "logo": "assets/clubs/brazil/cuiaba/logo.png",
+      "badge": "assets/clubs/brazil/cuiaba/badge.png",
+      "country": "brazil"
+    },
+    "botafogo-sp": {
+      "logo": "assets/clubs/brazil/botafogo-sp/logo.png",
+      "badge": "assets/clubs/brazil/botafogo-sp/badge.png",
+      "country": "brazil"
+    },
+    "volta-redonda": {
+      "logo": "assets/clubs/brazil/volta-redonda/logo.png",
+      "badge": "assets/clubs/brazil/volta-redonda/badge.png",
+      "country": "brazil"
+    },
+    "chapecoense": {
+      "logo": "assets/clubs/brazil/chapecoense/logo.png",
+      "badge": "assets/clubs/brazil/chapecoense/badge.png",
+      "country": "brazil"
+    },
+    "ituano": {
+      "logo": "assets/clubs/brazil/ituano/logo.png",
+      "badge": "assets/clubs/brazil/ituano/badge.png",
+      "country": "brazil"
+    },
+    "america-mg": {
+      "logo": "assets/clubs/brazil/america-mg/logo.png",
+      "badge": "assets/clubs/brazil/america-mg/badge.png",
+      "country": "brazil"
+    },
+    "coritiba": {
+      "logo": "assets/clubs/brazil/coritiba/logo.png",
+      "badge": "assets/clubs/brazil/coritiba/badge.png",
+      "country": "brazil"
+    },
+    "guarani": {
+      "logo": "assets/clubs/brazil/guarani/logo.png",
+      "badge": "assets/clubs/brazil/guarani/badge.png",
+      "country": "brazil"
+    },
+    "vila-nova": {
+      "logo": "assets/clubs/brazil/vila-nova/logo.png",
+      "badge": "assets/clubs/brazil/vila-nova/badge.png",
+      "country": "brazil"
+    },
+    "csa": {
+      "logo": "assets/clubs/brazil/csa/logo.png",
+      "badge": "assets/clubs/brazil/csa/badge.png",
+      "country": "brazil"
+    },
+    "crb": {
+      "logo": "assets/clubs/brazil/crb/logo.png",
+      "badge": "assets/clubs/brazil/crb/badge.png",
+      "country": "brazil"
+    },
+    "atletico-go": {
+      "logo": "assets/clubs/brazil/atletico-go/logo.png",
+      "badge": "assets/clubs/brazil/atletico-go/badge.png",
+      "country": "brazil"
+    },
+    "ferroviaria": {
+      "logo": "assets/clubs/brazil/ferroviaria/logo.png",
+      "badge": "assets/clubs/brazil/ferroviaria/badge.png",
+      "country": "brazil"
+    },
+    "emelec": {
+      "logo": "assets/clubs/ecuador/emelec/logo.png",
+      "badge": "assets/clubs/ecuador/emelec/badge.png",
+      "country": "ecuador"
+    },
+    "independiente-del-valle": {
+      "logo": "assets/clubs/ecuador/independiente-del-valle/logo.png",
+      "badge": "assets/clubs/ecuador/independiente-del-valle/badge.png",
+      "country": "ecuador"
+    },
+    "orense": {
+      "logo": "assets/clubs/ecuador/orense/logo.png",
+      "badge": "assets/clubs/ecuador/orense/badge.png",
+      "country": "ecuador"
+    },
+    "tecnico-universitario": {
+      "logo": "assets/clubs/ecuador/tecnico-universitario/logo.png",
+      "badge": "assets/clubs/ecuador/tecnico-universitario/badge.png",
+      "country": "ecuador"
+    },
+    "aucas": {
+      "logo": "assets/clubs/ecuador/aucas/logo.png",
+      "badge": "assets/clubs/ecuador/aucas/badge.png",
+      "country": "ecuador"
+    },
+    "barcelona-sc": {
+      "logo": "assets/clubs/ecuador/barcelona-sc/logo.png",
+      "badge": "assets/clubs/ecuador/barcelona-sc/badge.png",
+      "country": "ecuador"
+    },
+    "el-nacional": {
+      "logo": "assets/clubs/ecuador/el-nacional/logo.png",
+      "badge": "assets/clubs/ecuador/el-nacional/badge.png",
+      "country": "ecuador"
+    },
+    "delfin": {
+      "logo": "assets/clubs/ecuador/delfin/logo.png",
+      "badge": "assets/clubs/ecuador/delfin/badge.png",
+      "country": "ecuador"
+    },
+    "ldu-quito": {
+      "logo": "assets/clubs/ecuador/ldu-quito/logo.png",
+      "badge": "assets/clubs/ecuador/ldu-quito/badge.png",
+      "country": "ecuador"
+    },
+    "universidad-catolica-ecuador": {
+      "logo": "assets/clubs/ecuador/universidad-catolica-ecuador/logo.png",
+      "badge": "assets/clubs/ecuador/universidad-catolica-ecuador/badge.png",
+      "country": "ecuador"
+    },
+    "deportivo-cuenca": {
+      "logo": "assets/clubs/ecuador/deportivo-cuenca/logo.png",
+      "badge": "assets/clubs/ecuador/deportivo-cuenca/badge.png",
+      "country": "ecuador"
+    },
+    "macara": {
+      "logo": "assets/clubs/ecuador/macara/logo.png",
+      "badge": "assets/clubs/ecuador/macara/badge.png",
+      "country": "ecuador"
+    },
+    "como": {
+      "logo": "assets/clubs/italy/como/logo.png",
+      "badge": "assets/clubs/italy/como/badge.png",
+      "country": "italy"
+    },
+    "genoa": {
+      "logo": "assets/clubs/italy/genoa/logo.png",
+      "badge": "assets/clubs/italy/genoa/badge.png",
+      "country": "italy"
+    },
+    "roma": {
+      "logo": "assets/clubs/italy/roma/logo.png",
+      "badge": "assets/clubs/italy/roma/badge.png",
+      "country": "italy"
+    },
+    "napoli": {
+      "logo": "assets/clubs/italy/napoli/logo.png",
+      "badge": "assets/clubs/italy/napoli/badge.png",
+      "country": "italy"
+    },
+    "lazio": {
+      "logo": "assets/clubs/italy/lazio/logo.png",
+      "badge": "assets/clubs/italy/lazio/badge.png",
+      "country": "italy"
+    },
+    "bologna": {
+      "logo": "assets/clubs/italy/bologna/logo.png",
+      "badge": "assets/clubs/italy/bologna/badge.png",
+      "country": "italy"
+    },
+    "chievo": {
+      "logo": "assets/clubs/italy/chievo/logo.png",
+      "badge": "assets/clubs/italy/chievo/badge.png",
+      "country": "italy"
+    },
+    "lecce": {
+      "logo": "assets/clubs/italy/lecce/logo.png",
+      "badge": "assets/clubs/italy/lecce/badge.png",
+      "country": "italy"
+    },
+    "parma": {
+      "logo": "assets/clubs/italy/parma/logo.png",
+      "badge": "assets/clubs/italy/parma/badge.png",
+      "country": "italy"
+    },
+    "monza": {
+      "logo": "assets/clubs/italy/monza/logo.png",
+      "badge": "assets/clubs/italy/monza/badge.png",
+      "country": "italy"
+    },
+    "juventus": {
+      "logo": "assets/clubs/italy/juventus/logo.png",
+      "badge": "assets/clubs/italy/juventus/badge.png",
+      "country": "italy"
+    },
+    "empoli": {
+      "logo": "assets/clubs/italy/empoli/logo.png",
+      "badge": "assets/clubs/italy/empoli/badge.png",
+      "country": "italy"
+    },
+    "udinese": {
+      "logo": "assets/clubs/italy/udinese/logo.png",
+      "badge": "assets/clubs/italy/udinese/badge.png",
+      "country": "italy"
+    },
+    "frosinone": {
+      "logo": "assets/clubs/italy/frosinone/logo.png",
+      "badge": "assets/clubs/italy/frosinone/badge.png",
+      "country": "italy"
+    },
+    "fiorentina": {
+      "logo": "assets/clubs/italy/fiorentina/logo.png",
+      "badge": "assets/clubs/italy/fiorentina/badge.png",
+      "country": "italy"
+    },
+    "atalanta": {
+      "logo": "assets/clubs/italy/atalanta/logo.png",
+      "badge": "assets/clubs/italy/atalanta/badge.png",
+      "country": "italy"
+    },
+    "cagliari": {
+      "logo": "assets/clubs/italy/cagliari/logo.png",
+      "badge": "assets/clubs/italy/cagliari/badge.png",
+      "country": "italy"
+    },
+    "torino": {
+      "logo": "assets/clubs/italy/torino/logo.png",
+      "badge": "assets/clubs/italy/torino/badge.png",
+      "country": "italy"
+    },
+    "fortaleza-ceif": {
+      "logo": "assets/clubs/colombia/fortaleza-ceif/logo.png",
+      "badge": "assets/clubs/colombia/fortaleza-ceif/badge.png",
+      "country": "colombia"
+    },
+    "once-caldas": {
+      "logo": "assets/clubs/colombia/once-caldas/logo.png",
+      "badge": "assets/clubs/colombia/once-caldas/badge.png",
+      "country": "colombia"
+    },
+    "la-equidad": {
+      "logo": "assets/clubs/colombia/la-equidad/logo.png",
+      "badge": "assets/clubs/colombia/la-equidad/badge.png",
+      "country": "colombia"
+    },
+    "independiente-santa-fe": {
+      "logo": "assets/clubs/colombia/independiente-santa-fe/logo.png",
+      "badge": "assets/clubs/colombia/independiente-santa-fe/badge.png",
+      "country": "colombia"
+    },
+    "deportivo-pereira": {
+      "logo": "assets/clubs/colombia/deportivo-pereira/logo.png",
+      "badge": "assets/clubs/colombia/deportivo-pereira/badge.png",
+      "country": "colombia"
+    },
+    "atletico-nacional": {
+      "logo": "assets/clubs/colombia/atletico-nacional/logo.png",
+      "badge": "assets/clubs/colombia/atletico-nacional/badge.png",
+      "country": "colombia"
+    },
+    "atletico-bucaramanga": {
+      "logo": "assets/clubs/colombia/atletico-bucaramanga/logo.png",
+      "badge": "assets/clubs/colombia/atletico-bucaramanga/badge.png",
+      "country": "colombia"
+    },
+    "deportivo-pasto": {
+      "logo": "assets/clubs/colombia/deportivo-pasto/logo.png",
+      "badge": "assets/clubs/colombia/deportivo-pasto/badge.png",
+      "country": "colombia"
+    },
+    "america-de-cali": {
+      "logo": "assets/clubs/colombia/america-de-cali/logo.png",
+      "badge": "assets/clubs/colombia/america-de-cali/badge.png",
+      "country": "colombia"
+    },
+    "boyaca-chico": {
+      "logo": "assets/clubs/colombia/boyaca-chico/logo.png",
+      "badge": "assets/clubs/colombia/boyaca-chico/badge.png",
+      "country": "colombia"
+    },
+    "aguilas-doradas": {
+      "logo": "assets/clubs/colombia/aguilas-doradas/logo.png",
+      "badge": "assets/clubs/colombia/aguilas-doradas/badge.png",
+      "country": "colombia"
+    },
+    "deportes-tolima": {
+      "logo": "assets/clubs/colombia/deportes-tolima/logo.png",
+      "badge": "assets/clubs/colombia/deportes-tolima/badge.png",
+      "country": "colombia"
+    },
+    "independiente-medellin": {
+      "logo": "assets/clubs/colombia/independiente-medellin/logo.png",
+      "badge": "assets/clubs/colombia/independiente-medellin/badge.png",
+      "country": "colombia"
+    },
+    "envigado": {
+      "logo": "assets/clubs/colombia/envigado/logo.png",
+      "badge": "assets/clubs/colombia/envigado/badge.png",
+      "country": "colombia"
+    },
+    "millonarios": {
+      "logo": "assets/clubs/colombia/millonarios/logo.png",
+      "badge": "assets/clubs/colombia/millonarios/badge.png",
+      "country": "colombia"
+    },
+    "junior": {
+      "logo": "assets/clubs/colombia/junior/logo.png",
+      "badge": "assets/clubs/colombia/junior/badge.png",
+      "country": "colombia"
+    },
+    "penarol": {
+      "logo": "assets/clubs/uruguay/penarol/logo.png",
+      "badge": "assets/clubs/uruguay/penarol/badge.png",
+      "country": "uruguay"
+    },
+    "racing-montevideo": {
+      "logo": "assets/clubs/uruguay/racing-montevideo/logo.png",
+      "badge": "assets/clubs/uruguay/racing-montevideo/badge.png",
+      "country": "uruguay"
+    },
+    "plaza-colonia": {
+      "logo": "assets/clubs/uruguay/plaza-colonia/logo.png",
+      "badge": "assets/clubs/uruguay/plaza-colonia/badge.png",
+      "country": "uruguay"
+    },
+    "liverpool-montevideo": {
+      "logo": "assets/clubs/uruguay/liverpool-montevideo/logo.png",
+      "badge": "assets/clubs/uruguay/liverpool-montevideo/badge.png",
+      "country": "uruguay"
+    },
+    "nacional": {
+      "logo": "assets/clubs/uruguay/nacional/logo.png",
+      "badge": "assets/clubs/uruguay/nacional/badge.png",
+      "country": "uruguay"
+    },
+    "montevideo-city-torque": {
+      "logo": "assets/clubs/uruguay/montevideo-city-torque/logo.png",
+      "badge": "assets/clubs/uruguay/montevideo-city-torque/badge.png",
+      "country": "uruguay"
+    },
+    "boston-river": {
+      "logo": "assets/clubs/uruguay/boston-river/logo.png",
+      "badge": "assets/clubs/uruguay/boston-river/badge.png",
+      "country": "uruguay"
+    },
+    "danubio": {
+      "logo": "assets/clubs/uruguay/danubio/logo.png",
+      "badge": "assets/clubs/uruguay/danubio/badge.png",
+      "country": "uruguay"
+    },
+    "la-luz": {
+      "logo": "assets/clubs/uruguay/la-luz/logo.png",
+      "badge": "assets/clubs/uruguay/la-luz/badge.png",
+      "country": "uruguay"
+    },
+    "defensor-sporting": {
+      "logo": "assets/clubs/uruguay/defensor-sporting/logo.png",
+      "badge": "assets/clubs/uruguay/defensor-sporting/badge.png",
+      "country": "uruguay"
+    },
+    "wanderers": {
+      "logo": "assets/clubs/uruguay/wanderers/logo.png",
+      "badge": "assets/clubs/uruguay/wanderers/badge.png",
+      "country": "uruguay"
+    },
+    "river-plate-montevideo": {
+      "logo": "assets/clubs/uruguay/river-plate-montevideo/logo.png",
+      "badge": "assets/clubs/uruguay/river-plate-montevideo/badge.png",
+      "country": "uruguay"
+    },
+    "union-la-calera": {
+      "logo": "assets/clubs/chile/union-la-calera/logo.png",
+      "badge": "assets/clubs/chile/union-la-calera/badge.png",
+      "country": "chile"
+    },
+    "union-espanola": {
+      "logo": "assets/clubs/chile/union-espanola/logo.png",
+      "badge": "assets/clubs/chile/union-espanola/badge.png",
+      "country": "chile"
+    },
+    "huachipato": {
+      "logo": "assets/clubs/chile/huachipato/logo.png",
+      "badge": "assets/clubs/chile/huachipato/badge.png",
+      "country": "chile"
+    },
+    "palestino": {
+      "logo": "assets/clubs/chile/palestino/logo.png",
+      "badge": "assets/clubs/chile/palestino/badge.png",
+      "country": "chile"
+    },
+    "audax-italiano": {
+      "logo": "assets/clubs/chile/audax-italiano/logo.png",
+      "badge": "assets/clubs/chile/audax-italiano/badge.png",
+      "country": "chile"
+    },
+    "colo-colo": {
+      "logo": "assets/clubs/chile/colo-colo/logo.png",
+      "badge": "assets/clubs/chile/colo-colo/badge.png",
+      "country": "chile"
+    },
+    "everton-de-vina-del-mar": {
+      "logo": "assets/clubs/chile/everton-de-vina-del-mar/logo.png",
+      "badge": "assets/clubs/chile/everton-de-vina-del-mar/badge.png",
+      "country": "chile"
+    },
+    "universidad-catolica": {
+      "logo": "assets/clubs/chile/universidad-catolica/logo.png",
+      "badge": "assets/clubs/chile/universidad-catolica/badge.png",
+      "country": "chile"
+    },
+    "ohiggins": {
+      "logo": "assets/clubs/chile/ohiggins/logo.png",
+      "badge": "assets/clubs/chile/ohiggins/badge.png",
+      "country": "chile"
+    },
+    "universidad-de-chile": {
+      "logo": "assets/clubs/chile/universidad-de-chile/logo.png",
+      "badge": "assets/clubs/chile/universidad-de-chile/badge.png",
+      "country": "chile"
+    },
+    "nublense": {
+      "logo": "assets/clubs/chile/nublense/logo.png",
+      "badge": "assets/clubs/chile/nublense/badge.png",
+      "country": "chile"
+    },
+    "monaco": {
+      "logo": "assets/clubs/france/monaco/logo.png",
+      "badge": "assets/clubs/france/monaco/badge.png",
+      "country": "france"
+    },
+    "strasbourg": {
+      "logo": "assets/clubs/france/strasbourg/logo.png",
+      "badge": "assets/clubs/france/strasbourg/badge.png",
+      "country": "france"
+    },
+    "lyon": {
+      "logo": "assets/clubs/france/lyon/logo.png",
+      "badge": "assets/clubs/france/lyon/badge.png",
+      "country": "france"
+    },
+    "montpellier": {
+      "logo": "assets/clubs/france/montpellier/logo.png",
+      "badge": "assets/clubs/france/montpellier/badge.png",
+      "country": "france"
+    },
+    "nice": {
+      "logo": "assets/clubs/france/nice/logo.png",
+      "badge": "assets/clubs/france/nice/badge.png",
+      "country": "france"
+    },
+    "rennes": {
+      "logo": "assets/clubs/france/rennes/logo.png",
+      "badge": "assets/clubs/france/rennes/badge.png",
+      "country": "france"
+    },
+    "lens": {
+      "logo": "assets/clubs/france/lens/logo.png",
+      "badge": "assets/clubs/france/lens/badge.png",
+      "country": "france"
+    },
+    "le-havre": {
+      "logo": "assets/clubs/france/le-havre/logo.png",
+      "badge": "assets/clubs/france/le-havre/badge.png",
+      "country": "france"
+    },
+    "metz": {
+      "logo": "assets/clubs/france/metz/logo.png",
+      "badge": "assets/clubs/france/metz/badge.png",
+      "country": "france"
+    },
+    "clermont": {
+      "logo": "assets/clubs/france/clermont/logo.png",
+      "badge": "assets/clubs/france/clermont/badge.png",
+      "country": "france"
+    },
+    "nantes": {
+      "logo": "assets/clubs/france/nantes/logo.png",
+      "badge": "assets/clubs/france/nantes/badge.png",
+      "country": "france"
+    },
+    "toulouse": {
+      "logo": "assets/clubs/france/toulouse/logo.png",
+      "badge": "assets/clubs/france/toulouse/badge.png",
+      "country": "france"
+    },
+    "lille": {
+      "logo": "assets/clubs/france/lille/logo.png",
+      "badge": "assets/clubs/france/lille/badge.png",
+      "country": "france"
+    },
+    "brest": {
+      "logo": "assets/clubs/france/brest/logo.png",
+      "badge": "assets/clubs/france/brest/badge.png",
+      "country": "france"
+    },
+    "marseille": {
+      "logo": "assets/clubs/france/marseille/logo.png",
+      "badge": "assets/clubs/france/marseille/badge.png",
+      "country": "france"
+    },
+    "lorient": {
+      "logo": "assets/clubs/france/lorient/logo.png",
+      "badge": "assets/clubs/france/lorient/badge.png",
+      "country": "france"
+    },
+    "cerro-porteno": {
+      "logo": "assets/clubs/paraguay/cerro-porteno/logo.png",
+      "badge": "assets/clubs/paraguay/cerro-porteno/badge.png",
+      "country": "paraguay"
     }
   },
   "leagues": {
@@ -304,7 +1320,20 @@
     "ligue_1": "assets/leagues/france/ligue-1.png",
     "liga_portugal": "assets/leagues/portugal/liga-portugal.png",
     "saudi_pro_league": "assets/leagues/saudi/saudi-pro-league.png",
-    "liga_mx": "assets/leagues/mexico/liga-mx.png"
+    "liga_mx": "assets/leagues/mexico/liga-mx.png",
+    "liga-profesional-argentina": "assets/leagues/argentina/liga-profesional.png",
+    "primera-division-chile": "assets/leagues/chile/primera-division.png",
+    "primera-a-colombia": "assets/leagues/colombia/primera-a.png",
+    "liga-pro-ecuador": "assets/leagues/ecuador/liga-pro.png",
+    "liga-1-peru": "assets/leagues/peru/liga-1.png",
+    "primera-division-uruguay": "assets/leagues/uruguay/primera-division.png",
+    "liga-mx": "assets/leagues/mexico/liga-mx.png",
+    "championship-england": "assets/leagues/england/championship.png",
+    "serie-a-italy": "assets/leagues/italy/serie-a.png",
+    "jupiler-pro-league": "assets/leagues/belgium/pro-league.png",
+    "super-lig-turkey": "assets/leagues/turkey/super-lig.png",
+    "uae-pro-league": "assets/leagues/uae/pro-league.png",
+    "qatar-stars-league": "assets/leagues/qatar/stars-league.png"
   },
   "players": {
     "joao-paulo": "assets/players/brazil/santos/joao-paulo.png",
@@ -427,9 +1456,11 @@
     }
   },
   "meta": {
-    "version": "v2.3.0",
+    "version": "v2.6.0",
     "description": "Mapa definitivo de assets com fallback inteligente. Substitua ou adicione arquivos nestes caminhos sem alterar codigo.",
-    "naming": "lowercase, sem acentos, hifen ou underline conforme nomes existentes do pacote"
+    "naming": "lowercase, sem acentos, hifen ou underline conforme nomes existentes do pacote",
+    "mergedClubLogos": 218,
+    "visualLibrary": "data/asset-library.json"
   },
   "icons": {
     "home": "assets/icons/home.png",

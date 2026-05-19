@@ -23,6 +23,7 @@ export function lobby(state){
     ['messages','E-mail','✉️','Diretoria, imprensa, empresário e possíveis seleções','Carreira'],
     ['aiBalance','IA / Realismo','🧠','Balanceamento esportivo, dificuldade e leitura da simulação','Motor'],
     ['club','Clube','🛡️','Resumo institucional, estádio, torcida e estrutura','Perfil'],
+    ['visualLibrary','Biblioteca Visual','🖼️','Fundos extras, logos, países, ligas e rotação visual','Assets'],
     ['settings','Configuração','⚙️','Save, qualidade, sons, acessibilidade e segurança','Sistema']
   ];
   const boardTrust = Number(state.boardTrust || 76);

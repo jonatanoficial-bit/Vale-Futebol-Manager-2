@@ -1,7 +1,8 @@
-import { bg, safeImg, clubLogo, country } from '../systems/assets.js';
+import { safeImg, clubLogo, country } from '../systems/assets.js';
+import { visualBackground } from '../systems/visualAssetManager.js';
 import { screens, teams } from '../data/gameData.js';
 import { money } from '../utils/dom.js';
-export function screenWrap(key, content, nav=true){ return `<main class="screen" style="background-image:url('${bg(key)}')">${content}${nav?bottomNav():''}<div class="build-badge" id="buildBadge"></div></main>`; }
+export function screenWrap(key, content, nav=true){ return `<main class="screen" style="background-image:url('${visualBackground(key)}')">${content}${nav?bottomNav():''}<div class="build-badge" id="buildBadge"></div></main>`; }
 export function brand(size='') { return `<div class="brand ${size}"><span class="gold">VALE</span><br>FUTEBOL<br><span class="gold">MANAGER</span><div class="tag">GOLD EDITION</div></div>`; }
 export function topbar(title, subtitle='', back='lobby'){ return `<div class="topbar"><button class="icon-btn" data-route="${back}" aria-label="Voltar">‹</button><div><div class="title">${title}</div>${subtitle?`<div class="subtitle">${subtitle}</div>`:''}</div><div class="row"><div class="resource">💵 € 92.5M</div><div class="resource">🪙 250</div><button class="icon-btn" data-route="messages">✉</button><button class="icon-btn" data-route="settings">?</button></div></div>`; }
 export function clubHeader(state){ const team = teams.find(t=>t.id===state.clubId) || teams[0]; return `<div class="header-club">${safeImg(clubLogo(team.id),'club',team.name,'club-logo')}<div><h2>${team.name}</h2><div class="row small">${safeImg(country(team.country),'country',team.countryName,'','')} ${team.countryName} · ${state.manager.name} · <span class="tag">${state.manager.reputation}</span></div></div></div>`; }
