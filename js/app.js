@@ -15,13 +15,13 @@ import { loadVisualLibrary } from './systems/visualAssetManager.js';
 
 async function boot(){
   const app = document.getElementById('app');
-  let buildInfo = { buildLabel:'Build v2.6.0' };
+  let buildInfo = { buildLabel:'Build v2.6.1' };
   try { buildInfo = await (await fetch('build/build-info.json', {cache:'no-store'})).json(); } catch(err) { console.warn('[VFM] build-info fallback', err); }
   await loadAssetMap();
   await loadVisualLibrary();
   applyCommercialPolish();
   load();
-  runRuntimeAudit(getState(), {phase:'v2.6.0 boot'});
+  runRuntimeAudit(getState(), {phase:'v2.6.1 boot'});
   validateCommercialState(getState());
   initRouter(app, buildInfo);
   register('cover', cover);

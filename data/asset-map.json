@@ -1456,11 +1456,12 @@
     }
   },
   "meta": {
-    "version": "v2.6.0",
+    "version": "v2.6.1",
     "description": "Mapa definitivo de assets com fallback inteligente. Substitua ou adicione arquivos nestes caminhos sem alterar codigo.",
     "naming": "lowercase, sem acentos, hifen ou underline conforme nomes existentes do pacote",
     "mergedClubLogos": 218,
-    "visualLibrary": "data/asset-library.json"
+    "visualLibrary": "data/asset-library.json",
+    "updatedAt": "2026-05-19T16:30:00Z"
   },
   "icons": {
     "home": "assets/icons/home.png",
@@ -1521,5 +1522,7 @@
   },
   "rosters": {
     "santos2026": "data/rosters/2026/santos.json"
-  }
+  },
+  "version": "v2.6.1",
+  "updatedAt": "2026-05-19T16:30:00Z"
 }

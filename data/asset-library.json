@@ -1,5 +1,5 @@
 {
-  "version": "v2.6.0",
+  "version": "v2.6.1",
   "rotation": {
     "enabledByDefault": true,
     "mode": "daily-stable",
@@ -1158,5 +1158,6 @@
     "se uma imagem falhar, usa fundo principal da tela",
     "logos ausentes usam placeholder sem travar",
     "novas imagens podem ser adicionadas mantendo o manifesto"
-  ]
+  ],
+  "updatedAt": "2026-05-19T16:30:00Z"
 }

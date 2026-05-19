@@ -1,32 +1,14 @@
-Vale Futebol Manager: Gold Edition
-AUDIT REPORT - v2.6.0
-
-Base: v2.5.1 corrigida
-Fase: Biblioteca Visual Dinâmica + integração de logos/paises/ligas
-Data: 2026-05-19 15:05 UTC
-
-Verificações executadas:
-- ZIP base v2.5.1 extraído com sucesso
-- Pacote de fundos principais/extras mesclado em assets/backgrounds
-- Pacote de logos organizado mesclado em assets/clubs
-- data/asset-map.json atualizado com logos de clubes
-- data/asset-library.json criado
-- data/club-logo-library.json integrado
-- data/world-league-library.json criado
-- js/systems/visualAssetManager.js criado
-- app.js atualizado para carregar biblioteca visual antes das rotas
-- common.js atualizado para buscar fundos pela biblioteca visual
-- lobby atualizado com botão Biblioteca Visual
-- moduleScreen atualizado com tela Biblioteca Visual
-- CSS de Biblioteca Visual incluído
-- node --check executado em todos os JS: OK
-- validação de JSON em data/ e build/: OK
+AUDIT REPORT - v2.6.1
+Data: 2026-05-19 16:30 UTC
 
 Resultado:
-0 erros críticos
-0 falhas bloqueantes
-0 JSON inválido
-0 JS inválido
+- JS auditado com node --check: OK
+- JSON principais validados: OK
+- Brasileirão Série A 2025: 20 clubes
+- Brasileirão Série B 2025: 20 clubes
+- Athletic corrigido para Série B
+- Fundo visual reforçado: overlay escurecedor reduzido e painéis menos opacos
+- Fallbacks de assets preservados
+- Estrutura GitHub/Vercel preservada
 
-Observação:
-Se algum logo de liga/país ainda não tiver PNG físico no caminho preparado, o fallback automático deve impedir travamento.
+Sem erros críticos detectados.
