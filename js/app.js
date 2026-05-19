@@ -1,5 +1,5 @@
 import { loadAssetMap } from './systems/assets.js';
-import { load, getState } from './systems/state.js';
+import { load, getState, advanceMatch } from './systems/state.js';
 import { initRouter, register, render } from './systems/router.js';
 import { cover } from './screens/cover.js';
 import { mainMenu } from './screens/mainMenu.js';
@@ -15,13 +15,13 @@ import { loadVisualLibrary } from './systems/visualAssetManager.js';
 
 async function boot(){
   const app = document.getElementById('app');
-  let buildInfo = { buildLabel:'Build v2.6.1' };
+  let buildInfo = { buildLabel:'Build v3.3.0' };
   try { buildInfo = await (await fetch('build/build-info.json', {cache:'no-store'})).json(); } catch(err) { console.warn('[VFM] build-info fallback', err); }
   await loadAssetMap();
   await loadVisualLibrary();
   applyCommercialPolish();
   load();
-  runRuntimeAudit(getState(), {phase:'v2.6.1 boot'});
+  runRuntimeAudit(getState(), {phase:'v3.3.0 boot'});
   validateCommercialState(getState());
   initRouter(app, buildInfo);
   register('cover', cover);
@@ -32,6 +32,9 @@ async function boot(){
   register('lobby', lobby);
   register('match', match);
   const modules = {
+    seasonCenter:['Temporada','Tabela viva, rodada completa, acesso, queda e vagas continentais'],
+    financeCenter:['Economia','Diretoria, orçamento, patrocínio e crise financeira realista'],
+    worldCompetitions:['Competições Globais','Libertadores, Sul-Americana, Mundial de Clubes e calendário de seleções'],
     championship:['Campeonato','Competições e agenda anual'],
     calendar:['Calendário','Agenda completa da temporada'],
     formation:['Formação','Escalação e desenho tático'],
@@ -45,6 +48,7 @@ async function boot(){
     finances:['Financeiro','Orçamento, receitas e despesas'],
     contracts:['Contratos','Contratos de jogadores e renovações'],
     messages:['E-mail','Diretoria, imprensa, empresários, propostas e seleção nacional'],
+    careerOffers:['Propostas','Clubes interessados, seleções nacionais e decisões de carreira'],
     nationalTeam:['Seleções','Carreira internacional, convocação e calendário FIFA'],
     squad:['Elenco','Jogadores, forma, moral e contratos'],
     settings:['Configurações','Preferências e segurança'],
@@ -57,6 +61,7 @@ async function boot(){
   Object.entries(modules).forEach(([route,[title,sub]]) => register(route, (state)=> moduleScreen(route,title,sub,state)));
   render();
   setInterval(()=>{ document.querySelectorAll('#buildBadge,.build-badge').forEach(el=>{ if(!el.textContent.trim()) el.textContent = buildInfo.buildLabel; }); }, 500);
+  setInterval(()=>{ const s=getState(); if(s.route==='match' && s.match?.autoPlay && !s.match?.finalized){ const step = Math.max(5, Math.min(25, Number(s.match.speed || 1) * 5)); advanceMatch(step); render(); } }, 2200);
 }
 window.addEventListener('error', event => {
   console.error('[VFM] erro global capturado', event.error || event.message);

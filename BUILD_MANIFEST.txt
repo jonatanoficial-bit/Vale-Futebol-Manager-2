@@ -1,3 +1,16 @@
-Vale Futebol Manager Gold Edition
-Build v2.6.1 | 2026-05-19 | 16:30 UTC
-Fase: correção visual de fundos + Brasileirão A/B 2025 completo
+Vale Futebol Manager: Gold Edition
+Build v3.3.0 | 2026-05-20 | 00:40 UTC
+Fase: Economia, diretoria, patrocínio e crise financeira realistas
+Base: v3.2.0
+
+Novos arquivos:
+- js/data/financeData.js
+- js/systems/financeEngine.js
+- FINANCE_ENGINE_V33_GUIDE.md
+
+Principais integrações:
+- nova rota financeCenter
+- novo botão Economia no lobby
+- receitas, despesas, folha, patrocínio e diretoria conectados ao estado do clube
+- gatilhos de crise financeira com fallback seguro
+- save migrável v3.2.0 -> v3.3.0

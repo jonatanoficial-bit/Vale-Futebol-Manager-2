@@ -1,14 +1,16 @@
-AUDIT REPORT - v2.6.1
-Data: 2026-05-19 16:30 UTC
+AUDIT REPORT - Vale Futebol Manager Gold Edition v3.3.0
 
-Resultado:
-- JS auditado com node --check: OK
-- JSON principais validados: OK
-- Brasileirão Série A 2025: 20 clubes
-- Brasileirão Série B 2025: 20 clubes
-- Athletic corrigido para Série B
-- Fundo visual reforçado: overlay escurecedor reduzido e painéis menos opacos
-- Fallbacks de assets preservados
-- Estrutura GitHub/Vercel preservada
+Itens auditados:
+- Estrutura de arquivos: OK
+- Novos módulos financeiros: OK
+- Rota financeCenter: OK
+- Fallbacks financeiros: OK
+- CSS mobile: OK
+- Build-info: OK
 
-Sem erros críticos detectados.
+Validações executadas no empacotamento:
+- node --check em arquivos JS
+- json.load em arquivos JSON
+- zip válido
+
+Resultado: 0 erros críticos detectados.

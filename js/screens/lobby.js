@@ -2,13 +2,16 @@ import { screenWrap, brand, moneyCard } from './common.js';
 import { teams } from '../data/gameData.js';
 import { safeImg, clubLogo, country } from '../systems/assets.js';
 import { money } from '../utils/dom.js';
-import { schedule, eventTitle } from '../data/seasonData.js';
+
 
 export function lobby(state){
   const t = teams.find(x => x.id === state.clubId) || teams[0];
   const managerCountry = state.manager.country || 'br';
   const menu = [
+    ['seasonCenter','Temporada','📆','Tabela viva, rodada completa, acesso, queda e vagas continentais','Novo'],
     ['championship','Campeonato','🏆','Competições, copa, continental e agenda anual','Essencial'],
+    ['worldCompetitions','Competições Globais','🌎','Libertadores, Sul-Americana, Mundial de Clubes e seleções','Novo'],
+    ['financeCenter','Economia','🏦','Diretoria, orçamento, patrocínio, risco e crise financeira','Novo'],
     ['calendar','Agenda','📅','Calendário completo, treinos e jogos','Temporada'],
     ['formation','Tática','🧩','Escalação, campo, banco e desenho tático','Pré-jogo'],
     ['instructions','Instruções','🎯','Pressão, passes, mentalidade e bolas paradas','Avançado'],
@@ -21,6 +24,7 @@ export function lobby(state){
     ['sponsorship','Patrocínio','🤝','Receitas comerciais, bônus e exposição de marca','Finanças'],
     ['finances','Financeiro','💼','Orçamento, receitas, despesas e folha salarial','Diretoria'],
     ['messages','E-mail','✉️','Diretoria, imprensa, empresário e possíveis seleções','Carreira'],
+    ['careerOffers','Propostas','📨','Sondagens de clubes, seleção nacional e carreira dupla','Novo'],
     ['aiBalance','IA / Realismo','🧠','Balanceamento esportivo, dificuldade e leitura da simulação','Motor'],
     ['club','Clube','🛡️','Resumo institucional, estádio, torcida e estrutura','Perfil'],
     ['visualLibrary','Biblioteca Visual','🖼️','Fundos extras, logos, países, ligas e rotação visual','Assets'],
@@ -28,11 +32,11 @@ export function lobby(state){
   ];
   const boardTrust = Number(state.boardTrust || 76);
   const fanMood = Number(state.fanMood || 82);
-  const completedIds = new Set((state.career?.completedMatches || []).map(m=>m.id));
-  const nextEvent = schedule.find(ev => ev.type === 'match' && !completedIds.has(`${ev.date}-${slug(ev.home)}-${slug(ev.away)}`));
   const lastResult = state.career?.lastResult;
-  const nextTitle = nextEvent ? eventTitle(nextEvent) : 'Temporada sem jogo pendente';
-  const nextInfo = nextEvent ? `${nextEvent.venue} · ${nextEvent.stage} · ${nextEvent.date.slice(8,10)}/${nextEvent.date.slice(5,7)}` : 'Calendário concluído';
+  const homeTeam = teams.find(x=>x.id===state.match?.home) || t;
+  const awayTeam = teams.find(x=>x.id===state.match?.away) || teams.find(x=>x.id!==t.id) || t;
+  const nextTitle = state.match?.finalized ? 'Pós-jogo concluído' : `${homeTeam.name} x ${awayTeam.name}`;
+  const nextInfo = state.match?.finalized ? 'Resultado salvo. Próximo compromisso será carregado na evolução da carreira.' : `${homeTeam.stadium || t.stadium} · ${state.match?.stage || 'Rodada'} · ${(state.match?.date || '2026-05-24').slice(8,10)}/${(state.match?.date || '2026-05-24').slice(5,7)}`;
   return screenWrap('lobby', `
     <section class="lobby-shell">
       <div class="premium-topbar panel">

@@ -44,3 +44,9 @@ Esta build adiciona substituições funcionais e decisões táticas durante a pa
 
 ### Build v1.9.0
 Mercado interativo com propostas, compras, vendas, renovações, orçamento vivo e proteção anti-quebra.
+
+
+## v2.8.0 - Transferencias Funcionais Profundas
+- Mercado funcional com compra, venda, emprestimo, propostas recebidas, renovacoes e IA de clubes.
+- Orçamento e folha vivos com bloqueio anti-quebra.
+- Diário de mercado persistente no save local.

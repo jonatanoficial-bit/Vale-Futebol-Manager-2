@@ -1,3 +1,7 @@
-# PROJECT STATUS - v2.6.1
+# PROJECT_STATUS.md
 
-Correção de visibilidade dos fundos, Série A 2025 com 20 clubes, Série B 2025 com 20 clubes, Athletic corrigido para Série B, e dados de clubes brasileiros expandidos para escolha de time.
+Status: Build v3.3.0 comercial expansiva.
+
+O jogo agora possui camada de economia e diretoria mais realista: receitas, despesas, folha salarial, patrocínio, mandatos, risco financeiro, crise e limite de mercado.
+
+Próxima fase recomendada: v3.4.0 - Polimento premium, UX, sons opcionais, responsividade extrema e auditoria visual final.

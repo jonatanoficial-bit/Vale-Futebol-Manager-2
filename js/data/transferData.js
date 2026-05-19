@@ -47,3 +47,26 @@ export const contractRules = [
   {label:'Política da diretoria', value:'Revenda e base forte'},
   {label:'Risco de folha', value:'Moderado'}
 ];
+
+export const loanTargets = [
+  {id:'andre-silva-loan', name:'André Silva', pos:'ATA', age:22, club:'Porto B', country:'pt', overall:73, potential:82, value:0, wage:0.28, interest:74, role:'Atacante para rotação por empréstimo', status:'Empréstimo', risk:'Baixo', photo:'assets/players/scouted/andre-silva-loan.png'},
+  {id:'bruno-mendez-loan', name:'Bruno Méndez', pos:'ZAG', age:25, club:'Granada', country:'uy', overall:76, potential:79, value:0, wage:0.34, interest:61, role:'Zagueiro de emergência para 12 meses', status:'Empréstimo', risk:'Médio', photo:'assets/players/scouted/bruno-mendez-loan.png'},
+  {id:'pedro-vitor-loan', name:'Pedro Vitor', pos:'PD', age:20, club:'Base Europeia', country:'br', overall:70, potential:84, value:0, wage:0.18, interest:82, role:'Ponta jovem para compor elenco', status:'Empréstimo', risk:'Baixo', photo:'assets/players/scouted/pedro-vitor-loan.png'}
+];
+
+export const aiClubProfiles = [
+  {id:'palmeiras', name:'Palmeiras', country:'br', budget:70, style:'compra seletiva'},
+  {id:'flamengo', name:'Flamengo', country:'br', budget:85, style:'alto investimento'},
+  {id:'cruzeiro', name:'Cruzeiro', country:'br', budget:38, style:'oportunidade regional'},
+  {id:'porto', name:'Porto', country:'pt', budget:44, style:'revenda internacional'},
+  {id:'benfica', name:'Benfica', country:'pt', budget:52, style:'talentos jovens'},
+  {id:'atlanta-united', name:'Atlanta United', country:'us', budget:30, style:'MLS agressiva'},
+  {id:'al-hilal', name:'Al-Hilal', country:'sa', budget:95, style:'salário alto'}
+];
+
+export const agentEvents = [
+  {type:'agent_pressure', title:'Empresário pressiona por aumento', impact:'Moral pode cair se renovar contrato demorar.'},
+  {type:'board_block', title:'Diretoria exige responsabilidade', impact:'Oferta acima do limite será bloqueada automaticamente.'},
+  {type:'fan_reaction', title:'Torcida cobra reforço', impact:'Contratação de impacto melhora humor da torcida.'},
+  {type:'player_unsettled', title:'Jogador balançado por proposta', impact:'Recusar venda pode reduzir confiança do atleta.'}
+];

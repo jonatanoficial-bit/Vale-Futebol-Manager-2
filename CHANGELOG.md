@@ -74,7 +74,7 @@ IA e balanceamento esportivo.
 - Segurança anti-quebra reforçada para save, assets, rotas e módulos.
 - Documentação final para GitHub/Vercel.
 
-## v2.5.1 - Central de Atualização de Elencos 2026
+## v2.6.2 - Central de Atualização de Elencos 2026
 - Atualizado elenco base do Santos para temporada 2026.
 - Adicionada tela Atualizar elenco no lobby.
 - Adicionada importação/exportação de elenco por JSON.
@@ -83,3 +83,20 @@ IA e balanceamento esportivo.
 - Adicionado data/rosters/2026/santos.json.
 - Fotos de jogadores preparadas em assets/players/brazil/santos/<id>.png.
 - Fallback automático para assets/placeholders/player-generic.png.
+
+
+## v2.8.0 - Transferencias Funcionais Profundas
+- Mercado funcional com compra, venda, emprestimo, propostas recebidas, renovacoes e IA de clubes.
+- Orçamento e folha vivos com bloqueio anti-quebra.
+- Diário de mercado persistente no save local.
+
+
+## v3.1.0
+- Adiciona engine de carreira.
+- Adiciona propostas de clubes e selecoes.
+- Ativa carreira dupla clube + selecao.
+- Adiciona convocacao e calendario internacional.
+
+## v3.3.0
+- Adicionado Centro de Economia, diretoria, patrocínio e crise financeira realistas.
+- Novo financeEngine com receitas, despesas, risco, limite de mercado e patrocínios por reputação.

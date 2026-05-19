@@ -84,3 +84,21 @@
 }
 .team-filter-panel,.selected-club-hero,.lobby-hero-v050{background:linear-gradient(145deg,rgba(8,13,18,.72),rgba(0,0,0,.58))!important;}
 @media(max-width:560px){.panel,.card{background:linear-gradient(180deg,rgba(9,15,21,.82),rgba(4,7,10,.84))!important}.screen:before{background:linear-gradient(180deg,rgba(0,0,0,.10),rgba(0,0,0,.56))!important}}
+
+/* v2.7.0 Season Engine */
+.season-center-v270{display:grid;gap:16px}.season-center-v270 .fixture-list{display:grid;gap:10px}.fixture-card{border:1px solid rgba(255,255,255,.12);background:rgba(5,10,16,.68);border-radius:18px;padding:12px;box-shadow:0 10px 30px rgba(0,0,0,.22)}.fixture-card.user-fixture{border-color:rgba(245,198,80,.72);background:linear-gradient(135deg,rgba(245,198,80,.12),rgba(5,10,16,.72))}.team-cell.right{justify-content:flex-end;text-align:right}.zone-libertadores td:first-child,.zone-promotion td:first-child{color:#ffd86b}.zone-sulamericana td:first-child{color:#8ce99a}.zone-relegation td:first-child{color:#ff7777}.standings-table small{display:block;color:rgba(255,255,255,.56);font-size:.72rem;margin-top:3px}.club-identity-card.mini{padding:10px 12px;min-width:220px}.club-identity-card.mini .club-logo{width:48px;height:48px}.premium-list.bullets{display:grid;gap:8px;margin:12px 0 0 18px;color:rgba(255,255,255,.82)}
+@media (max-width: 700px){.fixture-card .row{gap:8px}.fixture-card .team-cell{max-width:42%;font-size:.82rem}.club-identity-card.mini{width:100%;min-width:0}.season-center-v270 .standings-hero{align-items:flex-start}}
+
+
+/* v3.1.0 career proposals and national team polish */
+.career-v310 .hero-actions,.national-v310 .hero-actions{display:flex;gap:.7rem;flex-wrap:wrap;justify-content:flex-end}
+.career-offer-card{border-left:3px solid rgba(255,204,77,.72);align-items:center}
+.career-offer-card.national-offer{border-left-color:rgba(68,204,255,.72)}
+.active-national{box-shadow:0 0 0 1px rgba(255,204,77,.45),0 18px 45px rgba(0,0,0,.28)}
+.selected-callup{background:rgba(255,204,77,.08);border-color:rgba(255,204,77,.26)}
+.callup-row button,.offer-row button{min-height:34px}
+@media (max-width:720px){.career-v310 .hero-actions,.national-v310 .hero-actions{justify-content:stretch}.career-v310 .hero-actions button,.national-v310 .hero-actions button{flex:1}.career-offer-card{grid-template-columns:auto 1fr}.career-offer-card .candidate-side{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr 1fr;gap:.45rem;width:100%}}
+
+
+/* v3.3.0 Finance, board and crisis polish */
+.finance-v330{display:grid;gap:16px}.finance-hero{display:flex;justify-content:space-between;align-items:center;gap:16px;background:linear-gradient(135deg,rgba(16,18,24,.88),rgba(90,66,24,.36));border:1px solid rgba(255,215,120,.22)}.finance-health{min-width:150px;text-align:center;border-radius:20px;padding:16px;background:rgba(255,202,88,.1);box-shadow:inset 0 0 30px rgba(255,190,80,.08)}.finance-health strong{display:block;font-size:1.7rem;color:#ffd36b}.finance-list,.objective-list,.sponsor-market-list,.crisis-list,.finance-feed-list{display:grid;gap:10px}.finance-stream,.board-objective,.sponsor-proposal,.crisis-card,.finance-feed{border-radius:16px;padding:12px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09);display:grid;gap:6px}.finance-stream{grid-template-columns:1fr auto auto;align-items:center}.finance-stream.income b{color:#91ffbd}.finance-stream.expense b{color:#ffd36b}.board-objective{grid-template-columns:1fr auto auto;align-items:center}.board-objective .meter{grid-column:1/-1}.board-objective.ok em{color:#91ffbd}.board-objective.warn em{color:#ffd36b}.board-objective.danger em{color:#ff8f8f}.sponsor-proposal{grid-template-columns:1fr auto auto;align-items:center}.sponsor-proposal.locked{opacity:.62;filter:saturate(.7)}.crisis-card.ok{border-color:rgba(145,255,189,.24)}.crisis-card .meter.danger span{background:linear-gradient(90deg,#ff7b7b,#ffd36b)}.finance-feed small,.finance-stream small,.board-objective small,.sponsor-proposal small,.crisis-card small{color:rgba(255,255,255,.72)}@media(max-width:700px){.finance-hero,.finance-stream,.board-objective,.sponsor-proposal{grid-template-columns:1fr;display:grid}.finance-health{text-align:left;min-width:0}.finance-stream span,.sponsor-proposal em{justify-self:start}}
