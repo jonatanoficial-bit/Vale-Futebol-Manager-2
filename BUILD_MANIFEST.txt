@@ -1,15 +1,17 @@
-Build v3.6.0 | 2026-05-20 | 03:25 UTC
-Fase: Pacote de dados reais 2026, elencos editáveis e manutenção segura
-Base: v3.5.0
-Arquivos novos principais:
-- js/data/realData2026.js
-- js/systems/realDataEngine.js
-- REAL_DATA_2026_GUIDE.md
-- data/rosters/2026/*.json
+Vale Futebol Manager Gold Edition
+Build: v3.8.0
+Data: 2026-05-20
+Hora: 05:15 UTC
+Fase: Categorias de base e scouting profundo
+Base: v3.7.0
 
-
-## Build v3.7.0 - Mercado Inteligente
-- Adicionada central Mercado Inteligente no lobby.
-- Incluido motor de empresarios, preferencias de jogadores, propostas inteligentes e mercado IA.
-- Save migrado para vfm_gold_save_v370 com fallbacks anti-quebra.
-- Auditoria JS/JSON pendente de execucao no empacotamento.
+Incluido:
+- tela Base & Scouting
+- promessas da base
+- departamentos da academia
+- politica de formacao
+- regioes de scouting
+- eventos narrativos da base
+- caminho seguro para fotos futuras
+- fallback anti-quebra de avatares
+- guia YOUTH_ACADEMY_V38_GUIDE.md

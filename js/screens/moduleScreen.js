@@ -24,6 +24,8 @@ import { regressionFixesV350 } from '../data/mobileAuditData.js';
 import { buildMobileAuditReport, buildRouteSmokeMatrix, buildDeviceChecklist } from '../systems/mobileAuditEngine.js';
 import { buildDataAudit, dataQualityLabel, exportRosterTemplateText } from '../systems/realDataEngine.js';
 import { buildMarketIntelligence, getExpandedTargets } from '../systems/marketIntelligenceEngine.js';
+import { academyProfile, academyPolicies } from '../data/youthAcademyData.js';
+import { buildAcademySnapshot, exportAcademyTemplate } from '../systems/youthAcademyEngine.js';
 export function moduleScreen(route,title,subtitle,state){
   const extra = content(route, state);
   return screenWrap(route, `${topbar(title,subtitle,'lobby')}${clubHeader(state)}${extra}`, true);
@@ -74,6 +76,7 @@ function content(route,state={}){
   if(route==='polishCenter') return polishCenterScreenV340(state);
   if(route==='mobileAudit') return mobileAuditScreenV350(state);
   if(route==='data2026') return data2026ScreenV360(state);
+  if(route==='academyScouting') return academyScoutingScreenV380(state);
   if(route==='visualLibrary') return visualLibraryScreen(state);
   if(route==='rosterUpdate') return rosterUpdateScreen(state, squadPlayers, squadSummary, rosterMeta);
   if(route==='assetChecklist') return assetChecklistScreen(state);
@@ -788,5 +791,30 @@ function data2026ScreenV360(state={}){
     <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Divisões</span><h2>Série A e Série B 2026</h2></div><span class="status-pill">20 + 20</span></div><div class="grid grid-2">${leagueRows}</div></article><article class="panel"><div class="row space"><div><span class="tag">Manutenção</span><h2>Checklist anti-quebra</h2></div><strong class="grade">Seguro</strong></div><ul class="premium-list bullets">${checklist}</ul></article></section>
     <section class="panel"><div class="row space"><div><span class="tag">Cobertura dos elencos</span><h2>Arquivos que o jogo entende</h2></div><span class="small">Substitua o JSON do clube quando tiver elenco real.</span></div><div class="table-wrap"><table><thead><tr><th></th><th>Clube</th><th>Status</th><th>Atletas</th><th>JSON</th><th>Fotos</th></tr></thead><tbody>${coverageRows}</tbody></table></div></section>
     <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Gerador de template</span><h2>Modelo de elenco por clube</h2></div><select data-action="set-ui-select" data-ui-key="dataClub">${options}</select></div><p class="small">Copie este modelo para <code>data/rosters/2026/${selectedClub}.json</code> e troque nomes/atributos. A estrutura é validada pela tela Atualizar elenco.</p><textarea class="code-box" readonly>${sample}</textarea></article><article class="panel"><div class="row space"><div><span class="tag">Avatares dos jogadores</span><h2>Caminho oficial</h2></div><button class="secondary-btn mini" data-route="rosterUpdate">Atualizar elenco</button></div><p class="small">Para cada jogador, use o mesmo <code>id</code> do JSON:</p><pre class="code-box small-code">assets/players/brazil/${selectedClub}/id-do-jogador.png</pre><p class="alert">Se a imagem não existir, o jogo usa <code>assets/placeholders/player-generic.png</code>. Portanto o elenco não quebra por falta de foto.</p></article></section>
+  </section>`;
+}
+
+
+function academyScoutingScreenV380(state={}){
+  const snap = buildAcademySnapshot(state);
+  const policyOptions = academyPolicies.map(p=>`<option value="${p.id}" ${(state.academy?.policy || state.ui?.academyPolicy || 'balanced')===p.id?'selected':''}>${p.name}</option>`).join('');
+  const deptRows = snap.departments.map(d=>`<div class="academy-dept"><div><strong>${d.name}</strong><small>${d.note}</small></div><b>${d.score}%</b><div class="meter"><span style="width:${d.score}%"></span></div></div>`).join('');
+  const prospectCards = snap.prospects.map(p=>`<article class="prospect-card ${p.readiness>=68?'ready':p.readiness>=58?'watch':'dev'}">
+    <div class="row space"><div>${safeImg(p.photo,'player',p.name,'player-face')}<div><strong>${p.name}</strong><small>${p.age} anos · ${p.pos} · ${p.personality}</small></div></div><span class="tag">${p.promotion}</span></div>
+    <div class="prospect-stats"><span>OVR <b>${p.overall}</b></span><span>POT <b>${p.potential}</b></span><span>Pronto <b>${p.readiness}%</b></span><span>Risco <b>${p.risk}%</b></span></div>
+    <p class="small">Traço: ${p.trait} · Valor estimado € ${p.value}M · Caminho foto: <code>${p.photo}</code></p>
+    <div class="row gap"><button class="secondary-btn mini" data-action="safe-toast" data-message="${p.name} marcado para observação do profissional.">Observar</button><button class="main-btn mini" data-action="safe-toast" data-message="${p.name} adicionado ao plano de promoção gradual.">Plano de promoção</button></div>
+  </article>`).join('');
+  const regionRows = snap.regions.map(r=>`<div class="scouting-region ${r.recommended?'recommended':''}"><div><strong>${r.name}</strong><small>${r.style} · risco ${r.risk}</small></div><b>${r.chance}%</b><em>€ ${r.cost}M</em></div>`).join('');
+  const eventRows = snap.events.map(e=>`<div class="academy-event ${e.type}"><strong>${e.title}</strong><small>${e.text}</small></div>`).join('');
+  const alertRows = snap.alerts.map(a=>`<div class="academy-alert ${a.level}"><strong>${a.title}</strong><small>${a.text}</small></div>`).join('');
+  const template = exportAcademyTemplate().replace(/</g,'&lt;');
+  return `<section class="academy-v380 stack">
+    <div class="panel academy-hero"><div><span class="tag">v3.8.0 · categorias de base e scouting profundo</span><h1>Academia e captação de talentos</h1><p class="small">A base agora tem promessas, departamentos, política de formação, regiões de scouting, alertas de promoção e caminho oficial para fotos futuras sem quebrar o jogo.</p></div><div class="release-score"><strong>${snap.developmentIndex}%</strong><small>${snap.boardSignal}</small></div></div>
+    <section class="grid desktop-4"><div class="card kpi-card"><span>Promessas prontas</span><strong>${snap.promotionReady}</strong><small>prontas/relacionáveis</small></div><div class="card kpi-card"><span>Potencial elite</span><strong>${snap.elitePotential}</strong><small>POT 82+</small></div><div class="card kpi-card"><span>Valor da base</span><strong>€ ${snap.marketValue}M</strong><small>estimativa segura</small></div><div class="card kpi-card"><span>Custo mensal</span><strong>€ ${snap.profile.budgetMonthly}M</strong><small>orçamento da academia</small></div></section>
+    <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Política</span><h2>Estratégia da base</h2></div><select data-action="set-ui-select" data-ui-key="academyPolicy">${policyOptions}</select></div><p class="small">${snap.policy.effect}</p><div class="ux-audit-list">${alertRows}</div></article><article class="panel"><div class="row space"><div><span class="tag">Departamentos</span><h2>Estrutura de formação</h2></div><strong class="grade">${snap.profile.level}</strong></div><div class="academy-dept-list">${deptRows}</div></article></section>
+    <section class="panel"><div class="row space"><div><span class="tag">Joias da base</span><h2>Promessas monitoradas</h2></div><span class="status-pill">fallback de fotos ativo</span></div><div class="prospect-grid">${prospectCards}</div></section>
+    <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Scouting</span><h2>Regiões de captação</h2></div><button class="secondary-btn mini" data-action="safe-toast" data-message="Relatório de scouting gerado com segurança.">Gerar relatório</button></div><div class="scouting-region-list">${regionRows}</div></article><article class="panel"><div class="row space"><div><span class="tag">Eventos</span><h2>Narrativa da base</h2></div><span class="status-pill">carreira viva</span></div><div class="news-list compact">${eventRows}</div></article></section>
+    <section class="panel"><div class="row space"><div><span class="tag">Manutenção segura</span><h2>Template editável de promessas</h2></div><span class="small">Fotos futuras em <code>assets/players/youth/id-do-jogador.png</code></span></div><textarea class="code-box" readonly>${template}</textarea><p class="alert">Se uma foto de jovem não existir, o jogo usa o placeholder de jogador. Se um campo do JSON estiver incompleto, o motor normaliza dados e evita travamento.</p></section>
   </section>`;
 }

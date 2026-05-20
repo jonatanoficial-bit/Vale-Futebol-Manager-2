@@ -19,6 +19,7 @@ export function lobby(state){
     ['standings','Classificação','📊','Tabela, estatísticas e disputa por objetivos','Dados'],
     ['transfers','Transferências','🔁','Mercado, compra, venda, empréstimo e renovação','Janela'],
     ['smartMarket','Mercado Inteligente','🧠','Empresários, disputa por atletas, IA de clubes e oportunidades','Novo'],
+    ['academyScouting','Base & Scouting','🌱','Categorias de base, promessas, olheiros e captação de talentos','Novo'],
     ['contracts','Contratos','📝','Salários, vencimentos, luvas e renovações','Gestão'],
     ['rosterUpdate','Atualizar elenco','🧾','Importar JSON, exportar plantel e trocar avatares depois','Dados'],
     ['staff','Staff','👥','Comissão técnica, médico, olheiro e diretor comercial','Clube'],

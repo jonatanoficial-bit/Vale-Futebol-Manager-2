@@ -16,13 +16,13 @@ import { runtimeSafetySnapshot } from './systems/uxEngine.js';
 
 async function boot(){
   const app = document.getElementById('app');
-  let buildInfo = { buildLabel:'Build v3.7.0' };
+  let buildInfo = { buildLabel:'Build v3.8.0' };
   try { buildInfo = await (await fetch('build/build-info.json', {cache:'no-store'})).json(); } catch(err) { console.warn('[VFM] build-info fallback', err); }
   await loadAssetMap();
   await loadVisualLibrary();
   applyCommercialPolish();
   load();
-  runRuntimeAudit(getState(), {phase:'v3.7.0 boot', ux: runtimeSafetySnapshot(getState())});
+  runRuntimeAudit(getState(), {phase:'v3.8.0 boot', ux: runtimeSafetySnapshot(getState())});
   validateCommercialState(getState());
   initRouter(app, buildInfo);
   register('cover', cover);
@@ -47,6 +47,7 @@ async function boot(){
     standings:['Classificação','Tabelas e estatísticas'],
     transfers:['Transferências','Mercado, contratos e negociações'],
     smartMarket:['Mercado Inteligente','Empresários, propostas rivais, IA de clubes e disputa por atletas'],
+    academyScouting:['Base & Scouting','Categorias de base, promessas, olheiros e captação global'],
     staff:['Staff','Comissão técnica e funcionários'],
     sponsorship:['Patrocínio','Receitas comerciais e propostas'],
     club:['Clube','Resumo institucional e financeiro'],
