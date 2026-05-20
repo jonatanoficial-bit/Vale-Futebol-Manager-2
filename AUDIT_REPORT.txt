@@ -1,17 +1,28 @@
-Vale Futebol Manager Gold Edition - AUDIT_REPORT
-Build v3.4.0 | 2026-05-20 | 01:35 UTC
+AUDIT REPORT — v3.6.0
 
-Auditoria executada:
-- node --check em todos os arquivos JS: OK
-- validacao de JSONs principais: OK
-- importacao de novos modulos UX: OK
-- rota polishCenter registrada: OK
-- build-info atualizado: OK
-- CSS de polimento v3.4.0 adicionado: OK
-- ZIP final validado: OK
+Escopo:
+- Sintaxe JS
+- Importações ES Modules
+- JSONs principais
+- Rota data2026
+- Arquivos de elencos 2026
 
 Resultado:
-0 erros criticos
-0 falhas bloqueantes
-0 JSON invalido
-0 JS invalido
+- 0 erros críticos detectados na auditoria local.
+- Estrutura anti-quebra mantida.
+- ZIP final validado após geração.
+
+
+## Build v3.7.0 - Mercado Inteligente
+- Adicionada central Mercado Inteligente no lobby.
+- Incluido motor de empresarios, preferencias de jogadores, propostas inteligentes e mercado IA.
+- Save migrado para vfm_gold_save_v370 com fallbacks anti-quebra.
+- Auditoria JS/JSON pendente de execucao no empacotamento.
+
+## Auditoria executada para v3.7.0
+- node --check em todos os arquivos JS: OK
+- importacao dinamica de marketIntelligenceEngine.js: OK
+- renderizacao da rota smartMarket via moduleScreen: OK
+- teste seguro das funcoes generateSmartIncomingOffer, simulateSmartAIMarket e triggerAgentEvent: OK (persistencia local protegida em ambiente Node sem localStorage)
+- validacao de todos os JSONs: OK
+- arquivos novos presentes: js/data/marketIntelligenceData.js, js/systems/marketIntelligenceEngine.js, MARKET_INTELLIGENCE_V37_GUIDE.md

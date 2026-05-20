@@ -18,6 +18,7 @@ export function lobby(state){
     ['training','Treino','🔶','Plano semanal, evolução, fadiga e lesões','Elenco'],
     ['standings','Classificação','📊','Tabela, estatísticas e disputa por objetivos','Dados'],
     ['transfers','Transferências','🔁','Mercado, compra, venda, empréstimo e renovação','Janela'],
+    ['smartMarket','Mercado Inteligente','🧠','Empresários, disputa por atletas, IA de clubes e oportunidades','Novo'],
     ['contracts','Contratos','📝','Salários, vencimentos, luvas e renovações','Gestão'],
     ['rosterUpdate','Atualizar elenco','🧾','Importar JSON, exportar plantel e trocar avatares depois','Dados'],
     ['staff','Staff','👥','Comissão técnica, médico, olheiro e diretor comercial','Clube'],
@@ -28,6 +29,8 @@ export function lobby(state){
     ['aiBalance','IA / Realismo','🧠','Balanceamento esportivo, dificuldade e leitura da simulação','Motor'],
     ['club','Clube','🛡️','Resumo institucional, estádio, torcida e estrutura','Perfil'],
     ['visualLibrary','Biblioteca Visual','🖼️','Fundos extras, logos, países, ligas e rotação visual','Assets'],
+    ['mobileAudit','Auditoria Mobile','📱','Teste real de jogabilidade, rotas críticas, pós-jogo e save','QA'],
+    ['data2026','Dados 2026','🗃️','Divisões, elencos editáveis, cobertura de dados e caminhos de fotos','Novo'],
     ['settings','Configuração','⚙️','Save, qualidade, sons, acessibilidade e segurança','Sistema']
   ];
   const boardTrust = Number(state.boardTrust || 76);

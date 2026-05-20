@@ -3,23 +3,24 @@ import { deepScoreFromState, getPostMatchReport } from './matchEngine.js';
 import { teams } from '../data/gameData.js';
 import { nextFixtureForClub as seasonNextFixture, simulateOtherRoundMatches } from './seasonEngine.js';
 import { transferShortlist, negotiations as baseNegotiations, outgoingList, loanTargets, aiClubProfiles, agentEvents } from '../data/transferData.js';
+import { buildMarketIntelligence, createSmartIncomingOffer, createIntelligentAIDeal, nextAgentEvent } from './marketIntelligenceEngine.js';
 import { scoreFromTimeline, buildBalanceSummary } from './balance.js';
 import { squadPlayers as defaultRosterPlayers, rosterMeta as defaultRosterMeta, normalizeRoster } from '../data/squadData.js';
 import { generateOffers, validateCareerState, buildInternationalCalendar, defaultCallUpSelection } from './careerEngine.js';
 
-const key = 'vfm_gold_save_v340';
-const legacyKeys = ['vfm_gold_save_v330', 'vfm_gold_save_v320', 'vfm_gold_save_v310', 'vfm_gold_save_v300', 'vfm_gold_save_v290', 'vfm_gold_save_v280', 'vfm_gold_save_v270', 'vfm_gold_save_v262', 'vfm_gold_save_v261', 'vfm_gold_save_v260', 'vfm_gold_save_v251', 'vfm_gold_save_v240', 'vfm_gold_save_v230', 'vfm_gold_save_v220', 'vfm_gold_save_v210', 'vfm_gold_save_v200', 'vfm_gold_save_v190', 'vfm_gold_save_v180', 'vfm_gold_save_v170', 'vfm_gold_save_v160', 'vfm_gold_save_v150', 'vfm_gold_save_v140', 'vfm_gold_save_v130', 'vfm_gold_save_v120', 'vfm_gold_save_v110', 'vfm_gold_save_v100', 'vfm_gold_save_v090', 'vfm_gold_save_v080', 'vfm_gold_save_v050', 'vfm_gold_save_v040', 'vfm_gold_save_v030', 'vfm_gold_save_v020', 'vfm_gold_save_v010'];
+const key = 'vfm_gold_save_v370';
+const legacyKeys = ['vfm_gold_save_v360', 'vfm_gold_save_v350', 'vfm_gold_save_v340', 'vfm_gold_save_v330', 'vfm_gold_save_v320', 'vfm_gold_save_v310', 'vfm_gold_save_v300', 'vfm_gold_save_v290', 'vfm_gold_save_v280', 'vfm_gold_save_v270', 'vfm_gold_save_v262', 'vfm_gold_save_v261', 'vfm_gold_save_v260', 'vfm_gold_save_v251', 'vfm_gold_save_v240', 'vfm_gold_save_v230', 'vfm_gold_save_v220', 'vfm_gold_save_v210', 'vfm_gold_save_v200', 'vfm_gold_save_v190', 'vfm_gold_save_v180', 'vfm_gold_save_v170', 'vfm_gold_save_v160', 'vfm_gold_save_v150', 'vfm_gold_save_v140', 'vfm_gold_save_v130', 'vfm_gold_save_v120', 'vfm_gold_save_v110', 'vfm_gold_save_v100', 'vfm_gold_save_v090', 'vfm_gold_save_v080', 'vfm_gold_save_v050', 'vfm_gold_save_v040', 'vfm_gold_save_v030', 'vfm_gold_save_v020', 'vfm_gold_save_v010'];
 export const defaultState = () => ({
   route:'cover',
   manager:{ name:'Joao Victor', country:'br', avatar:'assets/avatars/manager-01.png', reputation:82, mode:'career' },
   clubId:'santos', season:2026, month:'Maio', money:92.5, coins:250, notifications:6, boardTrust:76, fanMood:82, jobSecurity:'Seguro',
   match:{ id:'2026-05-24-santos-palmeiras', date:'2026-05-24', competitionId:'brasileirao-a', competition:'Brasileirão Série A 2026', stage:'Rodada atual', minute:1, home:'santos', away:'palmeiras', homeGoals:0, awayGoals:0, speed:1, autoPlay:false, finalized:false, postMatchReady:false, substitutions:[], maxSubs:5, decision:'balanced', tacticalBoost:0, usedSubPlayers:[], postMatchReport:null },
-  career:{ currentDate:'2026-05-19', matchday:1, completedMatches:[], lastResult:null, promotionRelegation:{serieARelegation:4,serieBPromotion:4,libertadoresTop:4}, integrationLog:['Carreira migrada para v3.2.0 com propostas de clubes, carreira internacional, convocacao e calendario FIFA.'], jobOffers:[], offerHistory:[], nationalTeamJob:null, dualCareer:{enabled:false, club:true, nationalTeam:null}, callUpSelection:defaultCallUpSelection(), internationalCalendar:buildInternationalCalendar(2026), worldCompetitionCycle:{libertadores:true,sulamericana:true,clubWorldCupCycle:4,worldCupCycle:4,lastUpdated:'v3.4.0'}, financeReport:{profile:'balanced', lastMonthlyCycle:null, crisisLog:[], boardWarnings:[], sponsorReview:'v3.4.0'} },
-  gameplay:{ difficulty:'realistic', aiVersion:'v3.4.0', realism:88, variance:18, balanceLog:[] },
-  stability:{ autosave:true, lastBackup:null, backupCount:0, lastExport:null, lastImport:null, safeModeEvents:0, health:'Excelente', auditVersion:'v3.4.0', commercialAudit:'v3.4.0-ok', fullscreenMobile:true, overflowGuard:true, rosterSafeMode:true, matchEngineSafeMode:true },
+  career:{ currentDate:'2026-05-19', matchday:1, completedMatches:[], lastResult:null, promotionRelegation:{serieARelegation:4,serieBPromotion:4,libertadoresTop:4}, integrationLog:['Carreira migrada para v3.2.0 com propostas de clubes, carreira internacional, convocacao e calendario FIFA.'], jobOffers:[], offerHistory:[], nationalTeamJob:null, dualCareer:{enabled:false, club:true, nationalTeam:null}, callUpSelection:defaultCallUpSelection(), internationalCalendar:buildInternationalCalendar(2026), worldCompetitionCycle:{libertadores:true,sulamericana:true,clubWorldCupCycle:4,worldCupCycle:4,lastUpdated:'v3.5.0'}, financeReport:{profile:'balanced', lastMonthlyCycle:null, crisisLog:[], boardWarnings:[], sponsorReview:'v3.5.0'} },
+  gameplay:{ difficulty:'realistic', aiVersion:'v3.7.0', realism:88, variance:18, balanceLog:[] },
+  stability:{ autosave:true, lastBackup:null, backupCount:0, lastExport:null, lastImport:null, safeModeEvents:0, health:'Excelente', auditVersion:'v3.7.0', commercialAudit:'v3.7.0-ok', fullscreenMobile:true, overflowGuard:true, rosterSafeMode:true, matchEngineSafeMode:true },
   roster:{ meta: defaultRosterMeta, players: defaultRosterPlayers, lastImport:null, lastExport:null, validationLog:['Elenco base Santos 2026 carregado com proteção anti-quebra.'] },
-  finance:{profile:'balanced', lastMonthlyCycle:null, crisisLog:[], boardWarnings:[], sponsorReview:'v3.4.0'},
-  transfer:{ budget:42.8, wageRoom:2.4, negotiationLog:[], activeNegotiations:[], acceptedDeals:[], rejectedDeals:[], outgoingDeals:[], renewals:[], loanDeals:[], incomingOffers:[], aiDeals:[], windowOpen:true, boardApproval:82, marketDay:1 },
+  finance:{profile:'balanced', lastMonthlyCycle:null, crisisLog:[], boardWarnings:[], sponsorReview:'v3.5.0'},
+  transfer:{ budget:42.8, wageRoom:2.4, negotiationLog:[], activeNegotiations:[], acceptedDeals:[], rejectedDeals:[], outgoingDeals:[], renewals:[], loanDeals:[], incomingOffers:[], aiDeals:[], agentEvents:[], smartReports:[], windowOpen:true, boardApproval:82, marketDay:1, intelligenceVersion:'v3.7.0' },
   ui:{ selectedAvatar:'assets/avatars/manager-01.png', selectedMode:'career', selectedCountry:'br', selectedClub:'santos', teamCountryFilter:'all', teamLeagueFilter:'all', teamSort:'level', standingsCompetition:'brasileirao-a', selectedFormation:'433-possession', tacticalProfile:'possession', trainingTheme:'possession', transferFilter:'all', squadView:'best', captainId:'neymar', penaltyTakerId:'neymar', freeKickTakerId:'neymar', cornerTakerId:'gabriel-menino' }
 });
 let state = defaultState();
@@ -75,6 +76,9 @@ function normalize(next){
   if(!Array.isArray(merged.transfer.loanDeals)) merged.transfer.loanDeals = [];
   if(!Array.isArray(merged.transfer.incomingOffers)) merged.transfer.incomingOffers = [];
   if(!Array.isArray(merged.transfer.aiDeals)) merged.transfer.aiDeals = [];
+  if(!Array.isArray(merged.transfer.agentEvents)) merged.transfer.agentEvents = [];
+  if(!Array.isArray(merged.transfer.smartReports)) merged.transfer.smartReports = [];
+  merged.transfer.intelligenceVersion = String(merged.transfer.intelligenceVersion || 'v3.7.0');
   if(typeof merged.transfer.windowOpen !== 'boolean') merged.transfer.windowOpen = true;
   merged.transfer.boardApproval = Math.max(0, Math.min(100, Number(merged.transfer.boardApproval || 82)));
   merged.transfer.marketDay = Math.max(1, Number(merged.transfer.marketDay || 1));
@@ -310,6 +314,7 @@ export function openTransferNegotiation(playerId){
   const target = findTarget(playerId);
   if(!target){ transferLog('Negociação bloqueada: atleta não encontrado no radar.'); persist(); return false; }
   const transfer = {...(state.transfer || defaultState().transfer)};
+  const intelligence = buildMarketIntelligence(state, transferShortlist).targets.find(p=>p.id===target.id)?.intelligence;
   if(transfer.acceptedDeals.some(d=>d.id===target.id)){ transferLog(`Negociação bloqueada: ${target.name} já foi contratado.`); persist(); return false; }
   let active = Array.isArray(transfer.activeNegotiations) ? [...transfer.activeNegotiations] : [];
   const existing = active.find(n=>n.id===target.id);
@@ -322,7 +327,7 @@ export function openTransferNegotiation(playerId){
     existing.stage = 'Contraproposta enviada';
     existing.next = existing.chance >= 78 ? 'Pode aceitar com bônus por metas' : 'Aumentar luvas ou reduzir risco';
   } else {
-    active.push({id:target.id, player:target.name, type:target.value===0?'Livre':'Compra', stage:'Proposta formal enviada', chance:Math.max(35, Math.min(92, target.interest - 8)), offer:baseOffer, demand:target.value, wageOffer, wageDemand:target.wage, next:'Aguardar resposta do empresário'});
+    active.push({id:target.id, player:target.name, type:target.value===0?'Livre':'Compra', stage:'Proposta formal enviada', chance:intelligence?.score || Math.max(35, Math.min(92, target.interest - 8)), offer:baseOffer, demand:target.value, wageOffer:intelligence?.wageDemand || wageOffer, wageDemand:intelligence?.wageDemand || target.wage, next:intelligence?.recommendation || 'Aguardar resposta do empresário', agent:intelligence?.agent?.name || 'Agente local', motivation:intelligence?.motivation?.label || 'Projeto esportivo'});
   }
   transfer.activeNegotiations = active;
   transferLog(`Proposta enviada por ${target.name}.`);
@@ -464,6 +469,49 @@ export function toggleTransferWindow(){
   state = normalize({...state, transfer});
   transferLog(`Janela de transferências ${transfer.windowOpen ? 'aberta' : 'fechada'} pelo modo de teste seguro.`);
   persist();
+}
+
+
+export function generateSmartIncomingOffer(){
+  const transfer = {...(state.transfer || defaultState().transfer)};
+  const offer = createSmartIncomingOffer(state, outgoingList, aiClubProfiles);
+  if((transfer.incomingOffers||[]).some(o=>o.id===offer.id)){
+    transferLog('Radar inteligente não encontrou nova proposta neste ciclo.');
+    persist();
+    return false;
+  }
+  transfer.incomingOffers = [...(transfer.incomingOffers||[]), offer].slice(-10);
+  transfer.marketDay = Number(transfer.marketDay || 1) + 1;
+  transfer.smartReports = [...(transfer.smartReports||[]), {type:'incoming', title:`Proposta inteligente por ${offer.player}`, detail:`${offer.buyer} oferece € ${Number(offer.value||0).toFixed(1)}M. Risco moral: ${offer.moraleRisk}.`, date:offer.id}].slice(-12);
+  state = normalize({...state, transfer, notifications:Number(state.notifications||0)+1});
+  transferLog(`Proposta inteligente recebida: ${offer.buyer} por ${offer.player}.`);
+  persist();
+  return true;
+}
+
+export function simulateSmartAIMarket(){
+  const transfer = {...(state.transfer || defaultState().transfer)};
+  const deal = createIntelligentAIDeal(state, transferShortlist.concat(loanTargets||[]), aiClubProfiles);
+  transfer.aiDeals = [...(transfer.aiDeals||[]), deal].slice(-14);
+  transfer.marketDay = Number(transfer.marketDay || 1) + 1;
+  transfer.smartReports = [...(transfer.smartReports||[]), {type:'ai', title:`IA: ${deal.to} contratou ${deal.player}`, detail:`Motivo: ${deal.reason}. Encaixe ${deal.fit}%.`, date:deal.id}].slice(-12);
+  state = normalize({...state, transfer});
+  transferLog(`Mercado inteligente IA: ${deal.to} fechou ${deal.player} por € ${Number(deal.fee||0).toFixed(1)}M.`);
+  persist();
+  return true;
+}
+
+export function triggerAgentEvent(){
+  const transfer = {...(state.transfer || defaultState().transfer)};
+  const ev = nextAgentEvent(state);
+  transfer.agentEvents = [...(transfer.agentEvents||[]), ev].slice(-8);
+  if(ev.effect === 'morale') state.fanMood = Math.max(0, Number(state.fanMood||80) - 1);
+  if(ev.effect === 'board') transfer.boardApproval = Math.max(0, Number(transfer.boardApproval||82) - 2);
+  transfer.smartReports = [...(transfer.smartReports||[]), {type:'agent', title:ev.title, detail:`Evento de mercado: ${ev.effect} · severidade ${ev.severity}.`, date:ev.id}].slice(-12);
+  state = normalize({...state, transfer, notifications:Number(state.notifications||0)+1});
+  transferLog(`Evento de empresário: ${ev.title}.`);
+  persist();
+  return true;
 }
 
 

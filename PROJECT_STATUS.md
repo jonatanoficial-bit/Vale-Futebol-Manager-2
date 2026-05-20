@@ -1,28 +1,26 @@
-# PROJECT_STATUS.md
+# Project Status — v3.6.0
 
-## Vale Futebol Manager: Gold Edition
+Status: jogo em fase avançada com pacote de dados 2026, manutenção segura de elencos e suporte a fotos futuras por jogador.
 
-**Build atual:** v3.4.0  
-**Status:** Polimento premium e primeira fase AAA de UX concluida.  
-**Hospedagem:** GitHub Pages / Vercel.  
-**Tipo:** Site estatico mobile-first.
+## Destaques v3.6.0
+- Central Dados 2026 adicionada ao lobby.
+- Série A/Série B 2026 auditáveis.
+- Arquivo de elenco por clube.
+- Templates anti-quebra para clubes sem elenco real conferido.
+- Caminho oficial de avatar/foto de jogador por clube.
+- Documentação REAL_DATA_2026_GUIDE.md.
 
-## Sistemas presentes
-- Carreira de clube.
-- Temporada com tabela e calendario competitivo.
-- Transferencias funcionais.
-- Elenco, taticas e escalação.
-- Motor de partida profundo.
-- Propostas de clubes e selecoes.
-- Competições globais.
-- Economia, diretoria e patrocinios.
-- Biblioteca visual dinamica.
-- Central de saves.
-- Polimento AAA e auditoria visual.
+## Próximo passo sugerido
+v3.7.0 — Mercado inteligente e empresários.
 
-## Proximos passos sugeridos
-1. Categorias de base e scouting jovem.
-2. Banco global de jogadores por liga.
-3. Sons, animacoes e feedback premium.
-4. Expansao de ligas internacionais.
-5. APK Android futuro.
+
+## Build v3.7.0 - Mercado Inteligente
+- Adicionada central Mercado Inteligente no lobby.
+- Incluido motor de empresarios, preferencias de jogadores, propostas inteligentes e mercado IA.
+- Save migrado para vfm_gold_save_v370 com fallbacks anti-quebra.
+- Auditoria JS/JSON pendente de execucao no empacotamento.
+
+## Status v3.7.0
+O jogo agora possui uma camada de mercado inteligente: empresarios, motivacao de jogadores, clubes IA comprando por necessidade, risco moral em propostas recusadas e central visual de leitura do mercado.
+
+Proxima fase recomendada: v3.8.0 - Categorias de base e scouting profundo.

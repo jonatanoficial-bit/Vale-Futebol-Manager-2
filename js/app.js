@@ -16,13 +16,13 @@ import { runtimeSafetySnapshot } from './systems/uxEngine.js';
 
 async function boot(){
   const app = document.getElementById('app');
-  let buildInfo = { buildLabel:'Build v3.4.0' };
+  let buildInfo = { buildLabel:'Build v3.7.0' };
   try { buildInfo = await (await fetch('build/build-info.json', {cache:'no-store'})).json(); } catch(err) { console.warn('[VFM] build-info fallback', err); }
   await loadAssetMap();
   await loadVisualLibrary();
   applyCommercialPolish();
   load();
-  runRuntimeAudit(getState(), {phase:'v3.4.0 boot', ux: runtimeSafetySnapshot(getState())});
+  runRuntimeAudit(getState(), {phase:'v3.7.0 boot', ux: runtimeSafetySnapshot(getState())});
   validateCommercialState(getState());
   initRouter(app, buildInfo);
   register('cover', cover);
@@ -36,6 +36,8 @@ async function boot(){
     seasonCenter:['Temporada','Tabela viva, rodada completa, acesso, queda e vagas continentais'],
     financeCenter:['Economia','Diretoria, orçamento, patrocínio e crise financeira realista'],
     polishCenter:['Polimento AAA','Auditoria visual, UX mobile, performance e prontidão comercial'],
+    mobileAudit:['Auditoria Mobile','Fluxo real, smoke test de rotas, pós-jogo, save e estabilidade'],
+    data2026:['Dados 2026','Divisões, elencos, avatares de jogadores e manutenção segura'],
     worldCompetitions:['Competições Globais','Libertadores, Sul-Americana, Mundial de Clubes e calendário de seleções'],
     championship:['Campeonato','Competições e agenda anual'],
     calendar:['Calendário','Agenda completa da temporada'],
@@ -44,6 +46,7 @@ async function boot(){
     training:['Treino','Plano semanal e evolução'],
     standings:['Classificação','Tabelas e estatísticas'],
     transfers:['Transferências','Mercado, contratos e negociações'],
+    smartMarket:['Mercado Inteligente','Empresários, propostas rivais, IA de clubes e disputa por atletas'],
     staff:['Staff','Comissão técnica e funcionários'],
     sponsorship:['Patrocínio','Receitas comerciais e propostas'],
     club:['Clube','Resumo institucional e financeiro'],

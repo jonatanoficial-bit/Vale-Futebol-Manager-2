@@ -1,4 +1,4 @@
-import { getState, setState, setManager, setUI, startCareer, advanceMatch, finishMatch, setMatchSpeed, makeSubstitution, setMatchDecision, openTransferNegotiation, acceptTransferDeal, rejectTransferDeal, sellOutgoingPlayer, renewPlayerContract, loanTransferPlayer, generateIncomingOffer, respondIncomingOffer, simulateAIMarket, toggleTransferWindow, setMatchAutoPlay, autoSelectBestLineup, setCaptain, setSetPieceTaker, applyRotationPlan, createManualBackup, restoreManualBackup, exportSaveText, importSaveText, toggleAutosave, exportRosterText, importRosterText, resetRosterToDefault, sampleRosterText, generateCareerOffers, respondCareerOffer, registerNationalInterest, toggleCallUpPlayer, finalizeNationalCallUp } from './state.js';
+import { getState, setState, setManager, setUI, startCareer, advanceMatch, finishMatch, setMatchSpeed, makeSubstitution, setMatchDecision, openTransferNegotiation, acceptTransferDeal, rejectTransferDeal, sellOutgoingPlayer, renewPlayerContract, loanTransferPlayer, generateIncomingOffer, respondIncomingOffer, simulateAIMarket, toggleTransferWindow, generateSmartIncomingOffer, simulateSmartAIMarket, triggerAgentEvent, setMatchAutoPlay, autoSelectBestLineup, setCaptain, setSetPieceTaker, applyRotationPlan, createManualBackup, restoreManualBackup, exportSaveText, importSaveText, toggleAutosave, exportRosterText, importRosterText, resetRosterToDefault, sampleRosterText, generateCareerOffers, respondCareerOffer, registerNationalInterest, toggleCallUpPlayer, finalizeNationalCallUp } from './state.js';
 const routes = new Map(); let rootEl = null; let buildInfo = null;
 export function register(name, renderer){ routes.set(name, renderer); }
 export function initRouter(root, build){ rootEl = root; buildInfo = build; }
@@ -8,8 +8,8 @@ export function render(){
   try { rootEl.innerHTML = renderer(state); wire(rootEl); fillBuildBadges(); }
   catch(err){ console.error('[VFM] erro na tela, tela segura acionada', err); rootEl.innerHTML = `<main class="screen"><div class="module-placeholder"><h1>Modo seguro</h1><p>Uma tela apresentou erro, mas o jogo continua funcionando.</p><button class="main-btn" data-route="lobby">Voltar ao lobby</button></div>${build()}</main>`; wire(rootEl); }
 }
-function build(){ return `<div class="build-badge">${buildInfo?.buildLabel || 'Build v3.4.0'}</div>`; }
-function fillBuildBadges(){ rootEl.querySelectorAll('#buildBadge,.build-badge').forEach(el=>{ if(!el.textContent.trim()) el.textContent = buildInfo?.buildLabel || 'Build v3.4.0'; }); }
+function build(){ return `<div class="build-badge">${buildInfo?.buildLabel || 'Build v3.7.0'}</div>`; }
+function fillBuildBadges(){ rootEl.querySelectorAll('#buildBadge,.build-badge').forEach(el=>{ if(!el.textContent.trim()) el.textContent = buildInfo?.buildLabel || 'Build v3.7.0'; }); }
 function wire(scope){
   scope.querySelectorAll('[data-route]').forEach(btn => btn.addEventListener('click', () => go(btn.dataset.route)));
 
@@ -62,6 +62,9 @@ function wire(scope){
   scope.querySelectorAll('[data-action="transfer-offer-reject"]').forEach(btn => btn.addEventListener('click', () => { respondIncomingOffer(btn.dataset.offer, 'reject'); render(); }));
   scope.querySelectorAll('[data-action="transfer-ai-sim"]').forEach(btn => btn.addEventListener('click', () => { simulateAIMarket(); render(); }));
   scope.querySelectorAll('[data-action="transfer-window-toggle"]').forEach(btn => btn.addEventListener('click', () => { toggleTransferWindow(); render(); }));
+  scope.querySelectorAll('[data-action="transfer-smart-offer"]').forEach(btn => btn.addEventListener('click', () => { generateSmartIncomingOffer(); render(); }));
+  scope.querySelectorAll('[data-action="transfer-smart-ai"]').forEach(btn => btn.addEventListener('click', () => { simulateSmartAIMarket(); render(); }));
+  scope.querySelectorAll('[data-action="transfer-agent-event"]').forEach(btn => btn.addEventListener('click', () => { triggerAgentEvent(); render(); }));
 
   scope.querySelectorAll('[data-action="match-decision"]').forEach(btn => btn.addEventListener('click', () => { setMatchDecision(btn.dataset.decision); render(); }));
 

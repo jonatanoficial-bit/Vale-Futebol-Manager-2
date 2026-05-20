@@ -13,7 +13,7 @@ export function buildUXAudit(state={}){
   if(!gameplayOk) rows.push({area:'Loop de gameplay',status:'Atenção',score:72,detail:'Algum sistema de gameplay nao retornou estado esperado.'});
   const avg = Math.round(rows.reduce((sum,item)=>sum + item.score, 0) / Math.max(1, rows.length));
   return {
-    version:'v3.4.0',
+    version:'v3.5.0',
     score: Math.min(releaseReadiness.score, avg),
     blockers: rows.filter(r => r.score < 75).length,
     status: rows.some(r=>r.score<75) ? 'Modo seguro recomendado' : 'Pronto para teste comercial',

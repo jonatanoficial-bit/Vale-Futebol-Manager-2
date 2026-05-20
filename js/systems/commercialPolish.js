@@ -1,5 +1,5 @@
 export const commercialQuality = {
-  version: 'v3.4.0',
+  version: 'v3.5.0',
   status: 'Polimento premium AAA aplicado',
   mobile: { fullscreen: true, safeArea: true, touchMinimum: 44, overflowGuard: true },
   visual: { cards: 'premium', contrast: 'high', hierarchy: 'commercial', shadows: 'soft-gold' },
@@ -20,7 +20,7 @@ export function applyCommercialPolish(){
     installButtonGuards();
     return true;
   } catch(err){
-    console.warn('[VFM v3.4.0] polimento comercial aplicado em modo seguro', err);
+    console.warn('[VFM v3.5.0] polimento comercial aplicado em modo seguro', err);
     return false;
   }
 }
@@ -57,5 +57,5 @@ export function validateCommercialState(state={}){
   if(!state.match) issues.push('match ausente');
   if(!state.career) issues.push('career ausente');
   if(!state.ui) issues.push('ui ausente');
-  return { ok: issues.length === 0, issues, checkedAt: new Date().toISOString(), version:'v3.4.0' };
+  return { ok: issues.length === 0, issues, checkedAt: new Date().toISOString(), version:'v3.5.0' };
 }

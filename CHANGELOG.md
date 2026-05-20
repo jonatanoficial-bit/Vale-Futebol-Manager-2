@@ -107,3 +107,10 @@ IA e balanceamento esportivo.
 - Auditoria visual e tecnica interna.
 - Responsividade mobile fullscreen refinada.
 - Performance e fallbacks revisados para GitHub/Vercel.
+
+
+## Build v3.7.0 - Mercado Inteligente
+- Adicionada central Mercado Inteligente no lobby.
+- Incluido motor de empresarios, preferencias de jogadores, propostas inteligentes e mercado IA.
+- Save migrado para vfm_gold_save_v370 com fallbacks anti-quebra.
+- Auditoria JS/JSON pendente de execucao no empacotamento.

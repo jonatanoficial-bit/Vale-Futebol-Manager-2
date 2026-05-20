@@ -2,14 +2,14 @@ const storageKey = 'vfm_gold_audit_log_v251';
 
 export function auditLog(event='boot', payload={}){
   try {
-    const row = {event, payload, at:new Date().toISOString(), version:'v3.4.0'};
+    const row = {event, payload, at:new Date().toISOString(), version:'v3.5.0'};
     const current = JSON.parse(localStorage.getItem(storageKey) || '[]');
     current.push(row);
     localStorage.setItem(storageKey, JSON.stringify(current.slice(-50)));
     return row;
   } catch(err){
     console.warn('[VFM Audit] log indisponivel', err);
-    return {event, payload, at:'offline', version:'v3.4.0'};
+    return {event, payload, at:'offline', version:'v3.5.0'};
   }
 }
 

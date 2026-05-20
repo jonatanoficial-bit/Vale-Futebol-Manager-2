@@ -7,6 +7,7 @@ import { competitions, seasonMonths, schedule, calendarDays, eventTitle, eventCl
 import { trainingThemes, weeklyPlan, developmentFocus, trainingStaffImpact, trainingAlerts } from '../data/trainingData.js';
 import { staffBudget, currentStaff, staffCandidates, staffDepartmentKpis, sponsorsOverview, activeSponsors, sponsorProposals, financeSnapshot } from '../data/staffData.js';
 import { transferWindow, transferShortlist, outgoingList, negotiations, scoutingReports, contractRules, renewalTargets, boardTransferPolicy, loanTargets, aiClubProfiles, agentEvents } from '../data/transferData.js';
+import { negotiationRules, marketEvents } from '../data/marketIntelligenceData.js';
 import { inboxMessages, careerProfile, jobOffers, nationalTeams, callUpPool, seasonObjectives } from '../data/careerData.js';
 import { difficultyProfiles, aiWeights, leaguePaceProfiles, balanceDiagnostics, aiTuningNotes } from '../data/balanceData.js';
 import { stabilityChecklist, savePolicies } from '../data/stabilityData.js';
@@ -19,6 +20,10 @@ import { financeProfiles } from '../data/financeData.js';
 import { buildFinanceSnapshot, boardObjectiveStatus, financeEventFeed } from '../systems/financeEngine.js';
 import { uxAuditChecklist, premiumPolishNotes, releaseReadiness } from '../data/uxData.js';
 import { buildUXAudit } from '../systems/uxEngine.js';
+import { regressionFixesV350 } from '../data/mobileAuditData.js';
+import { buildMobileAuditReport, buildRouteSmokeMatrix, buildDeviceChecklist } from '../systems/mobileAuditEngine.js';
+import { buildDataAudit, dataQualityLabel, exportRosterTemplateText } from '../systems/realDataEngine.js';
+import { buildMarketIntelligence, getExpandedTargets } from '../systems/marketIntelligenceEngine.js';
 export function moduleScreen(route,title,subtitle,state){
   const extra = content(route, state);
   return screenWrap(route, `${topbar(title,subtitle,'lobby')}${clubHeader(state)}${extra}`, true);
@@ -67,6 +72,8 @@ function content(route,state={}){
   if(route==='worldCompetitions') return worldCompetitionsScreenV320(state);
   if(route==='financeCenter') return financeCenterScreenV330(state);
   if(route==='polishCenter') return polishCenterScreenV340(state);
+  if(route==='mobileAudit') return mobileAuditScreenV350(state);
+  if(route==='data2026') return data2026ScreenV360(state);
   if(route==='visualLibrary') return visualLibraryScreen(state);
   if(route==='rosterUpdate') return rosterUpdateScreen(state, squadPlayers, squadSummary, rosterMeta);
   if(route==='assetChecklist') return assetChecklistScreen(state);
@@ -96,6 +103,7 @@ function content(route,state={}){
     </section>`;
   }
   if(route==='transfers') return transfersScreen(state);
+  if(route==='smartMarket') return smartMarketScreenV370(state);
   if(route==='messages') return messagesScreenV310(state);
   if(route==='careerOffers') return careerOffersScreenV310(state);
   if(route==='nationalTeam') return nationalTeamScreenV310(state);
@@ -471,7 +479,7 @@ function transfersScreen(state={}){
   const rules = [...contractRules, ...boardTransferPolicy].map(r=>`<div class="stat-line"><span>${r.label}</span><strong>${r.value}</strong></div>`).join('');
   const log = (transferState.negotiationLog||[]).slice(-8).reverse().map(l=>`<div class="mail-row compact"><strong>${l.message || l}</strong><small>${l.time ? new Date(l.time).toLocaleString('pt-BR') : 'Registro local'}</small></div>`).join('') || '<p class="small">Nenhuma negociação registrada nesta sessão.</p>';
   return `<section class="transfers-v280">
-    <div class="panel transfer-hero"><div><span class="tag">Mercado profundo v2.8</span><h1>Central de transferências funcional</h1><p class="small">Compra, venda, empréstimo, propostas recebidas, renovações, janela aberta/fechada, orçamento, folha, bloqueio da diretoria e mercado IA dos outros clubes.</p></div><div class="row gap"><button class="secondary-btn" data-action="transfer-window-toggle">${transferState.windowOpen?'Fechar janela teste':'Abrir janela teste'}</button><button class="main-btn" data-route="contracts">Ver contratos</button></div></div>
+    <div class="panel transfer-hero"><div><span class="tag">Mercado profundo v3.7</span><h1>Central de transferências funcional</h1><p class="small">Compra, venda, empréstimo, propostas recebidas, renovações, janela, orçamento, folha, empresários, preferências de jogadores e mercado IA inteligente.</p></div><div class="row gap"><button class="secondary-btn" data-action="transfer-window-toggle">${transferState.windowOpen?'Fechar janela teste':'Abrir janela teste'}</button><button class="secondary-btn" data-route="smartMarket">Mercado inteligente</button><button class="main-btn" data-route="contracts">Ver contratos</button></div></div>
     <section class="grid desktop-4"><div class="card kpi-card"><span>Janela</span><strong>${transferState.windowOpen?'Aberta':'Fechada'}</strong><small>${transferWindow.daysLeft} dias restantes</small></div><div class="card kpi-card"><span>Orçamento vivo</span><strong>€ ${Number(transferState.budget).toFixed(1)}M</strong><small>limite seguro € ${transferWindow.boardLimit.toFixed(1)}M</small></div><div class="card kpi-card"><span>Folha livre</span><strong>€ ${Number(transferState.wageRoom).toFixed(2)}M</strong><small>bloqueio automático</small></div><div class="card kpi-card"><span>Aprovação diretoria</span><strong>${Number(transferState.boardApproval||82)}%</strong><small>risco financeiro controlado</small></div></section>
     <section class="grid grid-2 transfer-layout"><article class="panel transfer-market"><div class="row space"><div><span class="tag">Radar</span><h2>Alvos de compra e empréstimo</h2></div><div class="filter-row">${filters}</div></div><div class="transfer-list">${cards}</div></article>
     <article class="panel"><div class="row space"><div><span class="tag">Negociações</span><h2>Em andamento</h2></div><span class="status-pill">Estado real</span></div><div class="negotiation-list">${negRows}</div><div class="transfer-note"><strong>Necessidades da diretoria:</strong> ${transferWindow.needs.join(', ')}.</div><div class="news-list">${events}</div></article></section>
@@ -721,3 +729,64 @@ function polishCenterScreenV340(state={}){
   </section>`;
 }
 
+
+
+function smartMarketScreenV370(state={}){
+  const intelligence = buildMarketIntelligence(state, transferShortlist.concat(loanTargets||[]));
+  const best = intelligence.best;
+  const targetRows = intelligence.targets.slice(0,10).map(p=>`<article class="transfer-card smart-card ${p.intelligence.score>=78?'priority':''}">
+    <div class="transfer-face">${safeImg(p.photo,'player',p.name,'player-face')}</div>
+    <div class="transfer-main"><div class="row space"><div><strong>${p.name}</strong><small>${p.pos} · ${p.age} anos · ${p.club}</small></div><span class="status-pill">Fit ${p.intelligence.score}%</span></div>
+      <p>${p.role || 'Atleta monitorado'} · ${p.intelligence.recommendation}</p>
+      <div class="transfer-metrics"><span>Agente <b>${p.intelligence.agent.name}</b></span><span>Motivo <b>${p.intelligence.motivation.label}</b></span><span>Necessidade <b>${p.intelligence.need?'Sim':'Não'}</b></span></div>
+    </div>
+    <div class="transfer-price"><strong>€ ${Number(p.value||0).toFixed(1)}M</strong><small>Salário pedido € ${p.intelligence.wageDemand.toFixed(2)}M</small><div class="transfer-actions"><button class="secondary-btn mini" data-action="transfer-negotiate" data-player="${p.id}">Negociar</button><button class="main-btn mini" data-action="transfer-accept" data-player="${p.id}">Tentar compra</button></div></div>
+  </article>`).join('');
+  const reports = (state.transfer?.smartReports || []).slice().reverse().map(r=>`<div class="news-item"><strong>${r.title}</strong><span>${r.detail}</span></div>`).join('') || '<p class="small">Nenhum relatório inteligente ainda. Gere proposta, evento de empresário ou mercado IA.</p>';
+  const agentRows = (state.transfer?.agentEvents || []).slice().reverse().map(e=>`<div class="timeline-row"><strong>•</strong><span>${e.title}</span><small>${e.severity || e.effect}</small></div>`).join('') || '<p class="small">Sem pressão de empresários registrada.</p>';
+  const ruleRows = negotiationRules.map(r=>`<li>${r}</li>`).join('');
+  const eventRows = marketEvents.map(e=>`<div class="stat-line"><span>${e.title}</span><strong>${e.severity}</strong></div>`).join('');
+  return `<section class="smart-market-v370 stack">
+    <div class="panel transfer-hero"><div><span class="tag">v3.7.0 · mercado inteligente</span><h1>Empresários, IA de clubes e disputa real por atletas</h1><p class="small">Esta central transforma o mercado em sistema vivo: jogador avalia projeto, agente pressiona, diretoria controla verba, clubes rivais compram por necessidade e propostas recusadas podem gerar consequência.</p></div><div class="hero-actions"><button class="main-btn" data-action="transfer-smart-offer">Gerar proposta inteligente</button><button class="secondary-btn" data-action="transfer-smart-ai">Simular mercado IA</button><button class="secondary-btn" data-action="transfer-agent-event">Evento de empresário</button></div></div>
+    <section class="grid desktop-4"><div class="card kpi-card"><span>Orçamento</span><strong>€ ${intelligence.budget.toFixed(1)}M</strong><small>mercado aprovado</small></div><div class="card kpi-card"><span>Folha livre</span><strong>€ ${intelligence.wageRoom.toFixed(2)}M</strong><small>salário mensal</small></div><div class="card kpi-card"><span>Necessidades</span><strong>${intelligence.needs.join(' · ')}</strong><small>perfil do elenco</small></div><div class="card kpi-card"><span>Pressão</span><strong>${intelligence.pressure}%</strong><small>empresários/diretoria</small></div></section>
+    <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Recomendação</span><h2>Melhor oportunidade agora</h2></div><strong class="grade">${best?.intelligence?.score || 0}</strong></div>${best?`<div class="candidate-card"><div>${safeImg(best.photo,'player',best.name,'player-face')}<h3>${best.name}</h3><p>${best.pos} · ${best.club} · ${best.intelligence.recommendation}</p><small>${best.intelligence.motivation.effect}</small></div><button class="main-btn mini" data-action="transfer-negotiate" data-player="${best.id}">Abrir negociação</button></div>`:'<p class="small">Sem alvo recomendado.</p>'}<ul class="premium-list bullets">${ruleRows}</ul></article>
+    <article class="panel"><div class="row space"><div><span class="tag">Eventos</span><h2>Riscos de mercado</h2></div><span class="status-pill">dinâmico</span></div>${eventRows}<div class="timeline-list">${agentRows}</div></article></section>
+    <section class="grid grid-2"><article class="panel transfer-market"><div class="row space"><div><span class="tag">Radar inteligente</span><h2>Alvos por encaixe real</h2></div><button class="secondary-btn mini" data-route="transfers">Central clássica</button></div><div class="transfer-list">${targetRows}</div></article><article class="panel"><div class="row space"><div><span class="tag">Relatórios</span><h2>Diário inteligente de mercado</h2></div><span class="status-pill">save persistente</span></div><div class="news-list compact">${reports}</div></article></section>
+  </section>`;
+}
+
+
+function mobileAuditScreenV350(state={}){
+  const report = buildMobileAuditReport(state);
+  const routeRows = buildRouteSmokeMatrix().map(r=>`<div class="route-smoke-row ${r.risk.toLowerCase()}"><div><strong>${r.label}</strong><small>Rota: ${r.route} · Risco ${r.risk}</small></div><button class="secondary-btn mini" data-route="${r.route}">Abrir</button><em>${r.status}</em></div>`).join('');
+  const auditRows = report.rows.map(r=>`<div class="ux-audit-row ${r.score>=90?'ok':r.score>=80?'warn':'danger'}"><div><strong>${r.area}</strong><small>${r.detail}</small></div><b>${r.score}%</b><em>${r.ok?'OK':'Monitorar'}</em><div class="meter"><span style="width:${r.score}%"></span></div></div>`).join('');
+  const flowRows = report.flows.map(f=>`<article class="card flow-card"><div class="row space"><div><span class="tag">${f.scope}</span><h3>${f.title}</h3></div><strong>${f.steps.length}</strong></div><ol>${f.steps.map(step=>`<li>${step}</li>`).join('')}</ol><p class="small">Resultado esperado: ${f.expected}</p></article>`).join('');
+  const deviceRows = buildDeviceChecklist().map(d=>`<article class="card device-card"><div class="row space"><div><strong>${d.name}</strong><small>${d.width}x${d.height} · prioridade ${d.priority}</small></div><span class="tag">${d.minTap}px</span></div><ul class="premium-list bullets">${d.checks.map(c=>`<li>${c}</li>`).join('')}</ul></article>`).join('');
+  const fixes = regressionFixesV350.map(x=>`<li>${x}</li>`).join('');
+  return `<section class="mobile-audit-v350 stack">
+    <div class="panel polish-hero"><div><span class="tag">v3.5.0 · auditoria real de jogabilidade mobile</span><h1>Central de Teste Real</h1><p class="small">Esta build estabiliza o fluxo completo do jogo antes de novos sistemas grandes: novo jogo, escolha de clube, partida automática, pós-jogo, tabela, transferências, save e navegação mobile.</p></div><div class="release-score"><strong>${report.score}%</strong><small>${report.status}</small></div></div>
+    <section class="grid desktop-4"><div class="card kpi-card"><span>Bloqueios</span><strong>${report.blockers}</strong><small>meta: zero</small></div><div class="card kpi-card"><span>Avisos</span><strong>${report.warnings}</strong><small>pontos de observação</small></div><div class="card kpi-card"><span>Rotas críticas</span><strong>${report.routes.length}</strong><small>smoke test manual</small></div><div class="card kpi-card"><span>Dispositivos</span><strong>${report.devices.length}</strong><small>perfis mobile/desktop</small></div></section>
+    <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Diagnóstico</span><h2>Estado atual da carreira</h2></div><span class="status-pill">${report.recommendation}</span></div><div class="ux-audit-list">${auditRows}</div></article><article class="panel"><div class="row space"><div><span class="tag">Correções v3.5</span><h2>O que esta build protege</h2></div><strong class="grade">QA</strong></div><ul class="premium-list bullets">${fixes}</ul><div class="training-note"><strong>Orientação:</strong> teste primeiro em celular real, depois publique no GitHub/Vercel.</div></article></section>
+    <section class="panel"><div class="row space"><div><span class="tag">Fluxos críticos</span><h2>Roteiro de teste mobile</h2></div><button class="secondary-btn mini" data-action="safe-toast" data-message="Checklist de teste marcado para execução manual.">Marcar teste</button></div><div class="grid desktop-4">${flowRows}</div></section>
+    <section class="panel"><div class="row space"><div><span class="tag">Dispositivos</span><h2>Perfis mínimos de validação</h2></div><span class="status-pill">mobile-first</span></div><div class="grid desktop-4">${deviceRows}</div></section>
+    <section class="panel"><div class="row space"><div><span class="tag">Smoke test</span><h2>Rotas principais</h2></div><span class="small">Use estes botões para abrir as telas de maior risco sem voltar ao menu.</span></div><div class="route-smoke-grid">${routeRows}</div></section>
+  </section>`;
+}
+
+
+function data2026ScreenV360(state={}){
+  const audit = buildDataAudit();
+  const selectedClub = state.ui?.dataClub || state.clubId || 'santos';
+  const leagueRows = audit.leagues.map(l=>`<article class="card data-league-card ${l.ok?'ok':'warn'}"><div class="row space"><div><span class="tag">${l.leagueId}</span><h3>${l.listed}/${l.expected} clubes</h3></div><strong>${l.ok?'OK':'Revisar'}</strong></div><p class="small">No jogo: ${l.inGame}. ${l.missingInGame.length?'Faltando: '+l.missingInGame.map(x=>x.name).join(', '):'Sem ausências detectadas.'}</p></article>`).join('');
+  const coverageRows = audit.coverage.map(c=>`<tr class="${c.status==='verified'?'user-row':''}"><td>${safeImg(clubLogo(c.clubId),'club',c.clubId,'mini-logo')}</td><td><strong>${c.clubId}</strong><small>${c.leagueId}</small></td><td>${dataQualityLabel(c.status)}</td><td>${c.players}</td><td><code>${c.rosterPath}</code></td><td><code>${c.avatarFolder}</code></td></tr>`).join('');
+  const checklist = audit.checklist.map(x=>`<li>${x}</li>`).join('');
+  const options = teams.filter(t=>t.country==='br').map(t=>`<option value="${t.id}" ${selectedClub===t.id?'selected':''}>${t.name} · ${t.league}</option>`).join('');
+  const sample = exportRosterTemplateText(selectedClub).replace(/</g,'&lt;');
+  return `<section class="data2026-v360 stack">
+    <div class="panel polish-hero"><div><span class="tag">v3.6.0 · pacote de dados 2026</span><h1>Dados reais, elencos editáveis e manutenção segura</h1><p class="small">Esta central separa dado real, dado conferido e template seguro. A divisão brasileira 2026 fica auditável, os elencos passam a ter arquivo por clube e as fotos dos jogadores podem ser adicionadas depois sem alterar código.</p></div><div class="release-score"><strong>${audit.score}%</strong><small>${audit.issues.length?'Revisar dados':'Base OK'}</small></div></div>
+    <section class="grid desktop-4"><div class="card kpi-card"><span>Clubes Série A/B</span><strong>40</strong><small>2026 organizados</small></div><div class="card kpi-card"><span>Elencos conferidos</span><strong>${audit.verified}</strong><small>status verified</small></div><div class="card kpi-card"><span>Templates seguros</span><strong>${audit.templates}</strong><small>prontos para troca</small></div><div class="card kpi-card"><span>Fotos futuras</span><strong>1 pasta/clube</strong><small>sem mexer no código</small></div></section>
+    <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Divisões</span><h2>Série A e Série B 2026</h2></div><span class="status-pill">20 + 20</span></div><div class="grid grid-2">${leagueRows}</div></article><article class="panel"><div class="row space"><div><span class="tag">Manutenção</span><h2>Checklist anti-quebra</h2></div><strong class="grade">Seguro</strong></div><ul class="premium-list bullets">${checklist}</ul></article></section>
+    <section class="panel"><div class="row space"><div><span class="tag">Cobertura dos elencos</span><h2>Arquivos que o jogo entende</h2></div><span class="small">Substitua o JSON do clube quando tiver elenco real.</span></div><div class="table-wrap"><table><thead><tr><th></th><th>Clube</th><th>Status</th><th>Atletas</th><th>JSON</th><th>Fotos</th></tr></thead><tbody>${coverageRows}</tbody></table></div></section>
+    <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Gerador de template</span><h2>Modelo de elenco por clube</h2></div><select data-action="set-ui-select" data-ui-key="dataClub">${options}</select></div><p class="small">Copie este modelo para <code>data/rosters/2026/${selectedClub}.json</code> e troque nomes/atributos. A estrutura é validada pela tela Atualizar elenco.</p><textarea class="code-box" readonly>${sample}</textarea></article><article class="panel"><div class="row space"><div><span class="tag">Avatares dos jogadores</span><h2>Caminho oficial</h2></div><button class="secondary-btn mini" data-route="rosterUpdate">Atualizar elenco</button></div><p class="small">Para cada jogador, use o mesmo <code>id</code> do JSON:</p><pre class="code-box small-code">assets/players/brazil/${selectedClub}/id-do-jogador.png</pre><p class="alert">Se a imagem não existir, o jogo usa <code>assets/placeholders/player-generic.png</code>. Portanto o elenco não quebra por falta de foto.</p></article></section>
+  </section>`;
+}
