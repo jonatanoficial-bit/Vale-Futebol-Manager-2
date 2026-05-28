@@ -1,5 +1,5 @@
 import { safeScreenFallback } from '../../core/safety/error-recovery.js';
-import { getState, setState, setManager, setUI, startCareer, advanceMatch, finishMatch, setMatchSpeed, makeSubstitution, setMatchDecision, openTransferNegotiation, acceptTransferDeal, rejectTransferDeal, sellOutgoingPlayer, renewPlayerContract, loanTransferPlayer, generateIncomingOffer, respondIncomingOffer, simulateAIMarket, toggleTransferWindow, generateSmartIncomingOffer, simulateSmartAIMarket, triggerAgentEvent, setMatchAutoPlay, autoSelectBestLineup, setCaptain, setSetPieceTaker, applyRotationPlan, createManualBackup, restoreManualBackup, exportSaveText, importSaveText, toggleAutosave, exportRosterText, importRosterText, resetRosterToDefault, sampleRosterText, generateCareerOffers, respondCareerOffer, registerNationalInterest, toggleCallUpPlayer, finalizeNationalCallUp, completePostMatchAndReturnLobby, simulateBoardReview, renewManagerContract, simulateManagerDismissalRisk, simulateNextInternationalMatch } from './state.js';
+import { getState, setState, setManager, setUI, startCareer, advanceMatch, finishMatch, setMatchSpeed, makeSubstitution, setMatchDecision, openTransferNegotiation, acceptTransferDeal, rejectTransferDeal, sellOutgoingPlayer, renewPlayerContract, loanTransferPlayer, generateIncomingOffer, respondIncomingOffer, simulateAIMarket, toggleTransferWindow, generateSmartIncomingOffer, simulateSmartAIMarket, triggerAgentEvent, setMatchAutoPlay, autoSelectBestLineup, setCaptain, setSetPieceTaker, applyRotationPlan, createManualBackup, restoreManualBackup, exportSaveText, importSaveText, toggleAutosave, exportRosterText, importRosterText, resetRosterToDefault, sampleRosterText, generateCareerOffers, respondCareerOffer, registerNationalInterest, toggleCallUpPlayer, finalizeNationalCallUp, completePostMatchAndReturnLobby, simulateBoardReview, renewManagerContract, simulateManagerDismissalRisk, simulateNextInternationalMatch, applyTrainingMicrocycle, signPreContract } from './state.js';
 const routes = new Map(); let rootEl = null; let buildInfo = null;
 export function register(name, renderer){ routes.set(name, renderer); }
 export function initRouter(root, build){ rootEl = root; buildInfo = build; }
@@ -7,10 +7,10 @@ export function go(route){ const target = routes.has(route) ? route : 'lobby'; s
 export function render(){
   const state = getState(); const renderer = routes.get(state.route) || routes.get('lobby');
   try { rootEl.innerHTML = renderer(state); wire(rootEl); fillBuildBadges(); }
-  catch(err){ console.error('[VFM] erro na tela, tela segura acionada', err); rootEl.innerHTML = safeScreenFallback(buildInfo?.buildLabel || 'Build v4.5.0'); wire(rootEl); }
+  catch(err){ console.error('[VFM] erro na tela, tela segura acionada', err); rootEl.innerHTML = safeScreenFallback(buildInfo?.buildLabel || 'Build v4.8.0'); wire(rootEl); }
 }
-function build(){ return `<div class="build-badge">${buildInfo?.buildLabel || 'Build v4.5.0'}</div>`; }
-function fillBuildBadges(){ rootEl.querySelectorAll('#buildBadge,.build-badge').forEach(el=>{ if(!el.textContent.trim()) el.textContent = buildInfo?.buildLabel || 'Build v4.5.0'; }); }
+function build(){ return `<div class="build-badge">${buildInfo?.buildLabel || 'Build v4.8.0'}</div>`; }
+function fillBuildBadges(){ rootEl.querySelectorAll('#buildBadge,.build-badge').forEach(el=>{ if(!el.textContent.trim()) el.textContent = buildInfo?.buildLabel || 'Build v4.8.0'; }); }
 function wire(scope){
   scope.querySelectorAll('[data-route]').forEach(btn => btn.addEventListener('click', () => go(btn.dataset.route)));
 
@@ -33,6 +33,7 @@ function wire(scope){
   scope.querySelectorAll('[data-action="national-interest"]').forEach(btn => btn.addEventListener('click', () => { registerNationalInterest(btn.dataset.team); render(); }));
   scope.querySelectorAll('[data-action="callup-toggle"]').forEach(btn => btn.addEventListener('click', () => { toggleCallUpPlayer(btn.dataset.player); render(); }));
   scope.querySelectorAll('[data-action="callup-finalize"]').forEach(btn => btn.addEventListener('click', () => { finalizeNationalCallUp(); render(); }));
+  scope.querySelectorAll('[data-action="training-apply-week"]').forEach(btn => btn.addEventListener('click', () => { applyTrainingMicrocycle(); render(); }));
   scope.querySelectorAll('[data-action="national-play-next"]').forEach(btn => btn.addEventListener('click', () => { simulateNextInternationalMatch(); render(); }));
 
   scope.querySelectorAll('[data-action="toggle-autosave"]').forEach(btn => btn.addEventListener('click', () => { toggleAutosave(); render(); }));
@@ -63,6 +64,7 @@ function wire(scope){
   scope.querySelectorAll('[data-action="transfer-sell"]').forEach(btn => btn.addEventListener('click', () => { sellOutgoingPlayer(btn.dataset.player); render(); }));
   scope.querySelectorAll('[data-action="transfer-renew"]').forEach(btn => btn.addEventListener('click', () => { renewPlayerContract(btn.dataset.player); render(); }));
   scope.querySelectorAll('[data-action="transfer-loan"]').forEach(btn => btn.addEventListener('click', () => { loanTransferPlayer(btn.dataset.player); render(); }));
+  scope.querySelectorAll('[data-action="transfer-precontract"]').forEach(btn => btn.addEventListener('click', () => { signPreContract(btn.dataset.player); render(); }));
   scope.querySelectorAll('[data-action="transfer-offer-generate"]').forEach(btn => btn.addEventListener('click', () => { generateIncomingOffer(); render(); }));
   scope.querySelectorAll('[data-action="transfer-offer-accept"]').forEach(btn => btn.addEventListener('click', () => { respondIncomingOffer(btn.dataset.offer, 'accept'); render(); }));
   scope.querySelectorAll('[data-action="transfer-offer-reject"]').forEach(btn => btn.addEventListener('click', () => { respondIncomingOffer(btn.dataset.offer, 'reject'); render(); }));

@@ -1,7 +1,5 @@
-# Known Issues - v4.7.0
+# Known Issues - v4.9.0
 
-Nenhum erro crítico conhecido.
-
-Observação de desenvolvimento:
-- Eventos de VAR, pênalti e lesão ainda são narrativos/controlados, não interrompem a partida com minijogo próprio.
-- O balanceamento será refinado nas próximas fases conforme evolução de treino, elenco e mercado.
+- Mercado usa base demonstrativa e caminhos preparados para expansao do banco licenciado completo.
+- Valores de transferencia ainda sao balanceados por formulas internas simples; podem ser refinados na fase de balanceamento final.
+- O jogador real so e removido visualmente do elenco quando a integracao total elenco/mercado for aprofundada em fase futura.

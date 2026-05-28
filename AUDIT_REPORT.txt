@@ -1,13 +1,9 @@
-VALE FUTEBOL MANAGER - AUDIT REPORT
-Versão: v4.7.0
-Build: 2026.05.28.009
-Fase: 9 - Motor de Partida 2.0
-
-Arquivos auditados: 783
-Tamanho do projeto: 33M
+AUDITORIA V4.9.0
+Arquivos auditados: 791
+Tamanho aproximado: 33M
 node --check JS/core: OK
-Importação ESM motor de partida: OK
-Stress test 100 partidas: OK
+Importacao transferEngine/state/moduleScreen: OK
+Render transfers: OK
+Validadores de mercado: OK
 Erros: 0
 Warnings: 0
-Status: APROVADA

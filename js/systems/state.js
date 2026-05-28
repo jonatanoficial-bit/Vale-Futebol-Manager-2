@@ -8,20 +8,23 @@ import { scoreFromTimeline, buildBalanceSummary } from './balance.js';
 import { squadPlayers as defaultRosterPlayers, rosterMeta as defaultRosterMeta, normalizeRoster } from '../data/squadData.js';
 import { generateOffers, validateCareerState, validateManagerCareerState, buildManagerCareerSnapshot, buildInternationalCalendar, defaultCallUpSelection } from './careerEngine.js';
 import { buildNationalCalendar, buildNationalTeamSnapshot, safeCallUpPool, simulateNationalFixture, NATIONAL_TEAM_ENGINE_VERSION } from './nationalTeamEngine.js';
+import { ensureTrainingState, applyTrainingWeek, TRAINING_ENGINE_VERSION } from './trainingEngine.js';
+import { TRANSFER_ENGINE_VERSION, ensureTransferLedger, evaluateDealSafety, registerTransaction, buildTransferSnapshot, simulateGlobalMarketCycle, createPreContract, validateTransferIntegrity, renewalById } from './transferEngine.js';
 
-const key = 'vfm_gold_save_v470';
-const legacyKeys = ['vfm_gold_save_v460','vfm_gold_save_v450','vfm_gold_save_v440', 'vfm_gold_save_v430', 'vfm_gold_save_v420', 'vfm_gold_save_v410', 'vfm_gold_save_v400', 'vfm_gold_save_v390', 'vfm_gold_save_v370', 'vfm_gold_save_v360', 'vfm_gold_save_v350', 'vfm_gold_save_v340', 'vfm_gold_save_v330', 'vfm_gold_save_v320', 'vfm_gold_save_v310', 'vfm_gold_save_v300', 'vfm_gold_save_v290', 'vfm_gold_save_v280', 'vfm_gold_save_v270', 'vfm_gold_save_v262', 'vfm_gold_save_v261', 'vfm_gold_save_v260', 'vfm_gold_save_v251', 'vfm_gold_save_v240', 'vfm_gold_save_v230', 'vfm_gold_save_v220', 'vfm_gold_save_v210', 'vfm_gold_save_v200', 'vfm_gold_save_v190', 'vfm_gold_save_v180', 'vfm_gold_save_v170', 'vfm_gold_save_v160', 'vfm_gold_save_v150', 'vfm_gold_save_v140', 'vfm_gold_save_v130', 'vfm_gold_save_v120', 'vfm_gold_save_v110', 'vfm_gold_save_v100', 'vfm_gold_save_v090', 'vfm_gold_save_v080', 'vfm_gold_save_v050', 'vfm_gold_save_v040', 'vfm_gold_save_v030', 'vfm_gold_save_v020', 'vfm_gold_save_v010'];
+const key = 'vfm_gold_save_v490';
+const legacyKeys = ['vfm_gold_save_v480','vfm_gold_save_v470','vfm_gold_save_v460','vfm_gold_save_v450','vfm_gold_save_v440', 'vfm_gold_save_v430', 'vfm_gold_save_v420', 'vfm_gold_save_v410', 'vfm_gold_save_v400', 'vfm_gold_save_v390', 'vfm_gold_save_v370', 'vfm_gold_save_v360', 'vfm_gold_save_v350', 'vfm_gold_save_v340', 'vfm_gold_save_v330', 'vfm_gold_save_v320', 'vfm_gold_save_v310', 'vfm_gold_save_v300', 'vfm_gold_save_v290', 'vfm_gold_save_v280', 'vfm_gold_save_v270', 'vfm_gold_save_v262', 'vfm_gold_save_v261', 'vfm_gold_save_v260', 'vfm_gold_save_v251', 'vfm_gold_save_v240', 'vfm_gold_save_v230', 'vfm_gold_save_v220', 'vfm_gold_save_v210', 'vfm_gold_save_v200', 'vfm_gold_save_v190', 'vfm_gold_save_v180', 'vfm_gold_save_v170', 'vfm_gold_save_v160', 'vfm_gold_save_v150', 'vfm_gold_save_v140', 'vfm_gold_save_v130', 'vfm_gold_save_v120', 'vfm_gold_save_v110', 'vfm_gold_save_v100', 'vfm_gold_save_v090', 'vfm_gold_save_v080', 'vfm_gold_save_v050', 'vfm_gold_save_v040', 'vfm_gold_save_v030', 'vfm_gold_save_v020', 'vfm_gold_save_v010'];
 export const defaultState = () => ({
   route:'cover',
   manager:{ name:'Joao Victor', country:'br', avatar:'assets/avatars/manager-01.png', reputation:82, mode:'career' },
   clubId:'santos', season:2026, month:'Maio', money:92.5, coins:250, notifications:6, boardTrust:76, fanMood:82, jobSecurity:'Seguro',
   match:{ id:'2026-05-24-santos-palmeiras', date:'2026-05-24', competitionId:'brasileirao-a', competition:'Brasileirão Série A 2026', stage:'Rodada atual', minute:1, home:'santos', away:'palmeiras', homeGoals:0, awayGoals:0, speed:1, autoPlay:false, finalized:false, postMatchReady:false, substitutions:[], maxSubs:5, decision:'balanced', tacticalBoost:0, usedSubPlayers:[], postMatchReport:null, nextMatchQueued:null, reportViewed:false },
-  career:{ currentDate:'2026-05-19', matchday:1, completedMatches:[], lastResult:null, promotionRelegation:{serieARelegation:4,serieBPromotion:4,libertadoresTop:5,sulamericanaRange:[6,12],serieBRelegation:4}, integrationLog:['Carreira migrada para v4.7.0 com Motor de Partida 2.0, VAR narrativo, lesões, cartões, substituições e stress test seguro.'], jobOffers:[], offerHistory:[], nationalTeamJob:null, dualCareer:{enabled:false, club:true, nationalTeam:null}, callUpSelection:defaultCallUpSelection(), internationalCalendar:buildNationalCalendar(2026, 'brasil'), managerProfile:null, activeContract:null, contractHistory:[], titleHistory:[], sackRiskLog:[], managerTimeline:[], unlockedMilestones:[], boardRelationship:76, fanRelationship:82, dressingRoomTrust:69, mediaPressure:54, worldCompetitionCycle:{libertadores:true,sulamericana:true,clubWorldCupCycle:4,worldCupCycle:4,lastUpdated:'v4.3.0'}, financeReport:{profile:'balanced', lastMonthlyCycle:null, crisisLog:[], boardWarnings:[], sponsorReview:'v3.5.0'} },
-  gameplay:{ difficulty:'realistic', aiVersion:'v4.7.0', realism:88, variance:18, balanceLog:[] },
-  stability:{ autosave:true, lastBackup:null, backupCount:0, lastExport:null, lastImport:null, safeModeEvents:0, health:'Excelente', auditVersion:'v4.7.0', commercialAudit:'v3.7.0-ok', fullscreenMobile:true, overflowGuard:true, rosterSafeMode:true, matchEngineSafeMode:true, matchEngineVersion:'v4.7.0', matchStressTest:'passed-100' },
+  career:{ currentDate:'2026-05-19', matchday:1, completedMatches:[], lastResult:null, promotionRelegation:{serieARelegation:4,serieBPromotion:4,libertadoresTop:5,sulamericanaRange:[6,12],serieBRelegation:4}, integrationLog:['Carreira migrada para v4.9.0 com mercado internacional, contratos, orçamento seguro e proteção contra jogador duplicado.'], jobOffers:[], offerHistory:[], nationalTeamJob:null, dualCareer:{enabled:false, club:true, nationalTeam:null}, callUpSelection:defaultCallUpSelection(), internationalCalendar:buildNationalCalendar(2026, 'brasil'), managerProfile:null, activeContract:null, contractHistory:[], titleHistory:[], sackRiskLog:[], managerTimeline:[], unlockedMilestones:[], boardRelationship:76, fanRelationship:82, dressingRoomTrust:69, mediaPressure:54, worldCompetitionCycle:{libertadores:true,sulamericana:true,clubWorldCupCycle:4,worldCupCycle:4,lastUpdated:'v4.3.0'}, financeReport:{profile:'balanced', lastMonthlyCycle:null, crisisLog:[], boardWarnings:[], sponsorReview:'v3.5.0'} },
+  gameplay:{ difficulty:'realistic', aiVersion:'v4.9.0', realism:88, variance:18, balanceLog:[] },
+  stability:{ autosave:true, lastBackup:null, backupCount:0, lastExport:null, lastImport:null, safeModeEvents:0, health:'Excelente', auditVersion:'v4.9.0', commercialAudit:'v3.7.0-ok', fullscreenMobile:true, overflowGuard:true, rosterSafeMode:true, matchEngineSafeMode:true, matchEngineVersion:'v4.7.0', matchStressTest:'passed-100', trainingEngineVersion:TRAINING_ENGINE_VERSION, trainingStressTest:'passed-4-weeks', transferEngineVersion:TRANSFER_ENGINE_VERSION, transferIntegrity:'pending' },
   roster:{ meta: defaultRosterMeta, players: defaultRosterPlayers, lastImport:null, lastExport:null, validationLog:['Elenco base Santos 2026 carregado com proteção anti-quebra.'] },
   finance:{profile:'balanced', lastMonthlyCycle:null, crisisLog:[], boardWarnings:[], sponsorReview:'v3.5.0'},
-  transfer:{ budget:42.8, wageRoom:2.4, negotiationLog:[], activeNegotiations:[], acceptedDeals:[], rejectedDeals:[], outgoingDeals:[], renewals:[], loanDeals:[], incomingOffers:[], aiDeals:[], agentEvents:[], smartReports:[], windowOpen:true, boardApproval:82, marketDay:1, intelligenceVersion:'v3.7.0' },
+  training:ensureTrainingState(),
+  transfer:ensureTransferLedger({ budget:42.8, wageRoom:2.4, negotiationLog:[], activeNegotiations:[], acceptedDeals:[], rejectedDeals:[], outgoingDeals:[], renewals:[], loanDeals:[], incomingOffers:[], aiDeals:[], agentEvents:[], smartReports:[], windowOpen:true, boardApproval:82, marketDay:1, intelligenceVersion:'v3.7.0' }),
   ui:{ selectedAvatar:'assets/avatars/manager-01.png', selectedMode:'career', selectedCountry:'br', selectedClub:'santos', teamCountryFilter:'all', teamLeagueFilter:'all', teamSort:'level', standingsCompetition:'brasileirao-a', selectedFormation:'433-possession', tacticalProfile:'possession', trainingTheme:'possession', transferFilter:'all', squadView:'best', captainId:'neymar', penaltyTakerId:'neymar', freeKickTakerId:'neymar', cornerTakerId:'gabriel-menino' }
 });
 let state = defaultState();
@@ -72,7 +75,9 @@ function normalize(next){
   if(!['conservative','balanced','aggressive'].includes(merged.finance.profile)) merged.finance.profile = 'balanced';
   if(!Array.isArray(merged.finance.crisisLog)) merged.finance.crisisLog = [];
   if(!Array.isArray(merged.finance.boardWarnings)) merged.finance.boardWarnings = [];
-  merged.transfer = {...base.transfer, ...(next?.transfer || {})};
+  merged.training = ensureTrainingState({...(base.training||{}), ...(next?.training || {})});
+  merged.stability.trainingEngineVersion = TRAINING_ENGINE_VERSION;
+  merged.transfer = ensureTransferLedger({...base.transfer, ...(next?.transfer || {})});
   merged.transfer.budget = Math.max(0, Number(merged.transfer.budget || base.transfer.budget));
   merged.transfer.wageRoom = Math.max(0, Number(merged.transfer.wageRoom || base.transfer.wageRoom));
   if(!Array.isArray(merged.transfer.negotiationLog)) merged.transfer.negotiationLog = [];
@@ -87,6 +92,8 @@ function normalize(next){
   if(!Array.isArray(merged.transfer.agentEvents)) merged.transfer.agentEvents = [];
   if(!Array.isArray(merged.transfer.smartReports)) merged.transfer.smartReports = [];
   merged.transfer.intelligenceVersion = String(merged.transfer.intelligenceVersion || 'v3.7.0');
+  merged.transfer.marketEngineVersion = TRANSFER_ENGINE_VERSION;
+  merged.transfer.ledger = ensureTransferLedger(merged.transfer).ledger;
   if(typeof merged.transfer.windowOpen !== 'boolean') merged.transfer.windowOpen = true;
   merged.transfer.boardApproval = Math.max(0, Math.min(100, Number(merged.transfer.boardApproval || 82)));
   merged.transfer.marketDay = Math.max(1, Number(merged.transfer.marketDay || 1));
@@ -151,7 +158,7 @@ export function startCareer(){
     },
     clubId: chosenClub,
     match: firstMatch,
-    career:{...state.career, currentDate:'2026-05-19', matchday:1, completedMatches:[], lastResult:null, lastRoundResults:[], promotionRelegation:{serieARelegation:4,serieBPromotion:4,libertadoresTop:5,sulamericanaRange:[6,12],serieBRelegation:4}, integrationLog:['Carreira iniciada na v4.7.0: Motor de Partida 2.0 ativo com pós-jogo, atributos, VAR, cartões, lesões e anti-quebra.']},
+    career:{...state.career, currentDate:'2026-05-19', matchday:1, completedMatches:[], lastResult:null, lastRoundResults:[], promotionRelegation:{serieARelegation:4,serieBPromotion:4,libertadoresTop:5,sulamericanaRange:[6,12],serieBRelegation:4}, integrationLog:['Carreira iniciada na v4.9.0: Mercado internacional, orçamento seguro, contratos e anti-duplicação de jogadores ativos.']},
     route:'lobby'
   });
   persist();
@@ -244,7 +251,7 @@ export function finishMatch(){
     fanMood: Math.max(0, Math.min(100, Number(state.fanMood || 82) + (already ? 0 : fanDelta))),
     notifications: Number(state.notifications || 0) + (already ? 0 : 1),
     gameplay:{...state.gameplay, balanceLog},
-    stability:{...(state.stability||{}), health:'Pós-jogo salvo com segurança', auditVersion:'v4.7.0'}
+    stability:{...(state.stability||{}), health:'Pós-jogo salvo com segurança', auditVersion:'v4.9.0'}
   });
   logIntegration(`Resultado integrado: ${result.competition} ${result.stage} terminou ${result.summary}. Relatório pós-jogo preservado antes do retorno ao lobby.`);
   persist();
@@ -259,7 +266,7 @@ export function completePostMatchAndReturnLobby(){
     ...state,
     route:'lobby',
     match:nextMatch,
-    stability:{...(state.stability||{}), health:'Fluxo pós-jogo concluído', auditVersion:'v4.7.0'}
+    stability:{...(state.stability||{}), health:'Fluxo pós-jogo concluído', auditVersion:'v4.9.0'}
   });
   logIntegration('Relatório pós-jogo confirmado: save protegido e retorno ao lobby executado.');
   persist();
@@ -340,105 +347,112 @@ function findOutgoing(name){
 }
 export function openTransferNegotiation(playerId){
   const target = findTarget(playerId);
-  if(!target){ transferLog('Negociação bloqueada: atleta não encontrado no radar.'); persist(); return false; }
-  const transfer = {...(state.transfer || defaultState().transfer)};
-  const intelligence = buildMarketIntelligence(state, transferShortlist).targets.find(p=>p.id===target.id)?.intelligence;
-  if(transfer.acceptedDeals.some(d=>d.id===target.id)){ transferLog(`Negociação bloqueada: ${target.name} já foi contratado.`); persist(); return false; }
-  let active = Array.isArray(transfer.activeNegotiations) ? [...transfer.activeNegotiations] : [];
-  const existing = active.find(n=>n.id===target.id);
-  const baseOffer = target.value === 0 ? 0 : Number((target.value * 0.82).toFixed(1));
-  const wageOffer = Number((target.wage * 0.88).toFixed(2));
-  if(existing){
-    existing.offer = Number(Math.min(target.value || existing.offer + 0.1, existing.offer + Math.max(0.3, (target.value||1)*0.08)).toFixed(1));
-    existing.wageOffer = Number(Math.min(target.wage, existing.wageOffer + 0.04).toFixed(2));
-    existing.chance = Math.min(96, existing.chance + 7);
-    existing.stage = 'Contraproposta enviada';
-    existing.next = existing.chance >= 78 ? 'Pode aceitar com bônus por metas' : 'Aumentar luvas ou reduzir risco';
-  } else {
-    active.push({id:target.id, player:target.name, type:target.value===0?'Livre':'Compra', stage:'Proposta formal enviada', chance:intelligence?.score || Math.max(35, Math.min(92, target.interest - 8)), offer:baseOffer, demand:target.value, wageOffer:intelligence?.wageDemand || wageOffer, wageDemand:intelligence?.wageDemand || target.wage, next:intelligence?.recommendation || 'Aguardar resposta do empresário', agent:intelligence?.agent?.name || 'Agente local', motivation:intelligence?.motivation?.label || 'Projeto esportivo'});
-  }
-  transfer.activeNegotiations = active;
-  transferLog(`Proposta enviada por ${target.name}.`);
+  if(!target){ transferLog('Negociação bloqueada: atleta não encontrado.'); persist(); return false; }
+  const transfer = ensureTransferLedger({...state.transfer});
+  if(!transfer.windowOpen){ transferLog('Negociação bloqueada: janela de transferências fechada.'); persist(); return false; }
+  const existing = (transfer.activeNegotiations || []).find(n=>n.id===target.id);
+  const baseOffer = existing ? Number(existing.offer || target.value || 0) + 0.6 : Number(target.value || 0) * 0.86;
+  const wageOffer = existing ? Number(existing.wageOffer || target.wage || 0) + 0.03 : Number(target.wage || 0.2) * 0.92;
+  const safety = evaluateDealSafety(state, target, target.value === 0 ? 'free' : 'buy', {fee:baseOffer, wage:wageOffer});
+  if(!safety.ok){ transferLog(`Negociação bloqueada com ${target.name}: ${safety.errors.join(' ')}`); persist(); return false; }
+  const chance = Math.max(18, Math.min(96, Number(target.interest || 60) + (existing ? 7 : 0) - safety.warnings.length * 3));
+  const negotiation = {id:target.id, player:target.name, type:target.value===0?'Livre':'Compra', stage:existing?'Oferta melhorada':'Conversas abertas', chance, offer:safety.fee, wageOffer:safety.wage, demand:Number(target.value || 0), next:safety.warnings[0] || 'Aguardar contraproposta e aprovação do atleta'};
+  transfer.activeNegotiations = [...(transfer.activeNegotiations || []).filter(n=>n.id!==target.id), negotiation].slice(-12);
+  transfer.ledger.budgetLocks = [...(transfer.ledger.budgetLocks || []).filter(l=>l.playerId!==target.id), {playerId:target.id, player:target.name, fee:safety.fee, wage:safety.wage, kind:negotiation.type}].slice(-12);
+  state = normalize({...state, transfer});
+  transferLog(`${negotiation.stage} com ${target.name}. Segurança ${safety.score}/100. Oferta € ${safety.fee.toFixed(1)}M, salário € ${safety.wage.toFixed(2)}M.`);
   persist();
   return true;
 }
+
 export function acceptTransferDeal(playerId){
   const target = findTarget(playerId);
-  if(!target){ transferLog('Aceite bloqueado: atleta não encontrado.'); persist(); return false; }
-  const transfer = {...(state.transfer || defaultState().transfer)};
+  if(!target){ transferLog('Compra bloqueada: atleta não encontrado.'); persist(); return false; }
+  let transfer = ensureTransferLedger({...state.transfer});
+  if(!transfer.windowOpen){ transferLog('Compra bloqueada: janela de transferências fechada.'); persist(); return false; }
   const active = Array.isArray(transfer.activeNegotiations) ? transfer.activeNegotiations : [];
-  const deal = active.find(n=>n.id===target.id) || {id:target.id, player:target.name, offer:target.value, wageOffer:target.wage, chance:target.interest, type:target.value===0?'Livre':'Compra'};
-  if(transfer.acceptedDeals.some(d=>d.id===target.id)){ transferLog(`${target.name} já está marcado como contratado.`); persist(); return false; }
-  const fee = Number(deal.offer || 0);
-  const wage = Number(deal.wageOffer || target.wage || 0);
-  if(fee > transfer.budget || wage > transfer.wageRoom){ transferLog(`Diretoria bloqueou ${target.name}: orçamento ou folha insuficiente.`); persist(); return false; }
-  transfer.budget = Number((transfer.budget - fee).toFixed(1));
-  transfer.wageRoom = Number((transfer.wageRoom - wage).toFixed(2));
-  transfer.acceptedDeals = [...(transfer.acceptedDeals || []), {...deal, finalFee:fee, finalWage:wage, status:'Assinado'}];
+  const deal = active.find(n=>n.id===target.id) || {offer:Number(target.value||0), wageOffer:Number(target.wage||0.2), chance:target.interest||55};
+  const safety = evaluateDealSafety({...state, transfer}, target, target.value === 0 ? 'free' : 'buy', {fee:deal.offer, wage:deal.wageOffer});
+  if(!safety.ok){ transferLog(`Compra bloqueada com ${target.name}: ${safety.errors.join(' ')}`); persist(); return false; }
+  const fee = safety.fee;
+  const wage = safety.wage;
+  transfer.budget = Number((Number(transfer.budget||0) - fee).toFixed(1));
+  transfer.wageRoom = Number((Number(transfer.wageRoom||0) - wage).toFixed(2));
+  transfer.acceptedDeals = [...(transfer.acceptedDeals || []), {...deal, id:target.id, player:target.name, finalFee:fee, finalWage:wage, status:'Assinado'}];
   transfer.activeNegotiations = active.filter(n=>n.id!==target.id);
-  state = normalize({...state, transfer, notifications:Number(state.notifications||0)+1});
-  transferLog(`Contrato fechado com ${target.name}: taxa € ${fee.toFixed(1)}M e salário € ${wage.toFixed(2)}M.`);
+  transfer.ledger.budgetLocks = (transfer.ledger.budgetLocks || []).filter(l=>l.playerId!==target.id);
+  transfer = registerTransaction(transfer, {date:state.career?.currentDate, type:target.value===0?'livre':'compra', playerId:target.id, player:target.name, from:target.club, to:state.clubId || 'santos', fee, wage, status:'Assinado'});
+  state = normalize({...state, transfer, notifications:Number(state.notifications||0)+1, stability:{...(state.stability||{}), transferIntegrity:validateTransferIntegrity({...state, transfer}).status, transferEngineVersion:TRANSFER_ENGINE_VERSION}});
+  transferLog(`Contrato fechado com ${target.name}: taxa € ${fee.toFixed(1)}M e salário € ${wage.toFixed(2)}M. Registro anti-duplicação ativado.`);
   persist();
   return true;
 }
+
 export function rejectTransferDeal(playerId){
   const target = findTarget(playerId);
   if(!target){ transferLog('Recusa bloqueada: atleta não encontrado.'); persist(); return false; }
-  const transfer = {...(state.transfer || defaultState().transfer)};
+  const transfer = ensureTransferLedger({...state.transfer});
   const active = Array.isArray(transfer.activeNegotiations) ? transfer.activeNegotiations : [];
   transfer.rejectedDeals = [...(transfer.rejectedDeals || []), {id:target.id, player:target.name, reason:'Encerrado pelo manager'}].slice(-12);
   transfer.activeNegotiations = active.filter(n=>n.id!==target.id);
+  transfer.ledger.budgetLocks = (transfer.ledger.budgetLocks || []).filter(l=>l.playerId!==target.id);
   state = normalize({...state, transfer});
   transferLog(`Negociação encerrada com ${target.name}.`);
   persist();
   return true;
 }
+
 export function sellOutgoingPlayer(name){
   const player = findOutgoing(name);
   if(!player){ transferLog('Venda bloqueada: jogador não encontrado na lista de saídas.'); persist(); return false; }
-  const transfer = {...(state.transfer || defaultState().transfer)};
+  let transfer = ensureTransferLedger({...state.transfer});
   if(transfer.outgoingDeals.some(d=>d.name===player.name)){ transferLog(`${player.name} já possui venda/empréstimo registrado.`); persist(); return false; }
   const revenue = Number((player.value * 0.92).toFixed(1));
-  transfer.budget = Number((transfer.budget + revenue).toFixed(1));
-  transfer.wageRoom = Number((transfer.wageRoom + Number(player.wage || 0)).toFixed(2));
+  transfer.budget = Number((Number(transfer.budget||0) + revenue).toFixed(1));
+  transfer.wageRoom = Number((Number(transfer.wageRoom||0) + Number(player.wage || 0)).toFixed(2));
   transfer.outgoingDeals = [...(transfer.outgoingDeals || []), {...player, revenue, status:'Negociação concluída'}];
+  transfer = registerTransaction(transfer, {date:state.career?.currentDate, type:'venda', playerId:slug(player.name), player:player.name, from:state.clubId || 'santos', to:player.market, fee:revenue, wage:player.wage || 0, status:'Vendido'});
   state = normalize({...state, transfer, money:Number((Number(state.money||0)+revenue).toFixed(1))});
   transferLog(`Saída concluída: ${player.name}. Receita € ${revenue.toFixed(1)}M e folha liberada.`);
   persist();
   return true;
 }
+
 export function renewPlayerContract(playerId='giuliano'){
-  const transfer = {...(state.transfer || defaultState().transfer)};
+  let transfer = ensureTransferLedger({...state.transfer});
   const id = String(playerId || 'giuliano');
+  const target = renewalById(id);
   if(transfer.renewals.some(r=>r.id===id)){ transferLog('Renovação já registrada para este atleta.'); persist(); return false; }
-  const cost = 0.12;
-  if(transfer.wageRoom < cost){ transferLog('Renovação bloqueada: folha salarial livre insuficiente.'); persist(); return false; }
-  transfer.wageRoom = Number((transfer.wageRoom - cost).toFixed(2));
-  transfer.renewals = [...(transfer.renewals || []), {id, years:2, wageIncrease:cost, status:'Renovado'}];
+  const cost = Number((target?.demand ? Math.max(0.06, target.demand - (target.wage || 0.2)) : 0.12).toFixed(2));
+  if(Number(transfer.wageRoom||0) < cost){ transferLog('Renovação bloqueada: folha salarial livre insuficiente.'); persist(); return false; }
+  transfer.wageRoom = Number((Number(transfer.wageRoom||0) - cost).toFixed(2));
+  transfer.renewals = [...(transfer.renewals || []), {id, player:target?.player || id, years:2, wageIncrease:cost, status:'Renovado'}];
+  transfer = registerTransaction(transfer, {date:state.career?.currentDate, type:'renovação', playerId:id, player:target?.player || id, from:state.clubId || 'santos', to:state.clubId || 'santos', fee:0, wage:cost, status:'Renovado'});
   state = normalize({...state, transfer});
-  transferLog(`Renovação registrada para ${id}: +2 anos de contrato.`);
+  transferLog(`Renovação registrada para ${target?.player || id}: +2 anos de contrato.`);
   persist();
   return true;
 }
+
 export function loanTransferPlayer(playerId){
   const target = findTarget(playerId) || loanTargets.find(p => p.id === playerId);
   if(!target){ transferLog('Empréstimo bloqueado: atleta não encontrado no radar.'); persist(); return false; }
-  const transfer = {...(state.transfer || defaultState().transfer)};
+  let transfer = ensureTransferLedger({...state.transfer});
   if(!transfer.windowOpen){ transferLog('Empréstimo bloqueado: janela de transferências fechada.'); persist(); return false; }
-  if((transfer.loanDeals||[]).some(d=>d.id===target.id)){ transferLog(`${target.name} já possui empréstimo registrado.`); persist(); return false; }
-  const wageShare = Number((Number(target.wage || 0.22) * 0.45).toFixed(2));
-  if(wageShare > transfer.wageRoom){ transferLog(`Empréstimo bloqueado: folha insuficiente para ${target.name}.`); persist(); return false; }
-  transfer.wageRoom = Number((transfer.wageRoom - wageShare).toFixed(2));
-  transfer.loanDeals = [...(transfer.loanDeals||[]), {id:target.id, player:target.name, club:target.club, wageShare, months:12, status:'Empréstimo aprovado'}];
+  const safety = evaluateDealSafety({...state, transfer}, target, 'loan', {fee:0, wage:Number(target.wage || 0.22) * 0.45});
+  if(!safety.ok){ transferLog(`Empréstimo bloqueado com ${target.name}: ${safety.errors.join(' ')}`); persist(); return false; }
+  transfer.wageRoom = Number((Number(transfer.wageRoom||0) - safety.wage).toFixed(2));
+  transfer.loanDeals = [...(transfer.loanDeals||[]), {id:target.id, player:target.name, club:target.club, wageShare:safety.wage, months:12, status:'Empréstimo aprovado'}];
+  transfer = registerTransaction(transfer, {date:state.career?.currentDate, type:'empréstimo', playerId:target.id, player:target.name, from:target.club, to:state.clubId || 'santos', fee:0, wage:safety.wage, status:'Emprestado'});
   state = normalize({...state, transfer, notifications:Number(state.notifications||0)+1});
-  transferLog(`Empréstimo fechado com ${target.name}: clube pagará € ${wageShare.toFixed(2)}M/mês.`);
+  transferLog(`Empréstimo fechado com ${target.name}: clube pagará € ${safety.wage.toFixed(2)}M/mês.`);
   persist();
   return true;
 }
 
 export function generateIncomingOffer(){
-  const transfer = {...(state.transfer || defaultState().transfer)};
-  const base = outgoingList[Math.floor((transfer.marketDay || 1) % outgoingList.length)] || outgoingList[0];
+  let transfer = ensureTransferLedger({...state.transfer});
+  const base = findOutgoingTargetByCycle(transfer.marketDay || 1);
   const buyer = aiClubProfiles[Math.floor(((transfer.marketDay || 1) + 1) % aiClubProfiles.length)] || aiClubProfiles[0];
   const id = `${slug(base.name)}-${slug(buyer.name)}-${transfer.marketDay || 1}`;
   if((transfer.incomingOffers||[]).some(o=>o.id===id)){ transferLog('Nenhuma nova proposta recebida neste ciclo.'); persist(); return false; }
@@ -451,8 +465,12 @@ export function generateIncomingOffer(){
   return true;
 }
 
+function findOutgoingTargetByCycle(cycle=1){
+  return outgoingList[Math.floor(Number(cycle || 1) % outgoingList.length)] || outgoingList[0];
+}
+
 export function respondIncomingOffer(offerId, decision='accept'){
-  const transfer = {...(state.transfer || defaultState().transfer)};
+  let transfer = ensureTransferLedger({...state.transfer});
   const offers = Array.isArray(transfer.incomingOffers) ? transfer.incomingOffers.slice() : [];
   const offer = offers.find(o=>o.id===offerId);
   if(!offer){ transferLog('Resposta bloqueada: proposta não encontrada.'); persist(); return false; }
@@ -462,6 +480,7 @@ export function respondIncomingOffer(offerId, decision='accept'){
     transfer.budget = Number((Number(transfer.budget||0) + Number(offer.value||0)).toFixed(1));
     transfer.wageRoom = Number((Number(transfer.wageRoom||0) + Number(offer.wageFree||0)).toFixed(2));
     transfer.outgoingDeals = [...(transfer.outgoingDeals||[]), {name:offer.player, value:offer.value, revenue:offer.value, wage:offer.wageFree, market:offer.buyer, status:'Venda aceita'}];
+    transfer = registerTransaction(transfer, {date:state.career?.currentDate, type:'venda', playerId:slug(offer.player), player:offer.player, from:state.clubId || 'santos', to:offer.buyer, fee:offer.value, wage:offer.wageFree || 0, status:'Venda aceita'});
     transferLog(`Proposta aceita: ${offer.player} vendido para ${offer.buyer} por € ${Number(offer.value).toFixed(1)}M.`);
   } else {
     offer.status = 'Recusada';
@@ -469,26 +488,30 @@ export function respondIncomingOffer(offerId, decision='accept'){
     transferLog(`Proposta recusada por ${offer.player}. Empresário e diretoria foram notificados.`);
   }
   transfer.incomingOffers = offers;
-  state = normalize({...state, transfer});
+  state = normalize({...state, transfer, stability:{...(state.stability||{}), transferIntegrity:validateTransferIntegrity({...state, transfer}).status}});
   persist();
   return true;
 }
 
 export function simulateAIMarket(){
-  const transfer = {...(state.transfer || defaultState().transfer)};
-  const buyer = aiClubProfiles[(transfer.aiDeals?.length || 0) % aiClubProfiles.length] || aiClubProfiles[0];
-  const seller = aiClubProfiles[((transfer.aiDeals?.length || 0) + 3) % aiClubProfiles.length] || aiClubProfiles[1] || buyer;
-  const pool = transferShortlist.concat(loanTargets||[]);
-  const p = pool[((transfer.aiDeals?.length || 0) + Number(transfer.marketDay||1)) % pool.length];
-  if(!p){ transferLog('Mercado IA sem alvo disponível.'); persist(); return false; }
-  const fee = Number(((p.value || 1.2) * (0.9 + ((transfer.aiDeals?.length||0)%4)*0.08)).toFixed(1));
-  const deal = {id:`ai-${slug(p.name)}-${Date.now()}`, player:p.name, from:seller.name, to:buyer.name, fee, type:p.value===0?'Livre':'Compra', date:state.career?.currentDate || '2026-05-19'};
-  transfer.aiDeals = [...(transfer.aiDeals||[]), deal].slice(-12);
-  transfer.marketDay = Number(transfer.marketDay || 1) + 1;
-  state = normalize({...state, transfer});
-  transferLog(`Mercado IA: ${buyer.name} acertou ${deal.type.toLowerCase()} de ${p.name} por € ${fee.toFixed(1)}M.`);
+  const result = simulateGlobalMarketCycle(state);
+  state = normalize({...state, transfer:result.transfer});
+  if(result.deal) transferLog(`Mercado IA: ${result.deal.to} acertou ${result.deal.type.toLowerCase()} de ${result.deal.player} por € ${Number(result.deal.fee||0).toFixed(1)}M.`);
+  else transferLog('Mercado IA sem alvo disponível.');
   persist();
-  return true;
+  return Boolean(result.deal);
+}
+
+export function signPreContract(playerId){
+  const result = createPreContract(state.transfer || {}, playerId, state);
+  state = normalize({...state, transfer:result.transfer, notifications:Number(state.notifications||0)+(result.ok?1:0)});
+  transferLog(result.message);
+  persist();
+  return result.ok;
+}
+
+export function getTransferMarketSnapshot(){
+  return buildTransferSnapshot(state);
 }
 
 export function toggleTransferWindow(){
@@ -724,6 +747,18 @@ export function simulateManagerDismissalRisk(){
   logIntegration(msg);
   persist();
   return highRisk;
+}
+
+export function applyTrainingMicrocycle(){
+  const nextTraining = applyTrainingWeek(state);
+  state = normalize({
+    ...state,
+    training: nextTraining,
+    fanMood: Math.max(0, Math.min(100, Number(state.fanMood||75) + Math.round((nextTraining.moraleEffect||0)/2))),
+    career:{...(state.career||{}), integrationLog:[...((state.career||{}).integrationLog||[]), `Treino v4.8.0 aplicado: semana ${Math.max(1, Number(nextTraining.week||2)-1)} concluída com risco físico ${nextTraining.injuryRisk}%.`].slice(-8)}
+  });
+  persist();
+  return state.training;
 }
 
 export function persist(){ try { localStorage.setItem(key, JSON.stringify(state)); } catch(err){ console.warn('[VFM] save local indisponivel', err); } }

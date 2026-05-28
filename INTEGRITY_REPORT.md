@@ -1,25 +1,26 @@
-# Relatório de Integridade - v4.7.0
+# Integrity Report - v4.9.0
 
-Status geral: OK
+## Mercado internacional
 
-## Motor de Partida 2.0
-- Snapshot de partida: OK
-- Timeline avançada: OK
-- xG: OK
-- Atributos individuais: OK
-- Cartões: OK
-- Lesões narrativas: OK
-- Pênaltis narrativos: OK
-- VAR narrativo: OK
-- Substituições: OK
-- Pós-jogo: OK
+Status: OK
 
-## Stress test
-- 100 partidas simuladas: OK
-- Erros críticos: 0
-- Warnings críticos: 0
+Validacoes adicionadas:
 
-## Compatibilidade
-- Save v4.6.0: migrável
-- Save v4.5.0: migrável
-- Save legado: migrável via legacyKeys
+- Orcamento nunca pode ficar negativo.
+- Folha livre nunca pode ficar negativa.
+- Janela fechada bloqueia compra e emprestimo.
+- Jogador ja comprado ou emprestado nao pode ser duplicado.
+- Mercado IA evita jogador ja movimentado pelo usuario.
+- Pre-contrato entra no livro internacional.
+- Vendas atualizam receita e folha.
+- Renovacoes atualizam folha e historico.
+
+## Validadores
+
+- transfer-validator: OK
+- contract-negotiation-validator: OK
+- budget-guard: OK
+
+## Saida para jogador final
+
+Os testes internos nao aparecem como tela tecnica para o jogador. A experiencia visivel e a Central de Transferencias Global.

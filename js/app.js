@@ -17,13 +17,13 @@ import { runBootSafety } from '../core/safety/safe-loader.js';
 
 async function boot(){
   const app = document.getElementById('app');
-  let buildInfo = { buildLabel:'Build v4.7.0' };
+  let buildInfo = { buildLabel:'Build v4.9.0' };
   try { buildInfo = await (await fetch('build/build-info.json', {cache:'no-store'})).json(); } catch(err) { console.warn('[VFM] build-info fallback', err); }
   const loadedAssetMap = await loadAssetMap();
   await loadVisualLibrary();
   applyCommercialPolish();
   load();
-  runRuntimeAudit(getState(), {phase:'v4.7.0 boot', ux: runtimeSafetySnapshot(getState())});
+  runRuntimeAudit(getState(), {phase:'v4.9.0 boot', ux: runtimeSafetySnapshot(getState())});
   validateCommercialState(getState());
   initRouter(app, buildInfo);
   register('cover', cover);
@@ -46,9 +46,9 @@ async function boot(){
     calendar:['Calendário','Agenda completa da temporada'],
     formation:['Formação','Escalação e desenho tático'],
     instructions:['Instruções','Comportamento coletivo e individual'],
-    training:['Treino','Plano semanal e evolução'],
+    training:['Treino','Plano semanal, evolução, recuperação, base e departamento médico'],
     standings:['Classificação','Tabelas e estatísticas'],
-    transfers:['Transferências','Mercado, contratos e negociações'],
+    transfers:['Transferências','Mercado internacional, contratos, pré-contratos, orçamento seguro e IA global'],
     smartMarket:['Mercado Inteligente','Empresários, propostas rivais, IA de clubes e disputa por atletas'],
     academyScouting:['Base & Scouting','Categorias de base, promessas, olheiros e captação global'],
     staff:['Staff','Comissão técnica e funcionários'],

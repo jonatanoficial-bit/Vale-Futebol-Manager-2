@@ -1,22 +1,26 @@
-# Changelog - v4.7.0
+# Changelog - v4.9.0
 
-## Fase 9 - Motor de Partida 2.0
+## Fase 11 - Mercado internacional
 
-### Implementado
-- Motor de partida atualizado para v4.7.0.
-- Eventos avançados por atributos, tática, moral, fadiga, clima e mando de campo.
-- Risco narrativo de VAR, pênalti, cartões, lesões e contra-ataques.
-- Modelo de impacto individual dos 11 jogadores principais.
-- Painel de partida com controle tático, risco de transição, bola parada, VAR, pênalti, lesão e impacto do banco.
-- Relatório pós-jogo preservado com fluxo seguro.
-- Stress test interno de 100 partidas.
+- Criado `js/systems/transferEngine.js`.
+- Adicionado livro internacional de transacoes no mercado.
+- Adicionado registro anti-duplicacao de jogadores.
+- Compra agora valida janela, orcamento, folha e duplicidade.
+- Emprestimo agora valida folha e registra transacao.
+- Venda agora atualiza orcamento, folha e livro de transacoes.
+- Renovacao agora valida folha e registra custo salarial.
+- Adicionado pre-contrato para chegada futura.
+- Mercado IA global agora evita jogador ja assinado/emprestado/pre-contratado.
+- Tela Transferencias atualizada para Mercado Internacional v4.9.0.
+- Build visivel atualizada para `Build v4.9.0 | 2026-05-28 | 21:08 BRT`.
 
-### Anti-quebra
-- Validador do motor de partida.
-- Validador de equilíbrio de eventos.
-- Checador de integridade de xG.
-- Gate de stress test executado no boot safety.
+## Anti-quebra
 
-### Compatibilidade
-- Migração de saves v4.6.0 e anteriores.
-- Nova chave local: vfm_gold_save_v470.
+- `core/safety/transfer-validator.js`
+- `core/safety/contract-negotiation-validator.js`
+- `core/safety/budget-guard.js`
+
+## Compatibilidade
+
+- Novo save key: `vfm_gold_save_v490`.
+- Save v4.8.0 entra como legacy e pode migrar para v4.9.0.

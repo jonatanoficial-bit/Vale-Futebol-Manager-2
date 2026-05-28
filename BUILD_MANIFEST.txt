@@ -1,20 +1,17 @@
-VALE FUTEBOL MANAGER - BUILD MANIFEST
-Versão: v4.7.0
-Build: 2026.05.28.009
-Data: 2026-05-28
-Hora: 20:22 BRT
-Fase: 9 - Motor de Partida 2.0
+Vale Futebol Manager - Build Manifest
+Versao: v4.9.0
+Build: 2026.05.28.011
+Data: 28/05/2026
+Hora: 21:08 BRT
+Fase: 11 - Mercado internacional
+Label visivel: Build v4.9.0 | 2026-05-28 | 21:08 BRT
+Arquivos auditados: 791
+Tamanho aproximado: 33M
 
-Arquivos principais alterados:
-- js/systems/matchEngine.js
-- js/screens/match.js
-- js/systems/state.js
-- js/app.js
-- build/build-info.json
-
-Arquivos anti-quebra adicionados:
-- core/safety/match-engine-validator.js
-- core/safety/event-balance-tester.js
-- core/safety/xg-integrity-checker.js
-
-Status: APROVADA
+Principais entregas:
+- Motor de mercado internacional v4.9.0.
+- Compra, venda, emprestimo, renovacao e pre-contrato com validacao financeira.
+- Livro internacional de transacoes.
+- Registro anti-duplicacao de jogador.
+- Mercado IA global evitando jogadores ja movimentados.
+- Validadores: transfer-validator, contract-negotiation-validator, budget-guard.

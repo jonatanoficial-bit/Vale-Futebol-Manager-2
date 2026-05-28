@@ -1,25 +1,25 @@
-# Asset Paths — v4.6.0
+# Asset Paths - v4.8.0
 
-## Jogadores Maio/2026
+A Fase 10 não adicionou assets pesados novos.
 
-Padrão de foto por jogador:
+Caminhos usados:
+- assets/backgrounds/bg-training.jpg
+- assets/placeholders/player-generic.png
+- assets/placeholders/staff-generic.png
+- assets/icons/training.png
 
-```txt
-assets/players/brazil/{clubId}/{playerId}.png
-```
+Caminhos futuros recomendados:
+- assets/training/medical-room.jpg
+- assets/training/youth-academy.jpg
+- assets/training/performance-center.jpg
 
-Fallback automático:
+## v4.9.0 - Mercado internacional
 
-```txt
-assets/placeholders/player-generic.png
-```
+A Fase 11 nao adiciona assets pesados obrigatorios. Continua usando:
 
-## JSONs de elenco
+- assets/players/scouted/{playerId}.png
+- assets/placeholders/player-generic.png
+- assets/countries/{country}.png
+- assets/placeholders/country-flag-generic.png
 
-```txt
-data/rosters/2026/{clubId}.json
-```
-
-## Observação
-
-Os assets pesados não precisam ser reenviados a cada fase se os caminhos forem mantidos. Esta build mantém o mapa de caminhos para evitar perda de referência.
+Todos os novos recursos de mercado sao de codigo/dados e reutilizam os caminhos existentes.
