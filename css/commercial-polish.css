@@ -133,3 +133,10 @@ html.vfm-commercial-v340 .table-scroll{scrollbar-width:thin}.table-scroll::-webk
 .prospect-card.ready{border-color:rgba(90,220,140,.45)}.prospect-card.watch{border-color:rgba(212,175,55,.45)}.prospect-card.dev{border-color:rgba(120,170,255,.25)}
 .prospect-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}.prospect-stats span{background:rgba(255,255,255,.06);border-radius:12px;padding:8px;text-align:center;font-size:.78rem}.prospect-stats b{display:block;color:#fff;font-size:1rem}.scouting-region{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center}.scouting-region.recommended{border-color:rgba(90,220,140,.35);background:rgba(50,120,70,.14)}.academy-alert.ok{border-color:rgba(90,220,140,.32)}.academy-alert.warn{border-color:rgba(212,175,55,.38)}.academy-alert.danger{border-color:rgba(255,90,90,.35)}.academy-event strong,.academy-alert strong{display:block}.academy-event small,.academy-alert small{color:rgba(255,255,255,.74)}
 @media(max-width:720px){.academy-v380 .academy-hero{flex-direction:column}.prospect-stats{grid-template-columns:repeat(2,1fr)}.scouting-region{grid-template-columns:1fr auto}}
+
+/* v3.9.0 - Phase 1 post-match premium + safe flow */
+.premium-postmatch{border:1px solid rgba(255,214,102,.28);box-shadow:0 20px 70px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.08)}
+.premium-postmatch .postmatch-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}
+.premium-postmatch .compact-stats{margin-top:14px}
+.premium-postmatch .stat-line{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:12px 14px}
+@media (max-width:760px){.premium-postmatch .postmatch-grid{grid-template-columns:1fr}.premium-postmatch .row.space{align-items:flex-start;gap:14px}.premium-postmatch .main-btn{width:100%}}
