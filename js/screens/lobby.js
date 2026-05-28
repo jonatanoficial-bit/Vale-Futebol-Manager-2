@@ -8,6 +8,7 @@ export function lobby(state){
   const t = teams.find(x => x.id === state.clubId) || teams[0];
   const managerCountry = state.manager.country || 'br';
   const menu = [
+    ['polishCenter','UI AAA','✨','Visual comercial, responsividade, performance e prontidão Steam/mobile','v5.0'],
     ['seasonCenter','Temporada','📆','Tabela viva, rodada completa, acesso, queda e vagas continentais','Novo'],
     ['championship','Campeonato','🏆','Competições, copa, continental e agenda anual','Essencial'],
     ['worldCompetitions','Libertadores/Sul-Americana','🌎','Grupos CONMEBOL, mata-mata continental e rota mundial','v4.2'],

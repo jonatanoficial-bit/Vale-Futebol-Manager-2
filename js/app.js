@@ -10,6 +10,7 @@ import { lobby } from './screens/lobby.js';
 import { match } from './screens/match.js';
 import { moduleScreen } from './screens/moduleScreen.js';
 import { applyCommercialPolish, validateCommercialState } from './systems/commercialPolish.js';
+import { applyAaaUiShell, buildUiAaaSnapshot } from './systems/uiQualityEngine.js';
 import { runRuntimeAudit } from './systems/auditLogger.js';
 import { loadVisualLibrary } from './systems/visualAssetManager.js';
 import { runtimeSafetySnapshot } from './systems/uxEngine.js';
@@ -17,13 +18,14 @@ import { runBootSafety } from '../core/safety/safe-loader.js';
 
 async function boot(){
   const app = document.getElementById('app');
-  let buildInfo = { buildLabel:'Build v4.9.0' };
+  let buildInfo = { buildLabel:'Build v5.0.0' };
   try { buildInfo = await (await fetch('build/build-info.json', {cache:'no-store'})).json(); } catch(err) { console.warn('[VFM] build-info fallback', err); }
   const loadedAssetMap = await loadAssetMap();
   await loadVisualLibrary();
   applyCommercialPolish();
+  applyAaaUiShell();
   load();
-  runRuntimeAudit(getState(), {phase:'v4.9.0 boot', ux: runtimeSafetySnapshot(getState())});
+  runRuntimeAudit(getState(), {phase:'v5.0.0 boot', ux: runtimeSafetySnapshot(getState()), aaa: buildUiAaaSnapshot(getState())});
   validateCommercialState(getState());
   initRouter(app, buildInfo);
   register('cover', cover);
@@ -37,7 +39,7 @@ async function boot(){
     seasonCenter:['Temporada','Tabela viva, rodada completa, acesso, queda e vagas continentais'],
     copaDoBrasil:['Copa do Brasil','Mata-mata, agregado, pênaltis, premiação e vaga na Libertadores'],
     financeCenter:['Economia','Diretoria, orçamento, patrocínio e crise financeira realista'],
-    polishCenter:['Polimento AAA','Auditoria visual, UX mobile, performance e prontidão comercial'],
+    polishCenter:['UI AAA','Polimento visual, responsividade, performance e prontidão comercial'],
     mobileAudit:['Auditoria Mobile','Fluxo real, smoke test de rotas, pós-jogo, save e estabilidade'],
     data2026:['Dados 2026','Divisões, elencos, avatares de jogadores e manutenção segura'],
     database2026:['Banco Maio/2026','Elencos, atributos, contratos, valores, fotos e auditoria pesada'],

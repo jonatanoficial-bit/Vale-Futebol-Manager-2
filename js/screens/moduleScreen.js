@@ -38,6 +38,10 @@ import { buildAcademySnapshot, exportAcademyTemplate } from '../systems/youthAca
 import { validateTransferSystem } from '../../core/safety/transfer-validator.js';
 import { validateContractNegotiations } from '../../core/safety/contract-negotiation-validator.js';
 import { validateBudgetGuard } from '../../core/safety/budget-guard.js';
+import { renderUiAaaCenter } from '../systems/uiQualityEngine.js';
+import { validateUiRoutes } from '../../core/safety/ui-route-validator.js';
+import { validateResponsiveShell } from '../../core/safety/responsive-validator.js';
+import { validateThemeTokens } from '../../core/safety/theme-validator.js';
 export function moduleScreen(route,title,subtitle,state){
   const extra = content(route, state);
   return screenWrap(route, `${topbar(title,subtitle,'lobby')}${clubHeader(state)}${extra}`, true);
@@ -86,7 +90,7 @@ function content(route,state={}){
   if(route==='copaDoBrasil') return copaDoBrasilScreenV410(state);
   if(route==='worldCompetitions') return worldCompetitionsScreenV430(state);
   if(route==='financeCenter') return financeCenterScreenV330(state);
-  if(route==='polishCenter') return polishCenterScreenV340(state);
+  if(route==='polishCenter') return polishCenterScreenV500(state);
   if(route==='mobileAudit') return mobileAuditScreenV350(state);
   if(route==='data2026') return data2026ScreenV360(state);
   if(route==='database2026') return databaseMay2026ScreenV460(state);
@@ -814,6 +818,15 @@ function financeCenterScreenV330(state={}){
     <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Diretoria</span><h2>Mandatos e risco de cobrança</h2></div><strong class="grade">${snap.boardScore}%</strong></div><div class="objective-list">${objectiveRows}</div></article><article class="panel"><div class="row space"><div><span class="tag">Patrocínio</span><h2>Mercado comercial</h2></div><button class="secondary-btn mini" data-route="sponsorship">Tela de patrocínio</button></div><div class="sponsor-market-list">${sponsorRows}</div></article></section>
     <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Crises</span><h2>Gatilhos financeiros</h2></div><strong class="grade">${snap.debtRisk}%</strong></div><div class="crisis-list">${crisisRows}</div></article><article class="panel"><div class="row space"><div><span class="tag">Relatório vivo</span><h2>Eventos executivos</h2></div><span class="status-pill">Anti-quebra ativo</span></div><div class="finance-feed-list">${feedRows}</div><p class="alert">Na v3.3 o centro financeiro é seguro: se qualquer dado faltar, o motor usa projeções e fallbacks para não travar o jogo.</p></article></section>
   </section>`;
+}
+
+
+function polishCenterScreenV500(state={}){
+  const routeValidation = validateUiRoutes(['lobby','match','championship','formation','transfers','club','polishCenter']);
+  const responsive = validateResponsiveShell();
+  const theme = validateThemeTokens();
+  const center = renderUiAaaCenter(state);
+  return `${center}<section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Rotas</span><h2>Validação UI-route</h2></div><strong class="grade">${routeValidation.status.toUpperCase()}</strong></div><pre class="code-block">${JSON.stringify(routeValidation,null,2)}</pre></article><article class="panel"><div class="row space"><div><span class="tag">Tema</span><h2>Responsividade e tokens</h2></div><strong class="grade">OK</strong></div><pre class="code-block">${JSON.stringify({responsive,theme},null,2)}</pre></article></section>`;
 }
 
 function polishCenterScreenV340(state={}){

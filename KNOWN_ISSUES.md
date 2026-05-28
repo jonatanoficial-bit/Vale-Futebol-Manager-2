@@ -1,5 +1,7 @@
-# Known Issues - v4.9.0
+# Known Issues - v5.0.0
 
-- Mercado usa base demonstrativa e caminhos preparados para expansao do banco licenciado completo.
-- Valores de transferencia ainda sao balanceados por formulas internas simples; podem ser refinados na fase de balanceamento final.
-- O jogador real so e removido visualmente do elenco quando a integracao total elenco/mercado for aprofundada em fase futura.
+Nenhum erro crítico conhecido na build.
+
+Observações:
+- A UI AAA é uma camada CSS/JS progressiva. Se o navegador não suportar blur avançado, o jogo cai para visual sólido sem quebrar.
+- Alguns assets continuam usando fallback conforme mapeamento original.

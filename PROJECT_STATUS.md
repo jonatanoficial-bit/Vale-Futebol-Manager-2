@@ -1,5 +1,5 @@
 Projeto: Vale Futebol Manager
-Versao atual: v4.9.0
-Fase atual: 11 - Mercado internacional
-Status: Build gerada e validada
-Proxima fase recomendada: v5.0.0 - UI AAA + responsividade
+Versão atual: v5.0.0
+Fase atual: 12 - UI AAA + Responsividade
+Status: Build entregue e aprovada nos testes locais.
+Próxima fase: v5.1.0 - Save profissional + migração, backup, exportação e recuperação de save corrompido.

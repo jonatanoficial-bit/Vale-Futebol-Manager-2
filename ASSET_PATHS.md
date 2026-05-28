@@ -23,3 +23,14 @@ A Fase 11 nao adiciona assets pesados obrigatorios. Continua usando:
 - assets/placeholders/country-flag-generic.png
 
 Todos os novos recursos de mercado sao de codigo/dados e reutilizam os caminhos existentes.
+
+
+## Fase 12 - UI AAA
+A Fase 12 não adiciona assets pesados. Usa os fundos existentes, especialmente:
+- assets/backgrounds/bg-lobby.jpg
+- assets/backgrounds/bg-main-menu.jpg
+- assets/backgrounds/bg-match.jpg
+- assets/backgrounds/bg-settings.jpg
+
+Novo CSS visual:
+- css/aaa-ui.css

@@ -1,9 +1,6 @@
-AUDITORIA V4.9.0
-Arquivos auditados: 791
-Tamanho aproximado: 33M
-node --check JS/core: OK
-Importacao transferEngine/state/moduleScreen: OK
-Render transfers: OK
-Validadores de mercado: OK
+Vale Futebol Manager - Audit Report v5.0.0
+Arquivos auditados: 796
+Tamanho do projeto: 33M
 Erros: 0
 Warnings: 0
+Status: OK

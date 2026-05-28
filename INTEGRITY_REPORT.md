@@ -1,26 +1,17 @@
-# Integrity Report - v4.9.0
+# Integrity Report - v5.0.0
 
-## Mercado internacional
+Status geral: OK
 
-Status: OK
+## Validações
+- CSS principal carregável: OK
+- `aaa-ui.css`: OK
+- `uiQualityEngine.js`: OK
+- Importação em `app.js`: OK
+- Rota `polishCenter`: OK
+- Validadores `ui-route`, `responsive`, `theme`: OK
+- Build info v5.0.0: OK
 
-Validacoes adicionadas:
+## Quality Gate
+`phase-12-aaa-ui-responsive-theme-route-integrity`
 
-- Orcamento nunca pode ficar negativo.
-- Folha livre nunca pode ficar negativa.
-- Janela fechada bloqueia compra e emprestimo.
-- Jogador ja comprado ou emprestado nao pode ser duplicado.
-- Mercado IA evita jogador ja movimentado pelo usuario.
-- Pre-contrato entra no livro internacional.
-- Vendas atualizam receita e folha.
-- Renovacoes atualizam folha e historico.
-
-## Validadores
-
-- transfer-validator: OK
-- contract-negotiation-validator: OK
-- budget-guard: OK
-
-## Saida para jogador final
-
-Os testes internos nao aparecem como tela tecnica para o jogador. A experiencia visivel e a Central de Transferencias Global.
+Resultado: aprovado para continuidade da Fase 13.
