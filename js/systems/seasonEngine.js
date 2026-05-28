@@ -3,7 +3,38 @@ import { standingsTables } from '../data/standingsData.js';
 import { clubLogo } from './assets.js';
 
 const DAY = 24*60*60*1000;
-export const SEASON_ENGINE_VERSION = 'v2.7.0';
+export const SEASON_ENGINE_VERSION = 'v4.0.0';
+
+export const BRAZILIAN_SEASON_RULES = {
+  season: 2026,
+  leagues: {
+    'brasileirao-a': {
+      name: 'Brasileirão Série A 2026',
+      tier: 1,
+      teams: 20,
+      rounds: 38,
+      matchesPerRound: 10,
+      totalMatches: 380,
+      relegation: { from: 17, to: 20, destination: 'brasileirao-b', label: 'Rebaixamento para Série B' },
+      continental: [
+        { from: 1, to: 5, destination: 'libertadores', label: 'Libertadores' },
+        { from: 6, to: 12, destination: 'sulamericana', label: 'Sul-Americana' }
+      ]
+    },
+    'brasileirao-b': {
+      name: 'Brasileirão Série B 2026',
+      tier: 2,
+      teams: 20,
+      rounds: 38,
+      matchesPerRound: 10,
+      totalMatches: 380,
+      promotion: { from: 1, to: 4, destination: 'brasileirao-a', label: 'Acesso para Série A' },
+      relegation: { from: 17, to: 20, destination: 'brasileirao-c-sim', label: 'Zona de queda para Série C simulada' }
+    }
+  },
+  tieBreakers: ['Pontos', 'Vitórias', 'Saldo de gols', 'Gols pró', 'Nome do clube'],
+  safety: { fallbackOnMissingClub: true, fallbackOnMissingFixture: true, autoRepairRound: true }
+};
 
 export function teamById(id){ return teams.find(t=>t.id===id) || teams[0]; }
 export function leagueTeams(leagueId='brasileirao-a'){
@@ -22,7 +53,7 @@ function goalsFor(team, opp, seed, home=false){
   return Math.max(0, Math.min(5, Math.round(expected + (raw>.76?1:0) - (raw<.18?1:0))));
 }
 function fixtureDate(round, slot=0){
-  const start = '2026-05-24';
+  const start = '2026-04-13';
   return dateAdd(start, (round-1)*7 + Math.floor(slot/10));
 }
 export function buildRoundRobin(leagueId='brasileirao-a'){
@@ -98,7 +129,7 @@ export function deriveStandings(leagueId='brasileirao-a', completed=[]){
     else { h.d++; a.d++; h.pts++; a.pts++; h.form=['E',...h.form].slice(0,5); a.form=['E',...a.form].slice(0,5); }
   });
   if(!relevant.length && standingsTables[leagueId]) return standingsTables[leagueId].map((r,i)=>({...r,pos:i+1,logo:clubLogo(r.id)}));
-  return base.sort((a,b)=>(b.pts-a.pts)||((b.gf-b.ga)-(a.gf-a.ga))||(b.gf-a.gf)||a.club.localeCompare(b.club)).map((r,i)=>({...r,pos:i+1, logo:clubLogo(r.id)}));
+  return base.sort((a,b)=>(b.pts-a.pts)||(b.w-a.w)||((b.gf-b.ga)-(a.gf-a.ga))||(b.gf-a.gf)||a.club.localeCompare(b.club)).map((r,i)=>({...r,pos:i+1, logo:clubLogo(r.id)}));
 }
 export function leagueZones(leagueId='brasileirao-a', pos=1){
   if(leagueId==='brasileirao-b'){
@@ -106,7 +137,7 @@ export function leagueZones(leagueId='brasileirao-a', pos=1){
     if(pos>=17) return {name:'Risco de queda', className:'zone-relegation'};
     return {name:'Meio da tabela', className:'zone-neutral'};
   }
-  if(pos<=4) return {name:'Libertadores', className:'zone-libertadores'};
+  if(pos<=5) return {name:'Libertadores', className:'zone-libertadores'};
   if(pos<=12) return {name:'Sul-Americana', className:'zone-sulamericana'};
   if(pos>=17) return {name:'Rebaixamento', className:'zone-relegation'};
   return {name:'Meio da tabela', className:'zone-neutral'};
@@ -114,9 +145,78 @@ export function leagueZones(leagueId='brasileirao-a', pos=1){
 export function qualificationSummary(leagueId='brasileirao-a'){
   return leagueId==='brasileirao-b'
     ? ['1º-4º sobem para a Série A', '17º-20º entram em zona de queda', 'Tabela dinâmica por rodada simulada']
-    : ['1º-4º entram na Libertadores', '5º-12º disputam Sul-Americana', '17º-20º caem para a Série B'];
+    : ['1º-5º entram na Libertadores', '6º-12º disputam Sul-Americana', '17º-20º caem para a Série B'];
 }
 export function seasonProgress(completed=[]){
   const byLeague = completed.reduce((acc,m)=>{acc[m.competitionId]=(acc[m.competitionId]||0)+1; return acc;},{});
   return byLeague;
+}
+
+
+export function validateLeagueSeasonIntegrity(leagueId='brasileirao-a'){
+  const rules = BRAZILIAN_SEASON_RULES.leagues[leagueId] || BRAZILIAN_SEASON_RULES.leagues['brasileirao-a'];
+  const leagueClubList = leagueTeams(leagueId).slice(0, rules.teams);
+  const rounds = buildRoundRobin(leagueId);
+  const fixtures = rounds.flat();
+  const seen = new Set();
+  const pairCount = new Map();
+  const errors = [];
+  const warnings = [];
+  if(leagueClubList.length !== rules.teams) errors.push(`${rules.name}: esperado ${rules.teams} clubes, encontrado ${leagueClubList.length}.`);
+  if(rounds.length !== rules.rounds) errors.push(`${rules.name}: esperado ${rules.rounds} rodadas, encontrado ${rounds.length}.`);
+  rounds.forEach((round,idx)=>{
+    if(round.length !== rules.matchesPerRound) errors.push(`${rules.name}: rodada ${idx+1} deveria ter ${rules.matchesPerRound} jogos, encontrou ${round.length}.`);
+    const clubsInRound = new Set();
+    round.forEach(f=>{
+      if(seen.has(f.id)) errors.push(`${rules.name}: fixture duplicado ${f.id}.`);
+      seen.add(f.id);
+      if(!f.home || !f.away || f.home === f.away) errors.push(`${rules.name}: confronto inválido na rodada ${idx+1}.`);
+      if(clubsInRound.has(f.home) || clubsInRound.has(f.away)) errors.push(`${rules.name}: clube repetido na rodada ${idx+1}.`);
+      clubsInRound.add(f.home); clubsInRound.add(f.away);
+      const key = [f.home, f.away].sort().join('::');
+      pairCount.set(key, (pairCount.get(key)||0)+1);
+    });
+  });
+  if(fixtures.length !== rules.totalMatches) errors.push(`${rules.name}: esperado ${rules.totalMatches} jogos, encontrado ${fixtures.length}.`);
+  pairCount.forEach((count,key)=>{ if(count !== 2) errors.push(`${rules.name}: par ${key} aparece ${count} vez(es), esperado ida e volta.`); });
+  if(!errors.length && !warnings.length) warnings.push(`${rules.name}: integridade aprovada com ${rules.rounds} rodadas e ${fixtures.length} jogos.`);
+  return { leagueId, name: rules.name, status: errors.length ? 'error' : 'ok', errors, warnings, rounds: rounds.length, fixtures: fixtures.length, clubs: leagueClubList.length };
+}
+
+export function validateBrazilianSeasonSystem(){
+  const serieA = validateLeagueSeasonIntegrity('brasileirao-a');
+  const serieB = validateLeagueSeasonIntegrity('brasileirao-b');
+  const errors = [...serieA.errors, ...serieB.errors];
+  return { version: SEASON_ENGINE_VERSION, status: errors.length ? 'error' : 'ok', leagues: [serieA, serieB], errors, totalFixtures: serieA.fixtures + serieB.fixtures, totalRounds: serieA.rounds + serieB.rounds };
+}
+
+export function promotionRelegationSnapshot(completed=[]){
+  const serieA = deriveStandings('brasileirao-a', completed);
+  const serieB = deriveStandings('brasileirao-b', completed);
+  const sliceNames = (rows, from, to)=> rows.filter(r=>r.pos>=from && r.pos<=to).map(r=>({id:r.id, club:r.club, pos:r.pos, pts:r.pts}));
+  return {
+    libertadores: sliceNames(serieA,1,5),
+    sulamericana: sliceNames(serieA,6,12),
+    relegatedToB: sliceNames(serieA,17,20),
+    promotedToA: sliceNames(serieB,1,4),
+    relegatedToCSim: sliceNames(serieB,17,20),
+    rules: BRAZILIAN_SEASON_RULES
+  };
+}
+
+export function seasonDashboardSnapshot(state={}){
+  const completed = state.career?.completedMatches || [];
+  const club = teamById(state.clubId || 'santos');
+  const leagueId = club.leagueId || 'brasileirao-a';
+  const rules = BRAZILIAN_SEASON_RULES.leagues[leagueId] || BRAZILIAN_SEASON_RULES.leagues['brasileirao-a'];
+  const playedInLeague = completed.filter(m=>m.competitionId===leagueId).length;
+  const currentRound = Math.min(rules.rounds, Math.max(1, Number(state.career?.matchday || state.match?.round || 1)));
+  return {
+    club, leagueId, rules, currentRound,
+    playedInLeague,
+    progressPct: Math.round((playedInLeague / Math.max(1, rules.totalMatches))*100),
+    integrity: validateLeagueSeasonIntegrity(leagueId),
+    nationalIntegrity: validateBrazilianSeasonSystem(),
+    destinations: promotionRelegationSnapshot(completed)
+  };
 }

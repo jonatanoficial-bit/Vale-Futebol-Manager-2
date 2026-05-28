@@ -1,17 +1,20 @@
-Vale Futebol Manager Gold Edition
-Build: v3.8.0
-Data: 2026-05-20
-Hora: 05:15 UTC
-Fase: Categorias de base e scouting profundo
-Base: v3.7.0
+VALE FUTEBOL MANAGER - BUILD MANIFEST
+Versão: v4.7.0
+Build: 2026.05.28.009
+Data: 2026-05-28
+Hora: 20:22 BRT
+Fase: 9 - Motor de Partida 2.0
 
-Incluido:
-- tela Base & Scouting
-- promessas da base
-- departamentos da academia
-- politica de formacao
-- regioes de scouting
-- eventos narrativos da base
-- caminho seguro para fotos futuras
-- fallback anti-quebra de avatares
-- guia YOUTH_ACADEMY_V38_GUIDE.md
+Arquivos principais alterados:
+- js/systems/matchEngine.js
+- js/screens/match.js
+- js/systems/state.js
+- js/app.js
+- build/build-info.json
+
+Arquivos anti-quebra adicionados:
+- core/safety/match-engine-validator.js
+- core/safety/event-balance-tester.js
+- core/safety/xg-integrity-checker.js
+
+Status: APROVADA

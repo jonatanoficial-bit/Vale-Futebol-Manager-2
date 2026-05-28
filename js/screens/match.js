@@ -33,7 +33,33 @@ function buildSubOptions(players=[], state, isOver){
 function postMatchPanel(report, home, away){
   if(!report) return '';
   const s = report.stats;
-  return `<section class="panel post-match-report"><div class="row space"><div><span class="tag">Pós-jogo</span><h2>${report.headline}</h2></div><button class="main-btn mini" data-route="lobby">Salvar e voltar ao lobby</button></div><div class="grid desktop-4"><div class="card kpi-card"><span>Resultado</span><strong>${s.score.home} - ${s.score.away}</strong><small>${home.name} x ${away.name}</small></div><div class="card kpi-card"><span>Nota do jogo</span><strong>${report.stats.matchRating}</strong><small>Ritmo e chances</small></div><div class="card kpi-card"><span>Diretoria</span><strong>${report.boardNote}</strong><small>Impacto imediato</small></div><div class="card kpi-card"><span>Torcida</span><strong>${report.fanNote}</strong><small>Humor social</small></div></div><p class="alert"><b>Momento-chave:</b> ${report.bestMoment}</p><p class="alert"><b>Leitura tática:</b> ${report.tacticalRead}</p></section>`;
+  const score = s.score || report.score || {home:0, away:0};
+  const homeWin = score.home > score.away;
+  const draw = score.home === score.away;
+  const managerImpact = homeWin ? 'Confiança ampliada' : draw ? 'Projeto estável' : 'Cobrança controlada';
+  const financialImpact = homeWin ? '+ bônus por vitória' : draw ? '+ bônus de presença' : '+ receita de jogo';
+  const media = homeWin ? 'Imprensa destaca execução do plano de jogo.' : draw ? 'Coletiva cobra ajustes finos para a próxima rodada.' : 'Narrativa externa pede resposta imediata.';
+  return `<section class="panel post-match-report premium-postmatch">
+    <div class="row space"><div><span class="tag">Relatório pós-jogo · salvo</span><h2>${report.headline}</h2><p class="small">Fluxo seguro v4.7.0: resultado integrado, relatório preservado e próximo jogo enfileirado somente após confirmação.</p></div><button class="main-btn mini" data-action="post-match-lobby">Salvar e voltar ao lobby</button></div>
+    <div class="grid desktop-4">
+      <div class="card kpi-card"><span>Resultado final</span><strong>${score.home} - ${score.away}</strong><small>${home.name} x ${away.name}</small></div>
+      <div class="card kpi-card"><span>Nota do jogo</span><strong>${s.matchRating}</strong><small>Ritmo, xG e chances</small></div>
+      <div class="card kpi-card"><span>Diretoria</span><strong>${managerImpact}</strong><small>${report.boardNote}</small></div>
+      <div class="card kpi-card"><span>Torcida</span><strong>${report.fanNote}</strong><small>Humor social pós-jogo</small></div>
+    </div>
+    <div class="postmatch-grid">
+      <p class="alert"><b>Momento-chave:</b> ${report.bestMoment}</p>
+      <p class="alert"><b>Leitura tática:</b> ${report.tacticalRead}</p>
+      <p class="alert"><b>Imprensa:</b> ${media}</p>
+      <p class="alert"><b>Financeiro:</b> ${financialImpact}. Receita e moral foram atualizadas no save local.</p>
+    </div>
+    <div class="grid desktop-4 compact-stats">
+      <div class="stat-line"><span>Chutes</span><strong>${s.shots?.[0] || 0} - ${s.shots?.[1] || 0}</strong></div>
+      <div class="stat-line"><span>xG</span><strong>${s.xg?.[0] || '0.00'} - ${s.xg?.[1] || '0.00'}</strong></div>
+      <div class="stat-line"><span>Posse</span><strong>${s.possession?.[0] || 50}% - ${s.possession?.[1] || 50}%</strong></div>
+      <div class="stat-line"><span>Momentum</span><strong>${s.momentum || 50}%</strong></div>
+    </div>
+  </section>`;
 }
 export function match(state){
   const minute = Math.min(90, Math.max(1, Number(state.match?.minute || 1)));
@@ -61,11 +87,11 @@ export function match(state){
   const autoLabel = state.match?.autoPlay ? 'Pausar automático' : 'Avançar automático';
   const speed = Number(state.match?.speed || 1);
   const matchHeader = `${home.stadium || 'Estádio'} · ${stats.ctx.weather} · Árbitro ${stats.ctx.refereeTone} · ${stats.ctx.attendance.toLocaleString('pt-BR')} torcedores`;
-  return screenWrap('match', `${topbar('Partida ao vivo','Motor profundo v3.0 · tempo real, xG, VAR narrativo e pós-jogo','lobby')}
+  return screenWrap('match', `${topbar('Partida ao vivo','Motor 2.0 v4.7 · atributos, xG, VAR, lesões, cartões e pós-jogo','lobby')}
     <section class="match-v140 match-v300">
       <article class="panel match-score-hero">
         <div class="match-team-side">${safeImg(clubLogo(home.id),'club',home.name,'match-logo')}<h2>${home.name}</h2><span>${home.league}</span></div>
-        <div class="match-score-center"><span class="tag">${matchHeader}</span><div class="score ultra">${score.home} - ${score.away}</div><div class="clock premium">${String(minute).padStart(2,'0')}:00</div><div class="match-progress"><span style="width:${pct((minute/90)*100)}"></span></div><small>${isOver ? 'Partida encerrada. Pós-jogo pronto para retorno ao lobby.' : `Simulação ${speed}x com eventos, cansaço, tática, moral e mando de campo.`}</small></div>
+        <div class="match-score-center"><span class="tag">${matchHeader}</span><div class="score ultra">${score.home} - ${score.away}</div><div class="clock premium">${String(minute).padStart(2,'0')}:00</div><div class="match-progress"><span style="width:${pct((minute/90)*100)}"></span></div><small>${isOver ? 'Partida encerrada. Pós-jogo pronto para retorno ao lobby.' : `Simulação ${speed}x com atributos, cansaço, moral, tática, VAR e risco físico.`}</small></div>
         <div class="match-team-side">${safeImg(clubLogo(away.id),'club',away.name,'match-logo')}<h2>${away.name}</h2><span>${away.league}</span></div>
       </article>
 
@@ -82,8 +108,9 @@ export function match(state){
           </div>
           <div class="possession-bar"><span style="width:${stats.possession[0]}%"><b>${home.name}</b> ${stats.possession[0]}%</span><em><b>${away.name}</b> ${stats.possession[1]}%</em></div>
           <div class="match-context-grid"><span>Ritmo ${stats.tempo}%</span><span>Fadiga ${Math.round(100-stats.fatigue)}%</span><span>Clima: ${stats.ctx.weather}</span></div>
+          <div class="match-context-grid engine-v470"><span>Controle ${stats.advanced?.tacticalControl || 50}%</span><span>Transição ${stats.advanced?.transitionDanger || 42}%</span><span>Bola parada ${stats.advanced?.setPieceThreat || 34}%</span></div>
         </article>
-        <aside class="panel live-commentary-panel"><div class="row space"><div><span class="tag">Narração ao vivo</span><h2>Eventos e decisões</h2></div>${isOver ? '<button class="secondary-btn mini" data-route="lobby">Ir ao lobby</button>' : '<button class="secondary-btn mini" data-action="match-advance">Avançar +5 min</button>'}</div><div class="commentary premium-list">${commentary}</div></aside>
+        <aside class="panel live-commentary-panel"><div class="row space"><div><span class="tag">Narração ao vivo</span><h2>Eventos e decisões</h2></div>${isOver ? '<button class="secondary-btn mini" data-action="post-match-lobby">Ir ao lobby</button>' : '<button class="secondary-btn mini" data-action="match-advance">Avançar +5 min</button>'}</div><div class="commentary premium-list">${commentary}</div></aside>
       </section>
 
       <section class="grid desktop-4 match-kpis">
@@ -93,12 +120,19 @@ export function match(state){
         <div class="card kpi-card"><span>Disciplina</span><strong>${stats.fouls[0]+stats.fouls[1]}</strong><small>Cartões: ${stats.cards[0]} - ${stats.cards[1]}</small></div>
       </section>
 
+      <section class="grid desktop-4 match-kpis engine-v470-panel">
+        <div class="card kpi-card"><span>Risco VAR</span><strong>${stats.advanced?.varRisk || 8}%</strong><small>Revisões narrativas seguras</small></div>
+        <div class="card kpi-card"><span>Pênalti</span><strong>${stats.advanced?.penaltyRisk || 6}%</strong><small>Pressão na área</small></div>
+        <div class="card kpi-card"><span>Lesão</span><strong>${stats.advanced?.injuryRisk || 4}%</strong><small>Clima + fadiga + intensidade</small></div>
+        <div class="card kpi-card"><span>Impacto banco</span><strong>${stats.advanced?.substitutionImpact || 0}%</strong><small>Substituições e físico</small></div>
+      </section>
+
       <section class="grid grid-3 match-control-grid">
-        <article class="panel"><span class="tag">Controles</span><h3>Ritmo da simulação</h3><div class="row wrap"><button class="secondary-btn ${speed===1?'active':''}" data-action="match-speed" data-speed="1">1x</button><button class="secondary-btn ${speed===2?'active':''}" data-action="match-speed" data-speed="2">2x</button><button class="secondary-btn ${speed===5?'active':''}" data-action="match-speed" data-speed="5">5x</button></div>${isOver ? '<button class="main-btn" data-route="lobby">Salvar e voltar ao lobby</button>' : '<button class="main-btn" data-action="match-advance">Avançar +5 min</button><button class="secondary-btn" data-action="match-autoplay" data-enabled="'+(!state.match?.autoPlay)+'">'+autoLabel+'</button><button class="secondary-btn danger" data-action="match-finish">Finalizar e voltar ao lobby</button>'}</article>
+        <article class="panel"><span class="tag">Controles</span><h3>Ritmo da simulação</h3><div class="row wrap"><button class="secondary-btn ${speed===1?'active':''}" data-action="match-speed" data-speed="1">1x</button><button class="secondary-btn ${speed===2?'active':''}" data-action="match-speed" data-speed="2">2x</button><button class="secondary-btn ${speed===5?'active':''}" data-action="match-speed" data-speed="5">5x</button></div>${isOver ? '<button class="main-btn" data-action="post-match-lobby">Salvar e voltar ao lobby</button>' : '<button class="main-btn" data-action="match-advance">Avançar +5 min</button><button class="secondary-btn" data-action="match-autoplay" data-enabled="'+(!state.match?.autoPlay)+'">'+autoLabel+'</button><button class="secondary-btn danger" data-action="match-finish">Finalizar e ver relatório</button>'}</article>
         <article class="panel substitutions-panel"><span class="tag">Substituições</span><h3>Banco e queda física</h3><div class="stat-line"><span>Trocas restantes</span><strong>${subsLeft}/${state.match?.maxSubs || 5}</strong></div><div class="sub-list">${subOptions}</div><div class="commentary compact">${subHistory}</div></article>
         <article class="panel"><span class="tag">Decisões em jogo</span><h3>Comandos rápidos</h3><div class="tactical-actions">${tips}</div><div class="decision-log">${decisionLog}</div></article>
       </section>
 
-      <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Notas ao vivo</span><h2>Destaques individuais</h2></div><strong class="grade">${stats.matchRating}</strong></div><div class="rating-list">${ratingRows(players, snap)}</div></article><article class="panel ai-balance-live"><div class="row space"><div><span class="tag">IA v3.0</span><h2>Leitura realista</h2></div><strong class="grade">${stats.ctx.diff>4?'Casa':stats.ctx.diff<-4?'Visitante':'Equilíbrio'}</strong></div>${balanceLines.map(x=>`<div class="stat-line"><span>${x}</span><strong>OK</strong></div>`).join('')}<div class="stat-line"><span>Momentum</span><strong>${stats.momentum}%</strong></div><div class="stat-line"><span>Condição média</span><strong>${Math.round(stats.fatigue)}%</strong></div><p class="alert">O motor considera elenco, posição, tática, moral, fadiga, clima, mando de campo, substituições e variação controlada.</p></article><article class="panel"><div class="row space"><div><span class="tag">Assistente</span><h2>Diagnóstico</h2></div><span class="status-pill">Anti-quebra ativo</span></div><p class="alert">Partida profunda com avanço automático, pausa tática, VAR narrativo, xG, cansaço, eventos e pós-jogo.</p><div class="stat-line"><span>Recomendação</span><strong>${score.home>=score.away?'Controlar transição':'Aumentar pressão'}</strong></div><div class="stat-line"><span>Risco atual</span><strong>${minute>75?'Alto':'Médio'}</strong></div></article></section>
+      <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Notas ao vivo</span><h2>Destaques individuais</h2></div><strong class="grade">${stats.matchRating}</strong></div><div class="rating-list">${ratingRows(players, snap)}</div></article><article class="panel ai-balance-live"><div class="row space"><div><span class="tag">IA v3.0</span><h2>Leitura realista</h2></div><strong class="grade">${stats.ctx.diff>4?'Casa':stats.ctx.diff<-4?'Visitante':'Equilíbrio'}</strong></div>${balanceLines.map(x=>`<div class="stat-line"><span>${x}</span><strong>OK</strong></div>`).join('')}<div class="stat-line"><span>Momentum</span><strong>${stats.momentum}%</strong></div><div class="stat-line"><span>Condição média</span><strong>${Math.round(stats.fatigue)}%</strong></div><p class="alert">O motor 2.0 considera atributos individuais, posição, tática, moral, fadiga, clima, mando, substituições, VAR, risco físico, cartões e variação controlada.</p></article><article class="panel"><div class="row space"><div><span class="tag">Assistente</span><h2>Diagnóstico</h2></div><span class="status-pill">Anti-quebra ativo</span></div><p class="alert">Motor de partida 2.0 com stress test interno, eventos seguros, xG, VAR, cartões, lesões, substituições e relatório pós-jogo preservado.</p><div class="stat-line"><span>Recomendação</span><strong>${score.home>=score.away?'Controlar transição':'Aumentar pressão'}</strong></div><div class="stat-line"><span>Risco atual</span><strong>${minute>75?'Alto':'Médio'}</strong></div></article></section>
     </section>`, true);
 }

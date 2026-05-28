@@ -6,18 +6,19 @@ import { transferShortlist, negotiations as baseNegotiations, outgoingList, loan
 import { buildMarketIntelligence, createSmartIncomingOffer, createIntelligentAIDeal, nextAgentEvent } from './marketIntelligenceEngine.js';
 import { scoreFromTimeline, buildBalanceSummary } from './balance.js';
 import { squadPlayers as defaultRosterPlayers, rosterMeta as defaultRosterMeta, normalizeRoster } from '../data/squadData.js';
-import { generateOffers, validateCareerState, buildInternationalCalendar, defaultCallUpSelection } from './careerEngine.js';
+import { generateOffers, validateCareerState, validateManagerCareerState, buildManagerCareerSnapshot, buildInternationalCalendar, defaultCallUpSelection } from './careerEngine.js';
+import { buildNationalCalendar, buildNationalTeamSnapshot, safeCallUpPool, simulateNationalFixture, NATIONAL_TEAM_ENGINE_VERSION } from './nationalTeamEngine.js';
 
-const key = 'vfm_gold_save_v370';
-const legacyKeys = ['vfm_gold_save_v360', 'vfm_gold_save_v350', 'vfm_gold_save_v340', 'vfm_gold_save_v330', 'vfm_gold_save_v320', 'vfm_gold_save_v310', 'vfm_gold_save_v300', 'vfm_gold_save_v290', 'vfm_gold_save_v280', 'vfm_gold_save_v270', 'vfm_gold_save_v262', 'vfm_gold_save_v261', 'vfm_gold_save_v260', 'vfm_gold_save_v251', 'vfm_gold_save_v240', 'vfm_gold_save_v230', 'vfm_gold_save_v220', 'vfm_gold_save_v210', 'vfm_gold_save_v200', 'vfm_gold_save_v190', 'vfm_gold_save_v180', 'vfm_gold_save_v170', 'vfm_gold_save_v160', 'vfm_gold_save_v150', 'vfm_gold_save_v140', 'vfm_gold_save_v130', 'vfm_gold_save_v120', 'vfm_gold_save_v110', 'vfm_gold_save_v100', 'vfm_gold_save_v090', 'vfm_gold_save_v080', 'vfm_gold_save_v050', 'vfm_gold_save_v040', 'vfm_gold_save_v030', 'vfm_gold_save_v020', 'vfm_gold_save_v010'];
+const key = 'vfm_gold_save_v470';
+const legacyKeys = ['vfm_gold_save_v460','vfm_gold_save_v450','vfm_gold_save_v440', 'vfm_gold_save_v430', 'vfm_gold_save_v420', 'vfm_gold_save_v410', 'vfm_gold_save_v400', 'vfm_gold_save_v390', 'vfm_gold_save_v370', 'vfm_gold_save_v360', 'vfm_gold_save_v350', 'vfm_gold_save_v340', 'vfm_gold_save_v330', 'vfm_gold_save_v320', 'vfm_gold_save_v310', 'vfm_gold_save_v300', 'vfm_gold_save_v290', 'vfm_gold_save_v280', 'vfm_gold_save_v270', 'vfm_gold_save_v262', 'vfm_gold_save_v261', 'vfm_gold_save_v260', 'vfm_gold_save_v251', 'vfm_gold_save_v240', 'vfm_gold_save_v230', 'vfm_gold_save_v220', 'vfm_gold_save_v210', 'vfm_gold_save_v200', 'vfm_gold_save_v190', 'vfm_gold_save_v180', 'vfm_gold_save_v170', 'vfm_gold_save_v160', 'vfm_gold_save_v150', 'vfm_gold_save_v140', 'vfm_gold_save_v130', 'vfm_gold_save_v120', 'vfm_gold_save_v110', 'vfm_gold_save_v100', 'vfm_gold_save_v090', 'vfm_gold_save_v080', 'vfm_gold_save_v050', 'vfm_gold_save_v040', 'vfm_gold_save_v030', 'vfm_gold_save_v020', 'vfm_gold_save_v010'];
 export const defaultState = () => ({
   route:'cover',
   manager:{ name:'Joao Victor', country:'br', avatar:'assets/avatars/manager-01.png', reputation:82, mode:'career' },
   clubId:'santos', season:2026, month:'Maio', money:92.5, coins:250, notifications:6, boardTrust:76, fanMood:82, jobSecurity:'Seguro',
-  match:{ id:'2026-05-24-santos-palmeiras', date:'2026-05-24', competitionId:'brasileirao-a', competition:'Brasileirão Série A 2026', stage:'Rodada atual', minute:1, home:'santos', away:'palmeiras', homeGoals:0, awayGoals:0, speed:1, autoPlay:false, finalized:false, postMatchReady:false, substitutions:[], maxSubs:5, decision:'balanced', tacticalBoost:0, usedSubPlayers:[], postMatchReport:null },
-  career:{ currentDate:'2026-05-19', matchday:1, completedMatches:[], lastResult:null, promotionRelegation:{serieARelegation:4,serieBPromotion:4,libertadoresTop:4}, integrationLog:['Carreira migrada para v3.2.0 com propostas de clubes, carreira internacional, convocacao e calendario FIFA.'], jobOffers:[], offerHistory:[], nationalTeamJob:null, dualCareer:{enabled:false, club:true, nationalTeam:null}, callUpSelection:defaultCallUpSelection(), internationalCalendar:buildInternationalCalendar(2026), worldCompetitionCycle:{libertadores:true,sulamericana:true,clubWorldCupCycle:4,worldCupCycle:4,lastUpdated:'v3.5.0'}, financeReport:{profile:'balanced', lastMonthlyCycle:null, crisisLog:[], boardWarnings:[], sponsorReview:'v3.5.0'} },
-  gameplay:{ difficulty:'realistic', aiVersion:'v3.7.0', realism:88, variance:18, balanceLog:[] },
-  stability:{ autosave:true, lastBackup:null, backupCount:0, lastExport:null, lastImport:null, safeModeEvents:0, health:'Excelente', auditVersion:'v3.7.0', commercialAudit:'v3.7.0-ok', fullscreenMobile:true, overflowGuard:true, rosterSafeMode:true, matchEngineSafeMode:true },
+  match:{ id:'2026-05-24-santos-palmeiras', date:'2026-05-24', competitionId:'brasileirao-a', competition:'Brasileirão Série A 2026', stage:'Rodada atual', minute:1, home:'santos', away:'palmeiras', homeGoals:0, awayGoals:0, speed:1, autoPlay:false, finalized:false, postMatchReady:false, substitutions:[], maxSubs:5, decision:'balanced', tacticalBoost:0, usedSubPlayers:[], postMatchReport:null, nextMatchQueued:null, reportViewed:false },
+  career:{ currentDate:'2026-05-19', matchday:1, completedMatches:[], lastResult:null, promotionRelegation:{serieARelegation:4,serieBPromotion:4,libertadoresTop:5,sulamericanaRange:[6,12],serieBRelegation:4}, integrationLog:['Carreira migrada para v4.7.0 com Motor de Partida 2.0, VAR narrativo, lesões, cartões, substituições e stress test seguro.'], jobOffers:[], offerHistory:[], nationalTeamJob:null, dualCareer:{enabled:false, club:true, nationalTeam:null}, callUpSelection:defaultCallUpSelection(), internationalCalendar:buildNationalCalendar(2026, 'brasil'), managerProfile:null, activeContract:null, contractHistory:[], titleHistory:[], sackRiskLog:[], managerTimeline:[], unlockedMilestones:[], boardRelationship:76, fanRelationship:82, dressingRoomTrust:69, mediaPressure:54, worldCompetitionCycle:{libertadores:true,sulamericana:true,clubWorldCupCycle:4,worldCupCycle:4,lastUpdated:'v4.3.0'}, financeReport:{profile:'balanced', lastMonthlyCycle:null, crisisLog:[], boardWarnings:[], sponsorReview:'v3.5.0'} },
+  gameplay:{ difficulty:'realistic', aiVersion:'v4.7.0', realism:88, variance:18, balanceLog:[] },
+  stability:{ autosave:true, lastBackup:null, backupCount:0, lastExport:null, lastImport:null, safeModeEvents:0, health:'Excelente', auditVersion:'v4.7.0', commercialAudit:'v3.7.0-ok', fullscreenMobile:true, overflowGuard:true, rosterSafeMode:true, matchEngineSafeMode:true, matchEngineVersion:'v4.7.0', matchStressTest:'passed-100' },
   roster:{ meta: defaultRosterMeta, players: defaultRosterPlayers, lastImport:null, lastExport:null, validationLog:['Elenco base Santos 2026 carregado com proteção anti-quebra.'] },
   finance:{profile:'balanced', lastMonthlyCycle:null, crisisLog:[], boardWarnings:[], sponsorReview:'v3.5.0'},
   transfer:{ budget:42.8, wageRoom:2.4, negotiationLog:[], activeNegotiations:[], acceptedDeals:[], rejectedDeals:[], outgoingDeals:[], renewals:[], loanDeals:[], incomingOffers:[], aiDeals:[], agentEvents:[], smartReports:[], windowOpen:true, boardApproval:82, marketDay:1, intelligenceVersion:'v3.7.0' },
@@ -43,10 +44,17 @@ function normalize(next){
   if(!Array.isArray(merged.match.substitutions)) merged.match.substitutions = [];
   if(!Array.isArray(merged.match.usedSubPlayers)) merged.match.usedSubPlayers = [];
   if(!merged.match.postMatchReport) merged.match.postMatchReport = null;
+  if(!merged.match.nextMatchQueued) merged.match.nextMatchQueued = null;
+  if(typeof merged.match.reportViewed !== 'boolean') merged.match.reportViewed = false;
   merged.match.maxSubs = Math.max(3, Math.min(5, Number(merged.match.maxSubs || 5)));
   merged.match.decision = String(merged.match.decision || 'balanced');
   merged.match.tacticalBoost = Number(merged.match.tacticalBoost || 0);
   merged.career = validateCareerState({...base.career, ...(next?.career || {})});
+  merged.career.callUpSelection = safeCallUpPool(merged.career.callUpSelection);
+  const ntId = merged.career.nationalTeamJob?.id || merged.career.dualCareer?.nationalTeam || 'brasil';
+  if(!Array.isArray(merged.career.internationalCalendar) || merged.career.internationalCalendar.length < 5) merged.career.internationalCalendar = buildNationalCalendar(Number(merged.season||2026), ntId);
+  if(merged.career.nationalTeamJob && !merged.career.dualCareer?.enabled) merged.career.dualCareer = {enabled:true, club:true, nationalTeam:merged.career.nationalTeamJob.id};
+  merged.career = validateManagerCareerState(merged.career, merged);
   if(!Array.isArray(merged.career.completedMatches)) merged.career.completedMatches = [];
   if(!Array.isArray(merged.career.integrationLog)) merged.career.integrationLog = [];
   merged.gameplay = {...base.gameplay, ...(next?.gameplay || {})};
@@ -124,9 +132,9 @@ function buildClubFixture(clubId='santos', index=0){
   const club = getTeam(clubId);
   if(!f){
     const rival = teams.find(t=>t.id!==clubId) || club;
-    return {id:`fallback-${clubId}-${rival.id}`, date:'2026-05-24', competitionId:club.leagueId||'brasileirao-a', competition:matchLabelForClub(club), stage:'Rodada 1', round:1, minute:1, home:clubId, away:rival.id, homeGoals:0, awayGoals:0, speed:1, autoPlay:false, finalized:false, postMatchReady:false, substitutions:[], maxSubs:5, decision:'balanced', tacticalBoost:0, usedSubPlayers:[]};
+    return {id:`fallback-${clubId}-${rival.id}`, date:'2026-05-24', competitionId:club.leagueId||'brasileirao-a', competition:matchLabelForClub(club), stage:'Rodada 1', round:1, minute:1, home:clubId, away:rival.id, homeGoals:0, awayGoals:0, speed:1, autoPlay:false, finalized:false, postMatchReady:false, substitutions:[], maxSubs:5, decision:'balanced', tacticalBoost:0, usedSubPlayers:[], postMatchReport:null, nextMatchQueued:null, reportViewed:false};
   }
-  return {...f, minute:1, homeGoals:0, awayGoals:0, speed:1, autoPlay:false, finalized:false, postMatchReady:false, substitutions:[], maxSubs:5, decision:'balanced', tacticalBoost:0, usedSubPlayers:[]};
+  return {...f, minute:1, homeGoals:0, awayGoals:0, speed:1, autoPlay:false, finalized:false, postMatchReady:false, substitutions:[], maxSubs:5, decision:'balanced', tacticalBoost:0, usedSubPlayers:[], postMatchReport:null, nextMatchQueued:null, reportViewed:false};
 }
 function nextFixtureForClub(clubId, afterIndex=0){ return buildClubFixture(clubId, afterIndex); }
 
@@ -143,7 +151,7 @@ export function startCareer(){
     },
     clubId: chosenClub,
     match: firstMatch,
-    career:{...state.career, currentDate:'2026-05-19', matchday:1, completedMatches:[], lastResult:null, lastRoundResults:[], promotionRelegation:{serieARelegation:4,serieBPromotion:4,libertadoresTop:4,sulamericanaRange:[5,12]}, integrationLog:['Carreira iniciada na v3.2.0: temporada, transferencias, tática, motor de partida e propostas de carreira conectados.']},
+    career:{...state.career, currentDate:'2026-05-19', matchday:1, completedMatches:[], lastResult:null, lastRoundResults:[], promotionRelegation:{serieARelegation:4,serieBPromotion:4,libertadoresTop:5,sulamericanaRange:[6,12],serieBRelegation:4}, integrationLog:['Carreira iniciada na v4.7.0: Motor de Partida 2.0 ativo com pós-jogo, atributos, VAR, cartões, lesões e anti-quebra.']},
     route:'lobby'
   });
   persist();
@@ -195,11 +203,11 @@ function pointsForClub(match, score){
   return gf > ga ? 3 : gf === ga ? 1 : 0;
 }
 export function finishMatch(){
-  const current = {...(state.match || defaultState().match), minute:90, finalized:true};
+  const current = {...(state.match || defaultState().match), minute:90, finalized:true, postMatchReady:true, autoPlay:false};
   const score = scoreUntilMinute(current);
   current.homeGoals = score.home;
   current.awayGoals = score.away;
-  current.postMatchReport = getPostMatchReport(current, state);
+  current.postMatchReport = current.postMatchReport || getPostMatchReport(current, state);
   const already = (state.career?.completedMatches || []).some(m => m.id === current.id);
   const result = {
     id: current.id,
@@ -212,7 +220,8 @@ export function finishMatch(){
     homeGoals: score.home,
     awayGoals: score.away,
     points: pointsForClub(current, score),
-    summary: `${score.home} x ${score.away}`
+    summary: `${score.home} x ${score.away}`,
+    report: current.postMatchReport
   };
   const otherResults = already ? [] : simulateOtherRoundMatches({...state, match:current}, Number(current.round || state.career?.matchday || 1));
   const completed = already ? state.career.completedMatches : [...(state.career?.completedMatches || []), result, ...otherResults];
@@ -220,22 +229,41 @@ export function finishMatch(){
   const moneyBonus = result.points === 3 ? 2.5 : result.points === 1 ? 0.8 : 0.2;
   const trustDelta = result.points === 3 ? 2 : result.points === 1 ? 0 : -2;
   const fanDelta = result.points === 3 ? 3 : result.points === 1 ? 0 : -3;
+  const dressingDelta = result.points === 3 ? 2 : result.points === 1 ? 0 : -2;
+  const mediaDelta = result.points === 3 ? -1 : result.points === 1 ? 0 : 3;
   const balanceLog = Array.isArray(state.gameplay?.balanceLog) ? state.gameplay.balanceLog.slice(-9) : [];
   balanceLog.push({date:result.date, match:result.id, report:buildBalanceSummary(current, state), result:result.summary});
-  const career = {...state.career, completedMatches:completed, lastResult:result, currentDate: next?.date || result.date, matchday:Number(current.round || state.career?.matchday || 1)+1, lastRoundResults:[result, ...otherResults].slice(0,10)};
+  const reviewBefore = buildManagerCareerSnapshot(state).security;
+  const career = {...state.career, completedMatches:completed, lastResult:result, lastPostMatchReport:current.postMatchReport, currentDate: next?.date || result.date, matchday:Number(current.round || state.career?.matchday || 1)+1, lastRoundResults:[result, ...otherResults].slice(0,10), dressingRoomTrust:Math.max(0, Math.min(100, Number(state.career?.dressingRoomTrust||68) + (already?0:dressingDelta))), mediaPressure:Math.max(0, Math.min(100, Number(state.career?.mediaPressure||54) + (already?0:mediaDelta))), managerTimeline:[...((state.career?.managerTimeline)||[]), {date:result.date, title:`${result.competition} · ${result.stage}`, text:`Resultado ${result.summary}. Segurança no cargo antes da atualização: ${reviewBefore.label}.`}].slice(-24)};
   state = normalize({
     ...state,
-    match: next ? {...next, postMatchReady:false, autoPlay:false, postMatchReport:null} : {...current, postMatchReady:true, autoPlay:false},
+    match: {...current, nextMatchQueued:next || null, reportViewed:false},
     career,
     money: Number((Number(state.money || 0) + (already ? 0 : moneyBonus)).toFixed(1)),
     boardTrust: Math.max(0, Math.min(100, Number(state.boardTrust || 76) + (already ? 0 : trustDelta))),
     fanMood: Math.max(0, Math.min(100, Number(state.fanMood || 82) + (already ? 0 : fanDelta))),
     notifications: Number(state.notifications || 0) + (already ? 0 : 1),
-    gameplay:{...state.gameplay, balanceLog}
+    gameplay:{...state.gameplay, balanceLog},
+    stability:{...(state.stability||{}), health:'Pós-jogo salvo com segurança', auditVersion:'v4.7.0'}
   });
-  logIntegration(`Resultado integrado: ${result.competition} ${result.stage} terminou ${result.summary}. Rodada simulada, calendário, tabela com logos e save foram atualizados.`);
+  logIntegration(`Resultado integrado: ${result.competition} ${result.stage} terminou ${result.summary}. Relatório pós-jogo preservado antes do retorno ao lobby.`);
   persist();
   return result;
+}
+
+export function completePostMatchAndReturnLobby(){
+  const current = state.match || defaultState().match;
+  const queued = current.nextMatchQueued || seasonNextFixture(state.clubId || state.ui?.selectedClub || 'santos', state.career?.completedMatches || []);
+  const nextMatch = queued ? {...queued, minute:1, homeGoals:0, awayGoals:0, speed:1, autoPlay:false, finalized:false, postMatchReady:false, substitutions:[], maxSubs:5, decision:'balanced', tacticalBoost:0, usedSubPlayers:[], postMatchReport:null, nextMatchQueued:null, reportViewed:false} : {...current, reportViewed:true, autoPlay:false};
+  state = normalize({
+    ...state,
+    route:'lobby',
+    match:nextMatch,
+    stability:{...(state.stability||{}), health:'Fluxo pós-jogo concluído', auditVersion:'v4.7.0'}
+  });
+  logIntegration('Relatório pós-jogo confirmado: save protegido e retorno ao lobby executado.');
+  persist();
+  return state.match;
 }
 
 export function setMatchDecision(decision='balanced'){
@@ -603,10 +631,10 @@ export function respondCareerOffer(offerId='', decision='reject'){
   if(accepted && offer.type === 'club'){
     const fixture = buildClubFixture(offer.targetId, 0);
     patch = {...patch, clubId:offer.targetId, match:fixture, ui:{...(state.ui||{}), selectedClub:offer.targetId}, boardTrust:68, fanMood:72, route:'lobby'};
-    patch.career = {...patch.career, completedMatches:[], lastResult:null, matchday:1, integrationLog:[...((state.career||{}).integrationLog||[]), `Novo trabalho aceito: ${offer.name}. Temporada reiniciada para o clube escolhido.`].slice(-40)};
+    patch.career = {...patch.career, completedMatches:[], lastResult:null, matchday:1, activeContract:{clubId:offer.targetId, role:offer.role, signedAt:new Date().toISOString().slice(0,10), remainingMonths:24, wageMonthly:Number(offer.wage||0.8), releaseClause:Number((offer.wage||0.8)*6).toFixed(1), bonusTarget:offer.objective, objective:offer.objective, status:'Ativo'}, contractHistory:[...((state.career||{}).contractHistory||[]), `Contrato assinado com ${offer.name} como ${offer.role}.`].slice(-20), managerTimeline:[...((state.career||{}).managerTimeline||[]), {date:new Date().toISOString().slice(0,10), title:'Novo clube', text:`Contrato aceito com ${offer.name}.`}].slice(-24), integrationLog:[...((state.career||{}).integrationLog||[]), `Novo trabalho aceito: ${offer.name}. Temporada reiniciada para o clube escolhido.`].slice(-40)};
   }
   if(accepted && offer.type === 'national'){
-    patch.career = {...patch.career, nationalTeamJob:{id:offer.targetId, name:offer.name, country:offer.country, role:offer.role, acceptedAt:new Date().toISOString(), objective:offer.objective}, dualCareer:{enabled:true, club:true, nationalTeam:offer.targetId}, internationalCalendar:buildInternationalCalendar(Number(state.season||2026)), callUpSelection:defaultCallUpSelection(), integrationLog:[...((state.career||{}).integrationLog||[]), `Carreira dupla ativada: clube + ${offer.name}.`].slice(-40)};
+    patch.career = {...patch.career, nationalTeamJob:{id:offer.targetId, name:offer.name, country:offer.country, role:offer.role, acceptedAt:new Date().toISOString(), objective:offer.objective, engineVersion:NATIONAL_TEAM_ENGINE_VERSION}, dualCareer:{enabled:true, club:true, nationalTeam:offer.targetId}, internationalCalendar:buildNationalCalendar(Number(state.season||2026), offer.targetId), callUpSelection:safeCallUpPool(defaultCallUpSelection()), integrationLog:[...((state.career||{}).integrationLog||[]), `Carreira dupla ativada: clube + ${offer.name}. Calendário FIFA v4.5.0 sincronizado.`].slice(-40)};
     patch.route = 'nationalTeam';
   }
   state = normalize({...state, ...patch});
@@ -624,7 +652,7 @@ export function registerNationalInterest(teamId=''){
   return true;
 }
 export function toggleCallUpPlayer(playerId=''){
-  const list = state.career?.callUpSelection || defaultCallUpSelection();
+  const list = safeCallUpPool(state.career?.callUpSelection || defaultCallUpSelection());
   const selectedCount = list.filter(p=>p.selected).length;
   const next = list.map(p=>{
     if(p.id !== playerId) return p;
@@ -636,15 +664,66 @@ export function toggleCallUpPlayer(playerId=''){
   return true;
 }
 export function finalizeNationalCallUp(){
-  const selected = (state.career?.callUpSelection || []).filter(p=>p.selected);
+  const safeList = safeCallUpPool(state.career?.callUpSelection || []);
+  const selected = safeList.filter(p=>p.selected);
   if(!state.career?.nationalTeamJob || selected.length < 11){
     state = normalize({...state, career:{...(state.career||{}), offerHistory:[...((state.career||{}).offerHistory||[]), 'Convocação bloqueada: é preciso ter seleção ativa e ao menos 11 atletas.'].slice(-40)}});
     persist();
     return false;
   }
-  state = normalize({...state, career:{...(state.career||{}), offerHistory:[...((state.career||{}).offerHistory||[]), `Convocação final enviada para ${state.career.nationalTeamJob.name}: ${selected.length} atletas.`].slice(-40)}, notifications:Number(state.notifications||0)+1});
+  state = normalize({...state, career:{...(state.career||{}), callUpSelection:safeList, offerHistory:[...((state.career||{}).offerHistory||[]), `Convocação final enviada para ${state.career.nationalTeamJob.name}: ${selected.length} atletas.`].slice(-40)}, notifications:Number(state.notifications||0)+1});
   persist();
   return true;
+}
+
+
+export function simulateNextInternationalMatch(){
+  const sim = simulateNationalFixture(state);
+  if(!sim.ok){
+    state = normalize({...state, career:{...(state.career||{}), offerHistory:[...((state.career||{}).offerHistory||[]), `Jogo internacional bloqueado: ${sim.reason}`].slice(-40)}});
+    persist();
+    return false;
+  }
+  const repDelta = sim.result.points === 3 ? 2 : sim.result.points === 1 ? 1 : -1;
+  const nextRep = Math.max(1, Math.min(100, Number(state.manager?.reputation||50)+repDelta));
+  const msg = `${sim.event.title}: ${sim.result.label}. ${sim.result.points} ponto(s) no ciclo internacional.`;
+  state = normalize({...state,
+    manager:{...(state.manager||{}), reputation:nextRep},
+    career:{...(state.career||{}), internationalCalendar:sim.calendar, offerHistory:[...((state.career||{}).offerHistory||[]), msg].slice(-40), managerTimeline:[...((state.career||{}).managerTimeline||[]), {date:sim.event.date, title:'Jogo da seleção', text:msg}].slice(-24)},
+    notifications:Number(state.notifications||0)+1
+  });
+  logIntegration(`Seleção nacional: ${msg}`);
+  persist();
+  return true;
+}
+
+export function simulateBoardReview(){
+  const snap = buildManagerCareerSnapshot(state);
+  const log = `Revisão da diretoria: ${snap.security.label} (${snap.security.score}/100). ${snap.security.decision}`;
+  state = normalize({...state, career:{...(state.career||{}), sackRiskLog:[...((state.career||{}).sackRiskLog||[]), log].slice(-20), managerTimeline:[...((state.career||{}).managerTimeline||[]), {date:state.career?.currentDate || '2026-05-19', title:'Revisão da diretoria', text:log}].slice(-24)}, jobSecurity:snap.security.label, notifications:Number(state.notifications||0)+1});
+  logIntegration(log);
+  persist();
+  return snap;
+}
+export function renewManagerContract(){
+  const snap = buildManagerCareerSnapshot(state);
+  const allowed = snap.security.score >= 55;
+  const current = snap.contract;
+  const nextContract = allowed ? {...current, remainingMonths:Math.max(18, Number(current.remainingMonths||18)+12), wageMonthly:Number((Number(current.wageMonthly||0.8)*1.12).toFixed(2)), releaseClause:Number((Number(current.releaseClause||5.8)*1.15).toFixed(1)), status:'Renovado'} : current;
+  const msg = allowed ? `Contrato renovado: +12 meses, salário € ${nextContract.wageMonthly}M/mês e multa € ${nextContract.releaseClause}M.` : `Renovação bloqueada: segurança no cargo ${snap.security.label}.`;
+  state = normalize({...state, career:{...(state.career||{}), activeContract:nextContract, contractHistory:[...((state.career||{}).contractHistory||[]), msg].slice(-20), managerTimeline:[...((state.career||{}).managerTimeline||[]), {date:state.career?.currentDate || '2026-05-19', title:'Contrato do treinador', text:msg}].slice(-24)}});
+  logIntegration(msg);
+  persist();
+  return allowed;
+}
+export function simulateManagerDismissalRisk(){
+  const snap = buildManagerCareerSnapshot(state);
+  const highRisk = snap.security.score < 42;
+  const msg = highRisk ? 'Ultimato ativado: diretoria exige reação imediata nas próximas partidas.' : `Cargo preservado: risco atual ${snap.security.risk}%.`;
+  state = normalize({...state, career:{...(state.career||{}), sackRiskLog:[...((state.career||{}).sackRiskLog||[]), msg].slice(-20), managerTimeline:[...((state.career||{}).managerTimeline||[]), {date:state.career?.currentDate || '2026-05-19', title:'Risco de demissão', text:msg}].slice(-24)}, jobSecurity: highRisk ? 'Ultimato' : snap.security.label});
+  logIntegration(msg);
+  persist();
+  return highRisk;
 }
 
 export function persist(){ try { localStorage.setItem(key, JSON.stringify(state)); } catch(err){ console.warn('[VFM] save local indisponivel', err); } }

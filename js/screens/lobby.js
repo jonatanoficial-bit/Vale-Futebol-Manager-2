@@ -10,7 +10,7 @@ export function lobby(state){
   const menu = [
     ['seasonCenter','Temporada','📆','Tabela viva, rodada completa, acesso, queda e vagas continentais','Novo'],
     ['championship','Campeonato','🏆','Competições, copa, continental e agenda anual','Essencial'],
-    ['worldCompetitions','Competições Globais','🌎','Libertadores, Sul-Americana, Mundial de Clubes e seleções','Novo'],
+    ['worldCompetitions','Libertadores/Sul-Americana','🌎','Grupos CONMEBOL, mata-mata continental e rota mundial','v4.2'],
     ['financeCenter','Economia','🏦','Diretoria, orçamento, patrocínio, risco e crise financeira','Novo'],
     ['calendar','Agenda','📅','Calendário completo, treinos e jogos','Temporada'],
     ['formation','Tática','🧩','Escalação, campo, banco e desenho tático','Pré-jogo'],

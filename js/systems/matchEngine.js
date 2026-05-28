@@ -153,12 +153,14 @@ export function buildDeepStats(match={}, state={}){
     fouls:[Math.round(5 + phase*9 + (decision==='pressure'?2:0)), Math.round(6 + phase*10 + (ctx.refereeTone==='Rigoroso'?2:0))],
     cards:[Math.round((ctx.refereeTone==='Rigoroso'?1:0) + (decision==='pressure' && minute>60?1:0)), Math.round((minute>30?1:0)+(ctx.refereeTone==='Rigoroso' && minute>70?1:0))],
     momentum:Math.round(pressure),
-    matchRating:clamp(6.2 + (score.home+score.away)*.35 + tempo/100, 6.1, 9.6).toFixed(1)
+    matchRating:clamp(6.2 + (score.home+score.away)*.35 + tempo/100, 6.1, 9.6).toFixed(1),
+    advanced: buildAdvancedMatchMetrics(match, state),
+    playerImpact: buildPlayerImpactModel(match, state)
   };
 }
 export function buildDeepMatchSnapshot(match={}, state={}){
   const stats = buildDeepStats(match, state);
-  const timeline = buildDeepTimeline(match, state);
+  const timeline = buildAdvancedTimeline(match, state);
   const minute = clamp(match.minute || 1, 1, 90);
   const visibleEvents = timeline.filter(e=>e.minute<=minute);
   return {stats, timeline, visibleEvents, score:stats.score, ctx:stats.ctx};
@@ -167,6 +169,89 @@ export function deepScoreFromState(match={}, state={}){
   const score = scoreAtMinute(match, state, match.minute || 90);
   return {home:score.home, away:score.away};
 }
+
+export function buildAdvancedMatchMetrics(match={}, state={}){
+  const ctx = getDeepMatchContext(match, state);
+  const minute = clamp(match.minute || 1, 1, 90);
+  const phase = clamp(minute/90, .05, 1);
+  const score = scoreAtMinute(match, state, minute);
+  const decision = match.decision || 'balanced';
+  const subCount = Array.isArray(match.substitutions) ? match.substitutions.length : 0;
+  const tacticalRisk = {pressure:18, possession:6, right:10, lowblock:-8, balanced:0}[decision] || 0;
+  const refereeRisk = ctx.refereeTone === 'Rigoroso' ? 10 : ctx.refereeTone === 'Permissivo' ? -6 : 0;
+  const fatigue = clamp(100 - minute*.46 - (decision==='pressure'?10:0) + subCount*2.5, 34, 100);
+  const homeCardRisk = clamp(18 + phase*38 + tacticalRisk + refereeRisk - Math.max(0,ctx.diff)*.18, 4, 86);
+  const awayCardRisk = clamp(22 + phase*42 + refereeRisk + Math.max(0,ctx.diff)*.22, 5, 88);
+  const injuryRisk = clamp((100-fatigue)*.23 + (ctx.weather === 'Gramado pesado' ? 8 : 0) + (decision==='pressure'?4:0), 2, 28);
+  const varRisk = clamp(7 + (score.home+score.away)*3 + Math.abs(ctx.diff)*.12 + phase*8, 4, 35);
+  const penaltyRisk = clamp(6 + phase*11 + (decision==='pressure'?3:0) + rand(ctx.seed,404)*8, 3, 27);
+  const tacticalControl = clamp(50 + ctx.diff*.65 + (decision==='possession'?8:0) + (decision==='lowblock'?-4:0), 22, 78);
+  const transitionDanger = clamp(42 - ctx.diff*.42 + (decision==='pressure'?8:0) - (decision==='lowblock'?5:0), 18, 82);
+  const setPieceThreat = clamp(34 + rand(ctx.seed,405)*28 + (ctx.refereeTone==='Rigoroso'?4:0), 18, 75);
+  const substitutionImpact = clamp(subCount * 7 + (subCount ? rand(ctx.seed,406)*8 : 0), 0, 36);
+  return {
+    version:'v4.7.0', fatigue:Math.round(fatigue), homeCardRisk:Math.round(homeCardRisk), awayCardRisk:Math.round(awayCardRisk),
+    injuryRisk:Math.round(injuryRisk), varRisk:Math.round(varRisk), penaltyRisk:Math.round(penaltyRisk),
+    tacticalControl:Math.round(tacticalControl), transitionDanger:Math.round(transitionDanger), setPieceThreat:Math.round(setPieceThreat),
+    substitutionImpact:Math.round(substitutionImpact), decision, phase:Number(phase.toFixed(2))
+  };
+}
+
+export function buildPlayerImpactModel(match={}, state={}){
+  const roster = getActiveSquad(state);
+  const ctx = getDeepMatchContext(match, state);
+  const minute = clamp(match.minute || 1, 1, 90);
+  const starters = roster.filter(p=>['Titular','Estrela','Rotação'].includes(p.status)).slice(0,11);
+  const pool = starters.length >= 11 ? starters : roster.slice(0,11);
+  return pool.map((p,i)=>{
+    const overall = clamp(p.overall || 70, 45, 96);
+    const fitness = clamp((p.fitness || 82) - minute*.18 + (i%3), 35, 100);
+    const morale = clamp(p.morale || p.form || 75, 35, 99);
+    const attacking = ['ATA','PE','PD','MEI'].includes(p.pos) ? 1 : ['MC','VOL'].includes(p.pos) ? .55 : .18;
+    const defensive = ['GOL','ZAG','LD','LE','VOL'].includes(p.pos) ? 1 : ['MC'].includes(p.pos) ? .62 : .25;
+    const eventWeight = clamp(overall*.56 + fitness*.18 + morale*.16 + (attacking*8) + rand(ctx.seed,500+i)*6, 30, 98);
+    return {id:p.id, name:p.name, pos:p.pos, overall, fitness:Math.round(fitness), morale:Math.round(morale), attacking, defensive, eventWeight:Math.round(eventWeight)};
+  });
+}
+
+export function buildAdvancedTimeline(match={}, state={}){
+  const base = buildDeepTimeline(match, state).map(e=>({...e}));
+  const ctx = getDeepMatchContext(match, state);
+  const metrics = buildAdvancedMatchMetrics(match, state);
+  const seed = ctx.seed;
+  const advanced = [];
+  const add = (minute,type,side,title,text,x,y,meta={}) => advanced.push({minute,type,side,title,text,x,y,advanced:true,meta});
+  if(metrics.varRisk > 18) add(clamp(24 + Math.round(rand(seed,601)*46), 16, 84),'var', rand(seed,602)>.5?'home':'away','VAR narrativo','Checagem de possível impedimento/contato na área. A decisão é integrada sem travar a simulação.',50,50,{risk:metrics.varRisk});
+  if(metrics.penaltyRisk > 18) {
+    const side = rand(seed,603) + (ctx.diff/80) > .48 ? 'home' : 'away';
+    add(clamp(38 + Math.round(rand(seed,604)*38), 31, 88),'penalty',side,'Pênalti em revisão','Contato na área gera penalidade. O motor avalia pressão, árbitro e volume ofensivo antes do desfecho.',side==='home'?74:26,45,{risk:metrics.penaltyRisk});
+  }
+  if(metrics.injuryRisk > 14) add(clamp(50 + Math.round(rand(seed,605)*32), 46, 86),'injury','home','Alerta físico','Jogador sente desgaste muscular. Comissão médica recomenda substituição preventiva.',48,62,{risk:metrics.injuryRisk});
+  if(metrics.homeCardRisk > 54) add(clamp(28 + Math.round(rand(seed,606)*48), 22, 86),'card','home','Cartão por pressão','Marcação agressiva aumenta o risco disciplinar do mandante.',52,58,{risk:metrics.homeCardRisk});
+  if(metrics.awayCardRisk > 55) add(clamp(20 + Math.round(rand(seed,607)*55), 18, 86),'card','away','Cartão visitante','Visitante interrompe transição e recebe amarelo após acúmulo de faltas.',43,41,{risk:metrics.awayCardRisk});
+  if(metrics.transitionDanger > 58) add(clamp(64 + Math.round(rand(seed,608)*20), 56, 88),'pressure','away','Contra-ataque perigoso','Linhas altas abrem espaço para transição adversária.',29,52,{risk:metrics.transitionDanger});
+  return base.concat(advanced).sort((a,b)=>a.minute-b.minute || orderType(a.type)-orderType(b.type));
+}
+
+export function simulateMatchStressTest(iterations=100, state={}){
+  const errors = [];
+  let goals = 0, cards = 0, injuries = 0, penalties = 0, vars = 0;
+  for(let i=0;i<iterations;i++){
+    try {
+      const match = {...(state.match || {}), id:`stress-${i}`, minute:90, home:i%2?'santos':'flamengo', away:i%3?'palmeiras':'corinthians', decision:i%4===0?'pressure':i%4===1?'possession':i%4===2?'lowblock':'balanced'};
+      const snap = buildDeepMatchSnapshot(match, state);
+      const adv = buildAdvancedTimeline(match, state);
+      goals += Number(snap.score.home||0) + Number(snap.score.away||0);
+      cards += adv.filter(e=>e.type==='card').length;
+      injuries += adv.filter(e=>e.type==='injury').length;
+      penalties += adv.filter(e=>e.type==='penalty').length;
+      vars += adv.filter(e=>e.type==='var').length;
+      if(!snap.stats || !snap.score) errors.push(`snapshot ausente ${i}`);
+    } catch(err){ errors.push(err?.message || String(err)); }
+  }
+  return {name:'match-engine-stress', version:'v4.7.0', iterations, status:errors.length?'error':'ok', errors, totals:{goals,cards,injuries,penalties,vars}, averages:{goalsPerMatch:Number((goals/iterations).toFixed(2)), cardsPerMatch:Number((cards/iterations).toFixed(2))}};
+}
+
 export function getPostMatchReport(match={}, state={}){
   const snap = buildDeepMatchSnapshot({...match, minute:90}, state);
   const s = snap.stats;
