@@ -1,11 +1,11 @@
 {
-  "version": "v4.9.0",
-  "buildLabel": "Build v4.9.0 | 2026-05-28 | 21:08 BRT",
-  "phase": "Fase 11 - Mercado internacional, contratos, orçamento seguro e anti-duplicacao",
-  "timestamp": "2026-05-29T00:08:00Z",
+  "version": "v5.0.0",
+  "buildLabel": "Build v5.0.0 | 2026-05-28 | 21:31 BRT",
+  "phase": "Fase 12 - UI AAA, responsividade, mobile/desktop e prontidao comercial",
+  "timestamp": "2026-05-29T00:31:00Z",
   "visibleInGame": true,
-  "qualityGate": "phase-11-international-transfer-budget-contract-integrity",
-  "build": "2026.05.28.011",
+  "qualityGate": "phase-12-aaa-ui-responsive-theme-route-integrity",
+  "build": "2026.05.28.012",
   "date": "2026-05-28",
-  "time": "21:08 BRT"
+  "time": "21:31 BRT"
 }
