@@ -1,13 +1,26 @@
-Vale Futebol Manager - BUILD MANIFEST
-Versão: v5.0.0
-Build visível: Build v5.0.0 | 2026-05-28 | 21:31 BRT
-Fase: Fase 12 - UI AAA + responsividade
-Data/Hora: 28/05/2026 21:31 BRT
+Vale Futebol Manager - Build Manifest
+Versão: v5.1.0
+Build visível: Build v5.1.0 | 2026-05-28 | 21:52 BRT
+Fase: 13 - Save profissional
 
-Principais entregas:
-- Nova camada visual css/aaa-ui.css.
-- Shell premium mobile/desktop sem dependências pagas.
-- Safe-area, bottom navigation, touch target 44px, tabelas responsivas e build badge fixo.
-- Central UI AAA em Polimento AAA/UI AAA.
-- Validadores anti-quebra: ui-route, responsive e theme.
-- Build pronta para vitrine pública GitHub/Vercel/PWA futura.
+Arquivos adicionados:
+- js/systems/saveManager.js
+- core/safety/save-migration.js
+- core/safety/save-backup.js
+- core/safety/save-export-import.js
+- core/safety/save-corruption-recovery.js
+
+Arquivos alterados:
+- js/systems/state.js
+- js/screens/moduleScreen.js
+- js/screens/lobby.js
+- js/app.js
+- build/build-info.json
+
+Resumo:
+- Múltiplos slots locais para carreira e backups.
+- Autosave com checkpoint e backup automático.
+- Exportação/importação por envelope JSON seguro.
+- Migração de saves antigos para schema 510.
+- Recuperação contra save corrompido.
+- Central de Save Profissional v5.1.0 dentro do lobby.

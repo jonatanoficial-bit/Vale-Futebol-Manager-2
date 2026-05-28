@@ -1,21 +1,21 @@
-# Changelog - v5.0.0
+# Changelog - v5.1.0
 
-## Fase 12 - UI AAA + Responsividade
+## Fase 13 - Save profissional
 
 ### Adicionado
-- `css/aaa-ui.css` com visual premium glass, cards responsivos, bottom navigation flutuante e acabamento comercial.
-- `js/systems/uiQualityEngine.js` para aplicar shell AAA e gerar snapshot de qualidade visual.
-- `core/safety/ui-route-validator.js`.
-- `core/safety/responsive-validator.js`.
-- `core/safety/theme-validator.js`.
-- Central `UI AAA` acessível pelo lobby.
+- Sistema `saveManager.js` com schema 510.
+- Chave nova de save: `vfm_gold_save_v510`.
+- Migração automática de saves anteriores, incluindo v5.0.0 e v4.x.
+- Múltiplos slots manuais de backup.
+- Backup automático antes da persistência quando autosave está ativo.
+- Exportação em envelope JSON com metadados de versão, build, clube, manager e temporada.
+- Importação segura com validação antes de sobrescrever o estado atual.
+- Recuperação de save corrompido via backup automático.
+- Central de Save Profissional no lobby.
 
-### Melhorado
-- Lobby com novo card de acesso à UI AAA.
-- Build visível atualizada para v5.0.0.
-- Layout mobile com safe-area, 100svh, botões mínimos de 44px e proteção de overflow.
-- Layout desktop com grid mais comercial, glassmorphism, sombras premium e tabelas com rolagem segura.
-
-### Anti-quebra
-- Caso a UI AAA falhe, o jogo mantém o CSS anterior v4.9.0 e continua abrindo.
-- Validadores de rota, responsividade e tema ficam disponíveis no painel de desenvolvimento.
+### Segurança anti-quebra
+- JSON inválido não derruba o jogo.
+- Importação inválida é bloqueada.
+- Save antigo é normalizado para o estado atual.
+- Se o save principal corromper, o jogo tenta carregar backup automático.
+- Se nenhum backup existir, o jogo recria um estado seguro padrão.

@@ -10,17 +10,19 @@ import { generateOffers, validateCareerState, validateManagerCareerState, buildM
 import { buildNationalCalendar, buildNationalTeamSnapshot, safeCallUpPool, simulateNationalFixture, NATIONAL_TEAM_ENGINE_VERSION } from './nationalTeamEngine.js';
 import { ensureTrainingState, applyTrainingWeek, TRAINING_ENGINE_VERSION } from './trainingEngine.js';
 import { TRANSFER_ENGINE_VERSION, ensureTransferLedger, evaluateDealSafety, registerTransaction, buildTransferSnapshot, simulateGlobalMarketCycle, createPreContract, validateTransferIntegrity, renewalById } from './transferEngine.js';
+import { SAVE_MANAGER_VERSION, SAVE_KEY, writeAutoBackup, readAutoBackup, preserveCorruptSave, exportEnvelopeText, validateSavePayload, migrateLegacyState, writeSlot, readSlot, listSlots, saveIntegritySnapshot } from './saveManager.js';
 
-const key = 'vfm_gold_save_v490';
-const legacyKeys = ['vfm_gold_save_v480','vfm_gold_save_v470','vfm_gold_save_v460','vfm_gold_save_v450','vfm_gold_save_v440', 'vfm_gold_save_v430', 'vfm_gold_save_v420', 'vfm_gold_save_v410', 'vfm_gold_save_v400', 'vfm_gold_save_v390', 'vfm_gold_save_v370', 'vfm_gold_save_v360', 'vfm_gold_save_v350', 'vfm_gold_save_v340', 'vfm_gold_save_v330', 'vfm_gold_save_v320', 'vfm_gold_save_v310', 'vfm_gold_save_v300', 'vfm_gold_save_v290', 'vfm_gold_save_v280', 'vfm_gold_save_v270', 'vfm_gold_save_v262', 'vfm_gold_save_v261', 'vfm_gold_save_v260', 'vfm_gold_save_v251', 'vfm_gold_save_v240', 'vfm_gold_save_v230', 'vfm_gold_save_v220', 'vfm_gold_save_v210', 'vfm_gold_save_v200', 'vfm_gold_save_v190', 'vfm_gold_save_v180', 'vfm_gold_save_v170', 'vfm_gold_save_v160', 'vfm_gold_save_v150', 'vfm_gold_save_v140', 'vfm_gold_save_v130', 'vfm_gold_save_v120', 'vfm_gold_save_v110', 'vfm_gold_save_v100', 'vfm_gold_save_v090', 'vfm_gold_save_v080', 'vfm_gold_save_v050', 'vfm_gold_save_v040', 'vfm_gold_save_v030', 'vfm_gold_save_v020', 'vfm_gold_save_v010'];
+const key = SAVE_KEY;
+const legacyKeys = ['vfm_gold_save_v500','vfm_gold_save_v490','vfm_gold_save_v480','vfm_gold_save_v470','vfm_gold_save_v460','vfm_gold_save_v450','vfm_gold_save_v440', 'vfm_gold_save_v430', 'vfm_gold_save_v420', 'vfm_gold_save_v410', 'vfm_gold_save_v400', 'vfm_gold_save_v390', 'vfm_gold_save_v370', 'vfm_gold_save_v360', 'vfm_gold_save_v350', 'vfm_gold_save_v340', 'vfm_gold_save_v330', 'vfm_gold_save_v320', 'vfm_gold_save_v310', 'vfm_gold_save_v300', 'vfm_gold_save_v290', 'vfm_gold_save_v280', 'vfm_gold_save_v270', 'vfm_gold_save_v262', 'vfm_gold_save_v261', 'vfm_gold_save_v260', 'vfm_gold_save_v251', 'vfm_gold_save_v240', 'vfm_gold_save_v230', 'vfm_gold_save_v220', 'vfm_gold_save_v210', 'vfm_gold_save_v200', 'vfm_gold_save_v190', 'vfm_gold_save_v180', 'vfm_gold_save_v170', 'vfm_gold_save_v160', 'vfm_gold_save_v150', 'vfm_gold_save_v140', 'vfm_gold_save_v130', 'vfm_gold_save_v120', 'vfm_gold_save_v110', 'vfm_gold_save_v100', 'vfm_gold_save_v090', 'vfm_gold_save_v080', 'vfm_gold_save_v050', 'vfm_gold_save_v040', 'vfm_gold_save_v030', 'vfm_gold_save_v020', 'vfm_gold_save_v010'];
 export const defaultState = () => ({
   route:'cover',
   manager:{ name:'Joao Victor', country:'br', avatar:'assets/avatars/manager-01.png', reputation:82, mode:'career' },
   clubId:'santos', season:2026, month:'Maio', money:92.5, coins:250, notifications:6, boardTrust:76, fanMood:82, jobSecurity:'Seguro',
   match:{ id:'2026-05-24-santos-palmeiras', date:'2026-05-24', competitionId:'brasileirao-a', competition:'Brasileirão Série A 2026', stage:'Rodada atual', minute:1, home:'santos', away:'palmeiras', homeGoals:0, awayGoals:0, speed:1, autoPlay:false, finalized:false, postMatchReady:false, substitutions:[], maxSubs:5, decision:'balanced', tacticalBoost:0, usedSubPlayers:[], postMatchReport:null, nextMatchQueued:null, reportViewed:false },
-  career:{ currentDate:'2026-05-19', matchday:1, completedMatches:[], lastResult:null, promotionRelegation:{serieARelegation:4,serieBPromotion:4,libertadoresTop:5,sulamericanaRange:[6,12],serieBRelegation:4}, integrationLog:['Carreira migrada para v4.9.0 com mercado internacional, contratos, orçamento seguro e proteção contra jogador duplicado.'], jobOffers:[], offerHistory:[], nationalTeamJob:null, dualCareer:{enabled:false, club:true, nationalTeam:null}, callUpSelection:defaultCallUpSelection(), internationalCalendar:buildNationalCalendar(2026, 'brasil'), managerProfile:null, activeContract:null, contractHistory:[], titleHistory:[], sackRiskLog:[], managerTimeline:[], unlockedMilestones:[], boardRelationship:76, fanRelationship:82, dressingRoomTrust:69, mediaPressure:54, worldCompetitionCycle:{libertadores:true,sulamericana:true,clubWorldCupCycle:4,worldCupCycle:4,lastUpdated:'v4.3.0'}, financeReport:{profile:'balanced', lastMonthlyCycle:null, crisisLog:[], boardWarnings:[], sponsorReview:'v3.5.0'} },
-  gameplay:{ difficulty:'realistic', aiVersion:'v4.9.0', realism:88, variance:18, balanceLog:[] },
-  stability:{ autosave:true, lastBackup:null, backupCount:0, lastExport:null, lastImport:null, safeModeEvents:0, health:'Excelente', auditVersion:'v4.9.0', commercialAudit:'v3.7.0-ok', fullscreenMobile:true, overflowGuard:true, rosterSafeMode:true, matchEngineSafeMode:true, matchEngineVersion:'v4.7.0', matchStressTest:'passed-100', trainingEngineVersion:TRAINING_ENGINE_VERSION, trainingStressTest:'passed-4-weeks', transferEngineVersion:TRANSFER_ENGINE_VERSION, transferIntegrity:'pending' },
+  career:{ currentDate:'2026-05-19', matchday:1, completedMatches:[], lastResult:null, promotionRelegation:{serieARelegation:4,serieBPromotion:4,libertadoresTop:5,sulamericanaRange:[6,12],serieBRelegation:4}, integrationLog:['Carreira migrada para v5.1.0 com save profissional, múltiplos slots, backups automáticos e recuperação de carreira.'], jobOffers:[], offerHistory:[], nationalTeamJob:null, dualCareer:{enabled:false, club:true, nationalTeam:null}, callUpSelection:defaultCallUpSelection(), internationalCalendar:buildNationalCalendar(2026, 'brasil'), managerProfile:null, activeContract:null, contractHistory:[], titleHistory:[], sackRiskLog:[], managerTimeline:[], unlockedMilestones:[], boardRelationship:76, fanRelationship:82, dressingRoomTrust:69, mediaPressure:54, worldCompetitionCycle:{libertadores:true,sulamericana:true,clubWorldCupCycle:4,worldCupCycle:4,lastUpdated:'v4.3.0'}, financeReport:{profile:'balanced', lastMonthlyCycle:null, crisisLog:[], boardWarnings:[], sponsorReview:'v3.5.0'} },
+  gameplay:{ difficulty:'realistic', aiVersion:'v5.1.0', realism:88, variance:18, balanceLog:[] },
+  stability:{ autosave:true, lastBackup:null, backupCount:0, lastExport:null, lastImport:null, safeModeEvents:0, health:'Excelente', auditVersion:SAVE_MANAGER_VERSION, saveManagerVersion:SAVE_MANAGER_VERSION, saveIntegrity:'ok', commercialAudit:'v3.7.0-ok', fullscreenMobile:true, overflowGuard:true, rosterSafeMode:true, matchEngineSafeMode:true, matchEngineVersion:'v4.7.0', matchStressTest:'passed-100', trainingEngineVersion:TRAINING_ENGINE_VERSION, trainingStressTest:'passed-4-weeks', transferEngineVersion:TRANSFER_ENGINE_VERSION, transferIntegrity:'pending' },
+  save:{ version:SAVE_MANAGER_VERSION, schema:510, activeSlot:'principal', migratedFrom:null, lastMigrationAt:null, exportCount:0, importCount:0, autosaveCheckpoints:[] },
   roster:{ meta: defaultRosterMeta, players: defaultRosterPlayers, lastImport:null, lastExport:null, validationLog:['Elenco base Santos 2026 carregado com proteção anti-quebra.'] },
   finance:{profile:'balanced', lastMonthlyCycle:null, crisisLog:[], boardWarnings:[], sponsorReview:'v3.5.0'},
   training:ensureTrainingState(),
@@ -66,6 +68,15 @@ function normalize(next){
   merged.stability = {...base.stability, ...(next?.stability || {})};
   merged.stability.backupCount = Math.max(0, Number(merged.stability.backupCount || 0));
   if(typeof merged.stability.autosave !== 'boolean') merged.stability.autosave = true;
+  merged.stability.auditVersion = SAVE_MANAGER_VERSION;
+  merged.stability.saveManagerVersion = SAVE_MANAGER_VERSION;
+  merged.save = {...base.save, ...(next?.save || {})};
+  merged.save.version = SAVE_MANAGER_VERSION;
+  merged.save.schema = 510;
+  merged.save.activeSlot = String(merged.save.activeSlot || 'principal').slice(0,32);
+  merged.save.exportCount = Math.max(0, Number(merged.save.exportCount || 0));
+  merged.save.importCount = Math.max(0, Number(merged.save.importCount || 0));
+  merged.save.autosaveCheckpoints = Array.isArray(merged.save.autosaveCheckpoints) ? merged.save.autosaveCheckpoints.slice(-10) : [];
   merged.roster = {...base.roster, ...(next?.roster || {})};
   const normalizedRoster = normalizeRoster(merged.roster.players);
   if(normalizedRoster.length >= 11) merged.roster.players = normalizedRoster; else { merged.roster.players = base.roster.players; merged.roster.validationLog = [...(merged.roster.validationLog||[]), 'Roster importado recusado: menos de 11 jogadores validos.']; }
@@ -761,35 +772,53 @@ export function applyTrainingMicrocycle(){
   return state.training;
 }
 
-export function persist(){ try { localStorage.setItem(key, JSON.stringify(state)); } catch(err){ console.warn('[VFM] save local indisponivel', err); } }
-export function hasSave(){ try { return !!localStorage.getItem(key) || legacyKeys.some(k=>!!localStorage.getItem(k)); } catch(err){ return false; } }
+export function persist(){
+  try {
+    if(state?.stability?.autosave !== false){
+      const checkpoints = Array.isArray(state.save?.autosaveCheckpoints) ? state.save.autosaveCheckpoints.slice(-9) : [];
+      state = normalize({...state, save:{...(state.save||{}), autosaveCheckpoints:[...checkpoints, new Date().toISOString()]}});
+      writeAutoBackup(state);
+    }
+    localStorage.setItem(key, JSON.stringify(migrateLegacyState(state)));
+    try { writeSlot(state.save?.activeSlot || 'principal', state); } catch(slotErr){ console.warn('[VFM] slot save indisponivel', slotErr); }
+  } catch(err){ console.warn('[VFM] save local indisponivel', err); }
+}
+export function hasSave(){ try { return !!localStorage.getItem(key) || legacyKeys.some(k=>!!localStorage.getItem(k)) || listSlots().length>0; } catch(err){ return false; } }
 export function load(){
   try {
     let raw = localStorage.getItem(key);
     if(!raw){ const legacy = legacyKeys.find(k=>localStorage.getItem(k)); raw = legacy ? localStorage.getItem(legacy) : null; }
-    state = raw ? normalize(JSON.parse(raw)) : defaultState();
-  } catch(err){ console.warn('[VFM] save corrompido, reset seguro', err); state = defaultState(); }
+    let parsed = raw ? JSON.parse(raw) : null;
+    if(parsed?.state) parsed = parsed.state;
+    state = parsed ? normalize(migrateLegacyState(parsed)) : defaultState();
+    persist();
+  } catch(err){
+    console.warn('[VFM] save corrompido, tentando backup automatico', err);
+    try { preserveCorruptSave(localStorage.getItem(key) || ''); } catch(e){}
+    const backup = readAutoBackup();
+    state = backup ? normalize(migrateLegacyState(backup)) : defaultState();
+    state.stability = {...(state.stability||{}), safeModeEvents:Number(state.stability?.safeModeEvents||0)+1, health:backup?'Save recuperado do backup automatico':'Save recriado com seguranca', saveIntegrity:backup?'recovered':'reset'};
+    persist();
+  }
   return state;
 }
 export function reset(){ state = defaultState(); persist(); }
 
-
 export function createManualBackup(slot=1){
   try {
-    const safeSlot = Math.max(1, Math.min(3, Number(slot || 1)));
-    const payload = JSON.stringify({...state, backupMeta:{version:'v2.6.2', createdAt:new Date().toISOString(), slot:safeSlot}});
-    localStorage.setItem(`vfm_gold_backup_${safeSlot}`, payload);
-    state = normalize({...state, stability:{...(state.stability||{}), lastBackup:new Date().toISOString(), backupCount:Number(state.stability?.backupCount||0)+1, health:'Backup atualizado'}});
+    const safeSlot = Math.max(1, Math.min(5, Number(slot || 1)));
+    writeSlot(`backup-${safeSlot}`, state);
+    state = normalize({...state, stability:{...(state.stability||{}), lastBackup:new Date().toISOString(), backupCount:Number(state.stability?.backupCount||0)+1, health:`Backup ${safeSlot} atualizado`}});
     persist();
     return true;
   } catch(err){ console.warn('[VFM] backup manual falhou', err); return false; }
 }
 export function restoreManualBackup(slot=1){
   try {
-    const safeSlot = Math.max(1, Math.min(3, Number(slot || 1)));
-    const raw = localStorage.getItem(`vfm_gold_backup_${safeSlot}`);
-    if(!raw) return false;
-    state = normalize(JSON.parse(raw));
+    const safeSlot = Math.max(1, Math.min(5, Number(slot || 1)));
+    const restored = readSlot(`backup-${safeSlot}`);
+    if(!restored) return false;
+    state = normalize(migrateLegacyState(restored));
     state.stability = {...(state.stability||{}), health:`Backup ${safeSlot} restaurado`, lastImport:new Date().toISOString()};
     persist();
     return true;
@@ -797,21 +826,40 @@ export function restoreManualBackup(slot=1){
 }
 export function exportSaveText(){
   try {
-    const payload = JSON.stringify({...state, exportMeta:{version:'v2.6.2', exportedAt:new Date().toISOString()}}, null, 2);
-    state = normalize({...state, stability:{...(state.stability||{}), lastExport:new Date().toISOString(), health:'Exportacao pronta'}});
+    const payload = exportEnvelopeText(state);
+    state = normalize({...state, save:{...(state.save||{}), exportCount:Number(state.save?.exportCount||0)+1}, stability:{...(state.stability||{}), lastExport:new Date().toISOString(), health:'Exportacao profissional pronta'}});
     persist();
     return payload;
   } catch(err){ console.warn('[VFM] exportacao falhou', err); return ''; }
 }
 export function importSaveText(text=''){
   try {
+    const validation = validateSavePayload(text);
+    if(!validation.ok) throw new Error(validation.errors.join(' | '));
     const parsed = JSON.parse(String(text || '{}'));
-    state = normalize(parsed);
-    state.stability = {...(state.stability||{}), lastImport:new Date().toISOString(), health:'Save importado e normalizado'};
+    const payload = parsed?.state ? parsed.state : parsed;
+    state = normalize(migrateLegacyState(payload));
+    state.save = {...(state.save||{}), importCount:Number(state.save?.importCount||0)+1};
+    state.stability = {...(state.stability||{}), lastImport:new Date().toISOString(), health:'Save importado, migrado e normalizado', saveIntegrity:'ok'};
     persist();
     return true;
-  } catch(err){ console.warn('[VFM] importacao invalida bloqueada', err); state = normalize({...state, stability:{...(state.stability||{}), health:'Importacao invalida bloqueada'}}); persist(); return false; }
+  } catch(err){ console.warn('[VFM] importacao invalida bloqueada', err); state = normalize({...state, stability:{...(state.stability||{}), health:'Importacao invalida bloqueada', saveIntegrity:'blocked-import'}}); persist(); return false; }
 }
+export function loadSaveSlot(slot='principal'){
+  try {
+    const restored = readSlot(slot);
+    if(!restored) return false;
+    state = normalize(migrateLegacyState(restored));
+    state.save = {...(state.save||{}), activeSlot:String(slot||'principal')};
+    state.stability = {...(state.stability||{}), lastImport:new Date().toISOString(), health:`Slot ${slot} carregado`};
+    persist();
+    return true;
+  } catch(err){ console.warn('[VFM] slot invalido bloqueado', err); return false; }
+}
+export function listSaveSlots(){
+  try { return listSlots(); } catch(err){ return []; }
+}
+export function getSaveIntegritySnapshot(){ return saveIntegritySnapshot(state); }
 export function toggleAutosave(){
   state = normalize({...state, stability:{...(state.stability||{}), autosave:!state.stability?.autosave, health:'Preferencia de autosave atualizada'}});
   persist();

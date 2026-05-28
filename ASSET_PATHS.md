@@ -1,36 +1,16 @@
-# Asset Paths - v4.8.0
+# Asset Paths - v5.1.0
 
-A Fase 10 não adicionou assets pesados novos.
+A Fase 13 não adiciona assets pesados.
 
-Caminhos usados:
-- assets/backgrounds/bg-training.jpg
-- assets/placeholders/player-generic.png
-- assets/placeholders/staff-generic.png
-- assets/icons/training.png
+Mantidos os caminhos já utilizados pelo projeto:
 
-Caminhos futuros recomendados:
-- assets/training/medical-room.jpg
-- assets/training/youth-academy.jpg
-- assets/training/performance-center.jpg
+```txt
+assets/backgrounds/
+assets/clubs/
+assets/players/brazil/{clubId}/{playerId}.png
+assets/placeholders/player-generic.png
+assets/logos/
+assets/stadiums/
+```
 
-## v4.9.0 - Mercado internacional
-
-A Fase 11 nao adiciona assets pesados obrigatorios. Continua usando:
-
-- assets/players/scouted/{playerId}.png
-- assets/placeholders/player-generic.png
-- assets/countries/{country}.png
-- assets/placeholders/country-flag-generic.png
-
-Todos os novos recursos de mercado sao de codigo/dados e reutilizam os caminhos existentes.
-
-
-## Fase 12 - UI AAA
-A Fase 12 não adiciona assets pesados. Usa os fundos existentes, especialmente:
-- assets/backgrounds/bg-lobby.jpg
-- assets/backgrounds/bg-main-menu.jpg
-- assets/backgrounds/bg-match.jpg
-- assets/backgrounds/bg-settings.jpg
-
-Novo CSS visual:
-- css/aaa-ui.css
+Sistema de save não depende de imagens e não altera o mapa visual.

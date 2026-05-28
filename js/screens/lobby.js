@@ -9,6 +9,7 @@ export function lobby(state){
   const managerCountry = state.manager.country || 'br';
   const menu = [
     ['polishCenter','UI AAA','✨','Visual comercial, responsividade, performance e prontidão Steam/mobile','v5.0'],
+    ['saveCenter','Save Profissional','💾','Múltiplos saves, backup automático, exportar/importar e recuperação anti-corrupção','v5.1'],
     ['seasonCenter','Temporada','📆','Tabela viva, rodada completa, acesso, queda e vagas continentais','Novo'],
     ['championship','Campeonato','🏆','Competições, copa, continental e agenda anual','Essencial'],
     ['worldCompetitions','Libertadores/Sul-Americana','🌎','Grupos CONMEBOL, mata-mata continental e rota mundial','v4.2'],

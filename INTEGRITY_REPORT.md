@@ -1,17 +1,25 @@
-# Integrity Report - v5.0.0
+# Integrity Report - v5.1.0
 
-Status geral: OK
+Status geral: APROVADO
+
+## Quality gates
+
+- Inicialização JS: OK
+- `node --check` em JS/core: OK
+- `saveManager.js`: OK
+- `save-migration.js`: OK
+- `save-backup.js`: OK
+- `save-export-import.js`: OK
+- `save-corruption-recovery.js`: OK
+- Integração `state.js`: OK
+- Renderização da Central de Save: OK
+- Build info v5.1.0: OK
 
 ## Validações
-- CSS principal carregável: OK
-- `aaa-ui.css`: OK
-- `uiQualityEngine.js`: OK
-- Importação em `app.js`: OK
-- Rota `polishCenter`: OK
-- Validadores `ui-route`, `responsive`, `theme`: OK
-- Build info v5.0.0: OK
 
-## Quality Gate
-`phase-12-aaa-ui-responsive-theme-route-integrity`
-
-Resultado: aprovado para continuidade da Fase 13.
+- Migração de legacy saves: OK
+- Envelope JSON exportável: OK
+- Importação com validação: OK
+- Slots locais: OK
+- Checkpoints de autosave: OK
+- Recuperação por backup automático: OK

@@ -18,14 +18,14 @@ import { runBootSafety } from '../core/safety/safe-loader.js';
 
 async function boot(){
   const app = document.getElementById('app');
-  let buildInfo = { buildLabel:'Build v5.0.0' };
+  let buildInfo = { buildLabel:'Build v5.1.0' };
   try { buildInfo = await (await fetch('build/build-info.json', {cache:'no-store'})).json(); } catch(err) { console.warn('[VFM] build-info fallback', err); }
   const loadedAssetMap = await loadAssetMap();
   await loadVisualLibrary();
   applyCommercialPolish();
   applyAaaUiShell();
   load();
-  runRuntimeAudit(getState(), {phase:'v5.0.0 boot', ux: runtimeSafetySnapshot(getState()), aaa: buildUiAaaSnapshot(getState())});
+  runRuntimeAudit(getState(), {phase:'v5.1.0 boot', ux: runtimeSafetySnapshot(getState()), aaa: buildUiAaaSnapshot(getState())});
   validateCommercialState(getState());
   initRouter(app, buildInfo);
   register('cover', cover);

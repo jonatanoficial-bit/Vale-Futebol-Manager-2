@@ -1,6 +1,11 @@
-Vale Futebol Manager - Audit Report v5.0.0
-Arquivos auditados: 796
-Tamanho do projeto: 33M
-Erros: 0
+AUDIT REPORT - v5.1.0
+Build: 2026-05-28 21:52 BRT
+
+Arquivos auditados: js + core
+node --check: OK
+Save Manager: OK
+Save validators: OK
+State integration: OK
+UI save center: OK
+Errors: 0
 Warnings: 0
-Status: OK

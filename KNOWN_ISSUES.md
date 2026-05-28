@@ -1,7 +1,5 @@
-# Known Issues - v5.0.0
+# Known Issues - v5.1.0
 
-Nenhum erro crítico conhecido na build.
+Nenhum erro crítico conhecido nesta build.
 
-Observações:
-- A UI AAA é uma camada CSS/JS progressiva. Se o navegador não suportar blur avançado, o jogo cai para visual sólido sem quebrar.
-- Alguns assets continuam usando fallback conforme mapeamento original.
+Observação: os saves são locais do navegador. Para publicação futura em Steam/desktop, a mesma camada de envelope pode ser conectada a armazenamento de arquivo real via Electron/Tauri.

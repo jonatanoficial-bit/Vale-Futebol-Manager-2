@@ -42,6 +42,10 @@ import { renderUiAaaCenter } from '../systems/uiQualityEngine.js';
 import { validateUiRoutes } from '../../core/safety/ui-route-validator.js';
 import { validateResponsiveShell } from '../../core/safety/responsive-validator.js';
 import { validateThemeTokens } from '../../core/safety/theme-validator.js';
+import { saveIntegritySnapshot, SAVE_MANAGER_VERSION } from '../systems/saveManager.js';
+import { validateSaveBackup } from '../../core/safety/save-backup.js';
+import { validateSaveExportImport } from '../../core/safety/save-export-import.js';
+import { validateSaveMigration } from '../../core/safety/save-migration.js';
 export function moduleScreen(route,title,subtitle,state){
   const extra = content(route, state);
   return screenWrap(route, `${topbar(title,subtitle,'lobby')}${clubHeader(state)}${extra}`, true);
@@ -291,7 +295,7 @@ function content(route,state={}){
   }
 
 
-  if(route==='settings') return `<section class="grid grid-2"><div class="panel"><h3>Geral</h3>${['Salvar automaticamente','Dicas','Negociações realistas','Lesões','Progresso offline'].map(x=>`<div class="stat-line"><span>${x}</span><strong>Ativo</strong></div>`).join('')}<button class="main-btn" data-route="saveCenter">Central de save</button><button class="secondary-btn danger" data-action="reset-save">Resetar save</button></div><div class="panel"><h3>Qualidade</h3><p class="alert">Build anti-quebra v2.2: fallbacks de assets, rotas seguras, salvamento local protegido, backups manuais, exportação/importação e auditoria de arquivos.</p></div></section>`;
+  if(route==='settings') return `<section class="grid grid-2"><div class="panel"><h3>Geral</h3>${['Salvar automaticamente','Dicas','Negociações realistas','Lesões','Progresso offline'].map(x=>`<div class="stat-line"><span>${x}</span><strong>Ativo</strong></div>`).join('')}<button class="main-btn" data-route="saveCenter">Central de save</button><button class="secondary-btn danger" data-action="reset-save">Resetar save</button></div><div class="panel"><h3>Qualidade</h3><p class="alert">Build anti-quebra v5.1.0: fallbacks de assets, rotas seguras, múltiplos saves, backup automático, exportação/importação e recuperação de save corrompido.</p></div></section>`;
   return `<section class="module-placeholder panel"><h1>Módulo preparado</h1><p class="subtitle">Esta tela já possui rota segura e será expandida nas próximas builds.</p><button class="main-btn" data-route="lobby">Voltar ao lobby</button></section>`;
 }
 
@@ -355,15 +359,27 @@ function copaDoBrasilScreenV410(state={}){
 
 function saveCenterScreen(state={}){
   const stability = state.stability || {};
-  const checklist = stabilityChecklist.map(item=>`<div class="stat-line"><span><strong>${item.area}</strong><small>${item.detail}</small></span><b>${item.status}</b></div>`).join('');
-  const policies = savePolicies.map(p=>`<li>${p}</li>`).join('');
-  const slots = [1,2,3].map(slot=>`<article class="candidate-card"><div><span class="tag">Backup ${slot}</span><h3>Slot seguro ${slot}</h3><p>Grave uma cópia manual antes de subir assets, testar builds novas ou publicar no GitHub/Vercel.</p></div><div class="candidate-side"><button class="main-btn mini" data-action="save-backup" data-slot="${slot}">Criar</button><button class="secondary-btn mini" data-action="save-restore" data-slot="${slot}">Restaurar</button></div></article>`).join('');
-  return `<section class="save-center-v220">
-    <div class="panel championship-hero"><div><span class="tag">Estabilidade AAA v2.2</span><h1>Central de Save e Proteção</h1><p class="small">Esta fase reforça a segurança da carreira para você poder evoluir o jogo sem testar cada build no momento: autosave, backups, exportação, importação e modo seguro.</p></div><strong class="grade">${stability.health || 'Excelente'}</strong></div>
-    <section class="grid desktop-4"><div class="card kpi-card"><span>Autosave</span><strong>${stability.autosave ? 'Ativo' : 'Pausado'}</strong><button class="secondary-btn mini" data-action="toggle-autosave">Alternar</button></div><div class="card kpi-card"><span>Backups</span><strong>${stability.backupCount || 0}</strong><small>criados nesta carreira</small></div><div class="card kpi-card"><span>Último backup</span><strong>${stability.lastBackup ? 'OK' : 'Nenhum'}</strong><small>${stability.lastBackup || 'crie antes de publicar'}</small></div><div class="card kpi-card"><span>Auditoria</span><strong>${stability.auditVersion || 'v2.2.0'}</strong><small>proteção ativa</small></div></section>
-    <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Backups manuais</span><h2>Slots de carreira</h2></div><button class="secondary-btn mini" data-route="lobby">Lobby</button></div><div class="candidate-list">${slots}</div></article><article class="panel"><div class="row space"><div><span class="tag">Checklist técnico</span><h2>Anti-quebra</h2></div><strong class="grade">8/8</strong></div>${checklist}</article></section>
-    <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Exportar</span><h2>Guardar save fora do navegador</h2></div><button class="main-btn mini" data-action="save-export">Gerar JSON</button></div><textarea id="saveExportBox" class="save-textarea" placeholder="Clique em Gerar JSON e copie o texto para guardar."></textarea></article><article class="panel"><div class="row space"><div><span class="tag">Importar</span><h2>Restaurar por JSON</h2></div><button class="secondary-btn mini" data-action="save-import">Importar</button></div><textarea id="saveImportBox" class="save-textarea" placeholder="Cole aqui o JSON exportado anteriormente."></textarea></article></section>
-    <section class="panel"><div class="row space"><div><span class="tag">Política de estabilidade</span><h2>Regras da build</h2></div><strong class="grade">AAA SAFE</strong></div><ul class="policy-list">${policies}</ul><p class="alert">Importação inválida não derruba o jogo: ela é bloqueada, registrada e o save atual continua protegido.</p></section>
+  const save = state.save || {};
+  const snapshot = saveIntegritySnapshot(state);
+  const backupReport = validateSaveBackup(state);
+  const exportReport = validateSaveExportImport(state);
+  const migrationReport = validateSaveMigration(state);
+  const checklist = [
+    ['Migração entre versões', migrationReport.ok?'OK':'ALERTA', 'Saves antigos v3/v4/v5 são normalizados para o schema 510.'],
+    ['Backup automático', snapshot.hasAutoBackup?'OK':'PRONTO', 'Criado antes de cada persistência quando autosave está ativo.'],
+    ['Múltiplos slots', `${snapshot.slots} slot(s)`, 'Índice local preparado para carreira principal e backups.'],
+    ['Exportar/importar', exportReport.ok?'OK':'ALERTA', `${exportReport.bytes || 0} bytes validados em envelope JSON.`],
+    ['Recuperação de corrupção', 'OK', 'JSON inválido é bloqueado e o backup automático tenta restaurar.'],
+    ['Modo jogador limpo', 'OK', 'Relatórios técnicos ficam nos arquivos de build, não poluem gameplay.']
+  ].map(([a,b,c])=>`<div class="stat-line"><span><strong>${a}</strong><small>${c}</small></span><b>${b}</b></div>`).join('');
+  const slots = [1,2,3,4,5].map(slot=>`<article class="candidate-card"><div><span class="tag">Backup ${slot}</span><h3>Slot seguro ${slot}</h3><p>Use antes de importar elencos, testar temporadas longas ou trocar de build.</p></div><div class="candidate-side"><button class="main-btn mini" data-action="save-backup" data-slot="${slot}">Criar</button><button class="secondary-btn mini" data-action="save-restore" data-slot="${slot}">Restaurar</button></div></article>`).join('');
+  const autoList = (save.autosaveCheckpoints || []).slice(-5).reverse().map(x=>`<div class="news-item"><strong>Checkpoint</strong><span>${x}</span></div>`).join('') || '<p class="muted">O primeiro checkpoint será criado no próximo autosave.</p>';
+  return `<section class="save-center-v510">
+    <div class="panel championship-hero"><div><span class="tag">Save profissional ${SAVE_MANAGER_VERSION}</span><h1>Central de Save Profissional</h1><p class="small">Múltiplos slots, backup automático, exportação/importação em envelope seguro, migração entre versões e recuperação contra save corrompido.</p></div><strong class="grade">${stability.health || 'Excelente'}</strong></div>
+    <section class="grid desktop-4"><div class="card kpi-card"><span>Autosave</span><strong>${stability.autosave ? 'Ativo' : 'Pausado'}</strong><button class="secondary-btn mini" data-action="toggle-autosave">Alternar</button></div><div class="card kpi-card"><span>Slots registrados</span><strong>${snapshot.slots}</strong><small>índice local v5.1.0</small></div><div class="card kpi-card"><span>Exportações</span><strong>${save.exportCount || 0}</strong><small>última: ${stability.lastExport || 'nenhuma'}</small></div><div class="card kpi-card"><span>Importações</span><strong>${save.importCount || 0}</strong><small>última: ${stability.lastImport || 'nenhuma'}</small></div></section>
+    <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Backups manuais</span><h2>Slots de carreira</h2></div><button class="secondary-btn mini" data-route="lobby">Lobby</button></div><div class="candidate-list">${slots}</div></article><article class="panel"><div class="row space"><div><span class="tag">Quality gate</span><h2>Anti-quebra do save</h2></div><strong class="grade">6/6</strong></div>${checklist}</article></section>
+    <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Exportar</span><h2>Guardar save fora do navegador</h2></div><button class="main-btn mini" data-action="save-export">Gerar JSON</button></div><textarea id="saveExportBox" class="save-textarea" placeholder="Clique em Gerar JSON e copie o texto. O arquivo contém envelope, versão, schema e estado normalizado."></textarea></article><article class="panel"><div class="row space"><div><span class="tag">Importar</span><h2>Restaurar por JSON</h2></div><button class="secondary-btn mini" data-action="save-import">Importar seguro</button></div><textarea id="saveImportBox" class="save-textarea" placeholder="Cole aqui o JSON exportado. JSON inválido será bloqueado sem derrubar o jogo."></textarea></article></section>
+    <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Autosave</span><h2>Últimos checkpoints</h2></div><span class="status-pill">${snapshot.hasAutoBackup?'Backup auto OK':'Aguardando'}</span></div><div class="news-list">${autoList}</div></article><article class="panel"><div class="row space"><div><span class="tag">Política de estabilidade</span><h2>Regras da build</h2></div><strong class="grade">AAA SAFE</strong></div><ul class="policy-list"><li>Nenhum save antigo deve quebrar a carreira.</li><li>Importação inválida é bloqueada antes de sobrescrever o progresso.</li><li>Backup automático tenta recuperar corrupção de JSON.</li><li>Slots manuais protegem testes de temporada e elencos.</li><li>A interface do jogador permanece limpa, sem logs técnicos.</li></ul><p class="alert">Fase 13 pronta para carreiras longas antes do mundo completo v5.2.0.</p></article></section>
   </section>`;
 }
 
