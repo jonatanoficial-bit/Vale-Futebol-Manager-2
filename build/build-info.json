@@ -1,11 +1,8 @@
 {
-  "version": "v5.0.0",
-  "buildLabel": "Build v5.0.0 | 2026-05-28 | 21:31 BRT",
-  "phase": "Fase 12 - UI AAA, responsividade, mobile/desktop e prontidao comercial",
-  "timestamp": "2026-05-29T00:31:00Z",
-  "visibleInGame": true,
-  "qualityGate": "phase-12-aaa-ui-responsive-theme-route-integrity",
-  "build": "2026.05.28.012",
+  "version": "v5.2.0",
+  "buildLabel": "Build v5.2.0 | 2026-05-28 | 22:08 BRT",
+  "phase": "Fase 14 - Mundo completo + calendário global",
   "date": "2026-05-28",
-  "time": "21:31 BRT"
+  "time": "22:08 BRT",
+  "qualityGate": "0 errors / 0 warnings"
 }
