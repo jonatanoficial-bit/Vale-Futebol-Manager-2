@@ -1,21 +1,25 @@
-# Changelog - v5.1.0
+# Changelog - Vale Futebol Manager
 
-## Fase 13 - Save profissional
+## v5.2.0 - Fase 14 - Mundo completo + calendário global
+Data: 28/05/2026 22:08 BRT
 
 ### Adicionado
-- Sistema `saveManager.js` com schema 510.
-- Chave nova de save: `vfm_gold_save_v510`.
-- Migração automática de saves anteriores, incluindo v5.0.0 e v4.x.
-- Múltiplos slots manuais de backup.
-- Backup automático antes da persistência quando autosave está ativo.
-- Exportação em envelope JSON com metadados de versão, build, clube, manager e temporada.
-- Importação segura com validação antes de sobrescrever o estado atual.
-- Recuperação de save corrompido via backup automático.
-- Central de Save Profissional no lobby.
+- Central nova: Mundo Completo.
+- 12 ligas internacionais integradas em simulação compacta.
+- Premier League, LaLiga, Serie A Itália, Bundesliga, Ligue 1, Liga Portugal, Brasileirão, Argentina, MLS, Saudi Pro League, J1 League e Liga MX.
+- Competições europeias: Champions League, Europa League e Conference League.
+- Ranking mundial de clubes Top 30.
+- Calendário global com 12 janelas mensais e risco de conflito.
+- Pulso de mercado global conectado ao motor de transferências.
+- Ponte com Libertadores, Sul-Americana e Mundial/Intercontinental.
 
 ### Segurança anti-quebra
-- JSON inválido não derruba o jogo.
-- Importação inválida é bloqueada.
-- Save antigo é normalizado para o estado atual.
-- Se o save principal corromper, o jogo tenta carregar backup automático.
-- Se nenhum backup existir, o jogo recria um estado seguro padrão.
+- Validador de ligas mundiais.
+- Validador de calendário global.
+- Validador de mercado internacional.
+- Fallback para clubes, logos, tabelas compactas e ranking mundial.
+
+### Corrigido
+- Build visível atualizada para v5.2.0.
+- Lobby agora mostra a central Mundo Completo.
+- Registro de boot atualizado para v5.2.0.

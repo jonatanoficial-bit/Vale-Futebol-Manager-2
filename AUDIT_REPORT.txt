@@ -1,11 +1,12 @@
-AUDIT REPORT - v5.1.0
-Build: 2026-05-28 21:52 BRT
-
-Arquivos auditados: js + core
-node --check: OK
-Save Manager: OK
-Save validators: OK
-State integration: OK
-UI save center: OK
-Errors: 0
+Vale Futebol Manager - Auditoria v5.2.0
+Data: 28/05/2026
+Hora: 22:08 BRT
+Arquivos auditados: 806
+Tamanho do projeto: 33M
+node --check JS/core: OK
+Importação globalWorldEngine.js: OK
+Validação world-league-validator: OK
+Validação global-calendar-validator: OK
+Validação international-transfer-validator: OK
+Erros: 0
 Warnings: 0

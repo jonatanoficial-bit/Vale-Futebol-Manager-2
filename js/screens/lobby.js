@@ -10,9 +10,10 @@ export function lobby(state){
   const menu = [
     ['polishCenter','UI AAA','✨','Visual comercial, responsividade, performance e prontidão Steam/mobile','v5.0'],
     ['saveCenter','Save Profissional','💾','Múltiplos saves, backup automático, exportar/importar e recuperação anti-corrupção','v5.1'],
+    ['worldComplete','Mundo Completo','🌐','Ligas internacionais, competições europeias, ranking mundial e calendário global','v5.2'],
     ['seasonCenter','Temporada','📆','Tabela viva, rodada completa, acesso, queda e vagas continentais','Novo'],
     ['championship','Campeonato','🏆','Competições, copa, continental e agenda anual','Essencial'],
-    ['worldCompetitions','Libertadores/Sul-Americana','🌎','Grupos CONMEBOL, mata-mata continental e rota mundial','v4.2'],
+    ['worldCompetitions','Libertadores/Sul-Americana','🌎','Grupos CONMEBOL, mata-mata continental e rota mundial','v4.3'],
     ['financeCenter','Economia','🏦','Diretoria, orçamento, patrocínio, risco e crise financeira','Novo'],
     ['calendar','Agenda','📅','Calendário completo, treinos e jogos','Temporada'],
     ['formation','Tática','🧩','Escalação, campo, banco e desenho tático','Pré-jogo'],

@@ -1,18 +1,8 @@
-# Project Status - Vale Futebol Manager
+# Project Status
 
-Versão atual: v5.1.0
-Build: Build v5.1.0 | 2026-05-28 | 21:52 BRT
-Fase concluída: 13 - Save profissional
+Versão atual: v5.2.0
+Fase atual: 14 - Mundo completo + calendário global
+Status: Build aprovada
 
-## Concluído nesta fase
-
-- Múltiplos saves.
-- Backup automático.
-- Exportação/importação segura.
-- Migração entre versões.
-- Recuperação de save corrompido.
-- Central visual de save no lobby.
-
-## Próxima fase
-
-v5.2.0 - Mundo completo + calendário global.
+Resumo:
+O jogo agora possui camada global simulada, ligas internacionais, competições europeias, ranking mundial, calendário global e validações anti-quebra. A próxima etapa é a Release Candidate v6.0.0, com limpeza de produção, remoção de painéis dev públicos e auditoria final.

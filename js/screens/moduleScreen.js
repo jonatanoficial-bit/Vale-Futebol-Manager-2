@@ -43,6 +43,10 @@ import { validateUiRoutes } from '../../core/safety/ui-route-validator.js';
 import { validateResponsiveShell } from '../../core/safety/responsive-validator.js';
 import { validateThemeTokens } from '../../core/safety/theme-validator.js';
 import { saveIntegritySnapshot, SAVE_MANAGER_VERSION } from '../systems/saveManager.js';
+import { renderWorldCompleteCenter, buildWorldLeagueSnapshot, validateWorldCompleteSnapshot } from '../systems/globalWorldEngine.js';
+import { validateWorldLeagueSystem } from '../../core/safety/world-league-validator.js';
+import { validateGlobalCalendar } from '../../core/safety/global-calendar-validator.js';
+import { validateInternationalTransferMarket } from '../../core/safety/international-transfer-validator.js';
 import { validateSaveBackup } from '../../core/safety/save-backup.js';
 import { validateSaveExportImport } from '../../core/safety/save-export-import.js';
 import { validateSaveMigration } from '../../core/safety/save-migration.js';
@@ -93,6 +97,7 @@ function content(route,state={}){
   if(route==='seasonCenter') return seasonCenterScreen(state);
   if(route==='copaDoBrasil') return copaDoBrasilScreenV410(state);
   if(route==='worldCompetitions') return worldCompetitionsScreenV430(state);
+  if(route==='worldComplete') return renderWorldCompleteCenter(state);
   if(route==='financeCenter') return financeCenterScreenV330(state);
   if(route==='polishCenter') return polishCenterScreenV500(state);
   if(route==='mobileAudit') return mobileAuditScreenV350(state);
@@ -295,7 +300,7 @@ function content(route,state={}){
   }
 
 
-  if(route==='settings') return `<section class="grid grid-2"><div class="panel"><h3>Geral</h3>${['Salvar automaticamente','Dicas','Negociações realistas','Lesões','Progresso offline'].map(x=>`<div class="stat-line"><span>${x}</span><strong>Ativo</strong></div>`).join('')}<button class="main-btn" data-route="saveCenter">Central de save</button><button class="secondary-btn danger" data-action="reset-save">Resetar save</button></div><div class="panel"><h3>Qualidade</h3><p class="alert">Build anti-quebra v5.1.0: fallbacks de assets, rotas seguras, múltiplos saves, backup automático, exportação/importação e recuperação de save corrompido.</p></div></section>`;
+  if(route==='settings') return `<section class="grid grid-2"><div class="panel"><h3>Geral</h3>${['Salvar automaticamente','Dicas','Negociações realistas','Lesões','Progresso offline'].map(x=>`<div class="stat-line"><span>${x}</span><strong>Ativo</strong></div>`).join('')}<button class="main-btn" data-route="saveCenter">Central de save</button><button class="secondary-btn danger" data-action="reset-save">Resetar save</button></div><div class="panel"><h3>Qualidade</h3><p class="alert">Build anti-quebra v5.2.0: fallbacks de assets, rotas seguras, múltiplos saves, backup automático, exportação/importação e recuperação de save corrompido.</p></div></section>`;
   return `<section class="module-placeholder panel"><h1>Módulo preparado</h1><p class="subtitle">Esta tela já possui rota segura e será expandida nas próximas builds.</p><button class="main-btn" data-route="lobby">Voltar ao lobby</button></section>`;
 }
 

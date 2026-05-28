@@ -18,14 +18,14 @@ import { runBootSafety } from '../core/safety/safe-loader.js';
 
 async function boot(){
   const app = document.getElementById('app');
-  let buildInfo = { buildLabel:'Build v5.1.0' };
+  let buildInfo = { buildLabel:'Build v5.2.0' };
   try { buildInfo = await (await fetch('build/build-info.json', {cache:'no-store'})).json(); } catch(err) { console.warn('[VFM] build-info fallback', err); }
   const loadedAssetMap = await loadAssetMap();
   await loadVisualLibrary();
   applyCommercialPolish();
   applyAaaUiShell();
   load();
-  runRuntimeAudit(getState(), {phase:'v5.1.0 boot', ux: runtimeSafetySnapshot(getState()), aaa: buildUiAaaSnapshot(getState())});
+  runRuntimeAudit(getState(), {phase:'v5.2.0 boot', ux: runtimeSafetySnapshot(getState()), aaa: buildUiAaaSnapshot(getState())});
   validateCommercialState(getState());
   initRouter(app, buildInfo);
   register('cover', cover);
@@ -44,6 +44,7 @@ async function boot(){
     data2026:['Dados 2026','Divisões, elencos, avatares de jogadores e manutenção segura'],
     database2026:['Banco Maio/2026','Elencos, atributos, contratos, valores, fotos e auditoria pesada'],
     worldCompetitions:['Mundial/Intercontinental','Libertadores, Sul-Americana, rota mundial, finanças e reputação global'],
+    worldComplete:['Mundo Completo','Ligas internacionais, competições europeias, calendário global, ranking mundial e mercado global'],
     championship:['Campeonato','Competições e agenda anual'],
     calendar:['Calendário','Agenda completa da temporada'],
     formation:['Formação','Escalação e desenho tático'],

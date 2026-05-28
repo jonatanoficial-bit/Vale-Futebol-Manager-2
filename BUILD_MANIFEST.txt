@@ -1,26 +1,31 @@
-Vale Futebol Manager - Build Manifest
-Versão: v5.1.0
-Build visível: Build v5.1.0 | 2026-05-28 | 21:52 BRT
-Fase: 13 - Save profissional
+VALE FUTEBOL MANAGER - BUILD MANIFEST
+Versão: v5.2.0
+Build visível: Build v5.2.0 | 2026-05-28 | 22:08 BRT
+Fase: 14 - Mundo completo + calendário global
 
-Arquivos adicionados:
-- js/systems/saveManager.js
-- core/safety/save-migration.js
-- core/safety/save-backup.js
-- core/safety/save-export-import.js
-- core/safety/save-corruption-recovery.js
+Objetivo da build:
+- Integrar ligas internacionais simuladas ao ecossistema da carreira.
+- Criar calendário global de 12 meses com risco de conflito clube/seleção.
+- Criar ranking mundial de clubes.
+- Conectar competições europeias, mercado global e rota CONMEBOL/Mundial.
+- Manter o sistema anti-quebra em modo interno, sem poluir a experiência do jogador.
+
+Arquivos novos:
+- js/data/worldLeagueCompleteData.js
+- js/systems/globalWorldEngine.js
+- core/safety/world-league-validator.js
+- core/safety/global-calendar-validator.js
+- core/safety/international-transfer-validator.js
 
 Arquivos alterados:
-- js/systems/state.js
-- js/screens/moduleScreen.js
-- js/screens/lobby.js
 - js/app.js
+- js/screens/lobby.js
+- js/screens/moduleScreen.js
 - build/build-info.json
-
-Resumo:
-- Múltiplos slots locais para carreira e backups.
-- Autosave com checkpoint e backup automático.
-- Exportação/importação por envelope JSON seguro.
-- Migração de saves antigos para schema 510.
-- Recuperação contra save corrompido.
-- Central de Save Profissional v5.1.0 dentro do lobby.
+- BUILD_MANIFEST.txt
+- CHANGELOG.md
+- INTEGRITY_REPORT.md
+- TEST_REPORT.md
+- PROJECT_STATUS.md
+- KNOWN_ISSUES.md
+- ASSET_PATHS.md
