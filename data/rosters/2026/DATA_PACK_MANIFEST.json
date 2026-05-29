@@ -1,0 +1,23 @@
+{
+  "version": "v5.8.2",
+  "label": "Data Pack 2026.05.20",
+  "lockDate": "2026-05-20",
+  "status": "serie-a-pass-2-in-progress",
+  "paths": {
+    "brazilSerieA": "data/rosters/2026/brazil/serie-a/{clubId}.json",
+    "brazilSerieB": "data/rosters/2026/brazil/serie-b/{clubId}.json",
+    "europe": "data/rosters/2026/europe/{leagueId}/{clubId}.json",
+    "southAmerica": "data/rosters/2026/south-america/{leagueId}/{clubId}.json",
+    "nationalTeams": "data/rosters/2026/national-teams/{countryId}.json"
+  },
+  "releaseCandidateRule": "No playable club can use generated or generic player names. RC is blocked until official/licensed roster files are imported and validated.",
+  "officialSerieACoverage": "8/20",
+  "officialSerieAPlayers": 251,
+  "lastBatch": [
+    "corinthians",
+    "sao-paulo",
+    "santos",
+    "botafogo",
+    "vasco"
+  ]
+}
