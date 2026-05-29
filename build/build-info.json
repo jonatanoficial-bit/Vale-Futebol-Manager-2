@@ -1,8 +1,9 @@
 {
-  "version": "v5.7.0",
-  "buildLabel": "Build v5.7.0 | 2026-05-29 | 12:42 BRT",
-  "phase": "Fase 19 - Tela de partida refinada mobile/PC",
+  "version": "v5.8.4",
+  "build": "2026.05.29.584",
   "date": "2026-05-29",
-  "time": "12:42 BRT",
-  "qualityGate": "0 errors / 0 warnings"
+  "time": "16:08 BRT",
+  "phase": "Fase 24 - Série A 2026 lote 4 fechado",
+  "dataPack": "2026.05.20",
+  "status": "serie-a-closed"
 }
