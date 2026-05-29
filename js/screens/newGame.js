@@ -9,7 +9,7 @@ export function newGame(state){
   const selectedMode = state.ui?.selectedMode || state.manager.mode || 'career';
   const av=[1,2,3,4,5,6,7,8,9,10,11,12].map(i=>`assets/avatars/manager-${String(i).padStart(2,'0')}.png`);
   return screenWrap('newGame', `
-    ${topbar('Novo Game','Crie seu manager','mainMenu')}
+    ${topbar('Novo Game','Crie seu manager','mainMenu',{resources:false})}
     <section class="career-create stack">
       <div class="panel create-hero">
         <div>
@@ -50,7 +50,7 @@ export function newGame(state){
       </div>
 
       <button class="main-btn giant" data-action="manager-next">Continuar</button>
-    </section>`, true);
+    </section>`, false);
 }
 function countryLabel(code){ return countries.find(c=>c.code===code)?.name || 'Brasil'; }
 function continentLabel(code){ return countries.find(c=>c.code===code)?.continent || 'Internacional'; }

@@ -1,18 +1,24 @@
 import { safeScreenFallback } from '../../core/safety/error-recovery.js';
+import { requestFullscreenMode, requestLandscapeForMatch } from './mobileExperienceEngine.js';
+import { getNavigationRouteForActive } from './navigationExperienceEngine.js';
 import { getState, setState, setManager, setUI, startCareer, advanceMatch, finishMatch, setMatchSpeed, makeSubstitution, setMatchDecision, openTransferNegotiation, acceptTransferDeal, rejectTransferDeal, sellOutgoingPlayer, renewPlayerContract, loanTransferPlayer, generateIncomingOffer, respondIncomingOffer, simulateAIMarket, toggleTransferWindow, generateSmartIncomingOffer, simulateSmartAIMarket, triggerAgentEvent, setMatchAutoPlay, autoSelectBestLineup, setCaptain, setSetPieceTaker, applyRotationPlan, createManualBackup, restoreManualBackup, exportSaveText, importSaveText, toggleAutosave, exportRosterText, importRosterText, resetRosterToDefault, sampleRosterText, generateCareerOffers, respondCareerOffer, registerNationalInterest, toggleCallUpPlayer, finalizeNationalCallUp, completePostMatchAndReturnLobby, simulateBoardReview, renewManagerContract, simulateManagerDismissalRisk, simulateNextInternationalMatch, applyTrainingMicrocycle, signPreContract } from './state.js';
 const routes = new Map(); let rootEl = null; let buildInfo = null;
 export function register(name, renderer){ routes.set(name, renderer); }
 export function initRouter(root, build){ rootEl = root; buildInfo = build; }
-export function go(route){ const target = routes.has(route) ? route : 'lobby'; setState({route:target}); render(); }
+export function go(route){ const target = routes.has(route) ? route : 'lobby'; setState({route:target}); if(target === 'match'){ const s=getState(); if(!s.match?.finalized){ setMatchSpeed(s.match?.speed || 2); setMatchAutoPlay(true); requestLandscapeForMatch('match'); } } render(); }
 export function render(){
   const state = getState(); const renderer = routes.get(state.route) || routes.get('lobby');
   try { rootEl.innerHTML = renderer(state); wire(rootEl); fillBuildBadges(); }
-  catch(err){ console.error('[VFM] erro na tela, tela segura acionada', err); rootEl.innerHTML = safeScreenFallback(buildInfo?.buildLabel || 'Build v4.8.0'); wire(rootEl); }
+  catch(err){ console.error('[VFM] erro na tela, tela segura acionada', err); rootEl.innerHTML = safeScreenFallback(buildInfo?.buildLabel || 'Build v5.7.0'); wire(rootEl); }
 }
-function build(){ return `<div class="build-badge">${buildInfo?.buildLabel || 'Build v4.8.0'}</div>`; }
-function fillBuildBadges(){ rootEl.querySelectorAll('#buildBadge,.build-badge').forEach(el=>{ if(!el.textContent.trim()) el.textContent = buildInfo?.buildLabel || 'Build v4.8.0'; }); }
+function build(){ return `<div class="build-badge">${buildInfo?.buildLabel || 'Build v5.7.0'}</div>`; }
+function fillBuildBadges(){ rootEl.querySelectorAll('#buildBadge,.build-badge').forEach(el=>{ if(!el.textContent.trim()) el.textContent = buildInfo?.buildLabel || 'Build v5.7.0'; }); markActiveNavigation(); }
+function markActiveNavigation(){ const active = getNavigationRouteForActive(getState()?.route || 'lobby'); rootEl.querySelectorAll('[data-nav-route]').forEach(btn => { const isActive = btn.dataset.navRoute === active; btn.classList.toggle('active', isActive); if(isActive) btn.setAttribute('aria-current','page'); else btn.removeAttribute('aria-current'); }); }
 function wire(scope){
   scope.querySelectorAll('[data-route]').forEach(btn => btn.addEventListener('click', () => go(btn.dataset.route)));
+
+  scope.querySelectorAll('[data-action="ui-fullscreen"]').forEach(btn => btn.addEventListener('click', async () => { await requestFullscreenMode(); requestLandscapeForMatch(getState()?.route); }));
+
 
   scope.querySelectorAll('[data-action="save-backup"]').forEach(btn => btn.addEventListener('click', () => { createManualBackup(btn.dataset.slot || 1); render(); }));
   scope.querySelectorAll('[data-action="save-restore"]').forEach(btn => btn.addEventListener('click', () => { restoreManualBackup(btn.dataset.slot || 1); render(); }));
@@ -41,7 +47,7 @@ function wire(scope){
   scope.querySelectorAll('[data-action="select-avatar"]').forEach(btn => btn.addEventListener('click', () => { setUI({selectedAvatar:btn.dataset.avatar}); render(); }));
   scope.querySelectorAll('[data-action="select-mode"]').forEach(btn => btn.addEventListener('click', () => { setUI({selectedMode:btn.dataset.mode}); render(); }));
 
-  scope.querySelectorAll('[data-action="select-team"]').forEach(btn => btn.addEventListener('click', () => { setState({clubId:btn.dataset.team}); setUI({selectedClub:btn.dataset.team}); render(); }));
+  scope.querySelectorAll('[data-action="select-team"]').forEach(btn => btn.addEventListener('click', () => { setUI({selectedClub:btn.dataset.team}); render(); }));
   scope.querySelectorAll('[data-action="team-country-filter"]').forEach(sel => sel.addEventListener('change', () => { setUI({teamCountryFilter:sel.value, teamLeagueFilter:'all'}); render(); }));
   scope.querySelectorAll('[data-action="team-league-filter"]').forEach(sel => sel.addEventListener('change', () => { setUI({teamLeagueFilter:sel.value}); render(); }));
   scope.querySelectorAll('[data-action="team-sort"]').forEach(sel => sel.addEventListener('change', () => { setUI({teamSort:sel.value}); render(); }));

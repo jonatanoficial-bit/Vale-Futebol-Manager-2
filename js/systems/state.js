@@ -6,6 +6,7 @@ import { transferShortlist, negotiations as baseNegotiations, outgoingList, loan
 import { buildMarketIntelligence, createSmartIncomingOffer, createIntelligentAIDeal, nextAgentEvent } from './marketIntelligenceEngine.js';
 import { scoreFromTimeline, buildBalanceSummary } from './balance.js';
 import { squadPlayers as defaultRosterPlayers, rosterMeta as defaultRosterMeta, normalizeRoster } from '../data/squadData.js';
+import { buildMay2026RosterForClub } from './playerDatabase2026Engine.js';
 import { generateOffers, validateCareerState, validateManagerCareerState, buildManagerCareerSnapshot, buildInternationalCalendar, defaultCallUpSelection } from './careerEngine.js';
 import { buildNationalCalendar, buildNationalTeamSnapshot, safeCallUpPool, simulateNationalFixture, NATIONAL_TEAM_ENGINE_VERSION } from './nationalTeamEngine.js';
 import { ensureTrainingState, applyTrainingWeek, TRAINING_ENGINE_VERSION } from './trainingEngine.js';
@@ -13,17 +14,44 @@ import { TRANSFER_ENGINE_VERSION, ensureTransferLedger, evaluateDealSafety, regi
 import { SAVE_MANAGER_VERSION, SAVE_KEY, writeAutoBackup, readAutoBackup, preserveCorruptSave, exportEnvelopeText, validateSavePayload, migrateLegacyState, writeSlot, readSlot, listSlots, saveIntegritySnapshot } from './saveManager.js';
 
 const key = SAVE_KEY;
-const legacyKeys = ['vfm_gold_save_v500','vfm_gold_save_v490','vfm_gold_save_v480','vfm_gold_save_v470','vfm_gold_save_v460','vfm_gold_save_v450','vfm_gold_save_v440', 'vfm_gold_save_v430', 'vfm_gold_save_v420', 'vfm_gold_save_v410', 'vfm_gold_save_v400', 'vfm_gold_save_v390', 'vfm_gold_save_v370', 'vfm_gold_save_v360', 'vfm_gold_save_v350', 'vfm_gold_save_v340', 'vfm_gold_save_v330', 'vfm_gold_save_v320', 'vfm_gold_save_v310', 'vfm_gold_save_v300', 'vfm_gold_save_v290', 'vfm_gold_save_v280', 'vfm_gold_save_v270', 'vfm_gold_save_v262', 'vfm_gold_save_v261', 'vfm_gold_save_v260', 'vfm_gold_save_v251', 'vfm_gold_save_v240', 'vfm_gold_save_v230', 'vfm_gold_save_v220', 'vfm_gold_save_v210', 'vfm_gold_save_v200', 'vfm_gold_save_v190', 'vfm_gold_save_v180', 'vfm_gold_save_v170', 'vfm_gold_save_v160', 'vfm_gold_save_v150', 'vfm_gold_save_v140', 'vfm_gold_save_v130', 'vfm_gold_save_v120', 'vfm_gold_save_v110', 'vfm_gold_save_v100', 'vfm_gold_save_v090', 'vfm_gold_save_v080', 'vfm_gold_save_v050', 'vfm_gold_save_v040', 'vfm_gold_save_v030', 'vfm_gold_save_v020', 'vfm_gold_save_v010'];
+const legacyKeys = ['vfm_gold_save_v510','vfm_gold_save_v500','vfm_gold_save_v490','vfm_gold_save_v480','vfm_gold_save_v470','vfm_gold_save_v460','vfm_gold_save_v450','vfm_gold_save_v440', 'vfm_gold_save_v430', 'vfm_gold_save_v420', 'vfm_gold_save_v410', 'vfm_gold_save_v400', 'vfm_gold_save_v390', 'vfm_gold_save_v370', 'vfm_gold_save_v360', 'vfm_gold_save_v350', 'vfm_gold_save_v340', 'vfm_gold_save_v330', 'vfm_gold_save_v320', 'vfm_gold_save_v310', 'vfm_gold_save_v300', 'vfm_gold_save_v290', 'vfm_gold_save_v280', 'vfm_gold_save_v270', 'vfm_gold_save_v262', 'vfm_gold_save_v261', 'vfm_gold_save_v260', 'vfm_gold_save_v251', 'vfm_gold_save_v240', 'vfm_gold_save_v230', 'vfm_gold_save_v220', 'vfm_gold_save_v210', 'vfm_gold_save_v200', 'vfm_gold_save_v190', 'vfm_gold_save_v180', 'vfm_gold_save_v170', 'vfm_gold_save_v160', 'vfm_gold_save_v150', 'vfm_gold_save_v140', 'vfm_gold_save_v130', 'vfm_gold_save_v120', 'vfm_gold_save_v110', 'vfm_gold_save_v100', 'vfm_gold_save_v090', 'vfm_gold_save_v080', 'vfm_gold_save_v050', 'vfm_gold_save_v040', 'vfm_gold_save_v030', 'vfm_gold_save_v020', 'vfm_gold_save_v010'];
+
+function clubRosterPackage(clubId='santos'){
+  const pack = buildMay2026RosterForClub(clubId);
+  return { meta: pack.meta, players: normalizeRoster(pack.players), lastImport:null, lastExport:null, validationLog:[`Elenco Maio/2026 carregado para ${pack.meta.clubName || clubId}.`] };
+}
+function primaryPlayerIds(players=[]){
+  const ordered = [...players].sort((a,b)=>Number(b.overall||0)-Number(a.overall||0));
+  const byPos = pos => ordered.find(p=>String(p.pos||'').includes(pos)) || ordered[0] || {id:'player-1'};
+  return {
+    captainId: ordered[0]?.id || 'player-1',
+    penaltyTakerId: byPos('ATA').id || ordered[0]?.id || 'player-1',
+    freeKickTakerId: (ordered.find(p=>['MEI','MC','PE','PD'].includes(p.pos)) || ordered[0] || {id:'player-1'}).id,
+    cornerTakerId: (ordered.find(p=>['MEI','PE','PD','MC'].includes(p.pos)) || ordered[0] || {id:'player-1'}).id
+  };
+}
+function cleanLeagueStateForNewCareer(career={}, clubId='santos'){
+  return {
+    ...career,
+    currentDate:'2026-04-13',
+    matchday:1,
+    completedMatches:[],
+    lastResult:null,
+    lastRoundResults:[],
+    integrationLog:[`Carreira limpa iniciada na v5.3.0 para ${clubId}: tabela zerada, elenco do clube carregado e dados de demonstração removidos.`]
+  };
+}
+
 export const defaultState = () => ({
   route:'cover',
   manager:{ name:'Joao Victor', country:'br', avatar:'assets/avatars/manager-01.png', reputation:82, mode:'career' },
   clubId:'santos', season:2026, month:'Maio', money:92.5, coins:250, notifications:6, boardTrust:76, fanMood:82, jobSecurity:'Seguro',
   match:{ id:'2026-05-24-santos-palmeiras', date:'2026-05-24', competitionId:'brasileirao-a', competition:'Brasileirão Série A 2026', stage:'Rodada atual', minute:1, home:'santos', away:'palmeiras', homeGoals:0, awayGoals:0, speed:1, autoPlay:false, finalized:false, postMatchReady:false, substitutions:[], maxSubs:5, decision:'balanced', tacticalBoost:0, usedSubPlayers:[], postMatchReport:null, nextMatchQueued:null, reportViewed:false },
   career:{ currentDate:'2026-05-19', matchday:1, completedMatches:[], lastResult:null, promotionRelegation:{serieARelegation:4,serieBPromotion:4,libertadoresTop:5,sulamericanaRange:[6,12],serieBRelegation:4}, integrationLog:['Carreira migrada para v5.1.0 com save profissional, múltiplos slots, backups automáticos e recuperação de carreira.'], jobOffers:[], offerHistory:[], nationalTeamJob:null, dualCareer:{enabled:false, club:true, nationalTeam:null}, callUpSelection:defaultCallUpSelection(), internationalCalendar:buildNationalCalendar(2026, 'brasil'), managerProfile:null, activeContract:null, contractHistory:[], titleHistory:[], sackRiskLog:[], managerTimeline:[], unlockedMilestones:[], boardRelationship:76, fanRelationship:82, dressingRoomTrust:69, mediaPressure:54, worldCompetitionCycle:{libertadores:true,sulamericana:true,clubWorldCupCycle:4,worldCupCycle:4,lastUpdated:'v4.3.0'}, financeReport:{profile:'balanced', lastMonthlyCycle:null, crisisLog:[], boardWarnings:[], sponsorReview:'v3.5.0'} },
-  gameplay:{ difficulty:'realistic', aiVersion:'v5.1.0', realism:88, variance:18, balanceLog:[] },
+  gameplay:{ difficulty:'realistic', aiVersion:'v5.4.0', realism:88, variance:18, balanceLog:[] },
   stability:{ autosave:true, lastBackup:null, backupCount:0, lastExport:null, lastImport:null, safeModeEvents:0, health:'Excelente', auditVersion:SAVE_MANAGER_VERSION, saveManagerVersion:SAVE_MANAGER_VERSION, saveIntegrity:'ok', commercialAudit:'v3.7.0-ok', fullscreenMobile:true, overflowGuard:true, rosterSafeMode:true, matchEngineSafeMode:true, matchEngineVersion:'v4.7.0', matchStressTest:'passed-100', trainingEngineVersion:TRAINING_ENGINE_VERSION, trainingStressTest:'passed-4-weeks', transferEngineVersion:TRANSFER_ENGINE_VERSION, transferIntegrity:'pending' },
-  save:{ version:SAVE_MANAGER_VERSION, schema:510, activeSlot:'principal', migratedFrom:null, lastMigrationAt:null, exportCount:0, importCount:0, autosaveCheckpoints:[] },
-  roster:{ meta: defaultRosterMeta, players: defaultRosterPlayers, lastImport:null, lastExport:null, validationLog:['Elenco base Santos 2026 carregado com proteção anti-quebra.'] },
+  save:{ version:SAVE_MANAGER_VERSION, schema:530, activeSlot:'principal', migratedFrom:null, lastMigrationAt:null, exportCount:0, importCount:0, autosaveCheckpoints:[] },
+  roster:clubRosterPackage('santos'),
   finance:{profile:'balanced', lastMonthlyCycle:null, crisisLog:[], boardWarnings:[], sponsorReview:'v3.5.0'},
   training:ensureTrainingState(),
   transfer:ensureTransferLedger({ budget:42.8, wageRoom:2.4, negotiationLog:[], activeNegotiations:[], acceptedDeals:[], rejectedDeals:[], outgoingDeals:[], renewals:[], loanDeals:[], incomingOffers:[], aiDeals:[], agentEvents:[], smartReports:[], windowOpen:true, boardApproval:82, marketDay:1, intelligenceVersion:'v3.7.0' }),
@@ -72,7 +100,7 @@ function normalize(next){
   merged.stability.saveManagerVersion = SAVE_MANAGER_VERSION;
   merged.save = {...base.save, ...(next?.save || {})};
   merged.save.version = SAVE_MANAGER_VERSION;
-  merged.save.schema = 510;
+  merged.save.schema = 530;
   merged.save.activeSlot = String(merged.save.activeSlot || 'principal').slice(0,32);
   merged.save.exportCount = Math.max(0, Number(merged.save.exportCount || 0));
   merged.save.importCount = Math.max(0, Number(merged.save.importCount || 0));
@@ -127,8 +155,15 @@ function normalize(next){
   if(!merged.ui.penaltyTakerId) merged.ui.penaltyTakerId = merged.ui.captainId || 'neymar';
   if(!merged.ui.freeKickTakerId) merged.ui.freeKickTakerId = merged.ui.penaltyTakerId || 'neymar';
   if(!merged.ui.cornerTakerId) merged.ui.cornerTakerId = 'gabriel-menino';
-  const activeClub = merged.clubId || merged.ui.selectedClub || 'santos';
-  if(merged.ui.selectedClub !== activeClub) merged.ui.selectedClub = activeClub;
+  const activeClub = merged.clubId || 'santos';
+  const activeRosterClub = merged.roster?.meta?.clubId;
+  const safeToAutoSyncRoster = !merged.roster?.lastImport || String(activeRosterClub || '') === 'santos' || !merged.career.completedMatches.length;
+  if(activeRosterClub && activeRosterClub !== activeClub && safeToAutoSyncRoster){
+    const repaired = clubRosterPackage(activeClub);
+    merged.roster = {...repaired, validationLog:[...(merged.roster.validationLog||[]).slice(-3), `Correção v5.3.0: elenco trocado de ${activeRosterClub} para ${activeClub}.`, ...repaired.validationLog]};
+    const ids = primaryPlayerIds(merged.roster.players);
+    merged.ui = {...merged.ui, ...ids};
+  }
   if(!merged.match || !merged.match.home || !merged.match.away || (activeClub !== 'santos' && (merged.match.home === 'santos' || merged.match.away === 'santos') && !merged.career.completedMatches.length)) {
     merged.match = buildClubFixture(activeClub, 0);
   }
@@ -158,7 +193,11 @@ function nextFixtureForClub(clubId, afterIndex=0){ return buildClubFixture(clubI
 
 export function startCareer(){
   const chosenClub = state.ui.selectedClub || state.clubId || 'santos';
+  const chosenTeam = getTeam(chosenClub);
+  const rosterPack = clubRosterPackage(chosenClub);
+  const starters = primaryPlayerIds(rosterPack.players);
   const firstMatch = buildClubFixture(chosenClub, 0);
+  const transferBudget = Math.max(0, Number(chosenTeam?.budget || 30));
   state = normalize({
     ...state,
     manager:{
@@ -168,12 +207,20 @@ export function startCareer(){
       mode: state.ui.selectedMode || state.manager.mode
     },
     clubId: chosenClub,
+    money: transferBudget,
+    boardTrust: 76,
+    fanMood: 76,
+    jobSecurity:'Seguro',
     match: firstMatch,
-    career:{...state.career, currentDate:'2026-05-19', matchday:1, completedMatches:[], lastResult:null, lastRoundResults:[], promotionRelegation:{serieARelegation:4,serieBPromotion:4,libertadoresTop:5,sulamericanaRange:[6,12],serieBRelegation:4}, integrationLog:['Carreira iniciada na v4.9.0: Mercado internacional, orçamento seguro, contratos e anti-duplicação de jogadores ativos.']},
+    career: cleanLeagueStateForNewCareer({...state.career}, chosenClub),
+    roster: rosterPack,
+    transfer: ensureTransferLedger({...(state.transfer || {}), budget: Number((transferBudget * 0.45).toFixed(1)), wageRoom: Math.max(0.8, Number((transferBudget/40).toFixed(2))), acceptedDeals:[], rejectedDeals:[], outgoingDeals:[], renewals:[], loanDeals:[], incomingOffers:[], aiDeals:[], agentEvents:[], smartReports:[], marketDay:1}),
+    ui:{...state.ui, selectedClub:chosenClub, standingsCompetition:chosenTeam?.leagueId || 'brasileirao-a', ...starters},
     route:'lobby'
   });
   persist();
 }
+
 
 function scoreUntilMinute(match){
   return deepScoreFromState(match, state);

@@ -5,9 +5,10 @@ import { getActiveSquad } from '../data/squadData.js';
 import { safeImg, clubLogo, stadium } from '../systems/assets.js';
 import { buildBalanceSummary } from '../systems/balance.js';
 import { buildDeepMatchSnapshot, getPostMatchReport } from '../systems/matchEngine.js';
+import { buildMatchExperienceSnapshot, isImportantMatchEvent, recommendedMatchCopy } from '../systems/matchExperienceEngine.js';
 
 function pct(n){ return `${Math.max(0, Math.min(100, Math.round(n)))}%`; }
-function eventIcon(type){ return {goal:'⚽', chance:'🎯', shot:'🥅', save:'🧤', danger:'⚠️', card:'🟨', var:'📺', penalty:'⚪', sub:'🔁', pressure:'🔥', halftime:'⏱️', fulltime:'🏁', kickoff:'▶'}[type] || '•'; }
+function eventIcon(type){ return {goal:'⚽', chance:'🎯', shot:'🥅', save:'🧤', danger:'⚠️', card:'🟨', var:'📺', penalty:'⚪', injury:'🚑', sub:'🔁', pressure:'🔥', halftime:'⏱️', fulltime:'🏁', kickoff:'▶'}[type] || '•'; }
 function teamById(id){ return teams.find(t=>t.id===id) || teams.find(t=>t.id==='santos') || teams[0]; }
 function ratingRows(players=[], snap){
   const base = players.slice().sort((a,b)=>Number(b.overall||0)-Number(a.overall||0)).slice(0,5);
@@ -84,20 +85,34 @@ export function match(state){
   const subHistory = subs.length ? subs.map(x=>`<p class="live-event sub"><strong>${x.minute}' 🔁</strong><span><b>Substituição</b>${(byId.get(x.out)||{}).name || x.out} sai para entrada de ${(byId.get(x.in)||{}).name || x.in}.</span></p>`).join('') : '<p class="muted">Nenhuma substituição realizada.</p>';
   const decisionLog = (state.match?.decisionLog || []).slice(-4).reverse().map(x=>`<div class="stat-line"><span>${x.minute}' ${x.label}</span><strong>Ativo</strong></div>`).join('') || '<p class="muted">Plano equilibrado ativo.</p>';
   const balanceLines = buildBalanceSummary(state.match || {}, state);
-  const autoLabel = state.match?.autoPlay ? 'Pausar automático' : 'Avançar automático';
+  const autoLabel = state.match?.autoPlay ? 'Pausar' : 'Retomar';
   const speed = Number(state.match?.speed || 1);
+  const experience = buildMatchExperienceSnapshot(state);
+  const experienceCopy = recommendedMatchCopy(experience);
+  const importantEvents = snap.visibleEvents.filter(isImportantMatchEvent).slice(-3).reverse();
+  const importantHtml = importantEvents.length ? importantEvents.map(e=>`<div class="important-event-card-v570 ${e.type}"><strong>${e.minute}' ${eventIcon(e.type)} ${e.title}</strong><small>${e.text}</small></div>`).join('') : '<div class="important-event-card-v570"><strong>▶ Partida iniciada</strong><small>O assistente destacará gols, VAR, pênaltis, cartões, lesões e defesas importantes aqui.</small></div>';
+  const quickSubOne = buildSubOptions(players, state, isOver).split('</button>').slice(0,2).map(x=>x && x.includes('<button') ? `${x}</button>` : '').join('');
   const matchHeader = `${home.stadium || 'Estádio'} · ${stats.ctx.weather} · Árbitro ${stats.ctx.refereeTone} · ${stats.ctx.attendance.toLocaleString('pt-BR')} torcedores`;
-  return screenWrap('match', `${topbar('Partida ao vivo','Motor 2.0 v4.7 · atributos, xG, VAR, lesões, cartões e pós-jogo','lobby')}
-    <section class="match-v140 match-v300">
+  return screenWrap('match', `${topbar('Partida ao vivo','Motor 2.0 v5.7 · início automático, comandos rápidos e mobile horizontal','lobby')}
+    <section class="match-v140 match-v300 match-v570-shell">
       <article class="panel match-score-hero">
         <div class="match-team-side">${safeImg(clubLogo(home.id),'club',home.name,'match-logo')}<h2>${home.name}</h2><span>${home.league}</span></div>
-        <div class="match-score-center"><span class="tag">${matchHeader}</span><div class="score ultra">${score.home} - ${score.away}</div><div class="clock premium">${String(minute).padStart(2,'0')}:00</div><div class="match-progress"><span style="width:${pct((minute/90)*100)}"></span></div><small>${isOver ? 'Partida encerrada. Pós-jogo pronto para retorno ao lobby.' : `Simulação ${speed}x com atributos, cansaço, moral, tática, VAR e risco físico.`}</small></div>
+        <div class="match-score-center"><span class="tag">${matchHeader}</span><div class="score ultra">${score.home} - ${score.away}</div><div class="clock premium">${String(minute).padStart(2,'0')}:00</div><div class="match-progress"><span style="width:${pct((minute/90)*100)}"></span></div><small>${isOver ? 'Partida encerrada. Pós-jogo pronto para retorno ao lobby.' : experienceCopy}</small><div class="match-v570-status"><span class="status-chip">${state.match?.autoPlay ? '▶ Automático ligado' : '⏸ Pausado'}</span><span class="status-chip">Velocidade ${speed}x</span><span class="status-chip">Trocas ${subsLeft}/${state.match?.maxSubs || 5}</span></div></div>
         <div class="match-team-side">${safeImg(clubLogo(away.id),'club',away.name,'match-logo')}<h2>${away.name}</h2><span>${away.league}</span></div>
       </article>
 
+      <section class="match-command-dock-v570" aria-label="Comandos rápidos da partida">
+        <div><span class="dock-title">Ritmo</span><div class="dock-group">${isOver ? '<button class="main-btn active" data-action="post-match-lobby">Salvar e voltar</button>' : `<button class="main-btn ${state.match?.autoPlay?'active':''}" data-action="match-autoplay" data-enabled="${!state.match?.autoPlay}">${autoLabel}</button><button class="secondary-btn" data-action="match-advance">+5 min</button>`}</div></div>
+        <div><span class="dock-title">Velocidade</span><div class="dock-group"><button class="secondary-btn speed-pill ${speed===1?'active':''}" data-action="match-speed" data-speed="1">1x</button><button class="secondary-btn speed-pill ${speed===2?'active':''}" data-action="match-speed" data-speed="2">2x</button><button class="secondary-btn speed-pill ${speed===5?'active':''}" data-action="match-speed" data-speed="5">5x</button></div></div>
+        <div><span class="dock-title">Tática rápida</span><div class="dock-group"><button class="secondary-btn ${state.match?.decision==='pressure'?'active':''}" data-action="match-decision" data-decision="pressure">Pressão</button><button class="secondary-btn ${state.match?.decision==='lowblock'?'active':''}" data-action="match-decision" data-decision="lowblock">Fechar</button></div></div>
+        <div><span class="dock-title">Finalização</span><div class="dock-group vertical">${isOver ? '<button class="main-btn" data-action="post-match-lobby">Relatório final</button>' : '<button class="secondary-btn danger" data-action="match-finish">Encerrar + relatório</button>'}</div></div>
+      </section>
+
       ${postMatchPanel(report, home, away)}
 
-      <section class="match-live-grid">
+      <section class="panel important-events-panel-v570"><div class="row space"><div><span class="tag">Momentos-chave</span><h2>O que merece sua atenção</h2></div><strong class="grade">${stats.matchRating}</strong></div><div class="important-events-v570">${importantHtml}</div></section>
+
+      <section class="match-live-grid match-stage-v570">
         <article class="panel tactical-table">
           <div class="row space"><div><span class="tag">Mesa tática 2D</span><h2>Campo, zonas e eventos</h2></div><strong class="grade">${stats.momentum}%</strong></div>
           <div class="live-pitch deep-pitch" style="background-image:linear-gradient(rgba(6,16,10,.34),rgba(3,8,6,.70)),url('${stadium(home.id)}')">
@@ -128,11 +143,11 @@ export function match(state){
       </section>
 
       <section class="grid grid-3 match-control-grid">
-        <article class="panel"><span class="tag">Controles</span><h3>Ritmo da simulação</h3><div class="row wrap"><button class="secondary-btn ${speed===1?'active':''}" data-action="match-speed" data-speed="1">1x</button><button class="secondary-btn ${speed===2?'active':''}" data-action="match-speed" data-speed="2">2x</button><button class="secondary-btn ${speed===5?'active':''}" data-action="match-speed" data-speed="5">5x</button></div>${isOver ? '<button class="main-btn" data-action="post-match-lobby">Salvar e voltar ao lobby</button>' : '<button class="main-btn" data-action="match-advance">Avançar +5 min</button><button class="secondary-btn" data-action="match-autoplay" data-enabled="'+(!state.match?.autoPlay)+'">'+autoLabel+'</button><button class="secondary-btn danger" data-action="match-finish">Finalizar e ver relatório</button>'}</article>
+        <article class="panel"><span class="tag">Assistente de banco</span><h3>Atalhos de substituição</h3><p class="muted">As duas melhores sugestões ficam aqui para celular. A lista completa continua ao lado.</p><div class="quick-subs-v570">${quickSubOne || '<p class="muted">Sem troca segura no momento.</p>'}</div></article>
         <article class="panel substitutions-panel"><span class="tag">Substituições</span><h3>Banco e queda física</h3><div class="stat-line"><span>Trocas restantes</span><strong>${subsLeft}/${state.match?.maxSubs || 5}</strong></div><div class="sub-list">${subOptions}</div><div class="commentary compact">${subHistory}</div></article>
         <article class="panel"><span class="tag">Decisões em jogo</span><h3>Comandos rápidos</h3><div class="tactical-actions">${tips}</div><div class="decision-log">${decisionLog}</div></article>
       </section>
 
-      <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Notas ao vivo</span><h2>Destaques individuais</h2></div><strong class="grade">${stats.matchRating}</strong></div><div class="rating-list">${ratingRows(players, snap)}</div></article><article class="panel ai-balance-live"><div class="row space"><div><span class="tag">IA v3.0</span><h2>Leitura realista</h2></div><strong class="grade">${stats.ctx.diff>4?'Casa':stats.ctx.diff<-4?'Visitante':'Equilíbrio'}</strong></div>${balanceLines.map(x=>`<div class="stat-line"><span>${x}</span><strong>OK</strong></div>`).join('')}<div class="stat-line"><span>Momentum</span><strong>${stats.momentum}%</strong></div><div class="stat-line"><span>Condição média</span><strong>${Math.round(stats.fatigue)}%</strong></div><p class="alert">O motor 2.0 considera atributos individuais, posição, tática, moral, fadiga, clima, mando, substituições, VAR, risco físico, cartões e variação controlada.</p></article><article class="panel"><div class="row space"><div><span class="tag">Assistente</span><h2>Diagnóstico</h2></div><span class="status-pill">Anti-quebra ativo</span></div><p class="alert">Motor de partida 2.0 com stress test interno, eventos seguros, xG, VAR, cartões, lesões, substituições e relatório pós-jogo preservado.</p><div class="stat-line"><span>Recomendação</span><strong>${score.home>=score.away?'Controlar transição':'Aumentar pressão'}</strong></div><div class="stat-line"><span>Risco atual</span><strong>${minute>75?'Alto':'Médio'}</strong></div></article></section>
+      <section class="grid grid-2 extra-match-depth-v570"><article class="panel"><div class="row space"><div><span class="tag">Notas ao vivo</span><h2>Destaques individuais</h2></div><strong class="grade">${stats.matchRating}</strong></div><div class="rating-list">${ratingRows(players, snap)}</div></article><article class="panel ai-balance-live"><div class="row space"><div><span class="tag">IA v3.0</span><h2>Leitura realista</h2></div><strong class="grade">${stats.ctx.diff>4?'Casa':stats.ctx.diff<-4?'Visitante':'Equilíbrio'}</strong></div>${balanceLines.map(x=>`<div class="stat-line"><span>${x}</span><strong>OK</strong></div>`).join('')}<div class="stat-line"><span>Momentum</span><strong>${stats.momentum}%</strong></div><div class="stat-line"><span>Condição média</span><strong>${Math.round(stats.fatigue)}%</strong></div><p class="alert">O motor 2.0 considera atributos individuais, posição, tática, moral, fadiga, clima, mando, substituições, VAR, risco físico, cartões e variação controlada.</p></article><article class="panel"><div class="row space"><div><span class="tag">Assistente</span><h2>Diagnóstico</h2></div><span class="status-pill">Anti-quebra ativo</span></div><p class="alert">Motor de partida 2.0 com stress test interno, eventos seguros, xG, VAR, cartões, lesões, substituições e relatório pós-jogo preservado.</p><div class="stat-line"><span>Recomendação</span><strong>${score.home>=score.away?'Controlar transição':'Aumentar pressão'}</strong></div><div class="stat-line"><span>Risco atual</span><strong>${minute>75?'Alto':'Médio'}</strong></div></article></section>
     </section>`, true);
 }

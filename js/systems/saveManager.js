@@ -1,8 +1,8 @@
-export const SAVE_MANAGER_VERSION = 'v5.1.0';
-export const SAVE_KEY = 'vfm_gold_save_v510';
-export const SAVE_INDEX_KEY = 'vfm_gold_save_index_v510';
-export const AUTO_BACKUP_KEY = 'vfm_gold_autobackup_v510';
-export const CORRUPT_BACKUP_KEY = 'vfm_gold_corrupt_snapshot_v510';
+export const SAVE_MANAGER_VERSION = 'v5.4.0';
+export const SAVE_KEY = 'vfm_gold_save_v530';
+export const SAVE_INDEX_KEY = 'vfm_gold_save_index_v530';
+export const AUTO_BACKUP_KEY = 'vfm_gold_autobackup_v530';
+export const CORRUPT_BACKUP_KEY = 'vfm_gold_corrupt_snapshot_v530';
 const memoryStore = new Map();
 export function storageSafe(){
   if(typeof localStorage !== 'undefined') return localStorage;
@@ -20,8 +20,8 @@ export function saveEnvelope(state={}, meta={}){
     meta:{
       game:'Vale Futebol Manager',
       version:SAVE_MANAGER_VERSION,
-      schema:510,
-      build:'v5.1.0',
+      schema:530,
+      build:'v5.4.0',
       createdAt:meta.createdAt || nowIso(),
       updatedAt:nowIso(),
       slot:meta.slot || state?.save?.activeSlot || 'principal',
@@ -52,7 +52,7 @@ export function upsertSaveIndexItem(item={}, storage=storageSafe()){
   return setSaveIndex(index, storage);
 }
 export function slotKey(slot='principal'){
-  return `vfm_gold_slot_${String(slot || 'principal').replace(/[^a-z0-9_-]/gi,'_')}_v510`;
+  return `vfm_gold_slot_${String(slot || 'principal').replace(/[^a-z0-9_-]/gi,'_')}_v530`;
 }
 export function writeSlot(slot='principal', state={}, storage=storageSafe()){
   const safeSlot = String(slot || 'principal').slice(0,32) || 'principal';
@@ -96,7 +96,7 @@ export function migrateLegacyState(state={}){
   const next = {...(state||{})};
   next.save = {
     version:SAVE_MANAGER_VERSION,
-    schema:510,
+    schema:530,
     activeSlot:next.save?.activeSlot || 'principal',
     migratedFrom:next.save?.version || next.stability?.auditVersion || 'legacy',
     lastMigrationAt:nowIso(),

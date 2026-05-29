@@ -1,5 +1,4 @@
 import { teams } from '../data/gameData.js';
-import { standingsTables } from '../data/standingsData.js';
 import { clubLogo } from './assets.js';
 
 const DAY = 24*60*60*1000;
@@ -128,7 +127,6 @@ export function deriveStandings(leagueId='brasileirao-a', completed=[]){
     else if(hg<ag){ a.w++; h.l++; a.pts+=3; a.form=['V',...a.form].slice(0,5); h.form=['D',...h.form].slice(0,5); }
     else { h.d++; a.d++; h.pts++; a.pts++; h.form=['E',...h.form].slice(0,5); a.form=['E',...a.form].slice(0,5); }
   });
-  if(!relevant.length && standingsTables[leagueId]) return standingsTables[leagueId].map((r,i)=>({...r,pos:i+1,logo:clubLogo(r.id)}));
   return base.sort((a,b)=>(b.pts-a.pts)||(b.w-a.w)||((b.gf-b.ga)-(a.gf-a.ga))||(b.gf-a.gf)||a.club.localeCompare(b.club)).map((r,i)=>({...r,pos:i+1, logo:clubLogo(r.id)}));
 }
 export function leagueZones(leagueId='brasileirao-a', pos=1){

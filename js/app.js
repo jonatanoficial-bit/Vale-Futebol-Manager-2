@@ -6,11 +6,19 @@ import { mainMenu } from './screens/mainMenu.js';
 import { newGame } from './screens/newGame.js';
 import { teamSelect } from './screens/teamSelect.js';
 import { confirmCareer } from './screens/confirmCareer.js';
-import { lobby } from './screens/lobby.js';
+import { lobby, managerMenu, PRIMARY_ACTIONS_V550, MANAGER_MENU_GROUPS_V550 } from './screens/lobby.js';
 import { match } from './screens/match.js';
 import { moduleScreen } from './screens/moduleScreen.js';
 import { applyCommercialPolish, validateCommercialState } from './systems/commercialPolish.js';
 import { applyAaaUiShell, buildUiAaaSnapshot } from './systems/uiQualityEngine.js';
+import { applyMobileExperienceShell, buildMobileExperienceSnapshot } from './systems/mobileExperienceEngine.js';
+import { applyNavigationExperienceShell } from './systems/navigationExperienceEngine.js';
+import { buildMatchExperienceSnapshot } from './systems/matchExperienceEngine.js';
+import { validateLobbyCompactSystem } from '../core/safety/lobby-compact-validator.js';
+import { validateNavigationSystem } from '../core/safety/navigation-validator.js';
+import { validateMenuHierarchy } from '../core/safety/menu-hierarchy-validator.js';
+import { validateTouchTargets } from '../core/safety/touch-target-validator.js';
+import { validateMatchFlowV570 } from '../core/safety/match-flow-validator.js';
 import { runRuntimeAudit } from './systems/auditLogger.js';
 import { loadVisualLibrary } from './systems/visualAssetManager.js';
 import { runtimeSafetySnapshot } from './systems/uxEngine.js';
@@ -18,14 +26,16 @@ import { runBootSafety } from '../core/safety/safe-loader.js';
 
 async function boot(){
   const app = document.getElementById('app');
-  let buildInfo = { buildLabel:'Build v5.2.0' };
+  let buildInfo = { buildLabel:'Build v5.7.0' };
   try { buildInfo = await (await fetch('build/build-info.json', {cache:'no-store'})).json(); } catch(err) { console.warn('[VFM] build-info fallback', err); }
   const loadedAssetMap = await loadAssetMap();
   await loadVisualLibrary();
   applyCommercialPolish();
   applyAaaUiShell();
+  applyMobileExperienceShell();
+  applyNavigationExperienceShell();
   load();
-  runRuntimeAudit(getState(), {phase:'v5.2.0 boot', ux: runtimeSafetySnapshot(getState()), aaa: buildUiAaaSnapshot(getState())});
+  runRuntimeAudit(getState(), {phase:'v5.7.0 boot', matchFlow: validateMatchFlowV570(buildMatchExperienceSnapshot(getState())), ux: runtimeSafetySnapshot(getState()), aaa: buildUiAaaSnapshot(getState()), mobile: buildMobileExperienceSnapshot(), navigation: validateNavigationSystem({currentRoute:getState().route}), menuHierarchy: validateMenuHierarchy({primaryActions:PRIMARY_ACTIONS_V550, menuGroups:MANAGER_MENU_GROUPS_V550}), touchTargets: validateTouchTargets(), lobby: validateLobbyCompactSystem({primaryActions:PRIMARY_ACTIONS_V550, menuGroups:MANAGER_MENU_GROUPS_V550})});
   validateCommercialState(getState());
   initRouter(app, buildInfo);
   register('cover', cover);
@@ -34,6 +44,7 @@ async function boot(){
   register('teamSelect', teamSelect);
   register('confirmCareer', confirmCareer);
   register('lobby', lobby);
+  register('managerMenu', managerMenu);
   register('match', match);
   const modules = {
     seasonCenter:['Temporada','Tabela viva, rodada completa, acesso, queda e vagas continentais'],
@@ -71,7 +82,7 @@ async function boot(){
     visualLibrary:['Biblioteca Visual','Fundos dinâmicos, logos, países, ligas e extras integrados']
   };
   Object.entries(modules).forEach(([route,[title,sub]]) => register(route, (state)=> moduleScreen(route,title,sub,state)));
-  await runBootSafety({ state:getState(), routes:['cover','mainMenu','newGame','teamSelect','confirmCareer','lobby','match', ...Object.keys(modules)], assetMap:loadedAssetMap, buildInfo });
+  await runBootSafety({ state:getState(), routes:['cover','mainMenu','newGame','teamSelect','confirmCareer','lobby','managerMenu','match', ...Object.keys(modules)], assetMap:loadedAssetMap, buildInfo });
   render();
   setInterval(()=>{ document.querySelectorAll('#buildBadge,.build-badge').forEach(el=>{ if(!el.textContent.trim()) el.textContent = buildInfo.buildLabel; }); }, 500);
   setInterval(()=>{ const s=getState(); if(s.route==='match' && s.match?.autoPlay && !s.match?.finalized){ const step = Math.max(5, Math.min(25, Number(s.match.speed || 1) * 5)); advanceMatch(step); render(); } }, 2200);

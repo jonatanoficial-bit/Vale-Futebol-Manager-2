@@ -15,7 +15,7 @@ export function teamSelect(state){
   const chosen = teams.find(t => t.id === selectedClub) || filtered[0] || teams[0];
   const visibleIds = new Set(filtered.map(t => t.id));
   const grid = filtered.length ? filtered : teams.slice(0, 8);
-  return screenWrap('teamSelect', `${topbar('Escolha seu time','Filtros por país, liga, força e orçamento','newGame')}
+  return screenWrap('teamSelect', `${topbar('Escolha seu time','Filtros por país, liga, força e orçamento','newGame',{resources:false})}
   <section class="stack team-select-screen">
     <div class="panel team-filter-panel">
       <div class="row space filter-head"><div><span class="tag">Etapa 2 de 3</span><h1 class="title">Selecione o clube</h1><p class="subtitle">A escolha define orçamento, pressão da diretoria, competições e dificuldade inicial da carreira.</p></div><strong class="gold-text">${grid.length} clubes</strong></div>
@@ -55,7 +55,7 @@ export function teamSelect(state){
 
     <button class="main-btn giant" data-route="confirmCareer">Continuar com ${esc(chosen.name)}</button>
     <div class="alert audit-ok"><strong>Anti-quebra ativo:</strong> se o logo real do clube ainda não existir, o jogo usa placeholder automático. Você poderá subir o logo depois no caminho oficial sem alterar código.</div>
-  </section>`, true);
+  </section>`, false);
 }
 function clubCard(t, selected){
   return `<button type="button" class="club-card pro ${selected?'selected':''}" data-action="select-team" data-team="${t.id}" aria-label="Selecionar ${esc(t.name)}">
