@@ -1,18 +1,11 @@
-# Build v5.8.4 — Fase 24 / Série A 2026 lote 4 fechado
-
+Vale Futebol Manager — BUILD MANIFEST
+Versão: v5.9.1
+Build visível: Build v5.9.1 | 2026-05-29 | 20:45 BRT
+Fase: 34 — América do Sul completa por logos/ligas
 Data Pack: 2026.05.20
+Data lock: 20/05/2026
 
-## Implementado
-- Fechamento dos 20 clubes do Brasileirão Série A do jogo.
-- Inclusão dos 7 clubes restantes: Red Bull Bragantino, Vitória, Mirassol, Fortaleza, Ceará, Juventude e Sport Recife.
-- Nenhum clube Série A usa template genérico no Data Pack oficial/referência.
-- JSONs oficiais criados em data/rosters/2026/brazil/serie-a/.
-
-## Status
-Série A: 20/20 clubes cobertos.
-Release Candidate: ainda bloqueada até Série B, continentais, mundo e seleções.
-
----
-Build v5.8.3 | 2026-05-29 | 15:58 BRT
-Fase 23 — Série A 2026 lote 3: Internacional, Grêmio, Atlético Mineiro, Cruzeiro e Bahia.
-Cobertura oficial/referência Série A: 13/20 clubes.
+Clubes adicionados nesta build: 69
+Titulares adicionados: 759
+Total sul-americano coberto: 85
+Mínimo por clube nesta expansão: 11 titulares

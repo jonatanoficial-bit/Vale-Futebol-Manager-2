@@ -1,21 +1,31 @@
-# Build v5.8.4 — Fase 24 / Série A 2026 lote 4 fechado
+# CHANGELOG — Vale Futebol Manager v5.9.1
 
-Data Pack: 2026.05.20
+Build visível: Build v5.9.1 | 2026-05-29 | 20:45 BRT
+Fase 34: América do Sul completa por logos/ligas do jogo.
 
-## Implementado
-- Fechamento dos 20 clubes do Brasileirão Série A do jogo.
-- Inclusão dos 7 clubes restantes: Red Bull Bragantino, Vitória, Mirassol, Fortaleza, Ceará, Juventude e Sport Recife.
-- Nenhum clube Série A usa template genérico no Data Pack oficial/referência.
-- JSONs oficiais criados em data/rosters/2026/brazil/serie-a/.
+## Adicionado
+- Novo pacote `officialSouthAmerica2026RosterData.js`.
+- Cobertura para todos os clubes sul-americanos presentes na biblioteca de logos/ligas do jogo.
+- Mínimo de 11 titulares por clube nos clubes que ainda não tinham pacote prioritário completo.
+- Validador `south-america-all-logo-roster-validator.js`.
+- Roster Lock atualizado para contar América do Sul total, não só o pacote CONMEBOL prioritário.
 
-## Status
-Série A: 20/20 clubes cobertos.
-Release Candidate: ainda bloqueada até Série B, continentais, mundo e seleções.
+## Resultado
+- Clubes sul-americanos com logo/liga cobertos: 85.
+- Clubes adicionados nesta build: 69.
+- Jogadores/titulares adicionados nesta build: 759.
+- Genéricos detectados: 0.
 
----
-# v5.8.3 — Série A 2026 lote 3
+## Cobertura por país nesta build
+```json
+{
+  "Argentina": 23,
+  "Uruguai": 11,
+  "Chile": 10,
+  "Colômbia": 15,
+  "Equador": 10
+}
+```
 
-- Adicionados elencos de referência/licenciados para Internacional, Grêmio, Atlético Mineiro, Cruzeiro e Bahia.
-- Cobertura Série A passou de 8/20 para 13/20 clubes.
-- Criados JSONs oficiais por clube em data/rosters/2026/brazil/serie-a/.
-- Validador oficial atualizado para pass 3.
+## Observação de produção
+Os 16 clubes CONMEBOL prioritários continuam com pacotes mais completos. Os demais clubes receberam cobertura mínima de 11 titulares para gameplay, com camada editável para expansão para 23-30 atletas por clube.
