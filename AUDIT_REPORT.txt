@@ -1,12 +1,11 @@
-Vale Futebol Manager - Auditoria v5.2.0
-Data: 28/05/2026
-Hora: 22:08 BRT
-Arquivos auditados: 806
-Tamanho do projeto: 33M
+Vale Futebol Manager - Auditoria v5.7.0
+Arquivos auditados: 823
+Tamanho aproximado: 33M
 node --check JS/core: OK
-Importação globalWorldEngine.js: OK
-Validação world-league-validator: OK
-Validação global-calendar-validator: OK
-Validação international-transfer-validator: OK
+matchExperienceEngine import: OK
+validateMatchFlowV570: OK
+validateMatchControlsV570: OK
+validateMatchMobileLayoutV570: OK
+index.html com match-v570.css: OK
 Erros: 0
 Warnings: 0

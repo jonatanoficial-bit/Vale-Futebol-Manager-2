@@ -1,21 +1,14 @@
-# Integrity Report - v5.2.0
+# Integrity Report - v5.7.0
 
-Status geral: OK
-Erros críticos: 0
-Warnings públicos: 0
+Status: OK
 
-## Validações
-- Mundo integrado: OK
-- 12 ligas: OK
-- 247 clubes simulados: OK
-- 4 confederações: OK
-- 3 competições europeias: OK
-- Calendário global de 12 meses: OK
-- Ranking mundial Top 30: OK
-- Mercado internacional: OK
-- Ponte CONMEBOL/Mundial: OK
+Validações:
+- Tela de partida renderiza com dock de comandos: OK
+- Controles criticos presentes: OK
+- Post-match CTA preservado: OK
+- CSS mobile horizontal presente: OK
+- Imports ESM validos: OK
+- node --check em JS/core: OK
 
-## Política anti-quebra
-Se uma liga internacional não tiver dados reais completos, o motor cria uma tabela compacta segura.
-Se um clube não tiver logo, o placeholder global é usado.
-Se o calendário tiver conflito alto, o alerta fica interno e o jogador recebe apenas leitura esportiva limpa.
+Erros criticos: 0
+Warnings: 0

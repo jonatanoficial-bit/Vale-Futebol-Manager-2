@@ -1,7 +1,4 @@
-# Known Issues - v5.2.0
+# Known Issues - v5.7.0
 
-- As ligas internacionais estão em modo simulado compacto, não em calendário jogável rodada a rodada.
-- Alguns clubes usam placeholder de escudo quando não há asset oficial no pacote.
-- O banco internacional completo de jogadores ainda depende de importação licenciada por JSON.
-
-Nenhum item acima quebra o jogo. Todos possuem fallback seguro.
+- Alguns navegadores mobile podem negar bloqueio de orientacao; nesses casos o aviso de girar celular permanece como fallback.
+- Elencos completos licenciados devem continuar sendo importados nos caminhos oficiais de Maio/2026.

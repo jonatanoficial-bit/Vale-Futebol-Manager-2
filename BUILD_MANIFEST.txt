@@ -1,31 +1,19 @@
-VALE FUTEBOL MANAGER - BUILD MANIFEST
-Versão: v5.2.0
-Build visível: Build v5.2.0 | 2026-05-28 | 22:08 BRT
-Fase: 14 - Mundo completo + calendário global
+Vale Futebol Manager - Build Manifest
+Versao: v5.7.0
+Build visivel: Build v5.7.0 | 2026-05-29 | 12:42 BRT
+Fase: 19 - Tela de partida refinada mobile/PC
 
-Objetivo da build:
-- Integrar ligas internacionais simuladas ao ecossistema da carreira.
-- Criar calendário global de 12 meses com risco de conflito clube/seleção.
-- Criar ranking mundial de clubes.
-- Conectar competições europeias, mercado global e rota CONMEBOL/Mundial.
-- Manter o sistema anti-quebra em modo interno, sem poluir a experiência do jogador.
-
-Arquivos novos:
-- js/data/worldLeagueCompleteData.js
-- js/systems/globalWorldEngine.js
-- core/safety/world-league-validator.js
-- core/safety/global-calendar-validator.js
-- core/safety/international-transfer-validator.js
+Arquivos adicionados:
+- css/match-v570.css
+- js/systems/matchExperienceEngine.js
+- core/safety/match-flow-validator.js
+- core/safety/match-controls-validator.js
+- core/safety/match-mobile-layout-validator.js
 
 Arquivos alterados:
+- index.html
 - js/app.js
-- js/screens/lobby.js
-- js/screens/moduleScreen.js
-- build/build-info.json
-- BUILD_MANIFEST.txt
-- CHANGELOG.md
-- INTEGRITY_REPORT.md
-- TEST_REPORT.md
-- PROJECT_STATUS.md
-- KNOWN_ISSUES.md
-- ASSET_PATHS.md
+- js/screens/match.js
+- js/systems/router.js
+
+Objetivo: tornar a tela de jogo mais intuitiva, com inicio automatico, comandos rapidos, modo paisagem mobile e relatorio final acessivel.

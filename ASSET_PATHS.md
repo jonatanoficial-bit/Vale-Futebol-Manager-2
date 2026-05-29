@@ -1,31 +1,14 @@
-# Asset Paths - v5.1.0
+# Asset Paths — v5.6.0
 
-A Fase 13 não adiciona assets pesados.
+Esta build não altera os caminhos de assets. Mantém os caminhos oficiais anteriores:
 
-Mantidos os caminhos já utilizados pelo projeto:
+- Clubes: `assets/clubs/{clubId}.png`
+- Jogadores: `assets/players/brazil/{clubId}/{playerId}.png`
+- Elencos: `data/rosters/2026/{clubId}.json`
+- Avatares: `assets/avatars/manager-XX.png`
+- Fundos: conforme `ASSET_MAP.md`
 
-```txt
-assets/backgrounds/
-assets/clubs/
-assets/players/brazil/{clubId}/{playerId}.png
-assets/placeholders/player-generic.png
-assets/logos/
-assets/stadiums/
-```
+Alteração desta build: apenas camada de navegação CSS/JS.
 
-Sistema de save não depende de imagens e não altera o mapa visual.
-
-## v5.2.0 - Mundo completo
-Logos de clubes globais esperados:
-- assets/clubs/world/{clubId}.png
-- fallback: assets/placeholders/club-generic.png
-
-Logos de competições europeias esperados:
-- assets/competitions/uefa-champions-league.png
-- assets/competitions/uefa-europa-league.png
-- assets/competitions/uefa-conference-league.png
-- fallback: assets/placeholders/competition-generic.png
-
-Bandeiras/países esperados:
-- assets/countries/{countryCode}.png
-- fallback: assets/placeholders/country-generic.png
+## v5.7.0 - Tela de partida
+Nenhum asset pesado novo foi adicionado. A tela de partida continua usando os caminhos existentes de estadio, logos e placeholders.
