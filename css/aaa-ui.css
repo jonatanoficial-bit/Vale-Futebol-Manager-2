@@ -116,3 +116,72 @@ html.vfm-aaa-v500 .build-badge{position:fixed;right:12px;bottom:calc(var(--aaa-n
 @media(max-width:760px){html.vfm-aaa-v500 .screen{padding:10px;padding-bottom:calc(var(--aaa-nav-h) + 34px + env(safe-area-inset-bottom));background-attachment:scroll;}html.vfm-aaa-v500 .premium-topbar{position:relative;top:0;display:grid;grid-template-columns:1fr;gap:10px}html.vfm-aaa-v500 .top-status{justify-content:flex-start}html.vfm-aaa-v500 .lobby-hero-v050,html.vfm-aaa-v500 .command-grid,html.vfm-aaa-v500 .quick-summary,html.vfm-aaa-v500 .aaa-demo-grid{grid-template-columns:1fr!important}html.vfm-aaa-v500 .menu-grid.command-menu{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}html.vfm-aaa-v500 .premium-tile{min-height:128px;padding:14px!important}html.vfm-aaa-v500 .manager-card,html.vfm-aaa-v500 .club-identity-card{align-items:flex-start}html.vfm-aaa-v500 .bottom-nav{width:calc(100vw - 14px);bottom:6px;border-radius:22px}html.vfm-aaa-v500 .nav-item{font-size:.68rem!important;min-height:52px!important}html.vfm-aaa-v500 .build-badge{left:12px;right:auto;bottom:calc(var(--aaa-nav-h) + 18px + env(safe-area-inset-bottom));}.aaa-check-grid{grid-template-columns:1fr}.aaa-hero{display:grid}.aaa-phone-preview{max-width:220px}}
 @media(max-width:410px){html.vfm-aaa-v500 .menu-grid.command-menu{grid-template-columns:1fr}html.vfm-aaa-v500 .resource{font-size:.78rem;padding:.48rem .58rem!important}html.vfm-aaa-v500 .club-logo.xl{width:70px;height:70px}.aaa-score-grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){html.vfm-aaa-v500 *,html.vfm-aaa-v500 *:before,html.vfm-aaa-v500 *:after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+
+/* v5.3.0 - refinamento crítico de onboarding e navegação */
+html.vfm-aaa-v500 .screen.no-bottom-nav{padding-bottom:calc(22px + env(safe-area-inset-bottom))!important;}
+html.vfm-aaa-v500 .screen.no-build-badge .build-badge{display:none!important;}
+html.vfm-aaa-v500 .screen-newGame .topbar-resources,
+html.vfm-aaa-v500 .screen-teamSelect .topbar-resources,
+html.vfm-aaa-v500 .screen-confirmCareer .topbar-resources{display:none!important;}
+html.vfm-aaa-v500 .screen-newGame .topbar,
+html.vfm-aaa-v500 .screen-teamSelect .topbar,
+html.vfm-aaa-v500 .screen-confirmCareer .topbar{position:sticky;top:calc(8px + env(safe-area-inset-top));z-index:50;background:rgba(4,8,13,.72);border:1px solid rgba(255,255,255,.10);border-radius:24px;padding:10px 12px;backdrop-filter:blur(16px);}
+html.vfm-aaa-v500 .topbar-clean{justify-content:flex-end;}
+html.vfm-aaa-v500 .screen-newGame .main-btn.giant,
+html.vfm-aaa-v500 .screen-teamSelect .main-btn.giant,
+html.vfm-aaa-v500 .screen-confirmCareer .main-btn.giant{position:sticky;bottom:calc(10px + env(safe-area-inset-bottom));z-index:55;}
+@media(max-width:760px){
+  html.vfm-aaa-v500 .screen.no-bottom-nav{min-height:100svh;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;padding-inline:10px!important;}
+  html.vfm-aaa-v500 .screen-newGame .avatar-strip{display:flex;overflow-x:auto;gap:10px;padding-bottom:8px;scroll-snap-type:x mandatory;}
+  html.vfm-aaa-v500 .screen-newGame .avatar-card{min-width:132px;scroll-snap-align:start;}
+  html.vfm-aaa-v500 .screen-teamSelect .club-grid-pro{grid-template-columns:1fr!important;}
+  html.vfm-aaa-v500 .screen-confirmCareer .confirm-grid{grid-template-columns:1fr!important;}
+}
+
+/* v5.5.0 - lobby premium enxuto e menu do treinador */
+html.vfm-aaa-v500 .lobby-v550-shell{display:grid;gap:14px;max-width:1280px;margin:0 auto;}
+html.vfm-aaa-v500 .lobby-hero-v550{display:grid;grid-template-columns:1.05fr 1.25fr 1fr;gap:14px;align-items:stretch;margin-bottom:0;overflow:hidden;}
+html.vfm-aaa-v500 .hero-manager-v550,
+html.vfm-aaa-v500 .hero-club-v550,
+html.vfm-aaa-v500 .hero-next-v550{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:14px;box-shadow:var(--aaa-soft);}
+html.vfm-aaa-v500 .hero-manager-v550,
+html.vfm-aaa-v500 .hero-club-v550{display:flex;align-items:center;gap:13px;min-width:0;}
+html.vfm-aaa-v500 .hero-next-v550{display:grid;gap:8px;align-content:center;}
+html.vfm-aaa-v500 .quick-actions-v550{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;}
+html.vfm-aaa-v500 .quick-action-v550{display:grid!important;gap:6px;align-content:center;text-align:left;min-height:96px;border-color:rgba(255,216,106,.15)!important;background:linear-gradient(145deg,rgba(255,216,106,.10),rgba(255,255,255,.035))!important;}
+html.vfm-aaa-v500 .quick-action-v550 span{font-size:1.35rem;}
+html.vfm-aaa-v500 .quick-action-v550 em{font-style:normal;color:rgba(255,255,255,.68);font-size:.78rem;line-height:1.35;}
+html.vfm-aaa-v500 .status-row-v550{display:grid;grid-template-columns:2fr 1fr 1fr;gap:14px;}
+html.vfm-aaa-v500 .coach-feed-v550{margin:0;}
+html.vfm-aaa-v500 .coach-feed-grid-v550{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px;}
+html.vfm-aaa-v500 .manager-menu-shell-v550{max-width:1280px;margin:0 auto;display:grid;gap:14px;}
+html.vfm-aaa-v500 .menu-groups-v550{display:grid;gap:14px;}
+html.vfm-aaa-v500 .menu-group-v550{display:grid;gap:12px;}
+html.vfm-aaa-v500 .menu-grid-v550{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;}
+html.vfm-aaa-v500 .screen-managerMenu .premium-tile{min-height:132px;}
+@media(max-width:1100px){
+  html.vfm-aaa-v500 .lobby-hero-v550{grid-template-columns:1fr 1fr;}
+  html.vfm-aaa-v500 .hero-next-v550{grid-column:1/-1;}
+  html.vfm-aaa-v500 .quick-actions-v550{grid-template-columns:repeat(3,minmax(0,1fr));}
+  html.vfm-aaa-v500 .menu-grid-v550{grid-template-columns:repeat(3,minmax(0,1fr));}
+}
+@media(max-width:760px){
+  html.vfm-aaa-v500 .lobby-v550-shell{gap:10px;}
+  html.vfm-aaa-v500 .lobby-topbar-v550 .brand{font-size:.72rem;}
+  html.vfm-aaa-v500 .lobby-hero-v550,
+  html.vfm-aaa-v500 .status-row-v550,
+  html.vfm-aaa-v500 .coach-feed-grid-v550{grid-template-columns:1fr!important;}
+  html.vfm-aaa-v500 .quick-actions-v550{grid-template-columns:repeat(2,minmax(0,1fr));}
+  html.vfm-aaa-v500 .quick-action-v550{min-height:86px;padding:12px!important;}
+  html.vfm-aaa-v500 .quick-action-v550 em{display:none;}
+  html.vfm-aaa-v500 .hero-manager-v550,
+  html.vfm-aaa-v500 .hero-club-v550{padding:12px;}
+  html.vfm-aaa-v500 .hero-manager-v550 h1,
+  html.vfm-aaa-v500 .hero-club-v550 h2{font-size:1.18rem;}
+  html.vfm-aaa-v500 .menu-grid-v550{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+  html.vfm-aaa-v500 .screen-managerMenu .premium-tile{min-height:118px;}
+}
+@media(max-width:410px){
+  html.vfm-aaa-v500 .quick-actions-v550,
+  html.vfm-aaa-v500 .menu-grid-v550{grid-template-columns:1fr;}
+}
