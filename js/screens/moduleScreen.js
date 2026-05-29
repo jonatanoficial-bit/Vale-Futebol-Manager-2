@@ -50,6 +50,10 @@ import { validateInternationalTransferMarket } from '../../core/safety/internati
 import { validateSaveBackup } from '../../core/safety/save-backup.js';
 import { validateSaveExportImport } from '../../core/safety/save-export-import.js';
 import { validateSaveMigration } from '../../core/safety/save-migration.js';
+import { renderDataPack2026Center } from '../systems/dataPack2026Engine.js';
+import { validateDataPack2026System } from '../../core/safety/datapack-validator.js';
+import { blockGenericRosterForRelease } from '../../core/safety/roster-generic-blocker.js';
+import { validateOfficialRosterSchema2026 } from '../../core/safety/official-roster-schema-validator.js';
 export function moduleScreen(route,title,subtitle,state){
   const extra = content(route, state);
   return screenWrap(route, `${topbar(title,subtitle,'lobby')}${clubHeader(state)}${extra}`, true);
@@ -103,6 +107,7 @@ function content(route,state={}){
   if(route==='mobileAudit') return mobileAuditScreenV350(state);
   if(route==='data2026') return data2026ScreenV360(state);
   if(route==='database2026') return databaseMay2026ScreenV460(state);
+  if(route==='dataPack2026') return renderDataPack2026Center(state);
   if(route==='academyScouting') return academyScoutingScreenV380(state);
   if(route==='visualLibrary') return visualLibraryScreen(state);
   if(route==='rosterUpdate') return rosterUpdateScreen(state, squadPlayers, squadSummary, rosterMeta);

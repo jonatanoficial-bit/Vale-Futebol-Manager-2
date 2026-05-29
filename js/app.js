@@ -19,6 +19,8 @@ import { validateNavigationSystem } from '../core/safety/navigation-validator.js
 import { validateMenuHierarchy } from '../core/safety/menu-hierarchy-validator.js';
 import { validateTouchTargets } from '../core/safety/touch-target-validator.js';
 import { validateMatchFlowV570 } from '../core/safety/match-flow-validator.js';
+import { buildDataPack2026Snapshot } from './systems/dataPack2026Engine.js';
+import { validateDataPack2026System } from '../core/safety/datapack-validator.js';
 import { runRuntimeAudit } from './systems/auditLogger.js';
 import { loadVisualLibrary } from './systems/visualAssetManager.js';
 import { runtimeSafetySnapshot } from './systems/uxEngine.js';
@@ -26,7 +28,7 @@ import { runBootSafety } from '../core/safety/safe-loader.js';
 
 async function boot(){
   const app = document.getElementById('app');
-  let buildInfo = { buildLabel:'Build v5.7.0' };
+  let buildInfo = { buildLabel:'Build v5.8.0' };
   try { buildInfo = await (await fetch('build/build-info.json', {cache:'no-store'})).json(); } catch(err) { console.warn('[VFM] build-info fallback', err); }
   const loadedAssetMap = await loadAssetMap();
   await loadVisualLibrary();
@@ -35,7 +37,7 @@ async function boot(){
   applyMobileExperienceShell();
   applyNavigationExperienceShell();
   load();
-  runRuntimeAudit(getState(), {phase:'v5.7.0 boot', matchFlow: validateMatchFlowV570(buildMatchExperienceSnapshot(getState())), ux: runtimeSafetySnapshot(getState()), aaa: buildUiAaaSnapshot(getState()), mobile: buildMobileExperienceSnapshot(), navigation: validateNavigationSystem({currentRoute:getState().route}), menuHierarchy: validateMenuHierarchy({primaryActions:PRIMARY_ACTIONS_V550, menuGroups:MANAGER_MENU_GROUPS_V550}), touchTargets: validateTouchTargets(), lobby: validateLobbyCompactSystem({primaryActions:PRIMARY_ACTIONS_V550, menuGroups:MANAGER_MENU_GROUPS_V550})});
+  runRuntimeAudit(getState(), {phase:'v5.8.0 boot', dataPack2026: validateDataPack2026System(getState()), dataPackSnapshot: buildDataPack2026Snapshot(getState()), matchFlow: validateMatchFlowV570(buildMatchExperienceSnapshot(getState())), ux: runtimeSafetySnapshot(getState()), aaa: buildUiAaaSnapshot(getState()), mobile: buildMobileExperienceSnapshot(), navigation: validateNavigationSystem({currentRoute:getState().route}), menuHierarchy: validateMenuHierarchy({primaryActions:PRIMARY_ACTIONS_V550, menuGroups:MANAGER_MENU_GROUPS_V550}), touchTargets: validateTouchTargets(), lobby: validateLobbyCompactSystem({primaryActions:PRIMARY_ACTIONS_V550, menuGroups:MANAGER_MENU_GROUPS_V550})});
   validateCommercialState(getState());
   initRouter(app, buildInfo);
   register('cover', cover);
@@ -79,7 +81,8 @@ async function boot(){
     saveCenter:['Central de Save','Autosave, backups, exportação, importação e proteção de carreira'],
     assetChecklist:['Assets','Checklist visual, caminhos oficiais, cache e fallbacks'],
     rosterUpdate:['Atualização de Elenco','Importar, exportar e validar elencos por JSON'],
-    visualLibrary:['Biblioteca Visual','Fundos dinâmicos, logos, países, ligas e extras integrados']
+    visualLibrary:['Biblioteca Visual','Fundos dinâmicos, logos, países, ligas e extras integrados'],
+    dataPack2026:['Data Pack 2026','Schema oficial, bloqueio anti-genérico, caminhos e plano de elencos 20/05/2026']
   };
   Object.entries(modules).forEach(([route,[title,sub]]) => register(route, (state)=> moduleScreen(route,title,sub,state)));
   await runBootSafety({ state:getState(), routes:['cover','mainMenu','newGame','teamSelect','confirmCareer','lobby','managerMenu','match', ...Object.keys(modules)], assetMap:loadedAssetMap, buildInfo });

@@ -47,6 +47,7 @@ export const MANAGER_MENU_GROUPS_V550 = [
     ['polishCenter','UI AAA','✨','Visual, responsividade e performance','v5.0'],
     ['data2026','Dados 2026','🗃️','Divisões, elencos e caminhos de fotos','Dados'],
     ['database2026','Banco Maio/2026','🧾','Atributos, contratos e auditoria de dados','Novo'],
+    ['dataPack2026','Data Pack 2026','🔒','Schema oficial, bloqueio anti-genérico e plano 20/05/2026','v5.8'],
     ['visualLibrary','Biblioteca Visual','🖼️','Fundos, logos, países e extras','Assets'],
     ['settings','Configurações','⚙️','Qualidade, sons, acessibilidade e segurança','Sistema']
   ]]
