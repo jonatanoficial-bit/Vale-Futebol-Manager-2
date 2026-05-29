@@ -1,9 +1,8 @@
 {
-  "version": "v5.8.4",
-  "build": "2026.05.29.584",
-  "date": "2026-05-29",
-  "time": "16:08 BRT",
-  "phase": "Fase 24 - Série A 2026 lote 4 fechado",
+  "version": "v5.9.1",
+  "build": "Build v5.9.1 | 2026-05-29 | 20:45 BRT",
+  "phase": "Fase 34 — América do Sul logos/ligas com XI mínimo",
   "dataPack": "2026.05.20",
-  "status": "serie-a-closed"
+  "lockDate": "2026-05-20",
+  "createdAt": "2026-05-29 20:45 BRT"
 }
