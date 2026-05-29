@@ -1,8 +1,8 @@
 {
-  "version": "v5.2.0",
-  "buildLabel": "Build v5.2.0 | 2026-05-28 | 22:08 BRT",
-  "phase": "Fase 14 - Mundo completo + calendário global",
-  "date": "2026-05-28",
-  "time": "22:08 BRT",
+  "version": "v5.7.0",
+  "buildLabel": "Build v5.7.0 | 2026-05-29 | 12:42 BRT",
+  "phase": "Fase 19 - Tela de partida refinada mobile/PC",
+  "date": "2026-05-29",
+  "time": "12:42 BRT",
   "qualityGate": "0 errors / 0 warnings"
 }
