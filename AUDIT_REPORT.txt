@@ -1,11 +1,20 @@
-Vale Futebol Manager - Auditoria v5.7.0
-Arquivos auditados: 823
-Tamanho aproximado: 33M
+# Build v5.8.4 — Fase 24 / Série A 2026 lote 4 fechado
+
+Data Pack: 2026.05.20
+
+## Implementado
+- Fechamento dos 20 clubes do Brasileirão Série A do jogo.
+- Inclusão dos 7 clubes restantes: Red Bull Bragantino, Vitória, Mirassol, Fortaleza, Ceará, Juventude e Sport Recife.
+- Nenhum clube Série A usa template genérico no Data Pack oficial/referência.
+- JSONs oficiais criados em data/rosters/2026/brazil/serie-a/.
+
+## Status
+Série A: 20/20 clubes cobertos.
+Release Candidate: ainda bloqueada até Série B, continentais, mundo e seleções.
+
+---
+Auditoria v5.8.3
 node --check JS/core: OK
-matchExperienceEngine import: OK
-validateMatchFlowV570: OK
-validateMatchControlsV570: OK
-validateMatchMobileLayoutV570: OK
-index.html com match-v570.css: OK
-Erros: 0
-Warnings: 0
+Validação officialSerieA pass 3: OK
+Genéricos no lote 3: 0
+ZIP: OK

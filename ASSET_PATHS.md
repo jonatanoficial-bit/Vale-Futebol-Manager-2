@@ -1,14 +1,28 @@
-# Asset Paths — v5.6.0
+# Build v5.8.4 — Fase 24 / Série A 2026 lote 4 fechado
 
-Esta build não altera os caminhos de assets. Mantém os caminhos oficiais anteriores:
+Data Pack: 2026.05.20
 
-- Clubes: `assets/clubs/{clubId}.png`
-- Jogadores: `assets/players/brazil/{clubId}/{playerId}.png`
-- Elencos: `data/rosters/2026/{clubId}.json`
-- Avatares: `assets/avatars/manager-XX.png`
-- Fundos: conforme `ASSET_MAP.md`
+## Implementado
+- Fechamento dos 20 clubes do Brasileirão Série A do jogo.
+- Inclusão dos 7 clubes restantes: Red Bull Bragantino, Vitória, Mirassol, Fortaleza, Ceará, Juventude e Sport Recife.
+- Nenhum clube Série A usa template genérico no Data Pack oficial/referência.
+- JSONs oficiais criados em data/rosters/2026/brazil/serie-a/.
 
-Alteração desta build: apenas camada de navegação CSS/JS.
+## Status
+Série A: 20/20 clubes cobertos.
+Release Candidate: ainda bloqueada até Série B, continentais, mundo e seleções.
 
-## v5.7.0 - Tela de partida
-Nenhum asset pesado novo foi adicionado. A tela de partida continua usando os caminhos existentes de estadio, logos e placeholders.
+---
+# Asset paths v5.8.3
+
+Fotos esperadas do lote 3:
+
+```txt
+assets/players/brazil/serie-a/internacional/{playerId}.png
+assets/players/brazil/serie-a/gremio/{playerId}.png
+assets/players/brazil/serie-a/atletico-mg/{playerId}.png
+assets/players/brazil/serie-a/cruzeiro/{playerId}.png
+assets/players/brazil/serie-a/bahia/{playerId}.png
+```
+
+Se a foto não existir, o jogo usa placeholder automático.

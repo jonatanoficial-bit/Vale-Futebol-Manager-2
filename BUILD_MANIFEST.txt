@@ -1,19 +1,18 @@
-Vale Futebol Manager - Build Manifest
-Versao: v5.7.0
-Build visivel: Build v5.7.0 | 2026-05-29 | 12:42 BRT
-Fase: 19 - Tela de partida refinada mobile/PC
+# Build v5.8.4 — Fase 24 / Série A 2026 lote 4 fechado
 
-Arquivos adicionados:
-- css/match-v570.css
-- js/systems/matchExperienceEngine.js
-- core/safety/match-flow-validator.js
-- core/safety/match-controls-validator.js
-- core/safety/match-mobile-layout-validator.js
+Data Pack: 2026.05.20
 
-Arquivos alterados:
-- index.html
-- js/app.js
-- js/screens/match.js
-- js/systems/router.js
+## Implementado
+- Fechamento dos 20 clubes do Brasileirão Série A do jogo.
+- Inclusão dos 7 clubes restantes: Red Bull Bragantino, Vitória, Mirassol, Fortaleza, Ceará, Juventude e Sport Recife.
+- Nenhum clube Série A usa template genérico no Data Pack oficial/referência.
+- JSONs oficiais criados em data/rosters/2026/brazil/serie-a/.
 
-Objetivo: tornar a tela de jogo mais intuitiva, com inicio automatico, comandos rapidos, modo paisagem mobile e relatorio final acessivel.
+## Status
+Série A: 20/20 clubes cobertos.
+Release Candidate: ainda bloqueada até Série B, continentais, mundo e seleções.
+
+---
+Build v5.8.3 | 2026-05-29 | 15:58 BRT
+Fase 23 — Série A 2026 lote 3: Internacional, Grêmio, Atlético Mineiro, Cruzeiro e Bahia.
+Cobertura oficial/referência Série A: 13/20 clubes.

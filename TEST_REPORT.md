@@ -1,15 +1,28 @@
-# Test Report - v5.7.0
+# Build v5.8.4 — Fase 24 / Série A 2026 lote 4 fechado
 
-Testes realizados:
-- node --check JS/core
-- Import ESM matchExperienceEngine.js
-- validateMatchFlowV570
-- validateMatchControlsV570
-- validateMatchMobileLayoutV570
-- Verificacao de CSS no index.html
-- Verificacao de autostart no router
-- Verificacao de ZIP final
+Data Pack: 2026.05.20
 
-Resultado: APROVADO
-Erros: 0
-Warnings: 0
+## Implementado
+- Fechamento dos 20 clubes do Brasileirão Série A do jogo.
+- Inclusão dos 7 clubes restantes: Red Bull Bragantino, Vitória, Mirassol, Fortaleza, Ceará, Juventude e Sport Recife.
+- Nenhum clube Série A usa template genérico no Data Pack oficial/referência.
+- JSONs oficiais criados em data/rosters/2026/brazil/serie-a/.
+
+## Status
+Série A: 20/20 clubes cobertos.
+Release Candidate: ainda bloqueada até Série B, continentais, mundo e seleções.
+
+---
+# Testes v5.8.3
+
+```txt
+node --check JS/core: OK
+Import officialSerieA2026RosterData.js: OK
+validateOfficialSerieARosterPass583: OK
+Internacional carrega elenco oficial: OK
+Grêmio carrega elenco oficial: OK
+Atlético Mineiro carrega elenco oficial: OK
+Cruzeiro carrega elenco oficial: OK
+Bahia carrega elenco oficial: OK
+Genéricos no lote oficial: 0
+```
