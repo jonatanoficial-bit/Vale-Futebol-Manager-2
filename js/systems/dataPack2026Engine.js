@@ -1,4 +1,9 @@
 import { listOfficialSerieA2026Coverage } from '../data/officialSerieA2026RosterData.js';
+import { listOfficialSerieB2026Coverage } from '../data/officialSerieB2026RosterData.js';
+import { listOfficialConmebol2026Coverage, countOfficialConmebol2026Players } from '../data/officialConmebol2026RosterData.js';
+import { listSouthAmerica2026Coverage, countSouthAmerica2026Players } from '../data/officialSouthAmerica2026RosterData.js';
+import { listOfficialWorld2026Coverage, countOfficialWorld2026Players } from '../data/officialWorld2026RosterData.js';
+import { listOfficialNationalTeam2026Coverage, countOfficialNationalTeam2026Players } from '../data/officialNationalTeam2026RosterData.js';
 import { teams } from '../data/gameData.js';
 import { buildMay2026RosterForClub } from './playerDatabase2026Engine.js';
 import { DATA_PACK_2026_VERSION, DATA_PACK_LOCK_DATE, DATA_PACK_LABEL, dataPackRosterPaths2026, dataPackPlayerRequiredFields2026, dataPackPlayerTemplate2026, dataPackClubMinimums2026, dataPackImportStages2026, genericNamePatterns2026 } from '../data/dataPack2026Schema.js';
@@ -83,6 +88,7 @@ export function buildDataPack2026Snapshot(state={}){
   const international = teams.filter(t => t.country !== 'br');
   const playable = [...brazilA, ...brazilB];
   const officialCoverage = listOfficialSerieA2026Coverage();
+  const officialBCoverage = listOfficialSerieB2026Coverage();
   const clubRows = playable.map(club => {
     const pkg = buildMay2026RosterForClub(club.id);
     const validation = validateRosterPackage2026(pkg, {clubId: club.id, minPlayers: dataPackClubMinimums2026.playableMinPlayers});
@@ -118,6 +124,15 @@ export function buildDataPack2026Snapshot(state={}){
       playable: playable.length,
       blockedClubs,
       officialSerieAReady: officialCoverage.length,
+      officialSerieBReady: officialBCoverage.length,
+      officialConmebolReady: listOfficialConmebol2026Coverage().length,
+      officialConmebolPlayers: countOfficialConmebol2026Players(),
+      southAmericaAllLogoReady: listSouthAmerica2026Coverage().length,
+      southAmericaAllLogoPlayers: countSouthAmerica2026Players(),
+      officialWorldReady: listOfficialWorld2026Coverage().length,
+      officialWorldPlayers: countOfficialWorld2026Players(),
+      officialNationalReady: listOfficialNationalTeam2026Coverage().length,
+      officialNationalPlayers: countOfficialNationalTeam2026Players(),
       genericTotal
     },
     clubs: clubRows,
@@ -143,7 +158,7 @@ export function renderDataPack2026Center(state={}){
   const manifest = exportDataPackManifest2026().replace(/</g,'&lt;');
   return `<section class="datapack-v580 stack">
     <div class="panel championship-hero"><div><span class="tag">${snap.label} · ${snap.version}</span><h1>Motor oficial de Data Packs 2026</h1><p class="small">Esta build prepara o jogo para receber elencos oficiais/licenciados travados em ${snap.lockDate}. A Release Candidate fica bloqueada enquanto houver jogador genérico em clube jogável.</p></div><div class="release-score"><strong>${snap.qualityGate === 'release-ready' ? 'OK' : 'LOCK'}</strong><small>${snap.qualityGate}</small></div></div>
-    <section class="grid desktop-4"><div class="card kpi-card"><span>Série A</span><strong>${snap.totals.brazilSerieA}</strong><small>clubes mapeados</small></div><div class="card kpi-card"><span>Série B</span><strong>${snap.totals.brazilSerieB}</strong><small>clubes mapeados</small></div><div class="card kpi-card"><span>Série A oficiais</span><strong>${snap.totals.officialSerieAReady}</strong><small>lote 2 · 8/20</small></div><div class="card kpi-card"><span>Bloqueados</span><strong>${snap.totals.blockedClubs}</strong><small>aguardam elenco oficial</small></div></section>
+    <section class="grid desktop-5"><div class="card kpi-card"><span>Série A</span><strong>${snap.totals.brazilSerieA}</strong><small>clubes mapeados</small></div><div class="card kpi-card"><span>Série B</span><strong>${snap.totals.brazilSerieB}</strong><small>clubes mapeados</small></div><div class="card kpi-card"><span>Série A oficiais</span><strong>${snap.totals.officialSerieAReady}</strong><small>20/20</small></div><div class="card kpi-card"><span>Série B oficiais</span><strong>${snap.totals.officialSerieBReady}</strong><small>20/20</small></div><div class="card kpi-card"><span>CONMEBOL prioridade</span><strong>${snap.totals.officialConmebolReady}</strong><small>${snap.totals.officialConmebolPlayers} jogadores</small></div><div class="card kpi-card"><span>América do Sul</span><strong>${snap.totals.southAmericaAllLogoReady}</strong><small>${snap.totals.southAmericaAllLogoPlayers} atletas · logos/ligas</small></div><div class="card kpi-card"><span>Europa/Mundo</span><strong>${snap.totals.officialWorldReady}</strong><small>${snap.totals.officialWorldPlayers} jogadores</small></div><div class="card kpi-card"><span>Seleções</span><strong>${snap.totals.officialNationalReady}</strong><small>${snap.totals.officialNationalPlayers} convocáveis</small></div><div class="card kpi-card"><span>Bloqueados</span><strong>${snap.totals.blockedClubs}</strong><small>aguardam seleções/lock</small></div></section>
     <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Fases de importação</span><h2>Roteiro de elencos</h2></div><strong class="grade">20/05/2026</strong></div><div class="fixture-list">${stageRows}</div></article><article class="panel"><div class="row space"><div><span class="tag">Schema oficial</span><h2>Manifesto importável</h2></div><button class="secondary-btn mini" data-route="database2026">Banco atual</button></div><textarea class="code-box" readonly>${manifest}</textarea></article></section>
     <section class="panel"><div class="row space"><div><span class="tag">Bloqueio anti-genérico</span><h2>Clubes jogáveis Série A/B</h2></div><span class="status-pill">${snap.message}</span></div><div class="table-scroll"><table class="table"><thead><tr><th>Clube</th><th>Liga</th><th>Jogadores</th><th>Genéricos</th><th>Caminho</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table></div></section>
   </section>`;

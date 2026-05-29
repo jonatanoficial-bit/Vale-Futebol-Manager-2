@@ -1,9 +1,10 @@
 import { teams } from '../data/gameData.js';
 import { squadPlayers } from '../data/squadData.js';
 import { getOfficialSerieA2026Roster, listOfficialSerieA2026Coverage, OFFICIAL_SERIE_A_2026_VERSION } from '../data/officialSerieA2026RosterData.js';
+import { getOfficialSerieB2026Roster, listOfficialSerieB2026Coverage, OFFICIAL_SERIE_B_2026_VERSION } from '../data/officialSerieB2026RosterData.js';
 import { rosterMay2026Meta, positionBlueprintMay2026, clubTierProfilesMay2026, may2026RequiredFields, may2026PositionMinimums, may2026ValidationRules, licensedDataChecklistMay2026 } from '../data/rosterMay2026Data.js';
 
-export const PLAYER_DATABASE_2026_VERSION = 'v5.8.0';
+export const PLAYER_DATABASE_2026_VERSION = 'v5.8.10';
 
 function slug(value=''){
   return String(value).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') || 'clube';
@@ -71,9 +72,11 @@ function makePlayer(club={}, blueprint=[], index=0){
   };
 }
 export function buildMay2026RosterForClub(clubId='santos'){
-  const officialPkg = getOfficialSerieA2026Roster(clubId);
-  if(officialPkg) return normalizeOfficialRosterPackage(officialPkg);
   const club = teams.find(t=>t.id===clubId) || teams[0] || {id:'santos',name:'Santos FC',country:'br'};
+  const officialSerieBPkg = club.leagueId === 'brasileirao-b' ? getOfficialSerieB2026Roster(clubId) : null;
+  if(officialSerieBPkg) return normalizeOfficialRosterPackage({...officialSerieBPkg, meta:{...officialSerieBPkg.meta, officialSerieBVersion:OFFICIAL_SERIE_B_2026_VERSION}});
+  const officialSerieAPkg = club.leagueId === 'brasileirao-a' ? getOfficialSerieA2026Roster(clubId) : null;
+  if(officialSerieAPkg) return normalizeOfficialRosterPackage(officialSerieAPkg);
   const isSantos = club.id === 'santos';
   const basePlayers = isSantos && Array.isArray(squadPlayers) && squadPlayers.length >= 23
     ? squadPlayers.slice(0, 30).map((p, index)=>({
@@ -119,7 +122,7 @@ export function buildMay2026DatabaseSnapshot(state={}){
     selectedClub,
     selectedRoster,
     clubs: brazilian.map(t=>({ id:t.id, name:t.name, leagueId:t.leagueId, country:t.country, rosterPath:t.leagueId === 'brasileirao-a' ? `data/rosters/2026/brazil/serie-a/${t.id}.json` : t.leagueId === 'brasileirao-b' ? `data/rosters/2026/brazil/serie-b/${t.id}.json` : `data/rosters/2026/${t.id}.json`, photoFolder:t.leagueId === 'brasileirao-a' ? `assets/players/brazil/serie-a/${t.id}/` : t.leagueId === 'brasileirao-b' ? `assets/players/brazil/serie-b/${t.id}/` : `assets/players/brazil/${t.id}/`, players: buildMay2026RosterForClub(t.id).players.length })),
-    totals: { clubs:brazilian.length, clubsReady, totalPlayers, totalValue, avgOverall, minPlayers:may2026ValidationRules.minPlayers, officialSerieACoverage:listOfficialSerieA2026Coverage().length },
+    totals: { clubs:brazilian.length, clubsReady, totalPlayers, totalValue, avgOverall, minPlayers:may2026ValidationRules.minPlayers, officialSerieACoverage:listOfficialSerieA2026Coverage().length, officialSerieBCoverage:listOfficialSerieB2026Coverage().length },
     rules: may2026ValidationRules,
     requiredFields: may2026RequiredFields,
     positionMinimums: may2026PositionMinimums

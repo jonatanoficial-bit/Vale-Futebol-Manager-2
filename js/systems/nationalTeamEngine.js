@@ -1,6 +1,7 @@
 import { nationalTeams, callUpPool } from '../data/careerData.js';
+import { buildOfficialCallUpPool2026, getOfficialNationalTeamRoster2026 } from '../data/officialNationalTeam2026RosterData.js';
 
-export const NATIONAL_TEAM_ENGINE_VERSION = 'v4.5.0';
+export const NATIONAL_TEAM_ENGINE_VERSION = 'v5.8.12';
 
 function clamp(n,min=0,max=100){ return Math.max(min, Math.min(max, Number(n||0))); }
 function slug(text=''){ return String(text).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') || 'item'; }
@@ -48,14 +49,17 @@ export function safeCallUpPool(selection){
   return expanded;
 }
 export function getNationalTeamMeta(teamId='brasil'){
-  return nationalTeams.find(t=>t.id===teamId) || nationalTeams[0];
+  const official = getOfficialNationalTeamRoster2026(teamId);
+  const meta = nationalTeams.find(t=>t.id===teamId) || nationalTeams[0];
+  return official ? {...meta, id:teamId, name:official.meta.teamName, level:official.meta.level || meta.level, pool:official.players.length, dataLock:official.meta.snapshot, rosterPath:official.meta.rosterPath } : meta;
 }
 export function buildNationalTeamSnapshot(state={}){
   const job = state.career?.nationalTeamJob || null;
   const teamId = job?.id || 'brasil';
   const meta = getNationalTeamMeta(teamId);
   const calendar = Array.isArray(state.career?.internationalCalendar) && state.career.internationalCalendar.length ? state.career.internationalCalendar : buildNationalCalendar(Number(state.season||2026), teamId);
-  const callUps = safeCallUpPool(state.career?.callUpSelection);
+  const officialPool = buildOfficialCallUpPool2026(teamId);
+  const callUps = safeCallUpPool(state.career?.callUpSelection || officialPool);
   const selected = callUps.filter(p=>p.selected);
   const nextEvent = calendar.find(e=>!e.played) || calendar[calendar.length-1] || null;
   const dual = state.career?.dualCareer || {enabled:false, club:true, nationalTeam:null};

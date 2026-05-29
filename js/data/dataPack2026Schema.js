@@ -1,4 +1,4 @@
-export const DATA_PACK_2026_VERSION = 'v5.8.0';
+export const DATA_PACK_2026_VERSION = 'v5.9.1';
 export const DATA_PACK_LOCK_DATE = '2026-05-20';
 export const DATA_PACK_LABEL = 'Data Pack 2026.05.20';
 
@@ -51,12 +51,13 @@ export const dataPackClubMinimums2026 = {
 
 export const dataPackImportStages2026 = [
   { id:'engine', version:'v5.8.0', title:'Motor oficial de Data Packs 2026', scope:'estrutura, schema, caminhos e bloqueio anti-genérico', status:'entregue' },
-  { id:'br-a', version:'v5.8.1-v5.8.4', title:'Brasileirão Série A 2026', scope:'20 clubes, mínimo 25 jogadores reais por clube', status:'em andamento' },
-  { id:'br-b', version:'v5.8.2', title:'Brasileirão Série B 2026', scope:'20 clubes, mínimo 25 jogadores reais por clube', status:'planejada' },
-  { id:'conmebol', version:'v5.8.3', title:'Libertadores/Sul-Americana 2026', scope:'clubes continentais prioritários', status:'planejada' },
-  { id:'world', version:'v5.8.4', title:'Europa e mundo', scope:'grandes ligas, clubes fortes e simulados', status:'planejada' },
-  { id:'national', version:'v5.8.5', title:'Seleções nacionais 2026', scope:'convocáveis e listas para Copa do Mundo', status:'planejada' },
-  { id:'lock', version:'v5.9.0', title:'Roster Lock 20/05/2026', scope:'auditoria total e bloqueio de RC se houver genéricos', status:'planejada' }
+  { id:'br-a', version:'v5.8.1-v5.8.4', title:'Brasileirão Série A 2026', scope:'20 clubes, mínimo 25 jogadores reais por clube', status:'entregue' },
+  { id:'br-b', version:'v5.8.5-v5.8.8', title:'Brasileirão Série B 2026', scope:'20 clubes, mínimo 25 jogadores reais por clube', status:'entregue' },
+  { id:'conmebol', version:'v5.8.9', title:'Libertadores/Sul-Americana 2026', scope:'pack prioritário: 16 clubes sul-americanos não brasileiros', status:'entregue-prioritário' },
+  { id:'world', version:'v5.8.10-v5.8.11', title:'Europa e mundo', scope:'lotes 1 e 2: 28 clubes de elite UEFA/Portugal/MLS/Arábia e mercado global', status:'entregue-prioritário' },
+  { id:'national', version:'v5.8.12', title:'Seleções nacionais 2026', scope:'16 seleções prioritárias, 26 convocáveis por seleção, sem nomes genéricos', status:'entregue' },
+  { id:'south-america-all', version:'v5.9.1', title:'América do Sul logos/ligas', scope:'todos os clubes sul-americanos com logo/liga no jogo, mínimo 11 titulares por clube', status:'entregue' },
+  { id:'lock', version:'v5.9.1', title:'Roster Lock 20/05/2026', scope:'auditoria total atualizada com cobertura sul-americana por logo/liga', status:'entregue' }
 ];
 
 export const genericNamePatterns2026 = [

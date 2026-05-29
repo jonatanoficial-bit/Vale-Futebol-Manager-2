@@ -26,12 +26,22 @@ export const jobOffers = [
 ];
 
 export const nationalTeams = [
-  { id:'brasil', name:'Brasil', flag:'assets/countries/br.png', level:93, reputationRequired:80, status:'Bloqueada', pool:58, expectation:'Título continental e protagonismo mundial' },
-  { id:'argentina', name:'Argentina', flag:'assets/countries/ar.png', level:92, reputationRequired:82, status:'Bloqueada', pool:54, expectation:'Manter ciclo vencedor' },
-  { id:'uruguai', name:'Uruguai', flag:'assets/countries/uy.png', level:84, reputationRequired:68, status:'Monitorando', pool:39, expectation:'Renovar elenco competitivo' },
-  { id:'colombia', name:'Colômbia', flag:'assets/countries/co.png', level:82, reputationRequired:64, status:'Monitorando', pool:43, expectation:'Classificar e revelar nova base' },
-  { id:'chile', name:'Chile', flag:'assets/countries/cl.png', level:76, reputationRequired:58, status:'Possível no futuro', pool:34, expectation:'Reconstrução esportiva' },
-  { id:'usa', name:'Estados Unidos', flag:'assets/countries/us.png', level:78, reputationRequired:60, status:'Possível no futuro', pool:46, expectation:'Projeto comercial e esportivo' }
+  { id:'brasil', name:'Brasil', flag:'assets/countries/br.png', level:93, reputationRequired:80, status:'Disponível por reputação', pool:26, expectation:'Disputar título mundial' },
+  { id:'argentina', name:'Argentina', flag:'assets/countries/ar.png', level:92, reputationRequired:80, status:'Disponível por reputação', pool:26, expectation:'Disputar título mundial' },
+  { id:'uruguai', name:'Uruguai', flag:'assets/countries/uy.png', level:84, reputationRequired:70, status:'Monitorando', pool:26, expectation:'Avançar no Mundial e competir em alto nível' },
+  { id:'colombia', name:'Colômbia', flag:'assets/countries/co.png', level:83, reputationRequired:60, status:'Monitorando', pool:26, expectation:'Avançar no Mundial e competir em alto nível' },
+  { id:'franca', name:'França', flag:'assets/countries/fr.png', level:94, reputationRequired:80, status:'Disponível por reputação', pool:26, expectation:'Disputar título mundial' },
+  { id:'inglaterra', name:'Inglaterra', flag:'assets/countries/gb-eng.png', level:93, reputationRequired:80, status:'Disponível por reputação', pool:26, expectation:'Disputar título mundial' },
+  { id:'espanha', name:'Espanha', flag:'assets/countries/es.png', level:92, reputationRequired:80, status:'Disponível por reputação', pool:26, expectation:'Disputar título mundial' },
+  { id:'portugal', name:'Portugal', flag:'assets/countries/pt.png', level:91, reputationRequired:80, status:'Disponível por reputação', pool:26, expectation:'Disputar título mundial' },
+  { id:'alemanha', name:'Alemanha', flag:'assets/countries/de.png', level:89, reputationRequired:70, status:'Monitorando', pool:26, expectation:'Disputar título mundial' },
+  { id:'holanda', name:'Holanda', flag:'assets/countries/nl.png', level:88, reputationRequired:70, status:'Monitorando', pool:26, expectation:'Disputar título mundial' },
+  { id:'italia', name:'Itália', flag:'assets/countries/it.png', level:87, reputationRequired:70, status:'Monitorando', pool:26, expectation:'Avançar no Mundial e competir em alto nível' },
+  { id:'estados-unidos', name:'Estados Unidos', flag:'assets/countries/us.png', level:79, reputationRequired:60, status:'Monitorando', pool:26, expectation:'Avançar no Mundial e competir em alto nível' },
+  { id:'mexico', name:'México', flag:'assets/countries/mx.png', level:80, reputationRequired:60, status:'Monitorando', pool:26, expectation:'Avançar no Mundial e competir em alto nível' },
+  { id:'japao', name:'Japão', flag:'assets/countries/jp.png', level:80, reputationRequired:60, status:'Monitorando', pool:26, expectation:'Avançar no Mundial e competir em alto nível' },
+  { id:'marrocos', name:'Marrocos', flag:'assets/countries/ma.png', level:83, reputationRequired:60, status:'Monitorando', pool:26, expectation:'Avançar no Mundial e competir em alto nível' },
+  { id:'senegal', name:'Senegal', flag:'assets/countries/sn.png', level:81, reputationRequired:60, status:'Monitorando', pool:26, expectation:'Avançar no Mundial e competir em alto nível' }
 ];
 
 export const callUpPool = [

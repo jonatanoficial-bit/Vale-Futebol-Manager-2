@@ -51,6 +51,7 @@ import { validateSaveBackup } from '../../core/safety/save-backup.js';
 import { validateSaveExportImport } from '../../core/safety/save-export-import.js';
 import { validateSaveMigration } from '../../core/safety/save-migration.js';
 import { renderDataPack2026Center } from '../systems/dataPack2026Engine.js';
+import { renderRosterLock2026Center } from '../systems/rosterLock2026Engine.js';
 import { validateDataPack2026System } from '../../core/safety/datapack-validator.js';
 import { blockGenericRosterForRelease } from '../../core/safety/roster-generic-blocker.js';
 import { validateOfficialRosterSchema2026 } from '../../core/safety/official-roster-schema-validator.js';
@@ -108,6 +109,7 @@ function content(route,state={}){
   if(route==='data2026') return data2026ScreenV360(state);
   if(route==='database2026') return databaseMay2026ScreenV460(state);
   if(route==='dataPack2026') return renderDataPack2026Center(state);
+  if(route==='rosterLock2026') return renderRosterLock2026Center(state);
   if(route==='academyScouting') return academyScoutingScreenV380(state);
   if(route==='visualLibrary') return visualLibraryScreen(state);
   if(route==='rosterUpdate') return rosterUpdateScreen(state, squadPlayers, squadSummary, rosterMeta);

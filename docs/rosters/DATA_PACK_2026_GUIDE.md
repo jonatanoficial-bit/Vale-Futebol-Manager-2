@@ -21,4 +21,4 @@ Jogadores como `Fluminense GK 1`, `Corinthians ZAG 5`, `Player 1` ou `Jogador 1`
 - v5.8.3: Libertadores/Sul-Americana 2026
 - v5.8.4: Europa e mundo
 - v5.8.5: Seleções nacionais 2026
-- v5.9.0: Roster Lock 20/05/2026
+- v5.9.1: Roster Lock 20/05/2026
