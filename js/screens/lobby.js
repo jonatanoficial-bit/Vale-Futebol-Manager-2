@@ -8,7 +8,8 @@ export const PRIMARY_ACTIONS_V550 = [
   ['formation','Ajustar tática','🧩','Escalação, plano de jogo e banco'],
   ['squad','Ver elenco','👥','Jogadores, moral, contratos e forma'],
   ['messages','Abrir e-mail','✉️','Diretoria, imprensa e empresários'],
-  ['managerMenu','Menu completo','☰','Todos os módulos avançados']
+  ['managerMenu','Menu completo','☰','Todos os módulos avançados'],
+  ['careerTutorial','Tutorial e missões','🎓','Entenda o modo carreira e acompanhe metas']
 ];
 
 export const MANAGER_MENU_GROUPS_V550 = [
@@ -36,6 +37,7 @@ export const MANAGER_MENU_GROUPS_V550 = [
   ]],
   ['Carreira e mundo', [
     ['messages','E-mail','✉️','Diretoria, imprensa, empresários e seleção','Carreira'],
+    ['careerTutorial','Tutorial e missões','🎓','Funções, metas e progressão infinita','Novo'],
     ['careerOffers','Propostas','📨','Sondagens de clubes e seleções','Novo'],
     ['nationalTeam','Seleções','🇧🇷','Carreira dupla, Datas FIFA e Copa do Mundo','Internacional'],
     ['worldCompetitions','Libertadores/Sul-Americana','🌎','CONMEBOL e rota mundial','v4.3'],
@@ -70,7 +72,8 @@ export function lobby(state){
         <div class="top-left-brand">${brand()}</div>
         <div class="top-status">
           <div class="resource">💵 ${money(t.budget || state.money)}</div>
-          <div class="resource">⭐ Rep. ${t.reputation || 78}</div>
+          <div class="resource">⭐ Clube ${t.reputation || 78}</div>
+          <div class="resource">🧠 Técnico ${state.manager?.reputation || 50}</div>
           <button class="icon-btn mail-alert" data-route="messages" aria-label="E-mail do treinador">✉${unread ? `<span>${unread}</span>` : ''}</button>
           <button class="icon-btn" data-route="managerMenu" aria-label="Menu completo">☰</button>
         </div>
@@ -82,7 +85,7 @@ export function lobby(state){
           <div>
             <span class="tag">${state.manager.mode === 'sandbox' ? 'Sandbox livre' : 'Carreira completa'}</span>
             <h1>${state.manager.name}</h1>
-            <p class="small">${safeImg(country(managerCountry),'country','País do manager','inline-flag')} Manager · Temporada ${state.season} · ${state.month}</p>
+            <p class="small">${safeImg(country(managerCountry),'country','País do manager','inline-flag')} Manager · Temporada ${state.season} · ${state.month} · Reputação ${state.manager?.reputation || 50}/100</p>
           </div>
         </div>
         <div class="hero-club-v550">
@@ -114,6 +117,7 @@ export function lobby(state){
           <div class="small">Segurança no cargo: ${state.jobSecurity || 'Seguro'}</div>
         </article>
         <article class="panel command-card"><div class="small">Torcida</div><h2>${fanMood}%</h2><div class="meter"><span style="width:${fanMood}%"></span></div></article>
+        <article class="panel command-card"><div class="small">Reputação do técnico</div><h2>${state.manager?.reputation || 50}</h2><div class="meter"><span style="width:${state.manager?.reputation || 50}%"></span></div><button class="secondary-btn mini" data-route="careerTutorial">Ver missões</button></article>
         <article class="panel command-card"><div class="small">Força do time</div><h2>${t.level}</h2><div class="meter"><span style="width:${t.level}%"></span></div></article>
       </section>
 
@@ -122,7 +126,7 @@ export function lobby(state){
         <div class="coach-feed-grid-v550">
           <div class="news-item"><strong>Diretoria</strong><span>Objetivo ativo: ${t.board}</span></div>
           <div class="news-item"><strong>Jogo</strong><span>${nextTitle}</span></div>
-          <div class="news-item"><strong>Atalho</strong><span>Use Menu completo para módulos avançados sem poluir o lobby.</span></div>
+          <div class="news-item"><strong>Missões</strong><span>${(state.career?.missions || []).filter(m=>m.done).length}/${(state.career?.missions || []).length || 8} concluídas. Use Tutorial e missões para entender a carreira.</span></div>
         </div>
       </section>
     </section>`, true);

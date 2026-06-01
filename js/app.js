@@ -22,6 +22,7 @@ import { validateMatchFlowV570 } from '../core/safety/match-flow-validator.js';
 import { buildDataPack2026Snapshot } from './systems/dataPack2026Engine.js';
 import { buildRosterLock2026Snapshot } from './systems/rosterLock2026Engine.js';
 import { validateRosterLock2026 } from '../core/safety/roster-lock-validator.js';
+import { validateCareerLoopV592 } from '../core/safety/career-loop-validator.js';
 import { validateDataPack2026System } from '../core/safety/datapack-validator.js';
 import { runRuntimeAudit } from './systems/auditLogger.js';
 import { loadVisualLibrary } from './systems/visualAssetManager.js';
@@ -39,7 +40,7 @@ async function boot(){
   applyMobileExperienceShell();
   applyNavigationExperienceShell();
   load();
-  runRuntimeAudit(getState(), {phase:'v5.9.1 boot', rosterLock2026: validateRosterLock2026(getState()), rosterLockSnapshot: buildRosterLock2026Snapshot(getState()), dataPack2026: validateDataPack2026System(getState()), dataPackSnapshot: buildDataPack2026Snapshot(getState()), matchFlow: validateMatchFlowV570(buildMatchExperienceSnapshot(getState())), ux: runtimeSafetySnapshot(getState()), aaa: buildUiAaaSnapshot(getState()), mobile: buildMobileExperienceSnapshot(), navigation: validateNavigationSystem({currentRoute:getState().route}), menuHierarchy: validateMenuHierarchy({primaryActions:PRIMARY_ACTIONS_V550, menuGroups:MANAGER_MENU_GROUPS_V550}), touchTargets: validateTouchTargets(), lobby: validateLobbyCompactSystem({primaryActions:PRIMARY_ACTIONS_V550, menuGroups:MANAGER_MENU_GROUPS_V550})});
+  runRuntimeAudit(getState(), {phase:'v5.9.2 boot', careerLoop: validateCareerLoopV592(getState()), rosterLock2026: validateRosterLock2026(getState()), rosterLockSnapshot: buildRosterLock2026Snapshot(getState()), dataPack2026: validateDataPack2026System(getState()), dataPackSnapshot: buildDataPack2026Snapshot(getState()), matchFlow: validateMatchFlowV570(buildMatchExperienceSnapshot(getState())), ux: runtimeSafetySnapshot(getState()), aaa: buildUiAaaSnapshot(getState()), mobile: buildMobileExperienceSnapshot(), navigation: validateNavigationSystem({currentRoute:getState().route}), menuHierarchy: validateMenuHierarchy({primaryActions:PRIMARY_ACTIONS_V550, menuGroups:MANAGER_MENU_GROUPS_V550}), touchTargets: validateTouchTargets(), lobby: validateLobbyCompactSystem({primaryActions:PRIMARY_ACTIONS_V550, menuGroups:MANAGER_MENU_GROUPS_V550})});
   validateCommercialState(getState());
   initRouter(app, buildInfo);
   register('cover', cover);
@@ -85,7 +86,8 @@ async function boot(){
     rosterUpdate:['Atualização de Elenco','Importar, exportar e validar elencos por JSON'],
     visualLibrary:['Biblioteca Visual','Fundos dinâmicos, logos, países, ligas e extras integrados'],
     dataPack2026:['Data Pack 2026','Schema oficial, bloqueio anti-genérico, caminhos e plano de elencos 20/05/2026'],
-    rosterLock2026:['Roster Lock','Auditoria total, quality gate e travamento dos elencos 20/05/2026']
+    rosterLock2026:['Roster Lock','Auditoria total, quality gate e travamento dos elencos 20/05/2026'],
+    careerTutorial:['Tutorial e missões','Reputação do técnico, metas, modo carreira infinito e guia inicial']
   };
   Object.entries(modules).forEach(([route,[title,sub]]) => register(route, (state)=> moduleScreen(route,title,sub,state)));
   await runBootSafety({ state:getState(), routes:['cover','mainMenu','newGame','teamSelect','confirmCareer','lobby','managerMenu','match', ...Object.keys(modules)], assetMap:loadedAssetMap, buildInfo });

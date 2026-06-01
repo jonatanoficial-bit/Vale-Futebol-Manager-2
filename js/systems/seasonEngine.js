@@ -94,7 +94,7 @@ export function flattenFixtures(leagueId='brasileirao-a'){
 export function nextFixtureForClub(clubId='santos', completed=[]){
   const club=teamById(clubId); const leagueId=club.leagueId || 'brasileirao-a';
   const done = new Set((completed||[]).map(m=>m.id));
-  return flattenFixtures(leagueId).find(f=>(f.home===clubId||f.away===clubId)&&!done.has(f.id)) || flattenFixtures(leagueId).find(f=>f.home===clubId||f.away===clubId);
+  return flattenFixtures(leagueId).find(f=>(f.home===clubId||f.away===clubId)&&!done.has(f.id)) || null;
 }
 export function fixturesByRound(leagueId='brasileirao-a', round=1){
   return (buildRoundRobin(leagueId)[Math.max(0, round-1)] || []);

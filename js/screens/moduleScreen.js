@@ -55,6 +55,7 @@ import { renderRosterLock2026Center } from '../systems/rosterLock2026Engine.js';
 import { validateDataPack2026System } from '../../core/safety/datapack-validator.js';
 import { blockGenericRosterForRelease } from '../../core/safety/roster-generic-blocker.js';
 import { validateOfficialRosterSchema2026 } from '../../core/safety/official-roster-schema-validator.js';
+import { buildCareerMissions, careerLoopSnapshot } from '../systems/careerProgressionEngine.js';
 export function moduleScreen(route,title,subtitle,state){
   const extra = content(route, state);
   return screenWrap(route, `${topbar(title,subtitle,'lobby')}${clubHeader(state)}${extra}`, true);
@@ -99,6 +100,7 @@ function content(route,state={}){
   const squadSummary = getSquadSummary(state);
   const contractAlerts = getContractAlerts(state);
   const rosterMeta = getRosterMeta(state);
+  if(route==='careerTutorial') return careerTutorialScreenV592(state);
   if(route==='seasonCenter') return seasonCenterScreen(state);
   if(route==='copaDoBrasil') return copaDoBrasilScreenV410(state);
   if(route==='worldCompetitions') return worldCompetitionsScreenV430(state);
@@ -932,6 +934,22 @@ function data2026ScreenV360(state={}){
 }
 
 
+
+
+function careerTutorialScreenV592(state={}){
+  const snap = careerLoopSnapshot(state);
+  const missions = buildCareerMissions(state);
+  const missionCards = missions.map(m=>`<article class="card mission-card ${m.done?'ok':'pending'}"><div class="row space"><div><strong>${m.done?'✅':'🎯'} ${m.title}</strong><small>${m.desc}</small></div><b>${m.progress}%</b></div><div class="meter"><span style="width:${m.progress}%"></span></div><p class="small">Recompensa: ${m.reward}</p></article>`).join('');
+  const history = (state.career?.seasonHistory || []).slice().reverse().map(s=>`<div class="news-item"><strong>${s.season} · ${s.clubName}</strong><span>${s.position}º lugar · ${s.points} pts · ${s.objective} · prêmio € ${s.prize}M</span></div>`).join('') || '<div class="news-item"><strong>Primeira temporada em andamento</strong><span>Ao terminar o ano, a carreira vira para a próxima temporada automaticamente.</span></div>';
+  const story = (state.career?.activeStory || []).slice(0,6).map(x=>`<div class="news-item"><span>${x}</span></div>`).join('');
+  return `<section class="career-tutorial-v592 stack">
+    <div class="panel polish-hero"><div><span class="tag">v5.9.2 · Modo carreira infinito</span><h1>Tutorial, reputação e missões</h1><p class="small">A carreira agora foi preparada para prender o jogador por ciclos longos: reputação do técnico, renda acumulada, metas, histórico de temporadas e virada automática de ano.</p></div><div class="release-score"><strong>${snap.reputation}</strong><small>reputação atual</small></div></div>
+    <section class="grid desktop-4"><div class="card kpi-card"><span>Temporada</span><strong>${snap.season}</strong><small>ciclo atual</small></div><div class="card kpi-card"><span>Anos concluídos</span><strong>${snap.completedSeasons}</strong><small>modo infinito</small></div><div class="card kpi-card"><span>Renda acumulada</span><strong>€ ${snap.lifetimeEarnings}M</strong><small>prêmios + carreira</small></div><div class="card kpi-card"><span>Missões</span><strong>${snap.completedMissions}/${snap.missionCount}</strong><small>progressão guiada</small></div></section>
+    <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Como jogar</span><h2>Fluxo principal</h2></div><span class="status-pill">Tutorial</span></div><div class="news-list compact"><div class="news-item"><strong>1. Prepare o time</strong><span>Abra Elenco, Tática e Treino antes da partida.</span></div><div class="news-item"><strong>2. Jogue e revise</strong><span>Entre em Jogar, acompanhe a partida e leia o relatório pós-jogo.</span></div><div class="news-item"><strong>3. Cresça na carreira</strong><span>Vitórias, metas e temporadas boas aumentam reputação e renda.</span></div><div class="news-item"><strong>4. Carreira dupla</strong><span>Com reputação, aceite convites de clubes maiores ou seleções nacionais.</span></div></div></article><article class="panel"><div class="row space"><div><span class="tag">Histórico vivo</span><h2>Linha da carreira</h2></div><button class="secondary-btn mini" data-route="careerOffers">Ver propostas</button></div><div class="news-list compact">${story}</div></article></section>
+    <section class="panel"><div class="row space"><div><span class="tag">Missões ativas</span><h2>Metas que prendem o jogador</h2></div><span class="status-pill">${snap.completedMissions}/${snap.missionCount}</span></div><div class="grid grid-2">${missionCards}</div></section>
+    <section class="panel"><div class="row space"><div><span class="tag">Modo infinito</span><h2>Temporadas encerradas</h2></div><span class="status-pill">sem limite de anos</span></div><div class="news-list compact">${history}</div><p class="alert success">Quando os 38 jogos da liga terminam, o sistema calcula posição, prêmio, reputação, segurança no cargo e abre automaticamente a temporada seguinte.</p></section>
+  </section>`;
+}
 
 function databaseMay2026ScreenV460(state={}){
   const snap = buildMay2026DatabaseSnapshot(state);
