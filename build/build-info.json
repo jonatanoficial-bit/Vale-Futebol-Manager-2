@@ -1,8 +1,7 @@
 {
-  "version": "v5.9.1",
-  "build": "Build v5.9.1 | 2026-05-29 | 20:45 BRT",
-  "phase": "Fase 34 — América do Sul logos/ligas com XI mínimo",
+  "version": "v5.9.2",
+  "buildLabel": "Build v5.9.2 | 2026-05-28 | 23:02 BRT",
+  "phase": "Fase 35 - Carreira infinita, reputação do técnico, tutorial e missões",
   "dataPack": "2026.05.20",
-  "lockDate": "2026-05-20",
-  "createdAt": "2026-05-29 20:45 BRT"
+  "status": "career-loop-approved"
 }
