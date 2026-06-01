@@ -1,5 +1,5 @@
-# KNOWN ISSUES
+# Known Issues v5.9.2
 
-- Clubes sul-americanos fora do pacote prioritário têm cobertura mínima de 11 titulares, não banco completo.
-- Para simulação profunda de temporada continental, recomenda-se futura expansão dos clubes de 11 para 23-30 atletas.
-- Fotos reais não são incluídas no ZIP; caminhos foram mapeados em ASSET_PATHS.md.
+- Avatares reais do manager ainda precisam ser integrados fisicamente ao pacote de assets.
+- O calendário anual infinito usa estrutura de liga nacional como ciclo principal; copas/continentais ainda devem receber rollover completo em fase futura.
+- Em ambiente Node de teste, localStorage não existe; no navegador o save funciona normalmente.

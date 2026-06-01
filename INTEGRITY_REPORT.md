@@ -1,8 +1,14 @@
-# INTEGRITY REPORT — v5.9.1
+# Integrity Report v5.9.2
 
-América do Sul por logo/liga: 85 clubes cobertos.
-Novos clubes nesta build: 69.
-Novos titulares: 759.
-Mínimo por clube sul-americano: 11 atletas.
-Genéricos detectados: 0.
-Status: OK
+Status: career-loop-approved
+
+Validações principais:
+
+- Modo carreira não trava ao fim da temporada.
+- Temporada pode avançar indefinidamente.
+- Renda acumulada e reputação do técnico evoluem.
+- Missões geradas dinamicamente.
+- Tutorial acessível no Menu do Treinador e no lobby.
+- Save e normalização preservam campos novos mesmo em saves antigos.
+
+Quality Gate: aprovado para próxima fase de refinamento.

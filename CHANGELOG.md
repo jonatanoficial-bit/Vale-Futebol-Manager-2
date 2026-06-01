@@ -1,31 +1,19 @@
-# CHANGELOG — Vale Futebol Manager v5.9.1
+# Changelog v5.9.2 - Fase 35
 
-Build visível: Build v5.9.1 | 2026-05-29 | 20:45 BRT
-Fase 34: América do Sul completa por logos/ligas do jogo.
+## Carreira infinita, reputação e missões
 
-## Adicionado
-- Novo pacote `officialSouthAmerica2026RosterData.js`.
-- Cobertura para todos os clubes sul-americanos presentes na biblioteca de logos/ligas do jogo.
-- Mínimo de 11 titulares por clube nos clubes que ainda não tinham pacote prioritário completo.
-- Validador `south-america-all-logo-roster-validator.js`.
-- Roster Lock atualizado para contar América do Sul total, não só o pacote CONMEBOL prioritário.
+- Reputação atual do usuário agora aparece no lobby.
+- Criada rota `careerTutorial` com tutorial, missões, renda acumulada e histórico de temporadas.
+- Criado motor `careerProgressionEngine.js`.
+- Criado validador `career-loop-validator.js`.
+- Corrigido fluxo de fim de temporada: após os 38 jogos da liga, o jogo calcula posição, prêmio, reputação e inicia automaticamente a próxima temporada.
+- Modo carreira agora suporta anos ilimitados sem travar no fim do calendário.
+- Missões de engajamento adicionadas: primeira partida, tática, 5 jogos, 3 vitórias, reputação 90, renda, seleção nacional e objetivo da liga.
 
-## Resultado
-- Clubes sul-americanos com logo/liga cobertos: 85.
-- Clubes adicionados nesta build: 69.
-- Jogadores/titulares adicionados nesta build: 759.
-- Genéricos detectados: 0.
+## Testes
 
-## Cobertura por país nesta build
-```json
-{
-  "Argentina": 23,
-  "Uruguai": 11,
-  "Chile": 10,
-  "Colômbia": 15,
-  "Equador": 10
-}
-```
-
-## Observação de produção
-Os 16 clubes CONMEBOL prioritários continuam com pacotes mais completos. Os demais clubes receberam cobertura mínima de 11 titulares para gameplay, com camada editável para expansão para 23-30 atletas por clube.
+- 38 partidas simuladas até fim da temporada: OK.
+- Virada 2026 -> 2027: OK.
+- Tabela reiniciada para nova temporada: OK.
+- Histórico de temporada preservado: OK.
+- Reputação e renda atualizadas: OK.
