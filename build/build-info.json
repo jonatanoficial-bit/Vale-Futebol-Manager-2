@@ -1,7 +1,7 @@
 {
-  "version": "v5.9.2",
-  "buildLabel": "Build v5.9.2 | 2026-05-28 | 23:02 BRT",
-  "phase": "Fase 35 - Carreira infinita, reputação do técnico, tutorial e missões",
+  "version": "v5.9.7",
+  "buildLabel": "Build v5.9.7 | 2026-06-01 | Balanceamento geral",
+  "phase": "Fase 40 — Balanceamento geral de carreira",
   "dataPack": "2026.05.20",
-  "status": "career-loop-approved"
+  "status": "balance-general-approved"
 }
