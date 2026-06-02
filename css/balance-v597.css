@@ -1,0 +1,7 @@
+.balance-v597 .candidate-card.selected{border-color:rgba(91,208,255,.55);box-shadow:0 0 0 1px rgba(91,208,255,.18),0 18px 40px rgba(0,0,0,.22)}
+.balance-v597 .department-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:14px 0}
+.balance-v597 .department-kpi{padding:14px;border-radius:18px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09)}
+.balance-v597 .department-kpi span{display:block;opacity:.72;font-size:.82rem;margin-bottom:6px}
+.balance-v597 .department-kpi strong{font-size:1.4rem}
+.balance-v597 .hero-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+@media(max-width:760px){.balance-v597 .hero-actions{justify-content:flex-start}.balance-v597 .candidate-side{align-items:flex-start}}
