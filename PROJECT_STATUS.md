@@ -1,5 +1,13 @@
-# Project Status v5.9.2
+# Status v5.9.7
 
-A build agora tem estrutura de carreira infinita. O usuário pode jogar temporada após temporada, acumulando reputação, renda, histórico e missões.
+Build aprovada para seguir à Release Candidate.
 
-Próximo foco recomendado: integrar os 12 avatares reais do manager no onboarding e ajustar imagens/assets finais.
+- Roster Lock: OK
+- América do Sul com XI mínimo: OK
+- Coletiva pré/pós-jogo: OK
+- Tutorial guiado: OK
+- XP e níveis: OK
+- Mercado de treinadores: OK
+- Balanceamento geral: OK
+
+Próxima fase: v6.0.0 — Release Candidate pública.

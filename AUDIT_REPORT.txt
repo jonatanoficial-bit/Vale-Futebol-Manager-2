@@ -1,2 +1,5 @@
-AUDIT v5.9.1
-Status: 0 erros / 0 warnings
+Vale Futebol Manager v5.9.7 — Auditoria
+Arquivos JS/core verificados: OK
+Balanceamento geral: OK
+Warnings bloqueantes: 0
+Erros: 0

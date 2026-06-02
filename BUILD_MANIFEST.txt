@@ -1,19 +1,19 @@
-Vale Futebol Manager - v5.9.2 - Fase 35
+Vale Futebol Manager v5.9.7 — Fase 40
+Build: Balanceamento geral
+Data: 2026-06-01
 
-Arquivos principais adicionados:
-- js/systems/careerProgressionEngine.js
-- core/safety/career-loop-validator.js
+Novos arquivos:
+- js/data/balanceGeneralData.js
+- js/systems/balanceGeneralEngine.js
+- core/safety/balance-general-validator.js
+- css/balance-v597.css
 
 Arquivos alterados:
-- js/systems/state.js
-- js/systems/seasonEngine.js
-- js/screens/lobby.js
-- js/screens/moduleScreen.js
+- index.html
 - js/app.js
+- js/screens/moduleScreen.js
 - build/build-info.json
 - CHANGELOG.md
-- TEST_REPORT.md
-- INTEGRITY_REPORT.md
 - PROJECT_STATUS.md
-
-Build: career-loop-approved
+- INTEGRITY_REPORT.md
+- TEST_REPORT.md
