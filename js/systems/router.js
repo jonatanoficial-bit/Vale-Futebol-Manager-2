@@ -1,11 +1,11 @@
 import { safeScreenFallback } from '../../core/safety/error-recovery.js';
 import { requestFullscreenMode, requestLandscapeForMatch } from './mobileExperienceEngine.js';
 import { getNavigationRouteForActive } from './navigationExperienceEngine.js';
-import { getState, setState, setManager, setUI, startCareer, advanceMatch, finishMatch, setMatchSpeed, makeSubstitution, setMatchDecision, openTransferNegotiation, acceptTransferDeal, rejectTransferDeal, sellOutgoingPlayer, renewPlayerContract, loanTransferPlayer, generateIncomingOffer, respondIncomingOffer, simulateAIMarket, toggleTransferWindow, generateSmartIncomingOffer, simulateSmartAIMarket, triggerAgentEvent, setMatchAutoPlay, autoSelectBestLineup, setCaptain, setSetPieceTaker, applyRotationPlan, createManualBackup, restoreManualBackup, exportSaveText, importSaveText, toggleAutosave, exportRosterText, importRosterText, resetRosterToDefault, sampleRosterText, generateCareerOffers, respondCareerOffer, registerNationalInterest, toggleCallUpPlayer, finalizeNationalCallUp, completePostMatchAndReturnLobby, simulateBoardReview, renewManagerContract, simulateManagerDismissalRisk, simulateNextInternationalMatch, applyTrainingMicrocycle, signPreContract } from './state.js';
+import { getState, setState, setManager, setUI, startCareer, advanceMatch, finishMatch, setMatchSpeed, makeSubstitution, setMatchDecision, openTransferNegotiation, acceptTransferDeal, rejectTransferDeal, sellOutgoingPlayer, renewPlayerContract, loanTransferPlayer, generateIncomingOffer, respondIncomingOffer, simulateAIMarket, toggleTransferWindow, generateSmartIncomingOffer, simulateSmartAIMarket, triggerAgentEvent, setMatchAutoPlay, autoSelectBestLineup, setCaptain, setSetPieceTaker, applyRotationPlan, createManualBackup, restoreManualBackup, exportSaveText, importSaveText, toggleAutosave, exportRosterText, importRosterText, resetRosterToDefault, sampleRosterText, generateCareerOffers, respondCareerOffer, registerNationalInterest, toggleCallUpPlayer, finalizeNationalCallUp, completePostMatchAndReturnLobby, simulateBoardReview, renewManagerContract, simulateManagerDismissalRisk, simulateNextInternationalMatch, applyTrainingMicrocycle, signPreContract, openPreMatchPressConference, openPostMatchPressConference, answerPressConference, completePressConference, completeGuidedTutorialStep, completeGuidedTutorialForRoute, addManagerXp, setManagerSpecialty } from './state.js';
 const routes = new Map(); let rootEl = null; let buildInfo = null;
 export function register(name, renderer){ routes.set(name, renderer); }
 export function initRouter(root, build){ rootEl = root; buildInfo = build; }
-export function go(route){ const target = routes.has(route) ? route : 'lobby'; setState({route:target}); if(target === 'match'){ const s=getState(); if(!s.match?.finalized){ setMatchSpeed(s.match?.speed || 2); setMatchAutoPlay(true); requestLandscapeForMatch('match'); } } render(); }
+export function go(route){ const target = routes.has(route) ? route : 'lobby'; if(target !== 'match') completeGuidedTutorialForRoute(target); if(target === 'match'){ const s=getState(); if(!s.match?.finalized && s.match?.prePressDoneFor !== s.match?.id){ openPreMatchPressConference(); render(); return; } } setState({route:target}); if(target === 'match'){ const s=getState(); if(!s.match?.finalized){ setMatchSpeed(s.match?.speed || 2); setMatchAutoPlay(true); requestLandscapeForMatch('match'); } } render(); }
 export function render(){
   const state = getState(); const renderer = routes.get(state.route) || routes.get('lobby');
   try { rootEl.innerHTML = renderer(state); wire(rootEl); fillBuildBadges(); }
@@ -18,6 +18,14 @@ function wire(scope){
   scope.querySelectorAll('[data-route]').forEach(btn => btn.addEventListener('click', () => go(btn.dataset.route)));
 
   scope.querySelectorAll('[data-action="ui-fullscreen"]').forEach(btn => btn.addEventListener('click', async () => { await requestFullscreenMode(); requestLandscapeForMatch(getState()?.route); }));
+
+  scope.querySelectorAll('[data-action="press-answer"]').forEach(btn => btn.addEventListener('click', () => { answerPressConference(btn.dataset.answer); render(); }));
+  scope.querySelectorAll('[data-action="press-complete"]').forEach(btn => btn.addEventListener('click', () => { completeGuidedTutorialStep('press-first'); completePressConference(); render(); }));
+
+  scope.querySelectorAll('[data-action="manager-xp-simulate"]').forEach(btn => btn.addEventListener('click', () => { addManagerXp(Number(btn.dataset.xp||60), btn.dataset.reason || 'teste de progressão'); render(); }));
+  scope.querySelectorAll('[data-action="manager-specialty"]').forEach(btn => btn.addEventListener('click', () => { setManagerSpecialty(btn.dataset.specialty || 'tactician'); render(); }));
+
+  scope.querySelectorAll('[data-action="tutorial-complete"]').forEach(btn => btn.addEventListener('click', () => { completeGuidedTutorialStep(btn.dataset.step); render(); }));
 
 
   scope.querySelectorAll('[data-action="save-backup"]').forEach(btn => btn.addEventListener('click', () => { createManualBackup(btn.dataset.slot || 1); render(); }));
@@ -59,8 +67,8 @@ function wire(scope){
   scope.querySelectorAll('[data-action="set-setpiece"]').forEach(sel => sel.addEventListener('change', () => { setSetPieceTaker(sel.dataset.kind || 'penalty', sel.value); render(); }));
   scope.querySelectorAll('[data-action="safe-toast"]').forEach(btn => btn.addEventListener('click', () => { const msg = btn.dataset.message || 'Acao registrada.'; const original = btn.textContent || 'Acao'; console.info('[VFM]', msg); btn.textContent = 'Registrado'; btn.disabled = true; setTimeout(()=>{ btn.disabled=false; btn.textContent = original; }, 1200); }));
   scope.querySelectorAll('[data-action="match-advance"]').forEach(btn => btn.addEventListener('click', () => { advanceMatch(5); render(); }));
-  scope.querySelectorAll('[data-action="match-finish"]').forEach(btn => btn.addEventListener('click', () => { finishMatch(); render(); }));
-  scope.querySelectorAll('[data-action="post-match-lobby"]').forEach(btn => btn.addEventListener('click', () => { completePostMatchAndReturnLobby(); render(); }));
+  scope.querySelectorAll('[data-action="match-finish"]').forEach(btn => btn.addEventListener('click', () => { finishMatch(); completeGuidedTutorialStep('play-first-match'); render(); }));
+  scope.querySelectorAll('[data-action="post-match-lobby"]').forEach(btn => btn.addEventListener('click', () => { completeGuidedTutorialStep('read-report'); openPostMatchPressConference(); render(); }));
   scope.querySelectorAll('[data-action="match-autoplay"]').forEach(btn => btn.addEventListener('click', () => { setMatchAutoPlay(btn.dataset.enabled !== 'false'); render(); }));
   scope.querySelectorAll('[data-action="match-speed"]').forEach(btn => btn.addEventListener('click', () => { setMatchSpeed(btn.dataset.speed || 1); render(); }));
   scope.querySelectorAll('[data-action="match-substitution"]').forEach(btn => btn.addEventListener('click', () => { makeSubstitution(btn.dataset.out, btn.dataset.in); render(); }));

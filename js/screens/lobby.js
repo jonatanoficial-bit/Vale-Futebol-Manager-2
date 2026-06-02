@@ -9,7 +9,8 @@ export const PRIMARY_ACTIONS_V550 = [
   ['squad','Ver elenco','👥','Jogadores, moral, contratos e forma'],
   ['messages','Abrir e-mail','✉️','Diretoria, imprensa e empresários'],
   ['managerMenu','Menu completo','☰','Todos os módulos avançados'],
-  ['careerTutorial','Tutorial e missões','🎓','Entenda o modo carreira e acompanhe metas']
+  ['careerTutorial','Tutorial e missões','🎓','Entenda o modo carreira e acompanhe metas'],
+  ['managerProgression','Evolução','⭐','XP, nível e licença do treinador']
 ];
 
 export const MANAGER_MENU_GROUPS_V550 = [
@@ -38,7 +39,8 @@ export const MANAGER_MENU_GROUPS_V550 = [
   ['Carreira e mundo', [
     ['messages','E-mail','✉️','Diretoria, imprensa, empresários e seleção','Carreira'],
     ['careerTutorial','Tutorial e missões','🎓','Funções, metas e progressão infinita','Novo'],
-    ['careerOffers','Propostas','📨','Sondagens de clubes e seleções','Novo'],
+    ['managerProgression','Evolução do treinador','⭐','XP, níveis, licenças e especialidades','v5.9.5'],
+    ['careerOffers','Mercado de treinadores','📨','Propostas, contratos e sondagens reais','v5.9.6'],
     ['nationalTeam','Seleções','🇧🇷','Carreira dupla, Datas FIFA e Copa do Mundo','Internacional'],
     ['worldCompetitions','Libertadores/Sul-Americana','🌎','CONMEBOL e rota mundial','v4.3'],
     ['worldComplete','Mundo Completo','🌐','Ligas internacionais e calendário global','v5.2'],

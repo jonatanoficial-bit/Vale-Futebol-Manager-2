@@ -3,6 +3,7 @@ import { deepScoreFromState, getPostMatchReport } from './matchEngine.js';
 import { teams } from '../data/gameData.js';
 import { nextFixtureForClub as seasonNextFixture, simulateOtherRoundMatches } from './seasonEngine.js';
 import { normalizeCareerProgression, buildCareerMissions, applyPostMatchProgression, rolloverInfiniteSeason, careerLoopSnapshot } from './careerProgressionEngine.js';
+import { normalizeGuidedTutorial, completeTutorialStepPatch, guidedTutorialAutoPatchForRoute } from './guidedTutorialEngine.js';
 import { transferShortlist, negotiations as baseNegotiations, outgoingList, loanTargets, aiClubProfiles, agentEvents } from '../data/transferData.js';
 import { buildMarketIntelligence, createSmartIncomingOffer, createIntelligentAIDeal, nextAgentEvent } from './marketIntelligenceEngine.js';
 import { scoreFromTimeline, buildBalanceSummary } from './balance.js';
@@ -13,6 +14,9 @@ import { buildNationalCalendar, buildNationalTeamSnapshot, safeCallUpPool, simul
 import { ensureTrainingState, applyTrainingWeek, TRAINING_ENGINE_VERSION } from './trainingEngine.js';
 import { TRANSFER_ENGINE_VERSION, ensureTransferLedger, evaluateDealSafety, registerTransaction, buildTransferSnapshot, simulateGlobalMarketCycle, createPreContract, validateTransferIntegrity, renewalById } from './transferEngine.js';
 import { SAVE_MANAGER_VERSION, SAVE_KEY, writeAutoBackup, readAutoBackup, preserveCorruptSave, exportEnvelopeText, validateSavePayload, migrateLegacyState, writeSlot, readSlot, listSlots, saveIntegritySnapshot } from './saveManager.js';
+import { createPressConferenceSession, answerPressQuestion, applyPressConferenceEffects } from './pressConferenceEngine.js';
+import { normalizeManagerProgression, awardManagerXpPatch, xpForMatchResult, setManagerSpecialtyPatch } from './managerProgressionEngine.js';
+import { normalizeManagerJobMarket, createJobMarketPatch, registerJobDecisionPatch } from './managerJobMarketEngine.js';
 
 const key = SAVE_KEY;
 const legacyKeys = ['vfm_gold_save_v510','vfm_gold_save_v500','vfm_gold_save_v490','vfm_gold_save_v480','vfm_gold_save_v470','vfm_gold_save_v460','vfm_gold_save_v450','vfm_gold_save_v440', 'vfm_gold_save_v430', 'vfm_gold_save_v420', 'vfm_gold_save_v410', 'vfm_gold_save_v400', 'vfm_gold_save_v390', 'vfm_gold_save_v370', 'vfm_gold_save_v360', 'vfm_gold_save_v350', 'vfm_gold_save_v340', 'vfm_gold_save_v330', 'vfm_gold_save_v320', 'vfm_gold_save_v310', 'vfm_gold_save_v300', 'vfm_gold_save_v290', 'vfm_gold_save_v280', 'vfm_gold_save_v270', 'vfm_gold_save_v262', 'vfm_gold_save_v261', 'vfm_gold_save_v260', 'vfm_gold_save_v251', 'vfm_gold_save_v240', 'vfm_gold_save_v230', 'vfm_gold_save_v220', 'vfm_gold_save_v210', 'vfm_gold_save_v200', 'vfm_gold_save_v190', 'vfm_gold_save_v180', 'vfm_gold_save_v170', 'vfm_gold_save_v160', 'vfm_gold_save_v150', 'vfm_gold_save_v140', 'vfm_gold_save_v130', 'vfm_gold_save_v120', 'vfm_gold_save_v110', 'vfm_gold_save_v100', 'vfm_gold_save_v090', 'vfm_gold_save_v080', 'vfm_gold_save_v050', 'vfm_gold_save_v040', 'vfm_gold_save_v030', 'vfm_gold_save_v020', 'vfm_gold_save_v010'];
@@ -48,7 +52,7 @@ export const defaultState = () => ({
   manager:{ name:'Joao Victor', country:'br', avatar:'assets/avatars/manager-01.png', reputation:82, mode:'career' },
   clubId:'santos', season:2026, month:'Maio', money:92.5, coins:250, notifications:6, boardTrust:76, fanMood:82, jobSecurity:'Seguro',
   match:{ id:'2026-05-24-santos-palmeiras', date:'2026-05-24', competitionId:'brasileirao-a', competition:'Brasileirão Série A 2026', stage:'Rodada atual', minute:1, home:'santos', away:'palmeiras', homeGoals:0, awayGoals:0, speed:1, autoPlay:false, finalized:false, postMatchReady:false, substitutions:[], maxSubs:5, decision:'balanced', tacticalBoost:0, usedSubPlayers:[], postMatchReport:null, nextMatchQueued:null, reportViewed:false },
-  career:{ currentDate:'2026-05-19', matchday:1, completedMatches:[], lastResult:null, promotionRelegation:{serieARelegation:4,serieBPromotion:4,libertadoresTop:5,sulamericanaRange:[6,12],serieBRelegation:4}, integrationLog:['Carreira migrada para v5.1.0 com save profissional, múltiplos slots, backups automáticos e recuperação de carreira.'], jobOffers:[], offerHistory:[], nationalTeamJob:null, dualCareer:{enabled:false, club:true, nationalTeam:null}, callUpSelection:defaultCallUpSelection(), internationalCalendar:buildNationalCalendar(2026, 'brasil'), managerProfile:null, activeContract:null, contractHistory:[], titleHistory:[], sackRiskLog:[], managerTimeline:[], unlockedMilestones:[], boardRelationship:76, fanRelationship:82, dressingRoomTrust:69, mediaPressure:54, worldCompetitionCycle:{libertadores:true,sulamericana:true,clubWorldCupCycle:4,worldCupCycle:4,lastUpdated:'v4.3.0'}, financeReport:{profile:'balanced', lastMonthlyCycle:null, crisisLog:[], boardWarnings:[], sponsorReview:'v3.5.0'}, tutorial:{seen:false, step:1, completed:false}, missions:[], completedSeasons:0, seasonHistory:[], lifetimeEarnings:0, reputationHistory:[], activeStory:['Bem-vindo ao modo carreira: jogue partidas, cumpra missões, aumente renda e reputação sem limite de temporadas.'] },
+  career:{ currentDate:'2026-05-19', matchday:1, completedMatches:[], lastResult:null, promotionRelegation:{serieARelegation:4,serieBPromotion:4,libertadoresTop:5,sulamericanaRange:[6,12],serieBRelegation:4}, integrationLog:['Carreira migrada para v5.1.0 com save profissional, múltiplos slots, backups automáticos e recuperação de carreira.'], jobOffers:[], offerHistory:[], jobMarket:null, nationalTeamJob:null, dualCareer:{enabled:false, club:true, nationalTeam:null}, callUpSelection:defaultCallUpSelection(), internationalCalendar:buildNationalCalendar(2026, 'brasil'), managerProfile:null, activeContract:null, contractHistory:[], titleHistory:[], sackRiskLog:[], managerTimeline:[], unlockedMilestones:[], boardRelationship:76, fanRelationship:82, dressingRoomTrust:69, mediaPressure:54, worldCompetitionCycle:{libertadores:true,sulamericana:true,clubWorldCupCycle:4,worldCupCycle:4,lastUpdated:'v4.3.0'}, financeReport:{profile:'balanced', lastMonthlyCycle:null, crisisLog:[], boardWarnings:[], sponsorReview:'v3.5.0'}, tutorial:{seen:false, step:1, completed:false}, missions:[], completedSeasons:0, seasonHistory:[], lifetimeEarnings:0, reputationHistory:[], activeStory:['Bem-vindo ao modo carreira: jogue partidas, cumpra missões, aumente renda e reputação sem limite de temporadas.'], pressHistory:[], pressConference:null, managerProgression:null },
   gameplay:{ difficulty:'realistic', aiVersion:'v5.4.0', realism:88, variance:18, balanceLog:[] },
   stability:{ autosave:true, lastBackup:null, backupCount:0, lastExport:null, lastImport:null, safeModeEvents:0, health:'Excelente', auditVersion:SAVE_MANAGER_VERSION, saveManagerVersion:SAVE_MANAGER_VERSION, saveIntegrity:'ok', commercialAudit:'v3.7.0-ok', fullscreenMobile:true, overflowGuard:true, rosterSafeMode:true, matchEngineSafeMode:true, matchEngineVersion:'v4.7.0', matchStressTest:'passed-100', trainingEngineVersion:TRAINING_ENGINE_VERSION, trainingStressTest:'passed-4-weeks', transferEngineVersion:TRANSFER_ENGINE_VERSION, transferIntegrity:'pending' },
   save:{ version:SAVE_MANAGER_VERSION, schema:530, activeSlot:'principal', migratedFrom:null, lastMigrationAt:null, exportCount:0, importCount:0, autosaveCheckpoints:[] },
@@ -91,9 +95,14 @@ function normalize(next){
   merged.career = validateManagerCareerState(merged.career, merged);
   const careerProgression = normalizeCareerProgression(merged.career, merged);
   merged.career = {...merged.career, ...careerProgression};
+  merged.career.tutorial = normalizeGuidedTutorial(merged.career.tutorial || {});
   merged.career.missions = buildCareerMissions(merged);
+  merged.career.managerProgression = normalizeManagerProgression(merged);
+  merged.career.jobMarket = normalizeManagerJobMarket(merged);
   if(!Array.isArray(merged.career.completedMatches)) merged.career.completedMatches = [];
   if(!Array.isArray(merged.career.integrationLog)) merged.career.integrationLog = [];
+  if(!Array.isArray(merged.career.pressHistory)) merged.career.pressHistory = [];
+  if(merged.career.pressConference && typeof merged.career.pressConference !== 'object') merged.career.pressConference = null;
   merged.gameplay = {...base.gameplay, ...(next?.gameplay || {})};
   if(!Array.isArray(merged.gameplay.balanceLog)) merged.gameplay.balanceLog = [];
   if(!['easy','realistic','hardcore'].includes(merged.gameplay.difficulty)) merged.gameplay.difficulty = 'realistic';
@@ -216,7 +225,7 @@ export function startCareer(){
     fanMood: 76,
     jobSecurity:'Seguro',
     match: firstMatch,
-    career: {...cleanLeagueStateForNewCareer({...state.career}, chosenClub), tutorial:{seen:false, step:1, completed:false}, missions:[], completedSeasons:0, seasonHistory:[], lifetimeEarnings:0, reputationHistory:[{season:state.season||2026, rep:state.manager?.reputation||82, note:'Início da carreira'}], activeStory:['Primeira missão: revise o elenco, ajuste a tática e jogue sua estreia oficial.']},
+    career: {...cleanLeagueStateForNewCareer({...state.career}, chosenClub), tutorial:{seen:false, step:1, completed:false}, missions:[], completedSeasons:0, seasonHistory:[], lifetimeEarnings:0, reputationHistory:[{season:state.season||2026, rep:state.manager?.reputation||82, note:'Início da carreira'}], activeStory:['Primeira missão: participe da coletiva, revise o elenco, ajuste a tática e jogue sua estreia oficial.'], pressHistory:[], pressConference:null, managerProgression:null},
     roster: rosterPack,
     transfer: ensureTransferLedger({...(state.transfer || {}), budget: Number((transferBudget * 0.45).toFixed(1)), wageRoom: Math.max(0.8, Number((transferBudget/40).toFixed(2))), acceptedDeals:[], rejectedDeals:[], outgoingDeals:[], renewals:[], loanDeals:[], incomingOffers:[], aiDeals:[], agentEvents:[], smartReports:[], marketDay:1}),
     ui:{...state.ui, selectedClub:chosenClub, standingsCompetition:chosenTeam?.leagueId || 'brasileirao-a', ...starters},
@@ -306,11 +315,12 @@ export function finishMatch(){
   let career = {...state.career, completedMatches:completed, lastResult:result, lastPostMatchReport:current.postMatchReport, currentDate: next?.date || result.date, matchday:Number(current.round || state.career?.matchday || 1)+1, lastRoundResults:[result, ...otherResults].slice(0,10), dressingRoomTrust:Math.max(0, Math.min(100, Number(state.career?.dressingRoomTrust||68) + (already?0:dressingDelta))), mediaPressure:Math.max(0, Math.min(100, Number(state.career?.mediaPressure||54) + (already?0:mediaDelta))), managerTimeline:[...((state.career?.managerTimeline)||[]), {date:result.date, title:`${result.competition} · ${result.stage}`, text:`Resultado ${result.summary}. Segurança no cargo antes da atualização: ${reviewBefore.label}.`}].slice(-24)};
   const progressionPatch = already ? {managerReputation:state.manager?.reputation||82, career} : applyPostMatchProgression({...state, career}, result, moneyBonus);
   career = progressionPatch.career;
+  const xpPatch = already ? {} : awardManagerXpPatch({...state, manager:{...(state.manager||{}), reputation:progressionPatch.managerReputation}, career}, xpForMatchResult(result), `partida: ${result.summary}`, {match:result.id});
   state = normalize({
     ...state,
     match: {...current, nextMatchQueued:next || null, reportViewed:false},
-    manager:{...(state.manager||{}), reputation:progressionPatch.managerReputation},
-    career,
+    manager:{...(state.manager||{}), reputation:xpPatch.manager?.reputation ?? progressionPatch.managerReputation},
+    career: xpPatch.career || career,
     money: Number((Number(state.money || 0) + (already ? 0 : moneyBonus)).toFixed(1)),
     boardTrust: Math.max(0, Math.min(100, Number(state.boardTrust || 76) + (already ? 0 : trustDelta))),
     fanMood: Math.max(0, Math.min(100, Number(state.fanMood || 82) + (already ? 0 : fanDelta))),
@@ -343,6 +353,67 @@ export function completePostMatchAndReturnLobby(){
   logIntegration('Relatório pós-jogo confirmado: save protegido e retorno ao lobby executado.');
   persist();
   return state.match;
+}
+
+
+export function openPreMatchPressConference(){
+  const current = state.match || defaultState().match;
+  if(current.finalized || current.prePressDoneFor === current.id){
+    state = normalize({...state, route:'match'});
+    persist();
+    return state.career?.pressConference;
+  }
+  const session = createPressConferenceSession(state, 'pre');
+  state = normalize({...state, route:'pressConference', career:{...state.career, pressConference:session}});
+  logIntegration(`Coletiva pré-jogo aberta para ${current.competition || 'competição'} ${current.stage || ''}.`);
+  persist();
+  return session;
+}
+
+export function openPostMatchPressConference(){
+  const current = state.match || defaultState().match;
+  if(!current.finalized){
+    return openPreMatchPressConference();
+  }
+  if(current.postPressDoneFor === current.id){
+    return completePostMatchAndReturnLobby();
+  }
+  const session = createPressConferenceSession(state, 'post');
+  state = normalize({...state, route:'pressConference', career:{...state.career, pressConference:session}});
+  logIntegration(`Coletiva pós-jogo aberta para ${current.competition || 'competição'} ${current.stage || ''}.`);
+  persist();
+  return session;
+}
+
+export function answerPressConference(answerId){
+  const session = state.career?.pressConference || createPressConferenceSession(state, state.match?.finalized ? 'post' : 'pre');
+  const updated = answerPressQuestion(session, answerId);
+  state = normalize({...state, career:{...state.career, pressConference:updated}});
+  logIntegration(`Resposta de coletiva registrada: ${updated.answers?.slice(-1)?.[0]?.tone || 'sem tom definido'}.`);
+  persist();
+  return updated;
+}
+
+export function completePressConference(){
+  const session = state.career?.pressConference;
+  if(!session?.completed){
+    state = normalize({...state, route:'lobby'});
+    persist();
+    return state;
+  }
+  state = normalize(applyPressConferenceEffects(state, session));
+  state = normalize({...state, ...awardManagerXpPatch(state, 35, 'coletiva de imprensa concluída', {pressType:session.type})});
+  const nextRoute = session.nextRoute || (session.type === 'post' ? 'lobby' : 'match');
+  if(session.type === 'post'){
+    state = normalize({...state, career:{...state.career, pressConference:{...state.career.pressConference, applied:true, active:false}}});
+    persist();
+    completePostMatchAndReturnLobby();
+    return state;
+  }
+  state = normalize({...state, route:nextRoute, career:{...state.career, pressConference:{...state.career.pressConference, applied:true, active:false}}});
+  logIntegration(`Coletiva ${session.type === 'post' ? 'pós-jogo' : 'pré-jogo'} concluída. Próxima tela: ${state.route}.`);
+  persist();
+  return state;
 }
 
 export function setMatchDecision(decision='balanced'){
@@ -710,11 +781,11 @@ export function applyRotationPlan(){
 
 
 export function generateCareerOffers(){
-  const offers = generateOffers(state);
-  state = normalize({...state, career:{...(state.career||{}), jobOffers:offers, offerHistory:[...((state.career||{}).offerHistory||[]), `Geradas ${offers.length} propostas/sondagens de carreira.`].slice(-30)}, notifications:Number(state.notifications||0)+1});
-  logIntegration(`Mercado de trabalho atualizado com ${offers.length} oportunidades.`);
+  const marketPatch = createJobMarketPatch(state);
+  state = normalize({...state, career:{...(state.career||{}), ...marketPatch, offerHistory:[...((state.career||{}).offerHistory||[]), `Radar de treinadores v5.9.6 atualizado: ${marketPatch.jobOffers.length} oportunidades reais/sondagens.`].slice(-30)}, notifications:Number(state.notifications||0)+1});
+  logIntegration(`Mercado de treinadores v5.9.6 atualizado com ${marketPatch.jobOffers.length} oportunidades.`);
   persist();
-  return offers;
+  return marketPatch.jobOffers;
 }
 export function respondCareerOffer(offerId='', decision='reject'){
   const offers = state.career?.jobOffers || [];
@@ -722,11 +793,16 @@ export function respondCareerOffer(offerId='', decision='reject'){
   if(!offer) return false;
   const accepted = decision === 'accept';
   const historyMsg = `${accepted?'Aceitou':'Recusou'} ${offer.type==='national'?'seleção':'clube'}: ${offer.name}.`;
-  let patch = { career:{...(state.career||{}), offerHistory:[...((state.career||{}).offerHistory||[]), historyMsg].slice(-40), jobOffers:offers.filter(o=>o.id!==offerId)} };
+  const jobMarketPatch = registerJobDecisionPatch(state, offer, accepted ? 'accept' : 'reject');
+  let patch = { career:{...(state.career||{}), offerHistory:[...((state.career||{}).offerHistory||[]), historyMsg].slice(-40), jobOffers:offers.filter(o=>o.id!==offerId), jobMarket:jobMarketPatch} };
   if(accepted && offer.type === 'club'){
     const fixture = buildClubFixture(offer.targetId, 0);
-    patch = {...patch, clubId:offer.targetId, match:fixture, ui:{...(state.ui||{}), selectedClub:offer.targetId}, boardTrust:68, fanMood:72, route:'lobby'};
-    patch.career = {...patch.career, completedMatches:[], lastResult:null, matchday:1, activeContract:{clubId:offer.targetId, role:offer.role, signedAt:new Date().toISOString().slice(0,10), remainingMonths:24, wageMonthly:Number(offer.wage||0.8), releaseClause:Number((offer.wage||0.8)*6).toFixed(1), bonusTarget:offer.objective, objective:offer.objective, status:'Ativo'}, contractHistory:[...((state.career||{}).contractHistory||[]), `Contrato assinado com ${offer.name} como ${offer.role}.`].slice(-20), managerTimeline:[...((state.career||{}).managerTimeline||[]), {date:new Date().toISOString().slice(0,10), title:'Novo clube', text:`Contrato aceito com ${offer.name}.`}].slice(-24), integrationLog:[...((state.career||{}).integrationLog||[]), `Novo trabalho aceito: ${offer.name}. Temporada reiniciada para o clube escolhido.`].slice(-40)};
+    const newTeam = getTeam(offer.targetId);
+    const rosterPack = clubRosterPackage(offer.targetId);
+    const starters = primaryPlayerIds(rosterPack.players);
+    const transferBudget = Math.max(0, Number(newTeam?.budget || state.money || 30));
+    patch = {...patch, clubId:offer.targetId, match:fixture, roster:rosterPack, transfer:ensureTransferLedger({...(state.transfer||{}), budget:Number((transferBudget*0.45).toFixed(1)), wageRoom:Math.max(0.8, Number((transferBudget/40).toFixed(2)))}), ui:{...(state.ui||{}), selectedClub:offer.targetId, standingsCompetition:newTeam?.leagueId || 'brasileirao-a', ...starters}, money:transferBudget, boardTrust:68, fanMood:72, route:'lobby'};
+    patch.career = {...patch.career, completedMatches:[], lastResult:null, matchday:1, activeContract:{clubId:offer.targetId, role:offer.role, signedAt:new Date().toISOString().slice(0,10), remainingMonths:Number(offer.months||24), wageMonthly:Number(offer.wage||0.8), releaseClause:Number(offer.releaseClause || (Number(offer.wage||0.8)*6)).toFixed(1), bonusTarget:offer.objective, objective:offer.objective, status:'Ativo'}, contractHistory:[...((state.career||{}).contractHistory||[]), `Contrato assinado com ${offer.name}: € ${Number(offer.wage||0.8).toFixed(2)}M/mês, ${Number(offer.months||24)} meses.`].slice(-20), managerTimeline:[...((state.career||{}).managerTimeline||[]), {date:new Date().toISOString().slice(0,10), title:'Novo clube', text:`Contrato aceito com ${offer.name}.`}].slice(-24), integrationLog:[...((state.career||{}).integrationLog||[]), `Novo trabalho aceito: ${offer.name}. Elenco, orçamento, calendário e titulares foram sincronizados pela v5.9.6.`].slice(-40)};
   }
   if(accepted && offer.type === 'national'){
     patch.career = {...patch.career, nationalTeamJob:{id:offer.targetId, name:offer.name, country:offer.country, role:offer.role, acceptedAt:new Date().toISOString(), objective:offer.objective, engineVersion:NATIONAL_TEAM_ENGINE_VERSION}, dualCareer:{enabled:true, club:true, nationalTeam:offer.targetId}, internationalCalendar:buildNationalCalendar(Number(state.season||2026), offer.targetId), callUpSelection:safeCallUpPool(defaultCallUpSelection()), integrationLog:[...((state.career||{}).integrationLog||[]), `Carreira dupla ativada: clube + ${offer.name}. Calendário FIFA v4.5.0 sincronizado.`].slice(-40)};
@@ -840,6 +916,30 @@ export function getCareerLoopSnapshot(){
 export function markTutorialSeen(){
   state = normalize({...state, career:{...(state.career||{}), tutorial:{...(state.career?.tutorial||{}), seen:true}}});
   persist();
+}
+export function completeGuidedTutorialStep(stepId){
+  const patch = completeTutorialStepPatch(state, stepId);
+  state = normalize({...state, ...patch});
+  state = normalize({...state, ...awardManagerXpPatch(state, 45, `tutorial: ${stepId}`, {step:stepId})});
+  persist();
+  return state.career?.tutorial;
+}
+
+export function addManagerXp(amount=30, reason='ação do treinador'){
+  state = normalize({...state, ...awardManagerXpPatch(state, amount, reason)});
+  persist();
+  return state.career?.managerProgression;
+}
+export function setManagerSpecialty(specialtyId='tactician'){
+  const patch = setManagerSpecialtyPatch(state, specialtyId);
+  if(Object.keys(patch).length){ state = normalize({...state, ...patch}); persist(); }
+  return state.career?.managerProgression;
+}
+
+export function completeGuidedTutorialForRoute(route){
+  const patch = guidedTutorialAutoPatchForRoute(state, route);
+  if(patch){ state = normalize({...state, ...patch}); persist(); }
+  return state.career?.tutorial;
 }
 
 export function persist(){
