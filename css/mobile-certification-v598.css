@@ -1,0 +1,242 @@
+/* Vale Futebol Manager v5.9.8 — certificação mobile-first e rolagem por toque */
+:root{
+  --vfm-mobile-gutter: 10px;
+  --vfm-mobile-nav-space: 92px;
+  --vfm-mobile-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --vfm-mobile-safe-top: env(safe-area-inset-top, 0px);
+}
+
+/* O documento inteiro é o scroll principal. Evita telas presas em WebView/Safari/Chrome mobile. */
+html.vfm-mobile-v598,
+html.vfm-mobile-v598 body,
+html.vfm-mobile-v598 #app,
+html.vfm-mobile-v598 .app-shell{
+  width:100%!important;
+  height:auto!important;
+  max-height:none!important;
+  min-height:100%!important;
+  overflow-x:hidden!important;
+  overflow-y:visible!important;
+}
+html.vfm-mobile-v598{
+  min-height:100%;
+  overscroll-behavior-y:auto!important;
+  scroll-behavior:smooth;
+  -webkit-text-size-adjust:100%;
+}
+html.vfm-mobile-v598 body{
+  min-height:100dvh!important;
+  overflow-y:scroll!important;
+  overscroll-behavior-y:auto!important;
+  touch-action:pan-y pinch-zoom!important;
+  -webkit-overflow-scrolling:touch;
+  position:static!important;
+}
+html.vfm-mobile-v598 #app,
+html.vfm-mobile-v598 .app-shell{
+  position:relative!important;
+  margin:0!important;
+  padding:0!important;
+  max-width:none!important;
+  touch-action:pan-y pinch-zoom!important;
+}
+html.vfm-mobile-v598 .screen{
+  box-sizing:border-box!important;
+  width:100%!important;
+  height:auto!important;
+  max-height:none!important;
+  min-height:100dvh!important;
+  overflow-x:hidden!important;
+  overflow-y:visible!important;
+  touch-action:pan-y pinch-zoom!important;
+  -webkit-overflow-scrolling:touch;
+  padding-left:max(var(--vfm-mobile-gutter),env(safe-area-inset-left,0px))!important;
+  padding-right:max(var(--vfm-mobile-gutter),env(safe-area-inset-right,0px))!important;
+  padding-top:calc(10px + var(--vfm-mobile-safe-top))!important;
+  padding-bottom:calc(var(--vfm-mobile-nav-space) + 24px + var(--vfm-mobile-safe-bottom))!important;
+}
+html.vfm-mobile-v598 .screen.no-bottom-nav{
+  padding-bottom:calc(28px + var(--vfm-mobile-safe-bottom))!important;
+}
+html.vfm-mobile-v598 .screen > *{
+  max-width:100%;
+}
+html.vfm-mobile-v598 .panel,
+html.vfm-mobile-v598 .card,
+html.vfm-mobile-v598 .premium-topbar,
+html.vfm-mobile-v598 .topbar,
+html.vfm-mobile-v598 .grid,
+html.vfm-mobile-v598 .stack{
+  min-width:0!important;
+}
+html.vfm-mobile-v598 input,
+html.vfm-mobile-v598 select,
+html.vfm-mobile-v598 textarea{
+  font-size:16px!important; /* evita zoom automático no iPhone */
+  max-width:100%!important;
+}
+html.vfm-mobile-v598 button,
+html.vfm-mobile-v598 [role="button"]{
+  min-height:48px!important;
+  touch-action:manipulation!important;
+}
+
+/* Onboarding: tudo participa do scroll vertical, sem sticky que cubra conteúdo. */
+@media (max-width:920px){
+  html.vfm-mobile-v598 .screen-newGame .topbar,
+  html.vfm-mobile-v598 .screen-teamSelect .topbar,
+  html.vfm-mobile-v598 .screen-confirmCareer .topbar,
+  html.vfm-mobile-v598 .screen-newGame .main-btn.giant,
+  html.vfm-mobile-v598 .screen-teamSelect .main-btn.giant,
+  html.vfm-mobile-v598 .screen-confirmCareer .main-btn.giant{
+    position:relative!important;
+    top:auto!important;
+    bottom:auto!important;
+  }
+  html.vfm-mobile-v598 .screen-newGame,
+  html.vfm-mobile-v598 .screen-teamSelect,
+  html.vfm-mobile-v598 .screen-confirmCareer{
+    display:block!important;
+    height:auto!important;
+    min-height:100dvh!important;
+    overflow:visible!important;
+    padding-bottom:calc(34px + var(--vfm-mobile-safe-bottom))!important;
+  }
+  html.vfm-mobile-v598 .screen-newGame .avatar-strip{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:10px!important;
+    overflow:visible!important;
+    scroll-snap-type:none!important;
+    padding-bottom:4px!important;
+  }
+  html.vfm-mobile-v598 .screen-newGame .avatar-card{
+    min-width:0!important;
+    width:100%!important;
+    scroll-snap-align:none!important;
+  }
+  html.vfm-mobile-v598 .screen-teamSelect .club-grid-pro,
+  html.vfm-mobile-v598 .screen-confirmCareer .confirm-grid,
+  html.vfm-mobile-v598 .grid-2,
+  html.vfm-mobile-v598 .desktop-4{
+    grid-template-columns:1fr!important;
+  }
+  html.vfm-mobile-v598 .screen-newGame .main-btn.giant,
+  html.vfm-mobile-v598 .screen-teamSelect .main-btn.giant,
+  html.vfm-mobile-v598 .screen-confirmCareer .main-btn.giant{
+    width:100%!important;
+    margin-top:14px!important;
+  }
+  html.vfm-mobile-v598 .fullscreen-fab-v540{
+    position:fixed!important;
+    right:8px!important;
+    bottom:calc(var(--vfm-mobile-nav-space) + 12px + var(--vfm-mobile-safe-bottom))!important;
+  }
+  html.vfm-mobile-v598 .screen.no-bottom-nav .fullscreen-fab-v540{
+    bottom:calc(10px + var(--vfm-mobile-safe-bottom))!important;
+  }
+  html.vfm-mobile-v598 .bottom-nav{
+    position:fixed!important;
+  }
+  html.vfm-mobile-v598 .table-scroll,
+  html.vfm-mobile-v598 .top-status{
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    touch-action:pan-x!important;
+  }
+}
+
+@media (max-width:420px){
+  html.vfm-mobile-v598 .screen-newGame .avatar-strip{
+    grid-template-columns:1fr 1fr!important;
+    gap:8px!important;
+  }
+  html.vfm-mobile-v598 .panel,
+  html.vfm-mobile-v598 .card{
+    padding:12px!important;
+    border-radius:18px!important;
+  }
+  html.vfm-mobile-v598 h1{font-size:clamp(1.55rem,8vw,2.3rem)!important;}
+  html.vfm-mobile-v598 h2{font-size:clamp(1.15rem,6vw,1.6rem)!important;}
+}
+
+/* Partida: nunca bloqueia completamente o scroll. Portrait vira coluna; landscape pequeno vira layout compacto. */
+html.vfm-mobile-v598 .screen-match{
+  height:auto!important;
+  max-height:none!important;
+  min-height:100dvh!important;
+  overflow-x:hidden!important;
+  overflow-y:visible!important;
+  touch-action:pan-y pinch-zoom!important;
+}
+html.vfm-mobile-v598 .screen-match .match-v570-shell,
+html.vfm-mobile-v598 .screen-match .match-stage-v570,
+html.vfm-mobile-v598 .screen-match .live-commentary-panel{
+  height:auto!important;
+  max-height:none!important;
+  min-height:0!important;
+  overflow:visible!important;
+}
+html.vfm-mobile-v598 .screen-match .match-stage-v570,
+html.vfm-mobile-v598 .screen-match .match-live-grid{
+  grid-template-columns:1fr!important;
+}
+html.vfm-mobile-v598 .screen-match .live-pitch{
+  height:auto!important;
+  min-height:300px!important;
+}
+html.vfm-mobile-v598 .screen-match .commentary{
+  max-height:260px!important;
+  overflow-y:auto!important;
+  -webkit-overflow-scrolling:touch!important;
+  touch-action:pan-y!important;
+}
+
+@media (max-width:920px) and (orientation:landscape){
+  html.vfm-mobile-v598 .screen-match{
+    padding:6px 8px calc(80px + var(--vfm-mobile-safe-bottom))!important;
+  }
+  html.vfm-mobile-v598 .screen-match .match-v570-shell{
+    display:block!important;
+  }
+  html.vfm-mobile-v598 .screen-match .match-stage-v570,
+  html.vfm-mobile-v598 .screen-match .match-live-grid{
+    display:grid!important;
+    grid-template-columns:minmax(0,1.15fr) minmax(220px,.85fr)!important;
+    gap:8px!important;
+    align-items:start!important;
+  }
+  html.vfm-mobile-v598 .screen-match .live-pitch{
+    min-height:230px!important;
+  }
+  html.vfm-mobile-v598 .screen-match .commentary{
+    max-height:230px!important;
+  }
+}
+
+@media (max-width:700px) and (orientation:landscape){
+  html.vfm-mobile-v598 .screen-match .match-stage-v570,
+  html.vfm-mobile-v598 .screen-match .match-live-grid{
+    grid-template-columns:minmax(0,1fr) 210px!important;
+  }
+  html.vfm-mobile-v598 .screen-match .match-board .club-logo{width:42px!important;height:42px!important;}
+  html.vfm-mobile-v598 .screen-match .score{font-size:2rem!important;}
+  html.vfm-mobile-v598 .screen-match .match-control-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+}
+
+@media (max-width:580px) and (orientation:landscape){
+  html.vfm-mobile-v598 .screen-match .match-stage-v570,
+  html.vfm-mobile-v598 .screen-match .match-live-grid{
+    grid-template-columns:1fr!important;
+  }
+  html.vfm-mobile-v598 .screen-match .commentary{max-height:180px!important;}
+}
+
+/* Acessibilidade e redução de peso visual em celulares baixos. */
+@media (max-height:430px) and (orientation:landscape){
+  html.vfm-mobile-v598 .screen-match .orientation-hint-v540{display:none!important;}
+  html.vfm-mobile-v598 .screen-match .match-kpis,
+  html.vfm-mobile-v598 .screen-match .engine-v470-panel{display:none!important;}
+  html.vfm-mobile-v598 .screen-match .live-pitch{min-height:210px!important;}
+}

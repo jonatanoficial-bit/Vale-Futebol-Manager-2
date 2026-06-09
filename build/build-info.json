@@ -1,7 +1,7 @@
 {
-  "version": "v5.9.7",
-  "buildLabel": "Build v5.9.7 | 2026-06-01 | Balanceamento geral",
-  "phase": "Fase 40 — Balanceamento geral de carreira",
+  "version": "v5.9.8",
+  "buildLabel": "Build v5.9.8 | 2026-06-09 | Mobile-first e rolagem certificada",
+  "phase": "Fase 41 — Certificação Mobile, Fullscreen e Scroll",
   "dataPack": "2026.05.20",
-  "status": "balance-general-approved"
+  "status": "mobile-scroll-certified"
 }
