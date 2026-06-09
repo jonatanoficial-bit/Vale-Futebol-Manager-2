@@ -1,5 +1,5 @@
-# Known Issues v5.9.7
+# Limitações conhecidas
 
-Sem bloqueios críticos conhecidos.
-
-Observação: a próxima build deve remover/ocultar painéis técnicos para o jogador comum na Release Candidate pública.
+- Fullscreen e bloqueio de orientação dependem das permissões do navegador.
+- No Safari/iPhone, a melhor experiência fullscreen ocorre ao instalar o PWA na tela inicial.
+- O jogo permanece utilizável em retrato quando fullscreen ou rotação forem recusados.

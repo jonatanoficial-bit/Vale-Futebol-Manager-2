@@ -1,19 +1,11 @@
-Vale Futebol Manager v5.9.7 — Fase 40
-Build: Balanceamento geral
-Data: 2026-06-01
+VALE FUTEBOL MANAGER — BUILD v5.9.8
+Fase 41 — Certificação Mobile, Fullscreen e Scroll
+Data: 09/06/2026
 
-Novos arquivos:
-- js/data/balanceGeneralData.js
-- js/systems/balanceGeneralEngine.js
-- core/safety/balance-general-validator.js
-- css/balance-v597.css
-
-Arquivos alterados:
-- index.html
-- js/app.js
-- js/screens/moduleScreen.js
-- build/build-info.json
-- CHANGELOG.md
-- PROJECT_STATUS.md
-- INTEGRITY_REPORT.md
-- TEST_REPORT.md
+Prioridade: experiência mobile.
+- Scroll vertical por toque liberado no documento inteiro.
+- Onboarding sem alturas fixas, overflow oculto ou botões sticky cobrindo conteúdo.
+- Avatares em grade mobile vertical.
+- Inputs protegidos contra zoom e teclado cobrindo o campo.
+- Partida com fallback portrait e landscape compacto.
+- Fullscreen progressivo, sem bloquear a jogabilidade quando indisponível.

@@ -1,10 +1,19 @@
-# Testes v5.9.7
+# Testes v5.9.8
 
-- node --check JS/core: OK
-- Import balanceGeneralEngine.js: OK
-- validateBalanceGeneralSystem: OK
-- buildBalanceGeneralSnapshot: OK
-- runBalanceStressGate: OK
-- Rota aiBalance renderizando Balanceamento geral: OK
-- CSS balance-v597 carregado no index.html: OK
-- ZIP testado: OK
+Resoluções-alvo auditadas por regras CSS:
+- 360x740
+- 390x844
+- 393x852
+- 640x360
+- 667x375
+- 780x360
+- 844x390
+- 768x1024
+
+Testes estáticos:
+- JS syntax: OK
+- Imports ESM: OK
+- CSS mobile carregado por último: OK
+- Nenhum overflow:hidden obrigatório no onboarding: OK
+- Partida com fallback vertical: OK
+- ZIP: OK
