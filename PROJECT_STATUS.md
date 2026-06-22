@@ -7,3 +7,7 @@ Status: live-world-ready
 Base preservada: v6.1.0 Jornada Inicial Cinematográfica.
 
 Próxima fase sugerida: v6.3.0 — Matchday Premium, narração, tensão e pós-jogo emocional.
+
+
+## Status v6.3.0
+Build atual: Matchday Premium pronta para teste manual em mobile. Próxima fase sugerida: v6.4.0 — IA de elenco e vestiário.

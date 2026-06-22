@@ -1,7 +1,7 @@
 {
-  "version": "v6.2.0",
-  "buildLabel": "Build v6.2.0 | 2026-06-22 | Lobby Vivo e Jornal Esportivo",
-  "phase": "Fase 45 — Lobby vivo, jornal esportivo, bastidores e mundo em movimento",
+  "version": "v6.3.0",
+  "buildLabel": "Build v6.3.0 | 2026-06-22 | Matchday Premium",
+  "phase": "Fase 46 — Matchday premium, tensão pré-jogo e pós-jogo emocional",
   "dataPack": "2026.05.20",
-  "status": "live-world-ready"
+  "status": "matchday-premium-ready"
 }

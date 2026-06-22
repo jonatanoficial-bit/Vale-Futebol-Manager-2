@@ -5,6 +5,7 @@ import { money } from '../utils/dom.js';
 
 export const PRIMARY_ACTIONS_V550 = [
   ['match','Jogar partida','⚽','Entrar no próximo compromisso oficial'],
+  ['matchdayPremium','Matchday','🏟️','Pré-jogo, tensão, banco e pós-jogo premium'],
   ['formation','Ajustar tática','🧩','Escalação, plano de jogo e banco'],
   ['squad','Ver elenco','👥','Jogadores, moral, contratos e forma'],
   ['messages','Abrir e-mail','✉️','Diretoria, imprensa e empresários'],
@@ -21,7 +22,8 @@ export const MANAGER_MENU_GROUPS_V550 = [
     ['championship','Campeonato','🏆','Competições nacionais e agenda anual','Essencial'],
     ['standings','Classificação','📊','Tabela, estatísticas e objetivos','Dados'],
     ['calendar','Agenda','📅','Calendário completo, treinos e jogos','Temporada'],
-    ['match','Partida','⚽','Próximo jogo oficial','Jogar']
+    ['match','Partida','⚽','Próximo jogo oficial','Jogar'],
+    ['matchdayPremium','Matchday Premium','🏟️','Central do dia de jogo, drama e transmissão','v6.3']
   ]],
   ['Elenco e campo', [
     ['squad','Elenco','👥','Jogadores, forma, moral e contratos','Clube'],
@@ -129,7 +131,7 @@ export function lobby(state){
       </section>
 
       <section class="panel coach-feed-v550">
-        <div class="row space"><div><span class="tag">Resumo do dia</span><h3>Central do treinador</h3></div><div class="row"><button class="secondary-btn mini" data-route="liveWorld">Jornal</button><button class="secondary-btn mini" data-route="messages">Ver e-mails</button></div></div>
+        <div class="row space"><div><span class="tag">Resumo do dia</span><h3>Central do treinador</h3></div><div class="row"><button class="secondary-btn mini" data-route="matchdayPremium">Matchday</button><button class="secondary-btn mini" data-route="liveWorld">Jornal</button><button class="secondary-btn mini" data-route="messages">Ver e-mails</button></div></div>
         <div class="coach-feed-grid-v550">
           <div class="news-item"><strong>Diretoria</strong><span>Objetivo ativo: ${t.board}</span></div>
           <div class="news-item"><strong>Jogo</strong><span>${nextTitle}</span></div>

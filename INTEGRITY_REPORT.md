@@ -26,3 +26,7 @@ Build completa baseada na v6.1.0.
 - BUILD_MANIFEST.txt
 
 Nenhuma marca de conflito detectada.
+
+
+## Integridade v6.3.0
+A fase adiciona apenas módulos incrementais e integrações de rota. Não remove dados, assets, elencos, save, match engine, beta pública, jornada inicial ou jornal esportivo.

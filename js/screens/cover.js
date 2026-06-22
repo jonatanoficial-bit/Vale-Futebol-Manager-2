@@ -17,6 +17,7 @@ export function cover(){
         <div class="menu-actions main-menu-actions">
           <button class="main-btn giant" data-route="mainMenu">Entrar no jogo</button>
           <button class="secondary-btn" data-route="careerIntro">Jornada inicial</button>
+          <button class="secondary-btn" data-route="matchdayPremium">Matchday premium</button>
           <button class="secondary-btn" data-route="newGame">Iniciar nova carreira</button>
         </div>
       </div>

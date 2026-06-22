@@ -5,3 +5,6 @@ Date: 2026-06-22
 Status: live-world-ready
 Base: v6.1.0 Fase 44
 New route: liveWorld
+
+
+V6.3.0 ADDED: js/data/matchdayPremiumData.js; js/systems/matchdayPremiumEngine.js; core/safety/matchday-premium-validator.js; css/matchday-premium-v630.css; MATCHDAY_PREMIUM_GUIDE.md; MATCHDAY_QA_CHECKLIST.md
