@@ -47,6 +47,7 @@ export const MANAGER_MENU_GROUPS_V550 = [
     ['club','Clube','🛡️','Resumo institucional, estádio e torcida','Perfil']
   ]],
   ['Sistema e desenvolvimento', [
+    ['releaseCandidate','Beta Pública','🚀','Checklist público, mobile real e fluxo de teste','v6.0'],
     ['saveCenter','Save Profissional','💾','Backups, exportar/importar e recuperação','v5.1'],
     ['polishCenter','UI AAA','✨','Visual, responsividade e performance','v5.0'],
     ['data2026','Dados 2026','🗃️','Divisões, elencos e caminhos de fotos','Dados'],

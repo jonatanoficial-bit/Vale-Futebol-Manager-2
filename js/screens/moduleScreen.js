@@ -60,6 +60,7 @@ import { buildGuidedTutorialSnapshot } from '../systems/guidedTutorialEngine.js'
 import { buildManagerProgressionSnapshot } from '../systems/managerProgressionEngine.js';
 import { buildManagerJobMarketSnapshot } from '../systems/managerJobMarketEngine.js';
 import { renderBalanceGeneralCenter } from '../systems/balanceGeneralEngine.js';
+import { renderReleaseCandidateCenter } from '../systems/releaseCandidateEngine.js';
 export function moduleScreen(route,title,subtitle,state){
   const extra = content(route, state);
   return screenWrap(route, `${topbar(title,subtitle,'lobby')}${clubHeader(state)}${extra}`, true);
@@ -123,6 +124,7 @@ function content(route,state={}){
   if(route==='assetChecklist') return assetChecklistScreen(state);
   if(route==='saveCenter') return saveCenterScreen(state);
   if(route==='aiBalance') return renderBalanceGeneralCenter(state);
+  if(route==='releaseCandidate') return renderReleaseCandidateCenter(state);
   if(route==='formation') return formationScreen(state);
   if(route==='instructions') return instructionsScreen(state);
   if(route==='standings') {

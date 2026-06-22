@@ -1,0 +1,10 @@
+.release-candidate-v600 .rc-hero-v600{border-color:rgba(255,211,106,.28);box-shadow:0 22px 70px rgba(0,0,0,.28)}
+.release-candidate-v600 .hero-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+.release-candidate-v600 .candidate-card.selected{border-color:rgba(255,211,106,.50);background:linear-gradient(180deg,rgba(255,211,106,.12),rgba(255,255,255,.045))}
+.release-candidate-v600 .rc-flow-v600{display:grid;gap:10px;margin:14px 0 0;padding:0;list-style:none}
+.release-candidate-v600 .rc-flow-v600 li{padding:12px 14px;border-radius:16px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09);line-height:1.38}
+.release-candidate-v600 .rc-flow-v600 strong{color:#ffd36a;margin-right:6px}
+.release-candidate-v600 .department-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px;margin:12px 0}
+.release-candidate-v600 .department-kpi{padding:14px;border-radius:18px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09)}
+.release-candidate-v600 .department-kpi span{display:block;opacity:.72;font-size:.82rem;margin-bottom:6px}.release-candidate-v600 .department-kpi strong{font-size:1.15rem;word-break:break-word}
+@media(max-width:760px){.release-candidate-v600{padding-bottom:calc(96px + env(safe-area-inset-bottom))}.release-candidate-v600 .hero-actions{justify-content:flex-start}.release-candidate-v600 .candidate-side{align-items:flex-start}.release-candidate-v600 .rc-flow-v600 li{font-size:.94rem}}

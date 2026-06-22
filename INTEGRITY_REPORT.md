@@ -1,18 +1,11 @@
-# Relatório de Integridade — v5.9.9
+# Integrity Report — v6.0.0
 
-Status: OK
+Base utilizada: v5.9.9 Mobile UX Final.
 
-Validações principais:
+Novos módulos integrados:
+- js/data/releaseCandidateData.js
+- js/systems/releaseCandidateEngine.js
+- core/safety/release-candidate-validator.js
+- css/release-candidate-v600.css
 
-- Sintaxe JS/core: OK
-- Import `mobileUxFinalEngine.js`: OK
-- `validateMobileUxFinalV599`: OK
-- Scroll mestre do documento: OK
-- Onboarding sem barra inferior: OK
-- Botões de continuidade no fluxo: OK
-- Inputs com 16px para evitar zoom no iPhone: OK
-- Partida em retrato: OK
-- Partida em landscape compacto: OK
-- ZIP íntegro: OK
-
-Quality Gate: mobile-ux-certified
+Resultado: sem conflitos de merge nos arquivos principais. A busca por marcadores de conflito não retornou ocorrências reais no código.

@@ -1,15 +1,7 @@
-# Project Status — v5.9.9
+# Project Status
 
-O projeto entrou em auditoria mobile final antes da Beta Pública.
+Versão atual: v6.0.0.
+Fase: 43 — Beta Pública controlada.
+Status: public-beta-ready.
 
-Prioridade desta build: celular acima de PC.
-
-Status atual:
-
-- Carreira: avançada
-- Data Pack 2026.05.20: travado
-- Mercado de treinadores: integrado
-- XP e evolução: integrado
-- Coletiva: integrada
-- Mobile scroll: certificado por camada v5.9.9
-- Próxima fase recomendada: v6.0.0 Beta Pública ou v6.1.0 Jornada inicial cinematográfica, dependendo do teste em celular real.
+A build está preparada para teste real com 5 a 10 jogadores no celular. A próxima fase recomendada é v6.1.0 — Jornada inicial cinematográfica.

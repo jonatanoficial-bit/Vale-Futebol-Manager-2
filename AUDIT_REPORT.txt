@@ -1,13 +1,6 @@
-AUDITORIA v5.9.9 — MOBILE REAL E UX FINAL
+AUDIT REPORT — v6.0.0
 
-Arquivos adicionados:
-css/mobile-ux-final-v599.css
-js/systems/mobileUxFinalEngine.js
-core/safety/mobile-ux-final-validator.js
-
-Testes:
-node --check JS/core: OK
-Validador mobile UX final: OK
-ZIP: OK
-
-Resultado: APROVADO
+Resultado: build preparada para teste público controlado.
+Prioridade: mobile-first.
+Gate RC: integrado.
+Próxima fase: v6.1.0 — Jornada inicial cinematográfica.

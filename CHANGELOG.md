@@ -1,13 +1,15 @@
-# Vale Futebol Manager — v5.9.9
+# Changelog
 
-## Fase 42 — Auditoria mobile real e UX final
+## v6.0.0 — Fase 43 — Beta Pública Mobile-First
+- Adicionada central Beta Pública.
+- Adicionado checklist Release Candidate.
+- Adicionada matriz de testes mobile/tablet/desktop.
+- Adicionado roteiro de primeira jornada para testadores.
+- Integrado validador `release-candidate-validator`.
+- Registrada rota `releaseCandidate`.
+- Preservada a correção mobile v5.9.9 e todos os sistemas anteriores.
 
-- Corrigida prioridade mobile em todo o shell do app.
-- Reforçada rolagem vertical por toque no `html`, `body`, `#app`, `.app-shell` e telas principais.
-- Onboarding agora é sempre fluxo vertical no celular.
-- Botões de continuar ficam no fluxo da página, não fixos/cortados.
-- Avatar, nome, país, modo, escolha de clube e confirmação de carreira foram protegidos contra corte em telas pequenas.
-- Partida agora é jogável em retrato, horizontal compacto e horizontal grande.
-- Fullscreen permanece como melhoria progressiva: se o navegador negar, a rolagem continua funcionando.
-- Criado validador `mobile-ux-final-validator.js`.
-- Criado motor `mobileUxFinalEngine.js` com MutationObserver para reaplicar segurança de scroll após troca de telas.
+## v5.9.9 — Fase 42 — Auditoria Mobile Real e UX Final
+- Rolagem por toque reforçada.
+- Onboarding corrigido para celular.
+- Partida jogável em retrato e horizontal compacto.
