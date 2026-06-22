@@ -21,6 +21,7 @@ export function mainMenu(state){
           <button class="main-btn giant" data-route="careerIntro">🎬 Jornada inicial</button>
           <button class="secondary-btn giant" data-route="newGame">⚽ Novo jogo direto</button>
           <button class="secondary-btn giant ${saveReady?'':'disabled-soft'}" data-route="${saveReady?'lobby':'newGame'}">📁 Continuar ${saveReady?'':'(novo save)'}</button>
+          <button class="secondary-btn" data-route="liveWorld">📰 Jornal esportivo</button>
           <button class="secondary-btn" data-route="settings">⚙️ Configurações</button>
         </div>
       </div>

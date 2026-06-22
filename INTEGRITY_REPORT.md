@@ -1,31 +1,28 @@
-# Integrity Report — v6.0.0
+# Integrity Report — v6.2.0
 
-Base utilizada: v5.9.9 Mobile UX Final.
+Build completa baseada na v6.1.0.
 
-Novos módulos integrados:
-- js/data/releaseCandidateData.js
-- js/systems/releaseCandidateEngine.js
-- core/safety/release-candidate-validator.js
-- css/release-candidate-v600.css
+## Arquivos novos
+- js/data/liveWorldData.js
+- js/systems/liveWorldEngine.js
+- core/safety/live-world-validator.js
+- css/live-world-v620.css
+- LIVE_WORLD_JOURNAL_GUIDE.md
+- SPORTS_PRESS_CENTER.md
 
-Resultado: sem conflitos de merge nos arquivos principais. A busca por marcadores de conflito não retornou ocorrências reais no código.
-## Integridade v6.1.0
+## Arquivos alterados
+- index.html
+- js/app.js
+- js/screens/moduleScreen.js
+- js/screens/lobby.js
+- js/screens/mainMenu.js
+- js/screens/cover.js
+- build/build-info.json
+- CHANGELOG.md
+- PROJECT_STATUS.md
+- TEST_REPORT.md
+- KNOWN_ISSUES.md
+- AUDIT_REPORT.txt
+- BUILD_MANIFEST.txt
 
-Arquivos novos da fase:
-
-- `js/data/introCinematicData.js`
-- `js/systems/introCinematicEngine.js`
-- `core/safety/intro-cinematic-validator.js`
-- `css/intro-cinematic-v610.css`
-- `CINEMATIC_JOURNEY_GUIDE.md`
-- `FIRST_SESSION_SCRIPT.md`
-
-Arquivos alterados com integração segura:
-
-- `index.html`
-- `js/app.js`
-- `js/screens/moduleScreen.js`
-- `js/screens/cover.js`
-- `js/screens/mainMenu.js`
-- `js/screens/lobby.js`
-- `build/build-info.json`
+Nenhuma marca de conflito detectada.

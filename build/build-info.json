@@ -1,7 +1,7 @@
 {
-  "version": "v6.1.0",
-  "buildLabel": "Build v6.1.0 | 2026-06-22 | Jornada Inicial Cinematográfica",
-  "phase": "Fase 44 — Jornada inicial cinematográfica, retenção e onboarding emocional",
+  "version": "v6.2.0",
+  "buildLabel": "Build v6.2.0 | 2026-06-22 | Lobby Vivo e Jornal Esportivo",
+  "phase": "Fase 45 — Lobby vivo, jornal esportivo, bastidores e mundo em movimento",
   "dataPack": "2026.05.20",
-  "status": "cinematic-beta-ready"
+  "status": "live-world-ready"
 }

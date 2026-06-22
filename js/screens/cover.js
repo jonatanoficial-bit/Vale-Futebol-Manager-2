@@ -12,7 +12,7 @@ export function cover(){
         <h1>Construa sua dinastia no futebol.</h1>
         <p class="subtitle wide">Gestão completa de clube, carreira esportiva, tática, mercado, calendário, staff, patrocínio, seleção nacional e partidas simuladas com estatísticas ao vivo.</p>
         <div class="title-feature-row">
-          <span>⚽ Carreira</span><span>📊 Dados ao vivo</span><span>🏆 Competições</span><span>💼 Gestão realista</span>
+          <span>⚽ Carreira</span><span>📰 Jornal</span><span>📊 Dados ao vivo</span><span>🏆 Competições</span><span>💼 Gestão realista</span>
         </div>
         <div class="menu-actions main-menu-actions">
           <button class="main-btn giant" data-route="mainMenu">Entrar no jogo</button>

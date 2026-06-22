@@ -10,6 +10,7 @@ export const PRIMARY_ACTIONS_V550 = [
   ['messages','Abrir e-mail','✉️','Diretoria, imprensa e empresários'],
   ['managerMenu','Menu completo','☰','Todos os módulos avançados'],
   ['careerIntro','Jornada inicial','🎬','Arco cinematográfico, onboarding e primeiro jogo'],
+  ['liveWorld','Jornal esportivo','📰','Manchetes, bastidores e pulso do clube'],
   ['careerTutorial','Tutorial e missões','🎓','Entenda o modo carreira e acompanhe metas'],
   ['managerProgression','Evolução','⭐','XP, nível e licença do treinador']
 ];
@@ -39,6 +40,7 @@ export const MANAGER_MENU_GROUPS_V550 = [
   ]],
   ['Carreira e mundo', [
     ['messages','E-mail','✉️','Diretoria, imprensa, empresários e seleção','Carreira'],
+    ['liveWorld','Lobby Vivo','📰','Jornal esportivo, bastidores e clima do dia','v6.2'],
     ['careerTutorial','Tutorial e missões','🎓','Funções, metas e progressão infinita','Novo'],
     ['managerProgression','Evolução do treinador','⭐','XP, níveis, licenças e especialidades','v5.9.5'],
     ['careerOffers','Mercado de treinadores','📨','Propostas, contratos e sondagens reais','v5.9.6'],
@@ -127,7 +129,7 @@ export function lobby(state){
       </section>
 
       <section class="panel coach-feed-v550">
-        <div class="row space"><div><span class="tag">Resumo do dia</span><h3>Central do treinador</h3></div><button class="secondary-btn mini" data-route="messages">Ver e-mails</button></div>
+        <div class="row space"><div><span class="tag">Resumo do dia</span><h3>Central do treinador</h3></div><div class="row"><button class="secondary-btn mini" data-route="liveWorld">Jornal</button><button class="secondary-btn mini" data-route="messages">Ver e-mails</button></div></div>
         <div class="coach-feed-grid-v550">
           <div class="news-item"><strong>Diretoria</strong><span>Objetivo ativo: ${t.board}</span></div>
           <div class="news-item"><strong>Jogo</strong><span>${nextTitle}</span></div>
