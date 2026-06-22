@@ -1,0 +1,324 @@
+/* Vale Futebol Manager v5.9.9 — Auditoria mobile real e UX final
+   Prioridade absoluta: celular. O PC herda o layout quando houver espaço. */
+:root{
+  --vfm-bottom-nav-h: 82px;
+  --vfm-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --vfm-safe-top: env(safe-area-inset-top, 0px);
+  --vfm-safe-left: env(safe-area-inset-left, 0px);
+  --vfm-safe-right: env(safe-area-inset-right, 0px);
+  --vfm-mobile-pad: clamp(10px, 3vw, 16px);
+}
+
+/* Scroll mestre no documento inteiro. Nenhuma tela principal pode prender a rolagem. */
+html.vfm-mobile-ux-final,
+html.vfm-mobile-ux-final body{
+  width:100%!important;
+  min-width:0!important;
+  height:auto!important;
+  min-height:100%!important;
+  max-height:none!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  overscroll-behavior-y:auto!important;
+  -webkit-overflow-scrolling:touch!important;
+  touch-action:pan-y pinch-zoom!important;
+  position:static!important;
+}
+html.vfm-mobile-ux-final body{
+  min-height:100dvh!important;
+  padding:0!important;
+  margin:0!important;
+}
+html.vfm-mobile-ux-final #app,
+html.vfm-mobile-ux-final .app-shell{
+  width:100%!important;
+  min-width:0!important;
+  height:auto!important;
+  min-height:100dvh!important;
+  max-height:none!important;
+  overflow:visible!important;
+  position:relative!important;
+  touch-action:pan-y pinch-zoom!important;
+  -webkit-overflow-scrolling:touch!important;
+}
+html.vfm-mobile-ux-final .screen,
+html.vfm-mobile-ux-final [class^="screen-"],
+html.vfm-mobile-ux-final [class*=" screen-"]{
+  width:100%!important;
+  min-width:0!important;
+  height:auto!important;
+  min-height:100dvh!important;
+  max-height:none!important;
+  overflow-x:hidden!important;
+  overflow-y:visible!important;
+  touch-action:pan-y pinch-zoom!important;
+  -webkit-overflow-scrolling:touch!important;
+  box-sizing:border-box!important;
+  padding-left:max(var(--vfm-mobile-pad), var(--vfm-safe-left))!important;
+  padding-right:max(var(--vfm-mobile-pad), var(--vfm-safe-right))!important;
+  padding-top:calc(var(--vfm-mobile-pad) + var(--vfm-safe-top))!important;
+  padding-bottom:calc(var(--vfm-bottom-nav-h) + var(--vfm-safe-bottom) + 26px)!important;
+}
+html.vfm-mobile-ux-final .screen.no-bottom-nav,
+html.vfm-mobile-ux-final .screen-newGame,
+html.vfm-mobile-ux-final .screen-teamSelect,
+html.vfm-mobile-ux-final .screen-confirmCareer,
+html.vfm-mobile-ux-final .screen-cover,
+html.vfm-mobile-ux-final .screen-mainMenu{
+  padding-bottom:calc(32px + var(--vfm-safe-bottom))!important;
+}
+
+/* Qualquer wrapper antigo que tente virar app fixo volta a rolar. */
+html.vfm-mobile-ux-final .app-frame,
+html.vfm-mobile-ux-final .app-content,
+html.vfm-mobile-ux-final .content,
+html.vfm-mobile-ux-final .route,
+html.vfm-mobile-ux-final main,
+html.vfm-mobile-ux-final section,
+html.vfm-mobile-ux-final .stack,
+html.vfm-mobile-ux-final .career-create,
+html.vfm-mobile-ux-final .team-select-screen,
+html.vfm-mobile-ux-final .confirm-career-screen{
+  min-width:0!important;
+  max-width:100%!important;
+  height:auto!important;
+  max-height:none!important;
+  overflow:visible!important;
+}
+html.vfm-mobile-ux-final .panel,
+html.vfm-mobile-ux-final .card,
+html.vfm-mobile-ux-final .glass-card,
+html.vfm-mobile-ux-final .selected-club-hero,
+html.vfm-mobile-ux-final .create-hero,
+html.vfm-mobile-ux-final .manager-preview-card{
+  min-width:0!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+}
+
+/* Onboarding mobile-first: uma coluna, botões sempre no fluxo, nada fixo cortando tela. */
+@media (max-width: 980px){
+  html.vfm-mobile-ux-final .screen-newGame,
+  html.vfm-mobile-ux-final .screen-teamSelect,
+  html.vfm-mobile-ux-final .screen-confirmCareer{
+    display:block!important;
+  }
+  html.vfm-mobile-ux-final .screen-newGame .topbar,
+  html.vfm-mobile-ux-final .screen-teamSelect .topbar,
+  html.vfm-mobile-ux-final .screen-confirmCareer .topbar,
+  html.vfm-mobile-ux-final .screen-newGame .premium-topbar,
+  html.vfm-mobile-ux-final .screen-teamSelect .premium-topbar,
+  html.vfm-mobile-ux-final .screen-confirmCareer .premium-topbar,
+  html.vfm-mobile-ux-final .screen-newGame .main-btn.giant,
+  html.vfm-mobile-ux-final .screen-teamSelect .main-btn.giant,
+  html.vfm-mobile-ux-final .screen-confirmCareer .main-btn.giant{
+    position:relative!important;
+    top:auto!important;
+    bottom:auto!important;
+    left:auto!important;
+    right:auto!important;
+    transform:none!important;
+    z-index:auto!important;
+  }
+  html.vfm-mobile-ux-final .create-hero,
+  html.vfm-mobile-ux-final .selected-club-hero,
+  html.vfm-mobile-ux-final .confirm-grid,
+  html.vfm-mobile-ux-final .team-filters,
+  html.vfm-mobile-ux-final .mode-grid,
+  html.vfm-mobile-ux-final .grid,
+  html.vfm-mobile-ux-final .grid-2,
+  html.vfm-mobile-ux-final .grid-3,
+  html.vfm-mobile-ux-final .desktop-4{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:12px!important;
+  }
+  html.vfm-mobile-ux-final .avatar-strip{
+    display:grid!important;
+    grid-template-columns:repeat(2, minmax(0, 1fr))!important;
+    gap:10px!important;
+    width:100%!important;
+    overflow:visible!important;
+    scroll-snap-type:none!important;
+    padding:0!important;
+  }
+  html.vfm-mobile-ux-final .avatar-card,
+  html.vfm-mobile-ux-final .club-card,
+  html.vfm-mobile-ux-final .mode-card{
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    scroll-snap-align:none!important;
+  }
+  html.vfm-mobile-ux-final .main-btn.giant{
+    width:100%!important;
+    min-height:54px!important;
+    margin:14px 0 0!important;
+    white-space:normal!important;
+  }
+  html.vfm-mobile-ux-final .selected-club-stats{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:10px!important;
+  }
+  html.vfm-mobile-ux-final .club-confirm.big-club-card,
+  html.vfm-mobile-ux-final .manager-preview-card{
+    display:grid!important;
+    grid-template-columns:auto 1fr!important;
+    align-items:center!important;
+    gap:12px!important;
+  }
+}
+@media (max-width: 380px){
+  html.vfm-mobile-ux-final .avatar-strip{grid-template-columns:1fr!important;}
+  html.vfm-mobile-ux-final .club-confirm.big-club-card,
+  html.vfm-mobile-ux-final .manager-preview-card{grid-template-columns:1fr!important;text-align:center!important;}
+}
+
+/* Inputs e seletores seguros no iPhone/Android. */
+html.vfm-mobile-ux-final input,
+html.vfm-mobile-ux-final select,
+html.vfm-mobile-ux-final textarea{
+  font-size:16px!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-height:50px!important;
+  box-sizing:border-box!important;
+}
+html.vfm-mobile-ux-final button,
+html.vfm-mobile-ux-final .btn,
+html.vfm-mobile-ux-final .main-btn,
+html.vfm-mobile-ux-final [role="button"]{
+  min-height:48px!important;
+  touch-action:manipulation!important;
+}
+
+/* Navegação: no mobile fica fixa, porém nunca em telas de criação. */
+@media (max-width: 980px){
+  html.vfm-mobile-ux-final .bottom-nav{
+    position:fixed!important;
+    left:max(8px, var(--vfm-safe-left))!important;
+    right:max(8px, var(--vfm-safe-right))!important;
+    bottom:calc(8px + var(--vfm-safe-bottom))!important;
+    width:auto!important;
+    max-width:none!important;
+    z-index:40!important;
+  }
+  html.vfm-mobile-ux-final .screen-newGame .bottom-nav,
+  html.vfm-mobile-ux-final .screen-teamSelect .bottom-nav,
+  html.vfm-mobile-ux-final .screen-confirmCareer .bottom-nav,
+  html.vfm-mobile-ux-final .screen-cover .bottom-nav,
+  html.vfm-mobile-ux-final .screen-mainMenu .bottom-nav{
+    display:none!important;
+  }
+  html.vfm-mobile-ux-final .fullscreen-fab-v540{
+    right:max(8px, var(--vfm-safe-right))!important;
+    bottom:calc(94px + var(--vfm-safe-bottom))!important;
+    z-index:50!important;
+    opacity:.88;
+  }
+  html.vfm-mobile-ux-final .screen-newGame .fullscreen-fab-v540,
+  html.vfm-mobile-ux-final .screen-teamSelect .fullscreen-fab-v540,
+  html.vfm-mobile-ux-final .screen-confirmCareer .fullscreen-fab-v540{
+    bottom:calc(10px + var(--vfm-safe-bottom))!important;
+  }
+}
+
+/* Tabelas e listas grandes: rolagem horizontal interna, página continua rolando verticalmente. */
+html.vfm-mobile-ux-final .table-scroll,
+html.vfm-mobile-ux-final .standings-table-wrap,
+html.vfm-mobile-ux-final .top-status,
+html.vfm-mobile-ux-final .calendar-scroll,
+html.vfm-mobile-ux-final .roster-table-wrap{
+  max-width:100%!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  -webkit-overflow-scrolling:touch!important;
+  touch-action:pan-x pan-y!important;
+}
+
+/* Partida: celular retrato é totalmente jogável. Horizontal é melhoria, não obrigação. */
+html.vfm-mobile-ux-final .screen-match{
+  height:auto!important;
+  min-height:100dvh!important;
+  max-height:none!important;
+  overflow-x:hidden!important;
+  overflow-y:visible!important;
+  padding-bottom:calc(var(--vfm-bottom-nav-h) + var(--vfm-safe-bottom) + 18px)!important;
+}
+html.vfm-mobile-ux-final .screen-match .match-v570-shell,
+html.vfm-mobile-ux-final .screen-match .match-stage-v570,
+html.vfm-mobile-ux-final .screen-match .match-live-grid,
+html.vfm-mobile-ux-final .screen-match .live-commentary-panel,
+html.vfm-mobile-ux-final .screen-match .match-board,
+html.vfm-mobile-ux-final .screen-match .match-control-dock{
+  width:100%!important;
+  min-width:0!important;
+  height:auto!important;
+  max-height:none!important;
+  overflow:visible!important;
+  box-sizing:border-box!important;
+}
+html.vfm-mobile-ux-final .screen-match .match-stage-v570,
+html.vfm-mobile-ux-final .screen-match .match-live-grid{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:10px!important;
+}
+html.vfm-mobile-ux-final .screen-match .live-pitch{
+  width:100%!important;
+  min-height:260px!important;
+  height:clamp(260px, 50vh, 420px)!important;
+  max-height:none!important;
+}
+html.vfm-mobile-ux-final .screen-match .commentary{
+  max-height:260px!important;
+  overflow-y:auto!important;
+  -webkit-overflow-scrolling:touch!important;
+  touch-action:pan-y!important;
+}
+html.vfm-mobile-ux-final .screen-match .match-control-grid{
+  display:grid!important;
+  grid-template-columns:repeat(2, minmax(0, 1fr))!important;
+  gap:8px!important;
+}
+
+@media (max-width: 920px) and (orientation:landscape){
+  html.vfm-mobile-ux-final .screen-match{
+    min-height:100dvh!important;
+    padding:6px max(8px, var(--vfm-safe-right)) calc(18px + var(--vfm-safe-bottom)) max(8px, var(--vfm-safe-left))!important;
+  }
+  html.vfm-mobile-ux-final .screen-match .bottom-nav{display:none!important;}
+  html.vfm-mobile-ux-final .screen-match .fullscreen-fab-v540{display:none!important;}
+  html.vfm-mobile-ux-final .screen-match .match-stage-v570,
+  html.vfm-mobile-ux-final .screen-match .match-live-grid{
+    grid-template-columns:minmax(0, 1fr) minmax(190px, .72fr)!important;
+    gap:8px!important;
+  }
+  html.vfm-mobile-ux-final .screen-match .live-pitch{
+    min-height:205px!important;
+    height:calc(100dvh - 120px)!important;
+  }
+  html.vfm-mobile-ux-final .screen-match .commentary{max-height:calc(100dvh - 170px)!important;}
+}
+@media (max-width: 680px) and (orientation:landscape){
+  html.vfm-mobile-ux-final .screen-match .match-stage-v570,
+  html.vfm-mobile-ux-final .screen-match .match-live-grid{grid-template-columns:1fr!important;}
+  html.vfm-mobile-ux-final .screen-match .live-pitch{height:220px!important;}
+  html.vfm-mobile-ux-final .screen-match .commentary{max-height:170px!important;}
+}
+@media (max-height: 430px) and (orientation:landscape){
+  html.vfm-mobile-ux-final .screen-match .match-kpis,
+  html.vfm-mobile-ux-final .screen-match .engine-v470-panel,
+  html.vfm-mobile-ux-final .screen-match .orientation-hint-v540{display:none!important;}
+}
+
+/* Tipografia reduzida e cards menos altos em telas pequenas. */
+@media (max-width: 430px){
+  html.vfm-mobile-ux-final h1{font-size:clamp(1.42rem, 7vw, 2rem)!important;line-height:1.08!important;}
+  html.vfm-mobile-ux-final h2{font-size:clamp(1.12rem, 5.8vw, 1.5rem)!important;line-height:1.15!important;}
+  html.vfm-mobile-ux-final .title{font-size:clamp(1.45rem, 7vw, 2.05rem)!important;}
+  html.vfm-mobile-ux-final .subtitle{font-size:.92rem!important;}
+  html.vfm-mobile-ux-final .panel,
+  html.vfm-mobile-ux-final .card{padding:12px!important;border-radius:18px!important;}
+}

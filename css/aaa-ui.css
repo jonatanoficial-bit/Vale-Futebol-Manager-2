@@ -1,0 +1,187 @@
+/* Vale Futebol Manager - UI AAA v5.0.0
+   Fase 12: visual comercial mobile/desktop, responsividade e acabamento premium. */
+:root{
+  --aaa-bg:#02050a;
+  --aaa-panel:rgba(5,11,18,.74);
+  --aaa-panel-strong:rgba(7,13,21,.88);
+  --aaa-line:rgba(255,218,108,.18);
+  --aaa-line-strong:rgba(255,218,108,.34);
+  --aaa-gold:#ffd76a;
+  --aaa-blue:#7dc7ff;
+  --aaa-green:#89ffb8;
+  --aaa-red:#ff8585;
+  --aaa-radius:24px;
+  --aaa-radius-sm:16px;
+  --aaa-blur:18px;
+  --aaa-shadow:0 24px 70px rgba(0,0,0,.48), inset 0 1px 0 rgba(255,255,255,.075);
+  --aaa-soft:0 12px 36px rgba(0,0,0,.34);
+  --aaa-topbar-h:66px;
+  --aaa-nav-h:74px;
+}
+html.vfm-aaa-v500, html.vfm-aaa-v500 body{background:var(--aaa-bg); color:var(--text,#f4f4f4);}
+html.vfm-aaa-v500 body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background:radial-gradient(circle at 12% 8%,rgba(255,216,106,.13),transparent 28%),radial-gradient(circle at 88% 18%,rgba(125,199,255,.09),transparent 30%),linear-gradient(180deg,#03070d,#020409 58%,#010203);}
+html.vfm-aaa-v500 .app-shell{min-height:100svh;isolation:isolate;}
+html.vfm-aaa-v500 .screen{position:relative;min-height:100svh;padding:clamp(12px,2vw,24px);padding-bottom:calc(var(--aaa-nav-h) + 28px + env(safe-area-inset-bottom));background-attachment:fixed;}
+html.vfm-aaa-v500 .screen:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.62));z-index:0;pointer-events:none;}
+html.vfm-aaa-v500 .screen:after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(255,216,106,.08),transparent 28%),linear-gradient(90deg,rgba(0,0,0,.14),transparent 28%,transparent 72%,rgba(0,0,0,.14));z-index:0;pointer-events:none;}
+html.vfm-aaa-v500 .screen>*{position:relative;z-index:1;}
+html.vfm-aaa-v500 .panel,
+html.vfm-aaa-v500 .card,
+html.vfm-aaa-v500 .competition-card,
+html.vfm-aaa-v500 .fixture-row,
+html.vfm-aaa-v500 .timeline-item,
+html.vfm-aaa-v500 .calendar-day,
+html.vfm-aaa-v500 .transfer-card,
+html.vfm-aaa-v500 .career-offer-card{
+  background:linear-gradient(145deg,rgba(8,15,24,.78),rgba(4,8,14,.72))!important;
+  border:1px solid var(--aaa-line)!important;
+  border-radius:var(--aaa-radius)!important;
+  box-shadow:var(--aaa-shadow)!important;
+  backdrop-filter:blur(var(--aaa-blur)) saturate(1.18)!important;
+  -webkit-backdrop-filter:blur(var(--aaa-blur)) saturate(1.18)!important;
+}
+html.vfm-aaa-v500 .card,
+html.vfm-aaa-v500 .fixture-row,
+html.vfm-aaa-v500 .timeline-item{border-radius:var(--aaa-radius-sm)!important;}
+html.vfm-aaa-v500 .panel:hover,
+html.vfm-aaa-v500 .card:hover,
+html.vfm-aaa-v500 .premium-tile:hover{border-color:var(--aaa-line-strong)!important;transform:translateY(-1px);}
+html.vfm-aaa-v500 button,
+html.vfm-aaa-v500 .main-btn,
+html.vfm-aaa-v500 .secondary-btn,
+html.vfm-aaa-v500 .icon-btn{
+  transition:transform .16s ease, filter .16s ease, border-color .16s ease, box-shadow .16s ease;
+  touch-action:manipulation;
+}
+html.vfm-aaa-v500 button:active{transform:scale(.982);}
+html.vfm-aaa-v500 .main-btn,
+html.vfm-aaa-v500 .primary-btn{
+  background:linear-gradient(135deg,#fff0a9,#e9b63b 48%,#b77d14)!important;
+  color:#111!important;
+  border:1px solid rgba(255,255,255,.36)!important;
+  box-shadow:0 16px 42px rgba(255,196,64,.22),inset 0 1px 0 rgba(255,255,255,.46)!important;
+  font-weight:900!important;
+}
+html.vfm-aaa-v500 .secondary-btn,
+html.vfm-aaa-v500 .icon-btn,
+html.vfm-aaa-v500 .nav-item{
+  background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.035))!important;
+  border:1px solid rgba(255,255,255,.12)!important;
+  color:#f7f7f7!important;
+}
+html.vfm-aaa-v500 .premium-topbar{
+  position:sticky;top:calc(8px + env(safe-area-inset-top));z-index:20;
+  display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:var(--aaa-topbar-h);
+  margin-bottom:16px;padding:10px 14px!important;
+}
+html.vfm-aaa-v500 .top-status{display:flex;align-items:center;gap:9px;flex-wrap:wrap;justify-content:flex-end;}
+html.vfm-aaa-v500 .resource{border-radius:999px!important;padding:.56rem .75rem!important;background:rgba(0,0,0,.24)!important;border:1px solid rgba(255,255,255,.10)!important;white-space:nowrap;}
+html.vfm-aaa-v500 .brand{line-height:.82;letter-spacing:.02em;text-shadow:0 18px 42px rgba(0,0,0,.78);}
+html.vfm-aaa-v500 .brand .gold,
+html.vfm-aaa-v500 .gold{color:var(--aaa-gold)!important;text-shadow:0 0 28px rgba(255,216,106,.28);}
+html.vfm-aaa-v500 .lobby-hero-v050{display:grid;grid-template-columns:1.1fr 1.2fr .95fr;gap:14px;align-items:stretch;margin-bottom:16px;overflow:hidden;}
+html.vfm-aaa-v500 .manager-card,
+html.vfm-aaa-v500 .club-identity-card,
+html.vfm-aaa-v500 .next-match-card{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:14px;box-shadow:var(--aaa-soft);}
+html.vfm-aaa-v500 .manager-card,.club-identity-card{display:flex;align-items:center;gap:13px;}
+html.vfm-aaa-v500 .manager-pic{width:74px;height:74px;border-radius:22px;object-fit:cover;border:1px solid rgba(255,216,106,.28);box-shadow:0 16px 28px rgba(0,0,0,.32);}
+html.vfm-aaa-v500 .club-logo.xl{width:86px;height:86px;filter:drop-shadow(0 18px 26px rgba(0,0,0,.42));}
+html.vfm-aaa-v500 .command-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:14px;margin:16px 0;}
+html.vfm-aaa-v500 .quick-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:16px 0;}
+html.vfm-aaa-v500 .menu-grid.command-menu{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:16px;}
+html.vfm-aaa-v500 .premium-tile{position:relative;min-height:150px;text-align:left;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;padding:16px!important;}
+html.vfm-aaa-v500 .premium-tile:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 85% 8%,rgba(255,216,106,.16),transparent 28%);opacity:.85;pointer-events:none;}
+html.vfm-aaa-v500 .premium-tile>*{position:relative;z-index:1;}
+html.vfm-aaa-v500 .tile-icon{font-size:2.1rem;line-height:1;filter:drop-shadow(0 12px 20px rgba(0,0,0,.42));}
+html.vfm-aaa-v500 .tile-badge,.aaa-pill,.status-pill,.tag{border-radius:999px!important;background:rgba(255,216,106,.11)!important;border:1px solid rgba(255,216,106,.20)!important;color:#ffe9ac!important;padding:.25rem .52rem!important;font-size:.72rem!important;letter-spacing:.03em;}
+html.vfm-aaa-v500 .tile-badge{position:absolute;top:10px;right:10px;}
+html.vfm-aaa-v500 .meter{height:9px;background:rgba(255,255,255,.08)!important;border-radius:999px;overflow:hidden;border:1px solid rgba(255,255,255,.08);}
+html.vfm-aaa-v500 .meter span{height:100%;display:block;background:linear-gradient(90deg,#ffcf62,#89ffb8)!important;border-radius:999px;}
+html.vfm-aaa-v500 .table-scroll{border:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.04);}
+html.vfm-aaa-v500 .table th{position:sticky;top:0;background:rgba(8,13,20,.96);z-index:2;}
+html.vfm-aaa-v500 .bottom-nav{
+  position:fixed;left:50%;bottom:calc(10px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:50;
+  width:min(720px,calc(100vw - 24px));min-height:var(--aaa-nav-h);padding:8px;
+  border:1px solid rgba(255,255,255,.13);border-radius:26px;
+  background:linear-gradient(145deg,rgba(8,13,21,.86),rgba(3,6,11,.78));
+  box-shadow:0 24px 70px rgba(0,0,0,.62),inset 0 1px 0 rgba(255,255,255,.08);
+  backdrop-filter:blur(22px) saturate(1.22);-webkit-backdrop-filter:blur(22px) saturate(1.22);
+  display:grid;grid-template-columns:repeat(5,1fr);gap:7px;
+}
+html.vfm-aaa-v500 .nav-item{border-radius:18px!important;min-height:56px!important;display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:.76rem!important;}
+html.vfm-aaa-v500 .nav-item:hover{border-color:rgba(255,216,106,.35)!important;box-shadow:inset 0 0 0 1px rgba(255,216,106,.08);}
+html.vfm-aaa-v500 .build-badge{position:fixed;right:12px;bottom:calc(var(--aaa-nav-h) + 22px + env(safe-area-inset-bottom));z-index:45;background:rgba(0,0,0,.58)!important;border:1px solid rgba(255,255,255,.13)!important;border-radius:999px!important;padding:.42rem .68rem!important;color:#ffe9ac!important;font-size:.72rem!important;box-shadow:0 12px 30px rgba(0,0,0,.42);backdrop-filter:blur(14px);}
+.aaa-shell{display:grid;gap:16px}.aaa-hero{display:flex;align-items:center;justify-content:space-between;gap:16px;background:linear-gradient(135deg,rgba(255,216,106,.14),rgba(8,13,21,.78))!important}.aaa-hero h1{font-size:clamp(2rem,5vw,4.4rem);line-height:.95;margin:0}.aaa-score-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.aaa-check-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.aaa-check{display:grid;gap:8px;padding:14px;border-radius:18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10)}.aaa-check.ok{border-color:rgba(137,255,184,.26)}.aaa-check.warn{border-color:rgba(255,216,106,.26)}.aaa-check strong{font-size:1.05rem}.aaa-demo-grid{display:grid;grid-template-columns:1.4fr .8fr;gap:12px}.aaa-phone-preview{max-width:280px;margin:auto;border:1px solid rgba(255,255,255,.14);border-radius:34px;padding:10px;background:rgba(0,0,0,.34);box-shadow:0 22px 60px rgba(0,0,0,.46)}.aaa-phone-screen{aspect-ratio:9/16;border-radius:26px;background:linear-gradient(160deg,rgba(255,216,106,.16),rgba(5,10,18,.86)),url('../assets/backgrounds/bg-lobby.jpg');background-size:cover;padding:12px;display:flex;flex-direction:column;justify-content:space-between}.aaa-phone-card{background:rgba(0,0,0,.48);border:1px solid rgba(255,255,255,.13);border-radius:18px;padding:10px}.aaa-mini-nav{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}.aaa-mini-nav span{height:28px;border-radius:9px;background:rgba(255,255,255,.10)}
+@media(max-width:1100px){html.vfm-aaa-v500 .menu-grid.command-menu{grid-template-columns:repeat(4,minmax(0,1fr));}html.vfm-aaa-v500 .lobby-hero-v050{grid-template-columns:1fr 1fr}.next-match-card{grid-column:1/-1}.aaa-score-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){html.vfm-aaa-v500 .screen{padding:10px;padding-bottom:calc(var(--aaa-nav-h) + 34px + env(safe-area-inset-bottom));background-attachment:scroll;}html.vfm-aaa-v500 .premium-topbar{position:relative;top:0;display:grid;grid-template-columns:1fr;gap:10px}html.vfm-aaa-v500 .top-status{justify-content:flex-start}html.vfm-aaa-v500 .lobby-hero-v050,html.vfm-aaa-v500 .command-grid,html.vfm-aaa-v500 .quick-summary,html.vfm-aaa-v500 .aaa-demo-grid{grid-template-columns:1fr!important}html.vfm-aaa-v500 .menu-grid.command-menu{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}html.vfm-aaa-v500 .premium-tile{min-height:128px;padding:14px!important}html.vfm-aaa-v500 .manager-card,html.vfm-aaa-v500 .club-identity-card{align-items:flex-start}html.vfm-aaa-v500 .bottom-nav{width:calc(100vw - 14px);bottom:6px;border-radius:22px}html.vfm-aaa-v500 .nav-item{font-size:.68rem!important;min-height:52px!important}html.vfm-aaa-v500 .build-badge{left:12px;right:auto;bottom:calc(var(--aaa-nav-h) + 18px + env(safe-area-inset-bottom));}.aaa-check-grid{grid-template-columns:1fr}.aaa-hero{display:grid}.aaa-phone-preview{max-width:220px}}
+@media(max-width:410px){html.vfm-aaa-v500 .menu-grid.command-menu{grid-template-columns:1fr}html.vfm-aaa-v500 .resource{font-size:.78rem;padding:.48rem .58rem!important}html.vfm-aaa-v500 .club-logo.xl{width:70px;height:70px}.aaa-score-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){html.vfm-aaa-v500 *,html.vfm-aaa-v500 *:before,html.vfm-aaa-v500 *:after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+
+/* v5.3.0 - refinamento crítico de onboarding e navegação */
+html.vfm-aaa-v500 .screen.no-bottom-nav{padding-bottom:calc(22px + env(safe-area-inset-bottom))!important;}
+html.vfm-aaa-v500 .screen.no-build-badge .build-badge{display:none!important;}
+html.vfm-aaa-v500 .screen-newGame .topbar-resources,
+html.vfm-aaa-v500 .screen-teamSelect .topbar-resources,
+html.vfm-aaa-v500 .screen-confirmCareer .topbar-resources{display:none!important;}
+html.vfm-aaa-v500 .screen-newGame .topbar,
+html.vfm-aaa-v500 .screen-teamSelect .topbar,
+html.vfm-aaa-v500 .screen-confirmCareer .topbar{position:sticky;top:calc(8px + env(safe-area-inset-top));z-index:50;background:rgba(4,8,13,.72);border:1px solid rgba(255,255,255,.10);border-radius:24px;padding:10px 12px;backdrop-filter:blur(16px);}
+html.vfm-aaa-v500 .topbar-clean{justify-content:flex-end;}
+html.vfm-aaa-v500 .screen-newGame .main-btn.giant,
+html.vfm-aaa-v500 .screen-teamSelect .main-btn.giant,
+html.vfm-aaa-v500 .screen-confirmCareer .main-btn.giant{position:sticky;bottom:calc(10px + env(safe-area-inset-bottom));z-index:55;}
+@media(max-width:760px){
+  html.vfm-aaa-v500 .screen.no-bottom-nav{min-height:100svh;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;padding-inline:10px!important;}
+  html.vfm-aaa-v500 .screen-newGame .avatar-strip{display:flex;overflow-x:auto;gap:10px;padding-bottom:8px;scroll-snap-type:x mandatory;}
+  html.vfm-aaa-v500 .screen-newGame .avatar-card{min-width:132px;scroll-snap-align:start;}
+  html.vfm-aaa-v500 .screen-teamSelect .club-grid-pro{grid-template-columns:1fr!important;}
+  html.vfm-aaa-v500 .screen-confirmCareer .confirm-grid{grid-template-columns:1fr!important;}
+}
+
+/* v5.5.0 - lobby premium enxuto e menu do treinador */
+html.vfm-aaa-v500 .lobby-v550-shell{display:grid;gap:14px;max-width:1280px;margin:0 auto;}
+html.vfm-aaa-v500 .lobby-hero-v550{display:grid;grid-template-columns:1.05fr 1.25fr 1fr;gap:14px;align-items:stretch;margin-bottom:0;overflow:hidden;}
+html.vfm-aaa-v500 .hero-manager-v550,
+html.vfm-aaa-v500 .hero-club-v550,
+html.vfm-aaa-v500 .hero-next-v550{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:14px;box-shadow:var(--aaa-soft);}
+html.vfm-aaa-v500 .hero-manager-v550,
+html.vfm-aaa-v500 .hero-club-v550{display:flex;align-items:center;gap:13px;min-width:0;}
+html.vfm-aaa-v500 .hero-next-v550{display:grid;gap:8px;align-content:center;}
+html.vfm-aaa-v500 .quick-actions-v550{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;}
+html.vfm-aaa-v500 .quick-action-v550{display:grid!important;gap:6px;align-content:center;text-align:left;min-height:96px;border-color:rgba(255,216,106,.15)!important;background:linear-gradient(145deg,rgba(255,216,106,.10),rgba(255,255,255,.035))!important;}
+html.vfm-aaa-v500 .quick-action-v550 span{font-size:1.35rem;}
+html.vfm-aaa-v500 .quick-action-v550 em{font-style:normal;color:rgba(255,255,255,.68);font-size:.78rem;line-height:1.35;}
+html.vfm-aaa-v500 .status-row-v550{display:grid;grid-template-columns:2fr 1fr 1fr;gap:14px;}
+html.vfm-aaa-v500 .coach-feed-v550{margin:0;}
+html.vfm-aaa-v500 .coach-feed-grid-v550{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px;}
+html.vfm-aaa-v500 .manager-menu-shell-v550{max-width:1280px;margin:0 auto;display:grid;gap:14px;}
+html.vfm-aaa-v500 .menu-groups-v550{display:grid;gap:14px;}
+html.vfm-aaa-v500 .menu-group-v550{display:grid;gap:12px;}
+html.vfm-aaa-v500 .menu-grid-v550{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;}
+html.vfm-aaa-v500 .screen-managerMenu .premium-tile{min-height:132px;}
+@media(max-width:1100px){
+  html.vfm-aaa-v500 .lobby-hero-v550{grid-template-columns:1fr 1fr;}
+  html.vfm-aaa-v500 .hero-next-v550{grid-column:1/-1;}
+  html.vfm-aaa-v500 .quick-actions-v550{grid-template-columns:repeat(3,minmax(0,1fr));}
+  html.vfm-aaa-v500 .menu-grid-v550{grid-template-columns:repeat(3,minmax(0,1fr));}
+}
+@media(max-width:760px){
+  html.vfm-aaa-v500 .lobby-v550-shell{gap:10px;}
+  html.vfm-aaa-v500 .lobby-topbar-v550 .brand{font-size:.72rem;}
+  html.vfm-aaa-v500 .lobby-hero-v550,
+  html.vfm-aaa-v500 .status-row-v550,
+  html.vfm-aaa-v500 .coach-feed-grid-v550{grid-template-columns:1fr!important;}
+  html.vfm-aaa-v500 .quick-actions-v550{grid-template-columns:repeat(2,minmax(0,1fr));}
+  html.vfm-aaa-v500 .quick-action-v550{min-height:86px;padding:12px!important;}
+  html.vfm-aaa-v500 .quick-action-v550 em{display:none;}
+  html.vfm-aaa-v500 .hero-manager-v550,
+  html.vfm-aaa-v500 .hero-club-v550{padding:12px;}
+  html.vfm-aaa-v500 .hero-manager-v550 h1,
+  html.vfm-aaa-v500 .hero-club-v550 h2{font-size:1.18rem;}
+  html.vfm-aaa-v500 .menu-grid-v550{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+  html.vfm-aaa-v500 .screen-managerMenu .premium-tile{min-height:118px;}
+}
+@media(max-width:410px){
+  html.vfm-aaa-v500 .quick-actions-v550,
+  html.vfm-aaa-v500 .menu-grid-v550{grid-template-columns:1fr;}
+}

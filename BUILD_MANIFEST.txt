@@ -1,0 +1,10 @@
+Vale Futebol Manager — Build v5.9.9
+Fase 42 — Auditoria mobile real, UX final e rolagem total
+
+Arquivos principais adicionados:
+- css/mobile-ux-final-v599.css
+- js/systems/mobileUxFinalEngine.js
+- core/safety/mobile-ux-final-validator.js
+
+Objetivo:
+Garantir que o jogo seja mobile-first, com rolagem por toque em todas as telas, onboarding sem cortes, partida jogável em retrato/horizontal e fullscreen como melhoria progressiva, não requisito obrigatório.

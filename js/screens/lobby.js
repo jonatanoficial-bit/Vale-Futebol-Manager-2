@@ -1,0 +1,155 @@
+import { screenWrap, brand, moneyCard } from './common.js';
+import { teams } from '../data/gameData.js';
+import { safeImg, clubLogo, country } from '../systems/assets.js';
+import { money } from '../utils/dom.js';
+
+export const PRIMARY_ACTIONS_V550 = [
+  ['match','Jogar partida','⚽','Entrar no próximo compromisso oficial'],
+  ['formation','Ajustar tática','🧩','Escalação, plano de jogo e banco'],
+  ['squad','Ver elenco','👥','Jogadores, moral, contratos e forma'],
+  ['messages','Abrir e-mail','✉️','Diretoria, imprensa e empresários'],
+  ['managerMenu','Menu completo','☰','Todos os módulos avançados'],
+  ['careerTutorial','Tutorial e missões','🎓','Entenda o modo carreira e acompanhe metas'],
+  ['managerProgression','Evolução','⭐','XP, nível e licença do treinador']
+];
+
+export const MANAGER_MENU_GROUPS_V550 = [
+  ['Jogo e temporada', [
+    ['seasonCenter','Temporada','📆','Tabela viva, rodada completa, acesso, queda e vagas continentais','Essencial'],
+    ['championship','Campeonato','🏆','Competições nacionais e agenda anual','Essencial'],
+    ['standings','Classificação','📊','Tabela, estatísticas e objetivos','Dados'],
+    ['calendar','Agenda','📅','Calendário completo, treinos e jogos','Temporada'],
+    ['match','Partida','⚽','Próximo jogo oficial','Jogar']
+  ]],
+  ['Elenco e campo', [
+    ['squad','Elenco','👥','Jogadores, forma, moral e contratos','Clube'],
+    ['formation','Tática','🧩','Escalação, campo, banco e desenho tático','Pré-jogo'],
+    ['instructions','Instruções','🎯','Pressão, passes, mentalidade e bolas paradas','Avançado'],
+    ['training','Treino','🔶','Plano semanal, evolução, fadiga e lesões','Elenco'],
+    ['academyScouting','Base & Scouting','🌱','Promessas, olheiros e captação de talentos','Novo']
+  ]],
+  ['Mercado e finanças', [
+    ['transfers','Transferências','🔁','Compra, venda, empréstimo e renovação','Janela'],
+    ['smartMarket','Mercado Inteligente','🧠','Empresários, IA de clubes e oportunidades','Novo'],
+    ['contracts','Contratos','📝','Salários, vencimentos, luvas e renovações','Gestão'],
+    ['financeCenter','Economia','🏦','Diretoria, orçamento, patrocínio e crise','Novo'],
+    ['finances','Financeiro','💼','Receitas, despesas e folha salarial','Diretoria'],
+    ['sponsorship','Patrocínio','🤝','Receitas comerciais e bônus','Finanças']
+  ]],
+  ['Carreira e mundo', [
+    ['messages','E-mail','✉️','Diretoria, imprensa, empresários e seleção','Carreira'],
+    ['careerTutorial','Tutorial e missões','🎓','Funções, metas e progressão infinita','Novo'],
+    ['managerProgression','Evolução do treinador','⭐','XP, níveis, licenças e especialidades','v5.9.5'],
+    ['careerOffers','Mercado de treinadores','📨','Propostas, contratos e sondagens reais','v5.9.6'],
+    ['nationalTeam','Seleções','🇧🇷','Carreira dupla, Datas FIFA e Copa do Mundo','Internacional'],
+    ['worldCompetitions','Libertadores/Sul-Americana','🌎','CONMEBOL e rota mundial','v4.3'],
+    ['worldComplete','Mundo Completo','🌐','Ligas internacionais e calendário global','v5.2'],
+    ['club','Clube','🛡️','Resumo institucional, estádio e torcida','Perfil']
+  ]],
+  ['Sistema e desenvolvimento', [
+    ['saveCenter','Save Profissional','💾','Backups, exportar/importar e recuperação','v5.1'],
+    ['polishCenter','UI AAA','✨','Visual, responsividade e performance','v5.0'],
+    ['data2026','Dados 2026','🗃️','Divisões, elencos e caminhos de fotos','Dados'],
+    ['database2026','Banco Maio/2026','🧾','Atributos, contratos e auditoria de dados','Novo'],
+    ['dataPack2026','Data Pack 2026','🔒','Schema oficial, bloqueio anti-genérico e plano 20/05/2026','v5.8'],
+    ['visualLibrary','Biblioteca Visual','🖼️','Fundos, logos, países e extras','Assets'],
+    ['settings','Configurações','⚙️','Qualidade, sons, acessibilidade e segurança','Sistema']
+  ]]
+];
+
+export function lobby(state){
+  const t = teams.find(x => x.id === state.clubId) || teams[0];
+  const managerCountry = state.manager.country || 'br';
+  const boardTrust = Number(state.boardTrust || 76);
+  const fanMood = Number(state.fanMood || 82);
+  const lastResult = state.career?.lastResult;
+  const homeTeam = teams.find(x=>x.id===state.match?.home) || t;
+  const awayTeam = teams.find(x=>x.id===state.match?.away) || teams.find(x=>x.id!==t.id) || t;
+  const nextTitle = state.match?.finalized ? 'Relatório pós-jogo disponível' : `${homeTeam.name} x ${awayTeam.name}`;
+  const nextInfo = state.match?.finalized ? 'Resultado salvo. Revise o pós-jogo ou avance para o próximo compromisso.' : `${homeTeam.stadium || t.stadium} · ${state.match?.stage || 'Rodada'} · ${(state.match?.date || '2026-05-24').slice(8,10)}/${(state.match?.date || '2026-05-24').slice(5,7)}`;
+  const unread = Number(state.notifications || 0);
+  return screenWrap('lobby', `
+    <section class="lobby-shell lobby-v550-shell">
+      <div class="premium-topbar panel lobby-topbar-v550">
+        <div class="top-left-brand">${brand()}</div>
+        <div class="top-status">
+          <div class="resource">💵 ${money(t.budget || state.money)}</div>
+          <div class="resource">⭐ Clube ${t.reputation || 78}</div>
+          <div class="resource">🧠 Técnico ${state.manager?.reputation || 50}</div>
+          <button class="icon-btn mail-alert" data-route="messages" aria-label="E-mail do treinador">✉${unread ? `<span>${unread}</span>` : ''}</button>
+          <button class="icon-btn" data-route="managerMenu" aria-label="Menu completo">☰</button>
+        </div>
+      </div>
+
+      <section class="panel lobby-hero-v550">
+        <div class="hero-manager-v550">
+          ${safeImg(state.manager.avatar,'avatar','Manager','manager-pic')}
+          <div>
+            <span class="tag">${state.manager.mode === 'sandbox' ? 'Sandbox livre' : 'Carreira completa'}</span>
+            <h1>${state.manager.name}</h1>
+            <p class="small">${safeImg(country(managerCountry),'country','País do manager','inline-flag')} Manager · Temporada ${state.season} · ${state.month} · Reputação ${state.manager?.reputation || 50}/100</p>
+          </div>
+        </div>
+        <div class="hero-club-v550">
+          ${safeImg(clubLogo(t.id),'club',t.name,'club-logo xl')}
+          <div>
+            <span class="tag">${t.league}</span>
+            <h2>${t.name}</h2>
+            <p class="small">${t.stadium} · ${t.countryName} · Dificuldade: ${t.difficulty}</p>
+          </div>
+        </div>
+        <div class="hero-next-v550">
+          <div class="small">Próximo jogo oficial</div>
+          <strong>${nextTitle}</strong>
+          <p class="small">${nextInfo}</p>
+          ${lastResult ? `<p class="small">Último resultado: ${lastResult.homeGoals} x ${lastResult.awayGoals} · ${lastResult.competition}</p>` : ''}
+          <button class="main-btn compact" data-route="match">⚽ Iniciar jogo</button>
+        </div>
+      </section>
+
+      <section class="quick-actions-v550" aria-label="Ações principais">
+        ${PRIMARY_ACTIONS_V550.map(([route,title,icon,desc])=>`<button class="card quick-action-v550" data-route="${route}"><span>${icon}</span><strong>${title}</strong><em>${desc}</em></button>`).join('')}
+      </section>
+
+      <section class="status-row-v550">
+        <article class="panel command-card wide">
+          <div class="row space"><div><span class="tag">Diretoria</span><h3>Meta principal</h3></div><strong>${boardTrust}%</strong></div>
+          <p>${t.board}</p>
+          <div class="meter"><span style="width:${boardTrust}%"></span></div>
+          <div class="small">Segurança no cargo: ${state.jobSecurity || 'Seguro'}</div>
+        </article>
+        <article class="panel command-card"><div class="small">Torcida</div><h2>${fanMood}%</h2><div class="meter"><span style="width:${fanMood}%"></span></div></article>
+        <article class="panel command-card"><div class="small">Reputação do técnico</div><h2>${state.manager?.reputation || 50}</h2><div class="meter"><span style="width:${state.manager?.reputation || 50}%"></span></div><button class="secondary-btn mini" data-route="careerTutorial">Ver missões</button></article>
+        <article class="panel command-card"><div class="small">Força do time</div><h2>${t.level}</h2><div class="meter"><span style="width:${t.level}%"></span></div></article>
+      </section>
+
+      <section class="panel coach-feed-v550">
+        <div class="row space"><div><span class="tag">Resumo do dia</span><h3>Central do treinador</h3></div><button class="secondary-btn mini" data-route="messages">Ver e-mails</button></div>
+        <div class="coach-feed-grid-v550">
+          <div class="news-item"><strong>Diretoria</strong><span>Objetivo ativo: ${t.board}</span></div>
+          <div class="news-item"><strong>Jogo</strong><span>${nextTitle}</span></div>
+          <div class="news-item"><strong>Missões</strong><span>${(state.career?.missions || []).filter(m=>m.done).length}/${(state.career?.missions || []).length || 8} concluídas. Use Tutorial e missões para entender a carreira.</span></div>
+        </div>
+      </section>
+    </section>`, true);
+}
+
+export function managerMenu(state){
+  const t = teams.find(x => x.id === state.clubId) || teams[0];
+  return screenWrap('managerMenu', `
+    <section class="manager-menu-shell-v550">
+      <div class="premium-topbar panel lobby-topbar-v550">
+        <div><span class="tag">Central organizada</span><h1>Menu do treinador</h1><p class="small">Todos os módulos avançados ficam aqui para o lobby continuar limpo no mobile e no PC.</p></div>
+        <div class="top-status"><button class="secondary-btn mini" data-route="lobby">Voltar ao lobby</button><div class="resource">${t.name}</div></div>
+      </div>
+      <section class="menu-groups-v550">
+        ${MANAGER_MENU_GROUPS_V550.map(([group,items])=>`
+          <article class="panel menu-group-v550">
+            <div class="row space"><h2>${group}</h2><span class="tag">${items.length} atalhos</span></div>
+            <div class="menu-grid-v550">
+              ${items.map(([r,title,icon,desc,badge])=>`<button class="card menu-tile premium-tile" data-route="${r}"><span class="tile-badge">${badge}</span><span class="tile-icon">${icon}</span><strong>${title}</strong><span class="small">${desc}</span></button>`).join('')}
+            </div>
+          </article>`).join('')}
+      </section>
+    </section>`, true);
+}

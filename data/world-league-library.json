@@ -1,0 +1,122 @@
+{
+  "brasileirao-a": {
+    "name": "Brasileirao Serie A",
+    "country": "br",
+    "logo": "assets/leagues/brazil/brasileirao-serie-a.png"
+  },
+  "brasileirao-b": {
+    "name": "Brasileirao Serie B",
+    "country": "br",
+    "logo": "assets/leagues/brazil/brasileirao-serie-b.png"
+  },
+  "paulistao": {
+    "name": "Paulistao",
+    "country": "br",
+    "logo": "assets/leagues/brazil/paulistao.png"
+  },
+  "liga-profesional-argentina": {
+    "name": "Liga Profesional Argentina",
+    "country": "ar",
+    "logo": "assets/leagues/argentina/liga-profesional.png"
+  },
+  "primera-division-chile": {
+    "name": "Primera Division Chile",
+    "country": "cl",
+    "logo": "assets/leagues/chile/primera-division.png"
+  },
+  "primera-a-colombia": {
+    "name": "Categoria Primera A Colombia",
+    "country": "co",
+    "logo": "assets/leagues/colombia/primera-a.png"
+  },
+  "liga-pro-ecuador": {
+    "name": "LigaPro Ecuador",
+    "country": "ec",
+    "logo": "assets/leagues/ecuador/liga-pro.png"
+  },
+  "liga-1-peru": {
+    "name": "Liga 1 Peru",
+    "country": "pe",
+    "logo": "assets/leagues/peru/liga-1.png"
+  },
+  "primera-division-uruguay": {
+    "name": "Primera Division Uruguay",
+    "country": "uy",
+    "logo": "assets/leagues/uruguay/primera-division.png"
+  },
+  "liga-mx": {
+    "name": "Liga MX",
+    "country": "mx",
+    "logo": "assets/leagues/mexico/liga-mx.png"
+  },
+  "mls": {
+    "name": "Major League Soccer",
+    "country": "us",
+    "logo": "assets/leagues/usa/mls.png"
+  },
+  "premier-league": {
+    "name": "Premier League",
+    "country": "gb",
+    "logo": "assets/leagues/england/premier-league.png"
+  },
+  "championship-england": {
+    "name": "EFL Championship",
+    "country": "gb",
+    "logo": "assets/leagues/england/championship.png"
+  },
+  "laliga": {
+    "name": "LaLiga",
+    "country": "es",
+    "logo": "assets/leagues/spain/laliga.png"
+  },
+  "serie-a-italy": {
+    "name": "Serie A Italy",
+    "country": "it",
+    "logo": "assets/leagues/italy/serie-a.png"
+  },
+  "bundesliga": {
+    "name": "Bundesliga",
+    "country": "de",
+    "logo": "assets/leagues/germany/bundesliga.png"
+  },
+  "ligue-1": {
+    "name": "Ligue 1",
+    "country": "fr",
+    "logo": "assets/leagues/france/ligue-1.png"
+  },
+  "liga-portugal": {
+    "name": "Liga Portugal",
+    "country": "pt",
+    "logo": "assets/leagues/portugal/liga-portugal.png"
+  },
+  "eredivisie": {
+    "name": "Eredivisie",
+    "country": "nl",
+    "logo": "assets/leagues/netherlands/eredivisie.png"
+  },
+  "jupiler-pro-league": {
+    "name": "Belgian Pro League",
+    "country": "be",
+    "logo": "assets/leagues/belgium/pro-league.png"
+  },
+  "super-lig-turkey": {
+    "name": "Turkish Super Lig",
+    "country": "tr",
+    "logo": "assets/leagues/turkey/super-lig.png"
+  },
+  "saudi-pro-league": {
+    "name": "Saudi Pro League",
+    "country": "sa",
+    "logo": "assets/leagues/saudi/saudi-pro-league.png"
+  },
+  "uae-pro-league": {
+    "name": "UAE Pro League",
+    "country": "ae",
+    "logo": "assets/leagues/uae/pro-league.png"
+  },
+  "qatar-stars-league": {
+    "name": "Qatar Stars League",
+    "country": "qa",
+    "logo": "assets/leagues/qatar/stars-league.png"
+  }
+}

@@ -1,0 +1,784 @@
+{
+  "version": "br-2025-v261",
+  "updatedAt": "2026-05-19",
+  "sourceNote": "Série A e Série B 2025 com 20 clubes; base alinhada a tabelas CBF 2025. Athletic corrigido para Série B.",
+  "serieA": [
+    {
+      "id": "atletico-mg",
+      "name": "Atlético-MG",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-a",
+      "league": "Brasileirão Série A",
+      "level": 83,
+      "budget": 98,
+      "value": 150,
+      "stadium": "Arena MRV",
+      "reputation": 84,
+      "board": "Cumprir meta nacional e evoluir elenco",
+      "difficulty": "Alta cobrança",
+      "competitions": [
+        "Brasileirão Série A",
+        "Copa do Brasil",
+        "Libertadores"
+      ]
+    },
+    {
+      "id": "bahia",
+      "name": "Bahia",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-a",
+      "league": "Brasileirão Série A",
+      "level": 77,
+      "budget": 68,
+      "value": 96,
+      "stadium": "Fonte Nova",
+      "reputation": 75,
+      "board": "Cumprir meta nacional e evoluir elenco",
+      "difficulty": "Médio",
+      "competitions": [
+        "Brasileirão Série A",
+        "Copa do Brasil",
+        "Libertadores"
+      ]
+    },
+    {
+      "id": "botafogo",
+      "name": "Botafogo",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-a",
+      "league": "Brasileirão Série A",
+      "level": 80,
+      "budget": 90,
+      "value": 135,
+      "stadium": "Nilton Santos",
+      "reputation": 81,
+      "board": "Cumprir meta nacional e evoluir elenco",
+      "difficulty": "Alta cobrança",
+      "competitions": [
+        "Brasileirão Série A",
+        "Copa do Brasil",
+        "Libertadores"
+      ]
+    },
+    {
+      "id": "ceara",
+      "name": "Ceará",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-a",
+      "league": "Brasileirão Série A",
+      "level": 72,
+      "budget": 38,
+      "value": 48,
+      "stadium": "Castelão",
+      "reputation": 69,
+      "board": "Cumprir meta nacional e evoluir elenco",
+      "difficulty": "Desafiador",
+      "competitions": [
+        "Brasileirão Série A",
+        "Copa do Brasil"
+      ]
+    },
+    {
+      "id": "corinthians",
+      "name": "Corinthians",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-a",
+      "league": "Brasileirão Série A",
+      "level": 80,
+      "budget": 78,
+      "value": 112,
+      "stadium": "Neo Química Arena",
+      "reputation": 83,
+      "board": "Cumprir meta nacional e evoluir elenco",
+      "difficulty": "Desafiador",
+      "competitions": [
+        "Brasileirão Série A",
+        "Copa do Brasil",
+        "Sul-Americana"
+      ]
+    },
+    {
+      "id": "cruzeiro",
+      "name": "Cruzeiro",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-a",
+      "league": "Brasileirão Série A",
+      "level": 79,
+      "budget": 82,
+      "value": 116,
+      "stadium": "Mineirão",
+      "reputation": 80,
+      "board": "Cumprir meta nacional e evoluir elenco",
+      "difficulty": "Médio",
+      "competitions": [
+        "Brasileirão Série A",
+        "Copa do Brasil",
+        "Sul-Americana"
+      ]
+    },
+    {
+      "id": "flamengo",
+      "name": "Flamengo",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-a",
+      "league": "Brasileirão Série A",
+      "level": 88,
+      "budget": 160,
+      "value": 245,
+      "stadium": "Maracanã",
+      "reputation": 91,
+      "board": "Cumprir meta nacional e evoluir elenco",
+      "difficulty": "Pressão máxima",
+      "competitions": [
+        "Brasileirão Série A",
+        "Copa do Brasil",
+        "Libertadores"
+      ]
+    },
+    {
+      "id": "fluminense",
+      "name": "Fluminense",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-a",
+      "league": "Brasileirão Série A",
+      "level": 81,
+      "budget": 86,
+      "value": 124,
+      "stadium": "Maracanã",
+      "reputation": 82,
+      "board": "Cumprir meta nacional e evoluir elenco",
+      "difficulty": "Alta cobrança",
+      "competitions": [
+        "Brasileirão Série A",
+        "Copa do Brasil",
+        "Sul-Americana"
+      ]
+    },
+    {
+      "id": "fortaleza",
+      "name": "Fortaleza",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-a",
+      "league": "Brasileirão Série A",
+      "level": 77,
+      "budget": 62,
+      "value": 84,
+      "stadium": "Castelão",
+      "reputation": 75,
+      "board": "Cumprir meta nacional e evoluir elenco",
+      "difficulty": "Médio",
+      "competitions": [
+        "Brasileirão Série A",
+        "Copa do Brasil",
+        "Libertadores"
+      ]
+    },
+    {
+      "id": "gremio",
+      "name": "Grêmio",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-a",
+      "league": "Brasileirão Série A",
+      "level": 79,
+      "budget": 74,
+      "value": 108,
+      "stadium": "Arena do Grêmio",
+      "reputation": 80,
+      "board": "Cumprir meta nacional e evoluir elenco",
+      "difficulty": "Médio",
+      "competitions": [
+        "Brasileirão Série A",
+        "Copa do Brasil",
+        "Sul-Americana"
+      ]
+    },
+    {
+      "id": "internacional",
+      "name": "Internacional",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-a",
+      "league": "Brasileirão Série A",
+      "level": 80,
+      "budget": 80,
+      "value": 116,
+      "stadium": "Beira-Rio",
+      "reputation": 81,
+      "board": "Cumprir meta nacional e evoluir elenco",
+      "difficulty": "Alta cobrança",
+      "competitions": [
+        "Brasileirão Série A",
+        "Copa do Brasil",
+        "Libertadores"
+      ]
+    },
+    {
+      "id": "juventude",
+      "name": "Juventude",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-a",
+      "league": "Brasileirão Série A",
+      "level": 70,
+      "budget": 34,
+      "value": 42,
+      "stadium": "Alfredo Jaconi",
+      "reputation": 68,
+      "board": "Cumprir meta nacional e evoluir elenco",
+      "difficulty": "Difícil",
+      "competitions": [
+        "Brasileirão Série A",
+        "Copa do Brasil"
+      ]
+    },
+    {
+      "id": "mirassol",
+      "name": "Mirassol",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-a",
+      "league": "Brasileirão Série A",
+      "level": 69,
+      "budget": 30,
+      "value": 40,
+      "stadium": "Maião",
+      "reputation": 66,
+      "board": "Cumprir meta nacional e evoluir elenco",
+      "difficulty": "Estreante",
+      "competitions": [
+        "Brasileirão Série A",
+        "Copa do Brasil"
+      ]
+    },
+    {
+      "id": "palmeiras",
+      "name": "Palmeiras",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-a",
+      "league": "Brasileirão Série A",
+      "level": 87,
+      "budget": 145,
+      "value": 220,
+      "stadium": "Allianz Parque",
+      "reputation": 89,
+      "board": "Cumprir meta nacional e evoluir elenco",
+      "difficulty": "Alta cobrança",
+      "competitions": [
+        "Brasileirão Série A",
+        "Copa do Brasil",
+        "Libertadores"
+      ]
+    },
+    {
+      "id": "bragantino",
+      "name": "Red Bull Bragantino",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-a",
+      "league": "Brasileirão Série A",
+      "level": 78,
+      "budget": 86,
+      "value": 128,
+      "stadium": "Nabi Abi Chedid",
+      "reputation": 76,
+      "board": "Cumprir meta nacional e evoluir elenco",
+      "difficulty": "Projeto jovem",
+      "competitions": [
+        "Brasileirão Série A",
+        "Copa do Brasil",
+        "Sul-Americana"
+      ]
+    },
+    {
+      "id": "santos",
+      "name": "Santos FC",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-a",
+      "league": "Brasileirão Série A",
+      "level": 82,
+      "budget": 92.5,
+      "value": 123.8,
+      "stadium": "Vila Belmiro",
+      "reputation": 78,
+      "board": "Cumprir meta nacional e evoluir elenco",
+      "difficulty": "Médio",
+      "competitions": [
+        "Brasileirão Série A",
+        "Copa do Brasil",
+        "Sul-Americana"
+      ]
+    },
+    {
+      "id": "sao-paulo",
+      "name": "São Paulo",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-a",
+      "league": "Brasileirão Série A",
+      "level": 81,
+      "budget": 92,
+      "value": 124,
+      "stadium": "Morumbi",
+      "reputation": 83,
+      "board": "Cumprir meta nacional e evoluir elenco",
+      "difficulty": "Alta cobrança",
+      "competitions": [
+        "Brasileirão Série A",
+        "Copa do Brasil",
+        "Libertadores"
+      ]
+    },
+    {
+      "id": "sport",
+      "name": "Sport Recife",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-a",
+      "league": "Brasileirão Série A",
+      "level": 71,
+      "budget": 36,
+      "value": 45,
+      "stadium": "Ilha do Retiro",
+      "reputation": 69,
+      "board": "Cumprir meta nacional e evoluir elenco",
+      "difficulty": "Difícil",
+      "competitions": [
+        "Brasileirão Série A",
+        "Copa do Brasil"
+      ]
+    },
+    {
+      "id": "vasco",
+      "name": "Vasco",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-a",
+      "league": "Brasileirão Série A",
+      "level": 76,
+      "budget": 58,
+      "value": 78,
+      "stadium": "São Januário",
+      "reputation": 75,
+      "board": "Cumprir meta nacional e evoluir elenco",
+      "difficulty": "Desafiador",
+      "competitions": [
+        "Brasileirão Série A",
+        "Copa do Brasil",
+        "Sul-Americana"
+      ]
+    },
+    {
+      "id": "vitoria",
+      "name": "Vitória",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-a",
+      "league": "Brasileirão Série A",
+      "level": 71,
+      "budget": 37,
+      "value": 46,
+      "stadium": "Barradão",
+      "reputation": 68,
+      "board": "Cumprir meta nacional e evoluir elenco",
+      "difficulty": "Difícil",
+      "competitions": [
+        "Brasileirão Série A",
+        "Copa do Brasil"
+      ]
+    }
+  ],
+  "serieB": [
+    {
+      "id": "america-mg",
+      "name": "América-MG",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-b",
+      "league": "Brasileirão Série B",
+      "level": 72,
+      "budget": 42,
+      "value": 56,
+      "stadium": "Independência",
+      "reputation": 70,
+      "board": "Disputar acesso e organizar elenco",
+      "difficulty": "Acesso obrigatório",
+      "competitions": [
+        "Brasileirão Série B",
+        "Copa do Brasil"
+      ]
+    },
+    {
+      "id": "amazonas",
+      "name": "Amazonas FC",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-b",
+      "league": "Brasileirão Série B",
+      "level": 65,
+      "budget": 24,
+      "value": 32,
+      "stadium": "Carlos Zamith",
+      "reputation": 61,
+      "board": "Disputar acesso e organizar elenco",
+      "difficulty": "Sobrevivência",
+      "competitions": [
+        "Brasileirão Série B",
+        "Copa do Brasil"
+      ]
+    },
+    {
+      "id": "athletico-pr",
+      "name": "Athletico-PR",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-b",
+      "league": "Brasileirão Série B",
+      "level": 76,
+      "budget": 70,
+      "value": 96,
+      "stadium": "Arena da Baixada",
+      "reputation": 78,
+      "board": "Disputar acesso e organizar elenco",
+      "difficulty": "Acesso obrigatório",
+      "competitions": [
+        "Brasileirão Série B",
+        "Copa do Brasil"
+      ]
+    },
+    {
+      "id": "atletico-go",
+      "name": "Atlético-GO",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-b",
+      "league": "Brasileirão Série B",
+      "level": 70,
+      "budget": 36,
+      "value": 47,
+      "stadium": "Antônio Accioly",
+      "reputation": 69,
+      "board": "Disputar acesso e organizar elenco",
+      "difficulty": "Briga pelo acesso",
+      "competitions": [
+        "Brasileirão Série B",
+        "Copa do Brasil"
+      ]
+    },
+    {
+      "id": "avai",
+      "name": "Avaí",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-b",
+      "league": "Brasileirão Série B",
+      "level": 68,
+      "budget": 30,
+      "value": 40,
+      "stadium": "Ressacada",
+      "reputation": 66,
+      "board": "Disputar acesso e organizar elenco",
+      "difficulty": "Médio",
+      "competitions": [
+        "Brasileirão Série B",
+        "Copa do Brasil"
+      ]
+    },
+    {
+      "id": "botafogo-sp",
+      "name": "Botafogo-SP",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-b",
+      "league": "Brasileirão Série B",
+      "level": 66,
+      "budget": 26,
+      "value": 34,
+      "stadium": "Santa Cruz",
+      "reputation": 64,
+      "board": "Disputar acesso e organizar elenco",
+      "difficulty": "Desafiador",
+      "competitions": [
+        "Brasileirão Série B",
+        "Copa do Brasil"
+      ]
+    },
+    {
+      "id": "chapecoense",
+      "name": "Chapecoense",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-b",
+      "league": "Brasileirão Série B",
+      "level": 68,
+      "budget": 28,
+      "value": 38,
+      "stadium": "Arena Condá",
+      "reputation": 66,
+      "board": "Disputar acesso e organizar elenco",
+      "difficulty": "Médio",
+      "competitions": [
+        "Brasileirão Série B",
+        "Copa do Brasil"
+      ]
+    },
+    {
+      "id": "coritiba",
+      "name": "Coritiba",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-b",
+      "league": "Brasileirão Série B",
+      "level": 73,
+      "budget": 46,
+      "value": 64,
+      "stadium": "Couto Pereira",
+      "reputation": 73,
+      "board": "Disputar acesso e organizar elenco",
+      "difficulty": "Acesso obrigatório",
+      "competitions": [
+        "Brasileirão Série B",
+        "Copa do Brasil"
+      ]
+    },
+    {
+      "id": "crb",
+      "name": "CRB",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-b",
+      "league": "Brasileirão Série B",
+      "level": 68,
+      "budget": 30,
+      "value": 39,
+      "stadium": "Rei Pelé",
+      "reputation": 66,
+      "board": "Disputar acesso e organizar elenco",
+      "difficulty": "Médio",
+      "competitions": [
+        "Brasileirão Série B",
+        "Copa do Brasil"
+      ]
+    },
+    {
+      "id": "criciuma",
+      "name": "Criciúma",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-b",
+      "league": "Brasileirão Série B",
+      "level": 71,
+      "budget": 38,
+      "value": 52,
+      "stadium": "Heriberto Hülse",
+      "reputation": 70,
+      "board": "Disputar acesso e organizar elenco",
+      "difficulty": "Briga pelo acesso",
+      "competitions": [
+        "Brasileirão Série B",
+        "Copa do Brasil"
+      ]
+    },
+    {
+      "id": "cuiaba",
+      "name": "Cuiabá",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-b",
+      "league": "Brasileirão Série B",
+      "level": 72,
+      "budget": 42,
+      "value": 58,
+      "stadium": "Arena Pantanal",
+      "reputation": 71,
+      "board": "Disputar acesso e organizar elenco",
+      "difficulty": "Briga pelo acesso",
+      "competitions": [
+        "Brasileirão Série B",
+        "Copa do Brasil"
+      ]
+    },
+    {
+      "id": "ferroviaria",
+      "name": "Ferroviária",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-b",
+      "league": "Brasileirão Série B",
+      "level": 65,
+      "budget": 22,
+      "value": 31,
+      "stadium": "Fonte Luminosa",
+      "reputation": 62,
+      "board": "Disputar acesso e organizar elenco",
+      "difficulty": "Sobrevivência",
+      "competitions": [
+        "Brasileirão Série B",
+        "Copa do Brasil"
+      ]
+    },
+    {
+      "id": "goias",
+      "name": "Goiás",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-b",
+      "league": "Brasileirão Série B",
+      "level": 72,
+      "budget": 43,
+      "value": 59,
+      "stadium": "Serrinha",
+      "reputation": 72,
+      "board": "Disputar acesso e organizar elenco",
+      "difficulty": "Briga pelo acesso",
+      "competitions": [
+        "Brasileirão Série B",
+        "Copa do Brasil"
+      ]
+    },
+    {
+      "id": "novorizontino",
+      "name": "Novorizontino",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-b",
+      "league": "Brasileirão Série B",
+      "level": 70,
+      "budget": 32,
+      "value": 45,
+      "stadium": "Jorge Ismael de Biasi",
+      "reputation": 68,
+      "board": "Disputar acesso e organizar elenco",
+      "difficulty": "Acesso possível",
+      "competitions": [
+        "Brasileirão Série B",
+        "Copa do Brasil"
+      ]
+    },
+    {
+      "id": "operario-pr",
+      "name": "Operário-PR",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-b",
+      "league": "Brasileirão Série B",
+      "level": 67,
+      "budget": 27,
+      "value": 35,
+      "stadium": "Germano Krüger",
+      "reputation": 65,
+      "board": "Disputar acesso e organizar elenco",
+      "difficulty": "Médio",
+      "competitions": [
+        "Brasileirão Série B",
+        "Copa do Brasil"
+      ]
+    },
+    {
+      "id": "paysandu",
+      "name": "Paysandu",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-b",
+      "league": "Brasileirão Série B",
+      "level": 66,
+      "budget": 26,
+      "value": 35,
+      "stadium": "Curuzu",
+      "reputation": 65,
+      "board": "Disputar acesso e organizar elenco",
+      "difficulty": "Médio",
+      "competitions": [
+        "Brasileirão Série B",
+        "Copa do Brasil"
+      ]
+    },
+    {
+      "id": "remo",
+      "name": "Remo",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-b",
+      "league": "Brasileirão Série B",
+      "level": 68,
+      "budget": 31,
+      "value": 43,
+      "stadium": "Mangueirão",
+      "reputation": 67,
+      "board": "Disputar acesso e organizar elenco",
+      "difficulty": "Pressão popular",
+      "competitions": [
+        "Brasileirão Série B",
+        "Copa do Brasil"
+      ]
+    },
+    {
+      "id": "vila-nova",
+      "name": "Vila Nova",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-b",
+      "league": "Brasileirão Série B",
+      "level": 68,
+      "budget": 30,
+      "value": 41,
+      "stadium": "Onésio Brasileiro Alvarenga",
+      "reputation": 67,
+      "board": "Disputar acesso e organizar elenco",
+      "difficulty": "Médio",
+      "competitions": [
+        "Brasileirão Série B",
+        "Copa do Brasil"
+      ]
+    },
+    {
+      "id": "volta-redonda",
+      "name": "Volta Redonda",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-b",
+      "league": "Brasileirão Série B",
+      "level": 65,
+      "budget": 22,
+      "value": 30,
+      "stadium": "Raulino de Oliveira",
+      "reputation": 62,
+      "board": "Disputar acesso e organizar elenco",
+      "difficulty": "Sobrevivência",
+      "competitions": [
+        "Brasileirão Série B",
+        "Copa do Brasil"
+      ]
+    },
+    {
+      "id": "athletic-mg",
+      "name": "Athletic Club",
+      "country": "br",
+      "countryName": "Brasil",
+      "leagueId": "brasileirao-b",
+      "league": "Brasileirão Série B",
+      "level": 66,
+      "budget": 24,
+      "value": 33,
+      "stadium": "Arena Sicredi",
+      "reputation": 63,
+      "board": "Disputar acesso e organizar elenco",
+      "difficulty": "Estreante",
+      "competitions": [
+        "Brasileirão Série B",
+        "Copa do Brasil"
+      ]
+    }
+  ]
+}

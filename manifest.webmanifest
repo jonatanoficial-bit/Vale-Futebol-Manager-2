@@ -1,0 +1,11 @@
+{
+  "name": "Vale Futebol Manager Gold Edition",
+  "short_name": "VFM Gold",
+  "start_url": "./index.html",
+  "display": "fullscreen",
+  "orientation": "any",
+  "background_color": "#020407",
+  "theme_color": "#05070a",
+  "description": "Futebol manager premium mobile-first com modo tela cheia.",
+  "icons": []
+}

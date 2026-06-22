@@ -1,0 +1,14 @@
+Vale Futebol Manager: Gold Edition
+Build v2.5.1 | 2026-05-19 | 01:15 UTC
+
+Correção emergencial:
+- Corrigido erro em js/systems/router.js na ligação do botão toggle-autosave.
+- O erro impedia o carregamento do app no navegador/Vercel.
+
+Auditorias realizadas:
+- node --check em todos os arquivos JS.
+- teste em navegador Chromium via servidor local.
+- verificação de console sem erros críticos.
+- abertura da tela inicial confirmada.
+
+Status: build segura para substituir a v2.5.0 no GitHub/Vercel.

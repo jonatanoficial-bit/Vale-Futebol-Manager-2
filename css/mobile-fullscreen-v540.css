@@ -1,0 +1,141 @@
+/* v5.4.0 - Fullscreen mobile, rolagem segura e modo horizontal da partida */
+html.vfm-mobile-v540,
+html.vfm-mobile-v540 body{
+  width:100%;
+  min-height:100%;
+  min-height:100svh;
+  overflow-x:hidden;
+  overscroll-behavior-y:contain;
+  -webkit-text-size-adjust:100%;
+}
+html.vfm-mobile-v540 body{
+  overflow-y:auto;
+  touch-action:pan-y;
+  background:#020407;
+}
+html.vfm-mobile-v540 .app-shell{
+  width:100%;
+  max-width:none;
+  min-height:100svh;
+  min-height:var(--vfm-viewport-h,100svh);
+  padding-bottom:0;
+  overflow-x:hidden;
+}
+html.vfm-mobile-v540 .screen{
+  width:100%;
+  min-height:100svh;
+  min-height:var(--vfm-viewport-h,100svh);
+  overflow-x:hidden;
+  overflow-y:visible;
+  scroll-behavior:smooth;
+  -webkit-overflow-scrolling:touch;
+  padding-bottom:calc(112px + env(safe-area-inset-bottom));
+}
+html.vfm-mobile-v540 .panel,
+html.vfm-mobile-v540 .card,
+html.vfm-mobile-v540 .topbar,
+html.vfm-mobile-v540 .premium-topbar{
+  max-width:100%;
+}
+html.vfm-mobile-v540 button,
+html.vfm-mobile-v540 .main-btn,
+html.vfm-mobile-v540 .secondary-btn,
+html.vfm-mobile-v540 .icon-btn,
+html.vfm-mobile-v540 .nav-item{
+  min-height:44px;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:rgba(255,216,106,.18);
+}
+html.vfm-mobile-v540 .fullscreen-fab-v540{
+  position:fixed;
+  right:calc(12px + env(safe-area-inset-right));
+  bottom:calc(92px + env(safe-area-inset-bottom));
+  z-index:80;
+  width:46px;
+  height:46px;
+  border-radius:999px;
+  border:1px solid rgba(255,216,106,.35);
+  background:linear-gradient(180deg,rgba(255,216,106,.22),rgba(6,10,16,.82));
+  color:#ffe9ac;
+  box-shadow:0 20px 54px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.10);
+  backdrop-filter:blur(16px);
+}
+html.vfm-mobile-v540 .screen.no-bottom-nav .fullscreen-fab-v540{bottom:calc(18px + env(safe-area-inset-bottom));}
+html.vfm-mobile-v540 .orientation-hint-v540{
+  display:none;
+  position:sticky;
+  top:calc(8px + env(safe-area-inset-top));
+  z-index:90;
+  margin-bottom:10px;
+  padding:10px 12px;
+  border-radius:18px;
+  border:1px solid rgba(255,216,106,.24);
+  background:linear-gradient(135deg,rgba(255,216,106,.18),rgba(5,8,13,.86));
+  box-shadow:0 18px 44px rgba(0,0,0,.48);
+  backdrop-filter:blur(18px);
+  gap:10px;
+  align-items:center;
+  justify-content:space-between;
+}
+html.vfm-mobile-v540 .orientation-hint-v540 div{display:grid;gap:2px;}
+html.vfm-mobile-v540 .orientation-hint-v540 span{color:rgba(255,255,255,.78);font-size:.8rem;}
+html.vfm-mobile-v540 .table-scroll,
+html.vfm-mobile-v540 .grid,
+html.vfm-mobile-v540 .menu-grid,
+html.vfm-mobile-v540 .match-live-grid{
+  max-width:100%;
+}
+html.vfm-mobile-v540 .table-scroll{overflow:auto;-webkit-overflow-scrolling:touch;}
+html.vfm-mobile-v540 .live-pitch{min-height:360px;}
+
+@media(max-width:920px){
+  html.vfm-mobile-v540 .screen{padding-left:10px!important;padding-right:10px!important;}
+  html.vfm-mobile-v540 .premium-topbar,
+  html.vfm-mobile-v540 .topbar{position:relative!important;top:auto!important;}
+  html.vfm-mobile-v540 .bottom-nav{bottom:calc(6px + env(safe-area-inset-bottom))!important;}
+  html.vfm-mobile-v540 .build-badge{display:none!important;}
+  html.vfm-mobile-v540 .screen-match .orientation-hint-v540{display:flex;}
+  html.vfm-mobile-v540.is-landscape .screen-match .orientation-hint-v540{display:none;}
+  html.vfm-mobile-v540 .screen-match{padding-bottom:calc(86px + env(safe-area-inset-bottom))!important;}
+  html.vfm-mobile-v540 .screen-match .topbar{display:none;}
+  html.vfm-mobile-v540 .match-stadium-hero{position:sticky;top:calc(4px + env(safe-area-inset-top));z-index:42;}
+  html.vfm-mobile-v540 .match-board{grid-template-columns:1fr 1.2fr 1fr!important;gap:8px;align-items:center;}
+  html.vfm-mobile-v540 .match-board .club-logo{width:58px;height:58px;}
+  html.vfm-mobile-v540 .score{font-size:clamp(2.2rem,9vw,4rem)!important;}
+  html.vfm-mobile-v540 .match-live-grid{grid-template-columns:1fr!important;}
+  html.vfm-mobile-v540 .match-control-grid{grid-template-columns:1fr!important;}
+}
+
+@media(max-width:920px) and (orientation:landscape){
+  html.vfm-mobile-v540 .screen-match{
+    padding:6px 8px calc(74px + env(safe-area-inset-bottom))!important;
+    min-height:100svh;
+  }
+  html.vfm-mobile-v540 .screen-match .match-stadium-hero{margin-bottom:8px;}
+  html.vfm-mobile-v540 .screen-match .match-live-grid{
+    display:grid!important;
+    grid-template-columns:minmax(420px,1.4fr) minmax(280px,.85fr)!important;
+    gap:8px!important;
+    align-items:start;
+  }
+  html.vfm-mobile-v540 .screen-match .live-pitch{min-height:calc(100svh - 245px);}
+  html.vfm-mobile-v540 .screen-match .match-kpis,
+  html.vfm-mobile-v540 .screen-match .engine-v470-panel{display:none!important;}
+  html.vfm-mobile-v540 .screen-match .match-control-grid{
+    display:grid!important;
+    grid-template-columns:.8fr 1fr 1fr!important;
+    gap:8px!important;
+  }
+  html.vfm-mobile-v540 .screen-match .panel{padding:10px!important;border-radius:18px!important;}
+  html.vfm-mobile-v540 .screen-match .commentary{max-height:calc(100svh - 310px);overflow:auto;-webkit-overflow-scrolling:touch;}
+  html.vfm-mobile-v540 .fullscreen-fab-v540{right:8px;bottom:calc(78px + env(safe-area-inset-bottom));}
+}
+
+@media(max-width:520px){
+  html.vfm-mobile-v540 .screen{padding-bottom:calc(104px + env(safe-area-inset-bottom));}
+  html.vfm-mobile-v540 .bottom-nav{grid-template-columns:repeat(5,1fr)!important;width:calc(100vw - 10px)!important;padding:6px!important;}
+  html.vfm-mobile-v540 .nav-item{min-height:50px!important;font-size:.62rem!important;}
+  html.vfm-mobile-v540 .fullscreen-fab-v540{width:42px;height:42px;right:8px;}
+  html.vfm-mobile-v540 .top-status{overflow-x:auto;flex-wrap:nowrap!important;-webkit-overflow-scrolling:touch;padding-bottom:2px;}
+  html.vfm-mobile-v540 .resource{flex:0 0 auto;}
+}

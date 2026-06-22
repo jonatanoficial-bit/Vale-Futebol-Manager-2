@@ -1,0 +1,142 @@
+{
+  "version": "v5.9.1",
+  "label": "Data Pack 2026.05.20",
+  "lockDate": "2026-05-20",
+  "status": "serie-a-pass-2-in-progress",
+  "paths": {
+    "brazilSerieA": "data/rosters/2026/brazil/serie-a/{clubId}.json",
+    "brazilSerieB": "data/rosters/2026/brazil/serie-b/{clubId}.json",
+    "europe": "data/rosters/2026/europe/{leagueId}/{clubId}.json",
+    "southAmerica": "data/rosters/2026/south-america/{leagueId}/{clubId}.json",
+    "nationalTeams": "data/rosters/2026/national-teams/{countryId}.json"
+  },
+  "releaseCandidateRule": "No playable club can use generated or generic player names. RC is blocked until official/licensed roster files are imported and validated.",
+  "officialSerieACoverage": "8/20",
+  "officialSerieAPlayers": 251,
+  "lastBatch": [
+    "corinthians",
+    "sao-paulo",
+    "santos",
+    "botafogo",
+    "vasco"
+  ],
+  "serieBPass1": {
+    "version": "v5.8.5",
+    "clubs": [
+      "fortaleza",
+      "ceara",
+      "novorizontino",
+      "avai",
+      "athletic-club"
+    ],
+    "players": 134,
+    "status": "official-reference-pass-1"
+  },
+  "serieBPass2": {
+    "version": "v5.8.6",
+    "clubs": [
+      "goias",
+      "cuiaba",
+      "criciuma",
+      "america-mg",
+      "juventude"
+    ],
+    "totalSerieBClubs": 10,
+    "playersAdded": 154,
+    "playersSerieBTotal": 288,
+    "status": "official-reference-pass-2"
+  },
+  "serieBPass3": {
+    "version": "v5.8.7",
+    "clubs": [
+      "atletico-go",
+      "vila-nova",
+      "crb",
+      "nautico",
+      "sao-bernardo"
+    ],
+    "totalSerieBClubs": 15,
+    "playersAdded": 134,
+    "playersSerieBTotal": 422,
+    "status": "official-reference-pass-3"
+  },
+  "serieBPass4": {
+    "version": "v5.8.8",
+    "clubs": [
+      "operario",
+      "botafogo-sp",
+      "sport-recife",
+      "londrina",
+      "ponte-preta"
+    ],
+    "totalSerieBClubs": 20,
+    "playersAdded": 135,
+    "playersSerieBTotal": 557,
+    "status": "serie-b-20-of-20-complete"
+  },
+  "conmebolPriorityPack1": {
+    "version": "v5.8.10",
+    "clubs": [
+      "boca-juniors",
+      "river-plate",
+      "rosario-central",
+      "racing-club",
+      "independiente-del-valle",
+      "ldu-quito",
+      "penarol",
+      "nacional-uruguay",
+      "colo-colo",
+      "olimpia",
+      "cerro-porteno",
+      "atletico-nacional",
+      "junior-barranquilla",
+      "bolivar",
+      "universitario",
+      "alianza-lima"
+    ],
+    "playersAdded": 400,
+    "libertadoresClubs": 9,
+    "sulamericanaClubs": 7,
+    "status": "conmebol-priority-pack-1-complete"
+  },
+  "worldElitePack1": {
+    "version": "v5.8.10",
+    "clubs": [
+      "real-madrid",
+      "manchester-city",
+      "arsenal",
+      "paris-saint-germain",
+      "barcelona",
+      "chelsea",
+      "liverpool",
+      "bayern-munich",
+      "inter-milan",
+      "ac-milan",
+      "juventus",
+      "atletico-madrid"
+    ],
+    "playersAdded": 301,
+    "status": "world-elite-pack-1-complete"
+  },
+  "nationalTeams": {
+    "ready": 16,
+    "players": 416,
+    "lockDate": "2026-05-20"
+  },
+  "southAmericaAllLogoPack": {
+    "version": "v5.9.1",
+    "countries": [
+      "argentina",
+      "uruguay",
+      "chile",
+      "colombia",
+      "ecuador",
+      "paraguay"
+    ],
+    "clubsAdded": 69,
+    "totalSouthAmericaClubs": 85,
+    "playersAdded": 759,
+    "minimumPerClub": 11,
+    "status": "all-logo-league-starter-xi-covered"
+  }
+}

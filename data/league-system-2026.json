@@ -1,0 +1,195 @@
+{
+  "version": "2026-v1",
+  "updatedAt": "2026-05-19",
+  "sourceNote": "Divisões brasileiras 2026 baseadas nas tabelas oficiais CBF consultadas em 19/05/2026.",
+  "brazil": {
+    "serieA": [
+      {
+        "id": "palmeiras",
+        "name": "Palmeiras"
+      },
+      {
+        "id": "flamengo",
+        "name": "Flamengo"
+      },
+      {
+        "id": "fluminense",
+        "name": "Fluminense"
+      },
+      {
+        "id": "sao-paulo",
+        "name": "São Paulo"
+      },
+      {
+        "id": "athletico-pr",
+        "name": "Athletico Paranaense"
+      },
+      {
+        "id": "red-bull-bragantino",
+        "name": "Red Bull Bragantino"
+      },
+      {
+        "id": "bahia",
+        "name": "Bahia"
+      },
+      {
+        "id": "coritiba",
+        "name": "Coritiba SAF"
+      },
+      {
+        "id": "botafogo",
+        "name": "Botafogo"
+      },
+      {
+        "id": "atletico-mg",
+        "name": "Atlético-MG"
+      },
+      {
+        "id": "internacional",
+        "name": "Internacional"
+      },
+      {
+        "id": "vasco",
+        "name": "Vasco da Gama SAF"
+      },
+      {
+        "id": "cruzeiro",
+        "name": "Cruzeiro"
+      },
+      {
+        "id": "vitoria",
+        "name": "Vitória"
+      },
+      {
+        "id": "gremio",
+        "name": "Grêmio"
+      },
+      {
+        "id": "santos",
+        "name": "Santos FC"
+      },
+      {
+        "id": "corinthians",
+        "name": "Corinthians"
+      },
+      {
+        "id": "remo",
+        "name": "Remo"
+      },
+      {
+        "id": "mirassol",
+        "name": "Mirassol"
+      },
+      {
+        "id": "chapecoense",
+        "name": "Chapecoense"
+      }
+    ],
+    "serieB": [
+      {
+        "id": "vila-nova",
+        "name": "Vila Nova"
+      },
+      {
+        "id": "fortaleza",
+        "name": "Fortaleza SAF"
+      },
+      {
+        "id": "ceara",
+        "name": "Ceará"
+      },
+      {
+        "id": "novorizontino",
+        "name": "Novorizontino SAF"
+      },
+      {
+        "id": "avai",
+        "name": "Avaí"
+      },
+      {
+        "id": "athletic-club",
+        "name": "Athletic Club"
+      },
+      {
+        "id": "operario",
+        "name": "Operário"
+      },
+      {
+        "id": "botafogo-sp",
+        "name": "Botafogo-SP"
+      },
+      {
+        "id": "sao-bernardo",
+        "name": "São Bernardo"
+      },
+      {
+        "id": "criciuma",
+        "name": "Criciúma"
+      },
+      {
+        "id": "juventude",
+        "name": "Juventude"
+      },
+      {
+        "id": "goias",
+        "name": "Goiás"
+      },
+      {
+        "id": "sport-recife",
+        "name": "Sport Recife"
+      },
+      {
+        "id": "nautico",
+        "name": "Náutico"
+      },
+      {
+        "id": "cuiaba",
+        "name": "Cuiabá SAF"
+      },
+      {
+        "id": "londrina",
+        "name": "Londrina SAF"
+      },
+      {
+        "id": "atletico-go",
+        "name": "Atlético-GO SAF"
+      },
+      {
+        "id": "ponte-preta",
+        "name": "Ponte Preta"
+      },
+      {
+        "id": "crb",
+        "name": "CRB"
+      },
+      {
+        "id": "america-mg",
+        "name": "América-MG"
+      }
+    ],
+    "rules": {
+      "serieA": {
+        "teams": 20,
+        "relegation": 4,
+        "libertadoresDirect": 4,
+        "sudamericanaWindow": "5º ao 12º conforme vagas não usadas por copas"
+      },
+      "serieB": {
+        "teams": 20,
+        "promotion": 4,
+        "relegation": 4
+      },
+      "continental": {
+        "libertadores": "Top 4 da Série A recebem vaga continental principal no jogo; campeões de Copa do Brasil/Libertadores/Sul-Americana podem liberar vagas extras em futuras builds.",
+        "sulamericana": "Faixa intermediária da Série A entra na Sul-Americana no modo carreira.",
+        "interclubWorldCup": "Campeões continentais podem entrar no Mundial de Clubes, tratado como ciclo internacional de 4 anos no jogo."
+      },
+      "nationalTeam": {
+        "continentalCupCycle": 4,
+        "worldCupQualifiers": true,
+        "worldCupCycle": 4,
+        "clubWorldCupCycle": 4
+      }
+    }
+  }
+}

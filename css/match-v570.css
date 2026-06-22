@@ -1,0 +1,58 @@
+/* v5.7.0 - Tela de partida refinada PC/mobile */
+.screen-match .match-v570-shell{display:grid;gap:14px;}
+.match-v570-status{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:8px;}
+.match-v570-status .status-chip{border:1px solid rgba(255,216,106,.24);background:rgba(255,216,106,.09);border-radius:999px;padding:6px 10px;font-size:.78rem;color:rgba(255,255,255,.82);}
+.match-stage-v570{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(320px,.75fr);gap:14px;align-items:start;}
+.match-stage-v570 .tactical-table,.match-stage-v570 .live-commentary-panel{min-height:100%;}
+.match-command-dock-v570{position:sticky;top:calc(8px + env(safe-area-inset-top));z-index:55;display:grid;grid-template-columns:1.1fr .95fr 1.1fr 1fr;gap:10px;align-items:stretch;padding:10px;border:1px solid rgba(255,216,106,.20);border-radius:24px;background:linear-gradient(135deg,rgba(6,10,16,.88),rgba(20,26,38,.78));box-shadow:0 22px 70px rgba(0,0,0,.44);backdrop-filter:blur(18px);}
+.match-command-dock-v570 button{min-height:46px;}
+.match-command-dock-v570 .dock-group{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.match-command-dock-v570 .dock-group.vertical{display:grid;grid-template-columns:1fr;gap:6px;}
+.match-command-dock-v570 .dock-title{display:block;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.52);margin-bottom:4px;}
+.match-command-dock-v570 .speed-pill{min-width:54px;padding-inline:10px;}
+.match-command-dock-v570 .speed-pill.active,.match-command-dock-v570 .main-btn.active{outline:1px solid rgba(255,216,106,.7);box-shadow:0 0 0 3px rgba(255,216,106,.10);}
+.match-command-dock-v570 .danger{border-color:rgba(255,90,90,.34)!important;color:#ffd2d2!important;}
+.important-events-v570{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.important-event-card-v570{border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.055);border-radius:18px;padding:10px;display:grid;gap:4px;min-height:76px;}
+.important-event-card-v570 strong{color:#ffe7a3;}
+.important-event-card-v570 small{color:rgba(255,255,255,.62);line-height:1.3;}
+.quick-subs-v570{max-height:210px;overflow:auto;-webkit-overflow-scrolling:touch;padding-right:2px;}
+.match-v570-assist{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.match-v570-assist .alert{margin:0;}
+@media(max-width:1100px){
+  .match-stage-v570{grid-template-columns:1fr;}
+  .match-command-dock-v570{grid-template-columns:1fr 1fr;}
+  .important-events-v570{grid-template-columns:1fr;}
+}
+@media(max-width:920px){
+  html.vfm-mobile-v540 .screen-match .match-v570-shell{gap:10px;}
+  html.vfm-mobile-v540 .match-command-dock-v570{top:calc(4px + env(safe-area-inset-top));grid-template-columns:1fr 1fr;padding:8px;border-radius:20px;}
+  html.vfm-mobile-v540 .match-command-dock-v570 button{min-height:48px;font-size:.82rem;}
+  html.vfm-mobile-v540 .match-command-dock-v570 .dock-title{display:none;}
+  html.vfm-mobile-v540 .match-score-hero{grid-template-columns:.85fr 1.2fr .85fr;padding:10px!important;}
+  html.vfm-mobile-v540 .match-team-side h2{font-size:.85rem;}
+  html.vfm-mobile-v540 .match-team-side span{display:none;}
+  html.vfm-mobile-v540 .match-logo{width:46px!important;height:46px!important;}
+  html.vfm-mobile-v540 .match-v570-assist{grid-template-columns:1fr;}
+}
+@media(max-width:920px) and (orientation:landscape){
+  html.vfm-mobile-v540 .screen-match{overflow:hidden!important;}
+  html.vfm-mobile-v540 .screen-match .match-v570-shell{height:calc(100svh - 18px);display:grid;grid-template-rows:auto auto 1fr;overflow:hidden;}
+  html.vfm-mobile-v540 .screen-match .match-command-dock-v570{position:relative;top:auto;grid-template-columns:.85fr 1fr 1fr .85fr;gap:6px;margin:0;}
+  html.vfm-mobile-v540 .screen-match .match-score-hero{margin:0;}
+  html.vfm-mobile-v540 .screen-match .match-stage-v570{display:grid!important;grid-template-columns:minmax(460px,1.45fr) minmax(270px,.8fr)!important;gap:8px!important;min-height:0;overflow:hidden;}
+  html.vfm-mobile-v540 .screen-match .live-pitch{min-height:calc(100svh - 245px)!important;height:calc(100svh - 245px)!important;}
+  html.vfm-mobile-v540 .screen-match .live-commentary-panel{min-height:0;max-height:calc(100svh - 168px);overflow:hidden;}
+  html.vfm-mobile-v540 .screen-match .commentary{max-height:calc(100svh - 250px)!important;overflow:auto;}
+  html.vfm-mobile-v540 .screen-match .match-control-grid,
+  html.vfm-mobile-v540 .screen-match .match-kpis,
+  html.vfm-mobile-v540 .screen-match .engine-v470-panel,
+  html.vfm-mobile-v540 .screen-match .extra-match-depth-v570{display:none!important;}
+  html.vfm-mobile-v540 .bottom-nav{display:none!important;}
+  html.vfm-mobile-v540 .fullscreen-fab-v540{bottom:8px!important;}
+}
+@media(max-width:560px){
+  .match-command-dock-v570{grid-template-columns:1fr;}
+  .match-command-dock-v570 .dock-group{display:grid;grid-template-columns:1fr 1fr;}
+  .match-command-dock-v570 .dock-group.vertical{grid-template-columns:1fr;}
+}
