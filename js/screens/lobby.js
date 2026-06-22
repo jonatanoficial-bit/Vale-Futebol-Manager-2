@@ -9,6 +9,7 @@ export const PRIMARY_ACTIONS_V550 = [
   ['squad','Ver elenco','👥','Jogadores, moral, contratos e forma'],
   ['messages','Abrir e-mail','✉️','Diretoria, imprensa e empresários'],
   ['managerMenu','Menu completo','☰','Todos os módulos avançados'],
+  ['careerIntro','Jornada inicial','🎬','Arco cinematográfico, onboarding e primeiro jogo'],
   ['careerTutorial','Tutorial e missões','🎓','Entenda o modo carreira e acompanhe metas'],
   ['managerProgression','Evolução','⭐','XP, nível e licença do treinador']
 ];
@@ -47,6 +48,7 @@ export const MANAGER_MENU_GROUPS_V550 = [
     ['club','Clube','🛡️','Resumo institucional, estádio e torcida','Perfil']
   ]],
   ['Sistema e desenvolvimento', [
+    ['careerIntro','Jornada Inicial','🎬','Abertura cinematográfica e primeira sessão guiada','v6.1'],
     ['releaseCandidate','Beta Pública','🚀','Checklist público, mobile real e fluxo de teste','v6.0'],
     ['saveCenter','Save Profissional','💾','Backups, exportar/importar e recuperação','v5.1'],
     ['polishCenter','UI AAA','✨','Visual, responsividade e performance','v5.0'],

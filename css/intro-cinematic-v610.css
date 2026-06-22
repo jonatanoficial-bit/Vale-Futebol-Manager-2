@@ -1,0 +1,24 @@
+/* VFM v6.1.0 — Jornada Inicial Cinematográfica mobile-first */
+.intro-cinematic-v610{padding-bottom:calc(var(--vfm-bottom-nav-h,82px) + 28px)}
+.intro-hero-v610{position:relative;overflow:hidden;min-height:clamp(420px,60vh,680px);display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.65fr);gap:24px;align-items:end;background:linear-gradient(135deg,rgba(6,10,16,.96),rgba(12,26,42,.88)),var(--intro-bg);background-size:cover;background-position:center;border:1px solid rgba(255,255,255,.14)}
+.intro-hero-v610:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 20% 20%,rgba(255,208,96,.22),transparent 32%),linear-gradient(0deg,rgba(0,0,0,.25),transparent 55%);pointer-events:none}
+.intro-hero-copy-v610,.intro-manager-contract-v610{position:relative;z-index:1}
+.intro-hero-copy-v610 h1{font-size:clamp(2rem,5vw,4.7rem);line-height:.96;max-width:900px;margin:.28em 0;text-wrap:balance}
+.intro-hero-copy-v610 p{max-width:760px}
+.intro-manager-contract-v610{display:grid;grid-template-columns:88px 1fr;gap:14px;align-items:center;padding:16px;border-radius:22px;background:rgba(5,8,13,.78);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(12px)}
+.intro-manager-contract-v610 .manager-pic{width:88px;height:88px;border-radius:22px;object-fit:cover}
+.inline-club{width:28px;height:28px;object-fit:contain;vertical-align:middle;margin-right:6px}
+.intro-act-grid-v610{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.intro-act-card-v610{display:flex;flex-direction:column;gap:12px;min-height:260px;border-color:rgba(255,255,255,.13)}
+.intro-act-card-v610.current{outline:2px solid rgba(255,210,100,.72);box-shadow:0 0 0 8px rgba(255,210,100,.08)}
+.intro-act-card-v610 .secondary-btn{margin-top:auto;width:100%}
+.intro-act-head-v610{display:flex;gap:12px;align-items:center}
+.intro-act-icon-v610{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;font-size:1.6rem;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)}
+.intro-flow-v610{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.intro-flow-button-v610{width:100%;text-align:left;display:grid;gap:4px;padding:14px 16px;border-radius:16px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.055);color:inherit;cursor:pointer}
+.intro-flow-button-v610 span{font-size:.9rem;opacity:.78}
+.cinematic-kpi-v610 strong{text-transform:capitalize}
+.intro-rules-v610{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 22px}
+@media(max-width:960px){.intro-hero-v610{grid-template-columns:1fr;min-height:auto;padding-bottom:24px}.intro-act-grid-v610{grid-template-columns:repeat(2,minmax(0,1fr))}.intro-rules-v610{grid-template-columns:1fr}}
+@media(max-width:560px){.intro-cinematic-v610{padding-inline:0}.intro-hero-v610{border-radius:0;margin-inline:calc(var(--vfm-mobile-pad,14px) * -1);padding:22px 14px}.intro-hero-copy-v610 .menu-actions{display:grid}.intro-hero-copy-v610 .menu-actions button{width:100%}.intro-manager-contract-v610{grid-template-columns:68px 1fr}.intro-manager-contract-v610 .manager-pic{width:68px;height:68px;border-radius:18px}.intro-act-grid-v610{grid-template-columns:1fr}.intro-act-card-v610{min-height:auto}.intro-flow-button-v610{min-height:58px}.intro-hero-copy-v610 h1{font-size:2.15rem}}
+@media(max-height:430px) and (orientation:landscape){.intro-hero-v610{min-height:auto;grid-template-columns:1fr 1fr}.intro-hero-copy-v610 h1{font-size:2rem}.intro-act-grid-v610{grid-template-columns:repeat(3,minmax(0,1fr))}.intro-act-card-v610{min-height:220px}}

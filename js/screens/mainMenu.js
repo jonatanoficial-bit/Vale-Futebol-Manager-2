@@ -5,6 +5,7 @@ import { safeImg } from '../systems/assets.js';
 export function mainMenu(state){
   const saveReady = hasSave();
   const quick = [
+    ['intro','Jornada inicial','Abertura cinematográfica, primeira chance, pressão da diretoria e caminho até o primeiro jogo.'],
     ['career','Modo Carreira','Comece pequeno, evolua sua reputação e receba propostas de clubes e seleções.'],
     ['sandbox','Sandbox','Liberdade para testar elencos, competições e cenários sem travas.'],
     ['assets','Assets prontos','Use imagens genéricas agora e substitua depois sem mexer no código.']
@@ -17,7 +18,8 @@ export function mainMenu(state){
         <h1>Menu principal</h1>
         <p class="subtitle">Escolha como iniciar sua jornada no Vale Futebol Manager: Gold Edition.</p>
         <div class="menu-actions main-menu-actions">
-          <button class="main-btn giant" data-route="newGame">⚽ Novo jogo</button>
+          <button class="main-btn giant" data-route="careerIntro">🎬 Jornada inicial</button>
+          <button class="secondary-btn giant" data-route="newGame">⚽ Novo jogo direto</button>
           <button class="secondary-btn giant ${saveReady?'':'disabled-soft'}" data-route="${saveReady?'lobby':'newGame'}">📁 Continuar ${saveReady?'':'(novo save)'}</button>
           <button class="secondary-btn" data-route="settings">⚙️ Configurações</button>
         </div>
@@ -36,4 +38,4 @@ export function mainMenu(state){
       </div>
     </section>`, false);
 }
-function iconSymbol(id){ return ({career:'🏆',sandbox:'🧪',assets:'🖼️'})[id] || '⚽'; }
+function iconSymbol(id){ return ({intro:'🎬',career:'🏆',sandbox:'🧪',assets:'🖼️'})[id] || '⚽'; }

@@ -4,3 +4,7 @@ Phase: Fase 43 — Beta Pública Mobile-First
 Status: public-beta-ready
 Base: v5.9.9 Mobile UX Final
 Added: release candidate center, public beta guide, mobile test matrix, manual tester flow.
+Build v6.1.0 | 2026-06-22 | Jornada Inicial Cinematográfica
+Fase 44 — Retenção inicial, onboarding emocional e primeira sessão guiada
+Status: cinematic-beta-ready
+Base preservada: v6.0.0 Beta Pública Mobile-First

@@ -1,7 +1,7 @@
 {
-  "version": "v6.0.0",
-  "buildLabel": "Build v6.0.0 | 2026-06-22 | Beta Pública Mobile-First",
-  "phase": "Fase 43 — Beta Pública controlada, checklist RC e matriz mobile",
+  "version": "v6.1.0",
+  "buildLabel": "Build v6.1.0 | 2026-06-22 | Jornada Inicial Cinematográfica",
+  "phase": "Fase 44 — Jornada inicial cinematográfica, retenção e onboarding emocional",
   "dataPack": "2026.05.20",
-  "status": "public-beta-ready"
+  "status": "cinematic-beta-ready"
 }

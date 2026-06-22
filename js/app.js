@@ -35,6 +35,8 @@ import { validateManagerJobMarketSystem } from '../core/safety/manager-job-marke
 import { validateBalanceGeneralSystem } from '../core/safety/balance-general-validator.js';
 import { validateReleaseCandidateSystem } from '../core/safety/release-candidate-validator.js';
 import { buildReleaseCandidateSnapshot } from './systems/releaseCandidateEngine.js';
+import { validateIntroCinematicSystem } from '../core/safety/intro-cinematic-validator.js';
+import { buildIntroCinematicSnapshot } from './systems/introCinematicEngine.js';
 import { validateDataPack2026System } from '../core/safety/datapack-validator.js';
 import { runRuntimeAudit } from './systems/auditLogger.js';
 import { loadVisualLibrary } from './systems/visualAssetManager.js';
@@ -54,7 +56,7 @@ async function boot(){
   applyMobileUxFinalShell();
   applyNavigationExperienceShell();
   load();
-  runRuntimeAudit(getState(), {phase:'v6.0.0 beta pública boot', releaseCandidate: validateReleaseCandidateSystem(buildReleaseCandidateSnapshot(getState())), balanceGeneral: validateBalanceGeneralSystem(getState()), guidedTutorial: validateGuidedTutorialSystem(getState()), managerProgression: validateManagerProgressionSystem(getState()), managerJobMarket: validateManagerJobMarketSystem(getState()), pressConference: validatePressConferenceSystem(getState()), careerLoop: validateCareerLoopV592(getState()), rosterLock2026: validateRosterLock2026(getState()), rosterLockSnapshot: buildRosterLock2026Snapshot(getState()), dataPack2026: validateDataPack2026System(getState()), dataPackSnapshot: buildDataPack2026Snapshot(getState()), matchFlow: validateMatchFlowV570(buildMatchExperienceSnapshot(getState())), ux: runtimeSafetySnapshot(getState()), aaa: buildUiAaaSnapshot(getState()), mobile: buildMobileExperienceSnapshot(), mobileCertification: validateMobileCertificationV598(buildMobileCertificationSnapshot()), mobileUxFinal: validateMobileUxFinalV599(buildMobileUxFinalSnapshot()), navigation: validateNavigationSystem({currentRoute:getState().route}), menuHierarchy: validateMenuHierarchy({primaryActions:PRIMARY_ACTIONS_V550, menuGroups:MANAGER_MENU_GROUPS_V550}), touchTargets: validateTouchTargets(), lobby: validateLobbyCompactSystem({primaryActions:PRIMARY_ACTIONS_V550, menuGroups:MANAGER_MENU_GROUPS_V550})});
+  runRuntimeAudit(getState(), {phase:'v6.1.0 jornada inicial cinematográfica boot', introCinematic: validateIntroCinematicSystem(buildIntroCinematicSnapshot(getState())), releaseCandidate: validateReleaseCandidateSystem(buildReleaseCandidateSnapshot(getState())), balanceGeneral: validateBalanceGeneralSystem(getState()), guidedTutorial: validateGuidedTutorialSystem(getState()), managerProgression: validateManagerProgressionSystem(getState()), managerJobMarket: validateManagerJobMarketSystem(getState()), pressConference: validatePressConferenceSystem(getState()), careerLoop: validateCareerLoopV592(getState()), rosterLock2026: validateRosterLock2026(getState()), rosterLockSnapshot: buildRosterLock2026Snapshot(getState()), dataPack2026: validateDataPack2026System(getState()), dataPackSnapshot: buildDataPack2026Snapshot(getState()), matchFlow: validateMatchFlowV570(buildMatchExperienceSnapshot(getState())), ux: runtimeSafetySnapshot(getState()), aaa: buildUiAaaSnapshot(getState()), mobile: buildMobileExperienceSnapshot(), mobileCertification: validateMobileCertificationV598(buildMobileCertificationSnapshot()), mobileUxFinal: validateMobileUxFinalV599(buildMobileUxFinalSnapshot()), navigation: validateNavigationSystem({currentRoute:getState().route}), menuHierarchy: validateMenuHierarchy({primaryActions:PRIMARY_ACTIONS_V550, menuGroups:MANAGER_MENU_GROUPS_V550}), touchTargets: validateTouchTargets(), lobby: validateLobbyCompactSystem({primaryActions:PRIMARY_ACTIONS_V550, menuGroups:MANAGER_MENU_GROUPS_V550})});
   validateCommercialState(getState());
   initRouter(app, buildInfo);
   register('cover', cover);
@@ -97,6 +99,7 @@ async function boot(){
     settings:['Configurações','Preferências e segurança'],
     aiBalance:['Balanceamento geral','Dificuldade, reputação, XP, economia, propostas e estabilidade da carreira'],
     releaseCandidate:['Beta Pública','Checklist público, matriz mobile, fluxo de teste e prontidão v6.0.0'],
+    careerIntro:['Jornada Inicial','Abertura cinematográfica, arco emocional, onboarding guiado e primeira partida'],
     saveCenter:['Central de Save','Autosave, backups, exportação, importação e proteção de carreira'],
     assetChecklist:['Assets','Checklist visual, caminhos oficiais, cache e fallbacks'],
     rosterUpdate:['Atualização de Elenco','Importar, exportar e validar elencos por JSON'],
