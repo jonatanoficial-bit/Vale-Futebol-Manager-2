@@ -1,7 +1,7 @@
 {
-  "version": "v6.4.0",
-  "buildLabel": "Build v6.4.0 | 2026-06-22 | IA de Elenco e Vestiário",
-  "phase": "Fase 47 — IA de elenco, moral, liderança e vestiário",
+  "version": "v6.5.0",
+  "buildLabel": "Build v6.5.0 | 2026-06-22 | Objetivos, Conquistas e Retenção",
+  "phase": "Fase 48 — objetivos, conquistas, recompensas e retenção diária",
   "dataPack": "2026.05.20",
-  "status": "squad-ai-dressing-room-ready"
+  "status": "objectives-retention-ready"
 }

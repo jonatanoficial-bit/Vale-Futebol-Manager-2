@@ -7,6 +7,7 @@ export const PRIMARY_ACTIONS_V550 = [
   ['match','Jogar partida','⚽','Entrar no próximo compromisso oficial'],
   ['matchdayPremium','Matchday','🏟️','Pré-jogo, tensão, banco e pós-jogo premium'],
   ['squadAI','Vestiário','🧠','Moral, liderança, rotação e crise interna'],
+  ['objectivesHub','Objetivos','🎯','Metas, conquistas, recompensas e retenção diária'],
   ['formation','Ajustar tática','🧩','Escalação, plano de jogo e banco'],
   ['squad','Ver elenco','👥','Jogadores, moral, contratos e forma'],
   ['messages','Abrir e-mail','✉️','Diretoria, imprensa e empresários'],
@@ -29,6 +30,7 @@ export const MANAGER_MENU_GROUPS_V550 = [
   ['Elenco e campo', [
     ['squad','Elenco','👥','Jogadores, forma, moral e contratos','Clube'],
     ['squadAI','IA de Elenco','🧠','Moral, liderança, vestiário e rotação inteligente','v6.4'],
+    ['objectivesHub','Objetivos e conquistas','🎯','Missões diárias, metas de temporada e recompensas','v6.5'],
     ['formation','Tática','🧩','Escalação, campo, banco e desenho tático','Pré-jogo'],
     ['instructions','Instruções','🎯','Pressão, passes, mentalidade e bolas paradas','Avançado'],
     ['training','Treino','🔶','Plano semanal, evolução, fadiga e lesões','Elenco'],
@@ -133,11 +135,11 @@ export function lobby(state){
       </section>
 
       <section class="panel coach-feed-v550">
-        <div class="row space"><div><span class="tag">Resumo do dia</span><h3>Central do treinador</h3></div><div class="row"><button class="secondary-btn mini" data-route="matchdayPremium">Matchday</button><button class="secondary-btn mini" data-route="squadAI">Vestiário</button><button class="secondary-btn mini" data-route="liveWorld">Jornal</button><button class="secondary-btn mini" data-route="messages">Ver e-mails</button></div></div>
+        <div class="row space"><div><span class="tag">Resumo do dia</span><h3>Central do treinador</h3></div><div class="row"><button class="secondary-btn mini" data-route="matchdayPremium">Matchday</button><button class="secondary-btn mini" data-route="squadAI">Vestiário</button><button class="secondary-btn mini" data-route="objectivesHub">Objetivos</button><button class="secondary-btn mini" data-route="liveWorld">Jornal</button><button class="secondary-btn mini" data-route="messages">Ver e-mails</button></div></div>
         <div class="coach-feed-grid-v550">
           <div class="news-item"><strong>Diretoria</strong><span>Objetivo ativo: ${t.board}</span></div>
           <div class="news-item"><strong>Jogo</strong><span>${nextTitle}</span></div>
-          <div class="news-item"><strong>Missões</strong><span>${(state.career?.missions || []).filter(m=>m.done).length}/${(state.career?.missions || []).length || 8} concluídas. Use Tutorial e missões para entender a carreira.</span></div>
+          <div class="news-item"><strong>Missões</strong><span>${(state.career?.missions || []).filter(m=>m.done).length}/${(state.career?.missions || []).length || 8} concluídas. Use Objetivos para acompanhar recompensas e retorno diário.</span></div>
         </div>
       </section>
     </section>`, true);

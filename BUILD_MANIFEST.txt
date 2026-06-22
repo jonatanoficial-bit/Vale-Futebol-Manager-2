@@ -16,3 +16,13 @@ ADICIONADO v6.4.0
 - css/squad-ai-v640.css
 - SQUAD_AI_GUIDE.md
 - DRESSING_ROOM_QA_CHECKLIST.md
+
+
+V6.5.0 FILES
+- js/data/objectivesRetentionData.js
+- js/systems/objectivesRetentionEngine.js
+- core/safety/objectives-retention-validator.js
+- css/objectives-retention-v650.css
+- OBJECTIVES_RETENTION_GUIDE.md
+- RETENTION_QA_CHECKLIST.md
+- ACHIEVEMENTS_SYSTEM_GUIDE.md

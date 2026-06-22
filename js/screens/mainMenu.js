@@ -23,6 +23,7 @@ export function mainMenu(state){
           <button class="secondary-btn giant ${saveReady?'':'disabled-soft'}" data-route="${saveReady?'lobby':'newGame'}">📁 Continuar ${saveReady?'':'(novo save)'}</button>
           <button class="secondary-btn" data-route="matchdayPremium">🏟️ Matchday premium</button>
           <button class="secondary-btn" data-route="squadAI">🧠 IA de elenco</button>
+          <button class="secondary-btn" data-route="objectivesHub">🎯 Objetivos e conquistas</button>
           <button class="secondary-btn" data-route="liveWorld">📰 Jornal esportivo</button>
           <button class="secondary-btn" data-route="settings">⚙️ Configurações</button>
         </div>

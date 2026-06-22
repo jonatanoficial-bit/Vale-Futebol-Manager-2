@@ -65,6 +65,7 @@ import { renderIntroCinematicCenter } from '../systems/introCinematicEngine.js';
 import { renderLiveWorldCenter } from '../systems/liveWorldEngine.js';
 import { renderMatchdayPremiumCenter } from '../systems/matchdayPremiumEngine.js';
 import { renderSquadAiCenter, renderSquadAiRibbon } from '../systems/squadAiEngine.js';
+import { renderObjectivesRetentionCenter, renderObjectivesRetentionRibbon } from '../systems/objectivesRetentionEngine.js';
 export function moduleScreen(route,title,subtitle,state){
   const extra = content(route, state);
   return screenWrap(route, `${topbar(title,subtitle,'lobby')}${clubHeader(state)}${extra}`, true);
@@ -133,6 +134,7 @@ function content(route,state={}){
   if(route==='liveWorld') return renderLiveWorldCenter(state);
   if(route==='matchdayPremium') return renderMatchdayPremiumCenter(state);
   if(route==='squadAI') return renderSquadAiCenter(state);
+  if(route==='objectivesHub') return renderObjectivesRetentionCenter(state);
   if(route==='formation') return formationScreen(state);
   if(route==='instructions') return instructionsScreen(state);
   if(route==='standings') {
@@ -318,6 +320,7 @@ function content(route,state={}){
     const needsHtml = squadNeeds.map(n=>`<div class="need-row"><div><strong>${n.sector}</strong><small>${n.reason}</small></div><span>${n.urgency}</span><div class="meter"><span style="width:${n.urgency}%"></span></div></div>`).join('');
     return `<section class="squad-v090 squad-v290"><div class="panel squad-hero"><div><span class="tag">Elenco v2.9 · realidade esportiva</span><h1>Plantel vivo</h1><p class="small">Agora o elenco calcula posição natural, improvisação, prontidão, moral, forma, capitão, bolas paradas, rotação e risco antes da partida.</p></div><div class="row gap"><button class="secondary-btn" data-action="apply-rotation">Aplicar rotação</button><button class="main-btn" data-route="formation">Mesa tática</button></div></div>
     ${renderSquadAiRibbon(state)}
+    ${renderObjectivesRetentionRibbon(state)}
     <section class="grid desktop-4"><div class="card kpi-card"><span>Nota tática</span><strong>${tacticalReport.grade}</strong><small>média do plano</small></div><div class="card kpi-card"><span>Encaixe posicional</span><strong>${tacticalReport.fit}%</strong><div class="meter"><span style="width:${tacticalReport.fit}%"></span></div></div><div class="card kpi-card"><span>Prontidão</span><strong>${tacticalReport.readiness}%</strong><div class="meter"><span style="width:${tacticalReport.readiness}%"></span></div></div><div class="card kpi-card"><span>Risco físico</span><strong>${tacticalReport.fatigueRisk}%</strong><div class="meter"><span style="width:${tacticalReport.fatigueRisk}%"></span></div></div></section>
     <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Onze ideal calculado</span><h2>${lineup.formation.name}</h2></div><button class="secondary-btn mini" data-action="auto-lineup">Recalcular</button></div><div class="lineup-list">${startersHtml}</div></article><article class="panel"><div class="row space"><div><span class="tag">Banco e rotação</span><h2>Opções reais</h2></div><strong class="grade">${lineup.bench.length}</strong></div><div class="bench-list">${benchHtml}</div><div class="squad-alert-list">${alerts}</div></article></section>
     <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Liderança</span><h2>Capitão e bolas paradas</h2></div><span class="status-pill">Salvo</span></div><label class="form-label">Capitão<select class="select" data-action="set-captain">${playerOptions}</select></label><label class="form-label">Pênaltis<select class="select" data-action="set-setpiece" data-kind="penalty">${penaltyOptions}</select></label><label class="form-label">Faltas<select class="select" data-action="set-setpiece" data-kind="freekick">${freeOptions}</select></label><label class="form-label">Escanteios<select class="select" data-action="set-setpiece" data-kind="corner">${cornerOptions}</select></label></article><article class="panel"><div class="row space"><div><span class="tag">Planejamento</span><h2>Necessidades do elenco</h2></div><button class="secondary-btn mini" data-route="transfers">Mercado</button></div><div class="needs-list">${needsHtml}</div></article></section>

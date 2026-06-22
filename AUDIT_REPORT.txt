@@ -16,3 +16,11 @@ Status: OK
 - Validador anti-quebra criado.
 - Runtime audit atualizado.
 - Conflitos de merge: nenhum marcador detectado.
+
+
+V6.5.0 AUDIT
+- Objectives retention engine integrado.
+- Route objectivesHub registrada.
+- CSS mobile-first adicionado.
+- Merge conflict markers: none after grep.
+- ZIP integrity: OK.

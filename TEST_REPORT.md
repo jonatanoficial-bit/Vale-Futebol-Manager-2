@@ -21,13 +21,12 @@ Homologação manual em celular real: pendente.
 - Busca por conflitos de merge: OK.
 - ZIP integrity: OK.
 
-## Testes v6.4.0
-- node --check em JS/core: OK.
-- Import do motor Squad AI: OK.
-- Validador v6.4.0: OK.
-- Render da rota squadAI: OK.
-- Matchday Premium v6.3.0 preservado: OK.
-- Busca por conflitos de merge: OK.
-- ZIP integrity: OK.
 
-Homologação manual em celular real: pendente.
+## Testes v6.5.0
+- `node --check` em todos os arquivos JS de `js` e `core`: OK.
+- Import do motor de objetivos/retenção: OK.
+- Validador v6.5.0: OK.
+- Render da rota `objectivesHub`: OK.
+- Busca por conflitos de merge: OK.
+- Integridade do ZIP: OK.
+- Homologação manual em celular real: pendente.

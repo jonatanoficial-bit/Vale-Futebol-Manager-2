@@ -31,9 +31,6 @@ Nenhuma marca de conflito detectada.
 ## Integridade v6.3.0
 A fase adiciona apenas módulos incrementais e integrações de rota. Não remove dados, assets, elencos, save, match engine, beta pública, jornada inicial ou jornal esportivo.
 
-## Integridade v6.4.0
-- Build baseada na v6.3.0 Matchday Premium.
-- Rotas anteriores preservadas.
-- Nova rota `squadAI` registrada no app e no menu.
-- Validador `squad-ai-validator.js` criado para impedir fase incompleta.
-- Sem dependência externa, sem vídeo pesado, sem loop infinito.
+
+## Integridade v6.5.0
+A fase adiciona apenas arquivos isolados de dados, motor, validador e CSS, com integração por rota registrada. Não remove sistemas anteriores. O validador confirma rotas obrigatórias, mobile-first, offline/local, ausência de popup bloqueante e preservação de sistemas antigos.

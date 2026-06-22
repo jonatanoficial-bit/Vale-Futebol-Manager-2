@@ -22,10 +22,10 @@
 - Criado validador anti-quebra v6.3.0.
 - Preservadas as fases v6.0.0, v6.1.0 e v6.2.0.
 
-## v6.4.0 — Fase 47 — IA de Elenco e Vestiário
-- Adicionada rota `squadAI`.
-- Criada central de moral, liderança, crise, rotação e clima interno.
-- Adicionados perfis de jogador com influência, humor e risco.
-- Adicionados eventos de vestiário conectados a elenco, treino, coletiva, matchday e jornal.
-- Criado validador anti-quebra `validateSquadAiSystem`.
-- Preservadas as fases v6.0.0, v6.1.0, v6.2.0 e v6.3.0.
+
+## v6.5.0 — Fase 48 — Objetivos, Conquistas e Retenção
+- Adicionada rota `objectivesHub` com central de missões diárias, metas de temporada, conquistas e recompensas.
+- Criado motor `objectivesRetentionEngine` com snapshot técnico e score de retenção.
+- Criado validador `objectives-retention-validator` para auditoria anti-quebra.
+- Adicionado CSS mobile-first `objectives-retention-v650.css`.
+- Integração com lobby, capa, menu principal, elenco, tutorial, progressão, jornal, vestiário e matchday premium.
