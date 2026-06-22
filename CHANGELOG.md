@@ -1,3 +1,11 @@
+# v6.6.0 — Fase 49 — Economia Emocional e Diretoria Viva
+
+- Adicionada rota `emotionalBoard`.
+- Criada leitura viva de confiança da diretoria, autonomia, pressão e risco no cargo.
+- Promessas de coletiva passam a alimentar cobrança, reuniões e narrativa institucional.
+- Integração com finanças, torcida, jornal esportivo, vestiário, objetivos e matchday premium.
+- Adicionado validador anti-quebra `board-emotional-validator.js`.
+
 # Changelog
 
 ## v6.2.0 — Fase 45 — Lobby Vivo e Jornal Esportivo
@@ -21,11 +29,3 @@
 - Criado fluxo pré-jogo → partida → banco → pós-jogo → jornal.
 - Criado validador anti-quebra v6.3.0.
 - Preservadas as fases v6.0.0, v6.1.0 e v6.2.0.
-
-
-## v6.5.0 — Fase 48 — Objetivos, Conquistas e Retenção
-- Adicionada rota `objectivesHub` com central de missões diárias, metas de temporada, conquistas e recompensas.
-- Criado motor `objectivesRetentionEngine` com snapshot técnico e score de retenção.
-- Criado validador `objectives-retention-validator` para auditoria anti-quebra.
-- Adicionado CSS mobile-first `objectives-retention-v650.css`.
-- Integração com lobby, capa, menu principal, elenco, tutorial, progressão, jornal, vestiário e matchday premium.

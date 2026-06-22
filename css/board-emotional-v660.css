@@ -1,0 +1,26 @@
+.board-emotional-center-v660{gap:16px;padding-bottom:calc(96px + env(safe-area-inset-bottom,0px));}
+.board-emotional-hero-v660{position:relative;overflow:hidden;background:linear-gradient(135deg,rgba(155,112,36,.24),rgba(8,15,28,.96));}
+.board-emotional-hero-v660:after{content:"";position:absolute;inset:auto -20% -45% 40%;height:210px;background:radial-gradient(circle,rgba(255,195,94,.24),transparent 62%);pointer-events:none;}
+.board-emotional-ribbon-v660{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:14px;align-items:center;border:1px solid rgba(255,198,94,.24);background:rgba(9,14,24,.86);}
+.board-emotional-orb-v660{width:50px;height:50px;border-radius:999px;background:radial-gradient(circle at 35% 25%,#ffe2a4,#bf7a1f 45%,#2a1605 80%);box-shadow:0 0 30px rgba(255,180,70,.32);}
+.board-emotional-copy-v660 h2{margin:2px 0 4px;font-size:clamp(1.05rem,4vw,1.55rem);}
+.board-emotional-kpis-v660{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;}
+.board-emotional-kpis-v660 div{min-width:92px;padding:10px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);}
+.board-emotional-kpis-v660 span,.board-emotional-kpis-v660 small{display:block;color:var(--muted,#aeb7c8);font-size:.74rem;}
+.board-emotional-kpis-v660 strong{font-size:1.12rem;color:#ffd68a;}
+.board-emotional-actions-v660{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
+.board-pillars-grid-v660,.board-promises-grid-v660,.board-meetings-grid-v660{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;}
+.board-pillar-v660,.board-promise-v660,.board-meeting-v660{min-width:0;}
+.board-icon-v660{font-size:1.7rem;filter:drop-shadow(0 8px 18px rgba(0,0,0,.35));}
+.board-scenario-v660{border-left:3px solid rgba(255,255,255,.12);}
+.active-board-scenario-v660{border-left-color:#ffd68a;background:rgba(255,211,127,.08);}
+.board-score-grid-v660 .kpi-card{min-height:120px;}
+.board-rules-v660{display:grid;gap:10px;margin:0;padding-left:18px;}
+@media(max-width:760px){
+  .board-emotional-ribbon-v660{grid-template-columns:1fr;align-items:stretch;}
+  .board-emotional-orb-v660{display:none;}
+  .board-emotional-kpis-v660,.board-emotional-actions-v660{justify-content:stretch;}
+  .board-emotional-kpis-v660 div{flex:1;min-width:86px;}
+  .board-emotional-actions-v660 button{flex:1;min-height:44px;}
+  .board-pillars-grid-v660,.board-promises-grid-v660,.board-meetings-grid-v660{grid-template-columns:1fr;}
+}

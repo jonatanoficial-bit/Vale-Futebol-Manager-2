@@ -10,6 +10,5 @@
 - O Matchday Premium usa camadas HTML/CSS leves; não há vídeo ou áudio novo nesta fase.
 
 
-## Pendências v6.5.0
-- Homologação em celular real ainda necessária.
-- Conquistas aparecem como sistema visual e de retenção; persistência profunda por save pode ser ampliada em fase futura.
+## v6.6.0
+Não houve homologação manual em celular real dentro do ambiente. Testar a rolagem da rota emotionalBoard após publicar no GitHub Pages.

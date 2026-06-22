@@ -66,6 +66,7 @@ import { renderLiveWorldCenter } from '../systems/liveWorldEngine.js';
 import { renderMatchdayPremiumCenter } from '../systems/matchdayPremiumEngine.js';
 import { renderSquadAiCenter, renderSquadAiRibbon } from '../systems/squadAiEngine.js';
 import { renderObjectivesRetentionCenter, renderObjectivesRetentionRibbon } from '../systems/objectivesRetentionEngine.js';
+import { renderBoardEmotionalCenter, renderBoardEmotionalRibbon } from '../systems/boardEmotionalEngine.js';
 export function moduleScreen(route,title,subtitle,state){
   const extra = content(route, state);
   return screenWrap(route, `${topbar(title,subtitle,'lobby')}${clubHeader(state)}${extra}`, true);
@@ -135,6 +136,7 @@ function content(route,state={}){
   if(route==='matchdayPremium') return renderMatchdayPremiumCenter(state);
   if(route==='squadAI') return renderSquadAiCenter(state);
   if(route==='objectivesHub') return renderObjectivesRetentionCenter(state);
+  if(route==='emotionalBoard') return renderBoardEmotionalCenter(state);
   if(route==='formation') return formationScreen(state);
   if(route==='instructions') return instructionsScreen(state);
   if(route==='standings') {

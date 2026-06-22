@@ -26,3 +26,13 @@ V6.5.0 FILES
 - OBJECTIVES_RETENTION_GUIDE.md
 - RETENTION_QA_CHECKLIST.md
 - ACHIEVEMENTS_SYSTEM_GUIDE.md
+
+
+## v6.6.0 — Fase 49 — arquivos novos
+- js/data/boardEmotionalData.js
+- js/systems/boardEmotionalEngine.js
+- core/safety/board-emotional-validator.js
+- css/board-emotional-v660.css
+- EMOTIONAL_BOARD_GUIDE.md
+- BOARD_MEETING_QA_CHECKLIST.md
+- ECONOMY_EMOTIONAL_RULES.md

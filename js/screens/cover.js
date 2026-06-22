@@ -20,6 +20,7 @@ export function cover(){
           <button class="secondary-btn" data-route="matchdayPremium">Matchday premium</button>
           <button class="secondary-btn" data-route="squadAI">IA de elenco</button>
           <button class="secondary-btn" data-route="objectivesHub">Objetivos</button>
+          <button class="secondary-btn" data-route="emotionalBoard">Diretoria viva</button>
           <button class="secondary-btn" data-route="newGame">Iniciar nova carreira</button>
         </div>
       </div>

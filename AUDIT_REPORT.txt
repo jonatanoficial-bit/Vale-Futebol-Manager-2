@@ -24,3 +24,6 @@ V6.5.0 AUDIT
 - CSS mobile-first adicionado.
 - Merge conflict markers: none after grep.
 - ZIP integrity: OK.
+
+
+v6.6.0 Fase 49: Economia Emocional e Diretoria Viva adicionada com rota emotionalBoard, CSS mobile-first, validador dedicado e integração de auditoria runtime.

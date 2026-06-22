@@ -32,5 +32,5 @@ Nenhuma marca de conflito detectada.
 A fase adiciona apenas módulos incrementais e integrações de rota. Não remove dados, assets, elencos, save, match engine, beta pública, jornada inicial ou jornal esportivo.
 
 
-## Integridade v6.5.0
-A fase adiciona apenas arquivos isolados de dados, motor, validador e CSS, com integração por rota registrada. Não remove sistemas anteriores. O validador confirma rotas obrigatórias, mobile-first, offline/local, ausência de popup bloqueante e preservação de sistemas antigos.
+## v6.6.0 — Integridade
+A fase adiciona a Diretoria Viva sem remover rotas anteriores. O validador confirma rotas obrigatórias, contadores de pilares, cenários, promessas, reuniões e regras mobile.

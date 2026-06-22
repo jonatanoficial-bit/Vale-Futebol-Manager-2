@@ -30,3 +30,12 @@ Homologação manual em celular real: pendente.
 - Busca por conflitos de merge: OK.
 - Integridade do ZIP: OK.
 - Homologação manual em celular real: pendente.
+
+
+## v6.6.0 — Fase 49 — Testes
+- node --check em js/core: OK.
+- Import do motor boardEmotionalEngine: OK.
+- Validador board-emotional-validator: OK.
+- Render da rota emotionalBoard: OK.
+- Busca por conflitos de merge: OK.
+- ZIP integrity: OK.
