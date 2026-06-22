@@ -8,3 +8,11 @@ New route: liveWorld
 
 
 V6.3.0 ADDED: js/data/matchdayPremiumData.js; js/systems/matchdayPremiumEngine.js; core/safety/matchday-premium-validator.js; css/matchday-premium-v630.css; MATCHDAY_PREMIUM_GUIDE.md; MATCHDAY_QA_CHECKLIST.md
+
+ADICIONADO v6.4.0
+- js/data/squadAiData.js
+- js/systems/squadAiEngine.js
+- core/safety/squad-ai-validator.js
+- css/squad-ai-v640.css
+- SQUAD_AI_GUIDE.md
+- DRESSING_ROOM_QA_CHECKLIST.md

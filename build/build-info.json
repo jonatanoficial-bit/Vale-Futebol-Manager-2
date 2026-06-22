@@ -1,7 +1,7 @@
 {
-  "version": "v6.3.0",
-  "buildLabel": "Build v6.3.0 | 2026-06-22 | Matchday Premium",
-  "phase": "Fase 46 — Matchday premium, tensão pré-jogo e pós-jogo emocional",
+  "version": "v6.4.0",
+  "buildLabel": "Build v6.4.0 | 2026-06-22 | IA de Elenco e Vestiário",
+  "phase": "Fase 47 — IA de elenco, moral, liderança e vestiário",
   "dataPack": "2026.05.20",
-  "status": "matchday-premium-ready"
+  "status": "squad-ai-dressing-room-ready"
 }

@@ -21,3 +21,11 @@
 - Criado fluxo pré-jogo → partida → banco → pós-jogo → jornal.
 - Criado validador anti-quebra v6.3.0.
 - Preservadas as fases v6.0.0, v6.1.0 e v6.2.0.
+
+## v6.4.0 — Fase 47 — IA de Elenco e Vestiário
+- Adicionada rota `squadAI`.
+- Criada central de moral, liderança, crise, rotação e clima interno.
+- Adicionados perfis de jogador com influência, humor e risco.
+- Adicionados eventos de vestiário conectados a elenco, treino, coletiva, matchday e jornal.
+- Criado validador anti-quebra `validateSquadAiSystem`.
+- Preservadas as fases v6.0.0, v6.1.0, v6.2.0 e v6.3.0.

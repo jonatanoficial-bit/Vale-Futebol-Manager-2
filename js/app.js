@@ -41,6 +41,8 @@ import { validateLiveWorldSystem } from '../core/safety/live-world-validator.js'
 import { buildLiveWorldSnapshot } from './systems/liveWorldEngine.js';
 import { validateMatchdayPremiumSystem } from '../core/safety/matchday-premium-validator.js';
 import { buildMatchdayPremiumSnapshot } from './systems/matchdayPremiumEngine.js';
+import { validateSquadAiSystem } from '../core/safety/squad-ai-validator.js';
+import { buildSquadAiSnapshot } from './systems/squadAiEngine.js';
 import { validateDataPack2026System } from '../core/safety/datapack-validator.js';
 import { runRuntimeAudit } from './systems/auditLogger.js';
 import { loadVisualLibrary } from './systems/visualAssetManager.js';
@@ -60,7 +62,7 @@ async function boot(){
   applyMobileUxFinalShell();
   applyNavigationExperienceShell();
   load();
-  runRuntimeAudit(getState(), {phase:'v6.3.0 matchday premium boot', matchdayPremium: validateMatchdayPremiumSystem(buildMatchdayPremiumSnapshot(getState())), liveWorld: validateLiveWorldSystem(buildLiveWorldSnapshot(getState())), introCinematic: validateIntroCinematicSystem(buildIntroCinematicSnapshot(getState())), releaseCandidate: validateReleaseCandidateSystem(buildReleaseCandidateSnapshot(getState())), balanceGeneral: validateBalanceGeneralSystem(getState()), guidedTutorial: validateGuidedTutorialSystem(getState()), managerProgression: validateManagerProgressionSystem(getState()), managerJobMarket: validateManagerJobMarketSystem(getState()), pressConference: validatePressConferenceSystem(getState()), careerLoop: validateCareerLoopV592(getState()), rosterLock2026: validateRosterLock2026(getState()), rosterLockSnapshot: buildRosterLock2026Snapshot(getState()), dataPack2026: validateDataPack2026System(getState()), dataPackSnapshot: buildDataPack2026Snapshot(getState()), matchFlow: validateMatchFlowV570(buildMatchExperienceSnapshot(getState())), ux: runtimeSafetySnapshot(getState()), aaa: buildUiAaaSnapshot(getState()), mobile: buildMobileExperienceSnapshot(), mobileCertification: validateMobileCertificationV598(buildMobileCertificationSnapshot()), mobileUxFinal: validateMobileUxFinalV599(buildMobileUxFinalSnapshot()), navigation: validateNavigationSystem({currentRoute:getState().route}), menuHierarchy: validateMenuHierarchy({primaryActions:PRIMARY_ACTIONS_V550, menuGroups:MANAGER_MENU_GROUPS_V550}), touchTargets: validateTouchTargets(), lobby: validateLobbyCompactSystem({primaryActions:PRIMARY_ACTIONS_V550, menuGroups:MANAGER_MENU_GROUPS_V550})});
+  runRuntimeAudit(getState(), {phase:'v6.4.0 squad ai dressing room boot', squadAI: validateSquadAiSystem(buildSquadAiSnapshot(getState())), matchdayPremium: validateMatchdayPremiumSystem(buildMatchdayPremiumSnapshot(getState())), liveWorld: validateLiveWorldSystem(buildLiveWorldSnapshot(getState())), introCinematic: validateIntroCinematicSystem(buildIntroCinematicSnapshot(getState())), releaseCandidate: validateReleaseCandidateSystem(buildReleaseCandidateSnapshot(getState())), balanceGeneral: validateBalanceGeneralSystem(getState()), guidedTutorial: validateGuidedTutorialSystem(getState()), managerProgression: validateManagerProgressionSystem(getState()), managerJobMarket: validateManagerJobMarketSystem(getState()), pressConference: validatePressConferenceSystem(getState()), careerLoop: validateCareerLoopV592(getState()), rosterLock2026: validateRosterLock2026(getState()), rosterLockSnapshot: buildRosterLock2026Snapshot(getState()), dataPack2026: validateDataPack2026System(getState()), dataPackSnapshot: buildDataPack2026Snapshot(getState()), matchFlow: validateMatchFlowV570(buildMatchExperienceSnapshot(getState())), ux: runtimeSafetySnapshot(getState()), aaa: buildUiAaaSnapshot(getState()), mobile: buildMobileExperienceSnapshot(), mobileCertification: validateMobileCertificationV598(buildMobileCertificationSnapshot()), mobileUxFinal: validateMobileUxFinalV599(buildMobileUxFinalSnapshot()), navigation: validateNavigationSystem({currentRoute:getState().route}), menuHierarchy: validateMenuHierarchy({primaryActions:PRIMARY_ACTIONS_V550, menuGroups:MANAGER_MENU_GROUPS_V550}), touchTargets: validateTouchTargets(), lobby: validateLobbyCompactSystem({primaryActions:PRIMARY_ACTIONS_V550, menuGroups:MANAGER_MENU_GROUPS_V550})});
   validateCommercialState(getState());
   initRouter(app, buildInfo);
   register('cover', cover);
@@ -106,6 +108,7 @@ async function boot(){
     careerIntro:['Jornada Inicial','Abertura cinematográfica, arco emocional, onboarding guiado e primeira partida'],
     liveWorld:['Lobby Vivo','Jornal esportivo, bastidores, manchetes, torcida e mundo em movimento'],
     matchdayPremium:['Matchday Premium','Dia de jogo premium, pré-jogo, transmissão, banco e pós-jogo emocional'],
+    squadAI:['IA de Elenco','Moral, liderança, vestiário, rotação, crise e reação dos jogadores'],
     saveCenter:['Central de Save','Autosave, backups, exportação, importação e proteção de carreira'],
     assetChecklist:['Assets','Checklist visual, caminhos oficiais, cache e fallbacks'],
     rosterUpdate:['Atualização de Elenco','Importar, exportar e validar elencos por JSON'],

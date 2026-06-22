@@ -8,3 +8,11 @@ ZIP: OK
 
 
 [V6.3.0] Matchday Premium auditado: rota, CSS, validador, render e ZIP aprovados em teste estático.
+
+AUDITORIA v6.4.0 — IA DE ELENCO E VESTIÁRIO
+Status: OK
+- Rota squadAI adicionada.
+- CSS mobile-first carregado.
+- Validador anti-quebra criado.
+- Runtime audit atualizado.
+- Conflitos de merge: nenhum marcador detectado.

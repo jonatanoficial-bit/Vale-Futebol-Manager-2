@@ -20,3 +20,14 @@ Homologação manual em celular real: pendente.
 - Tarja premium integrada à partida: OK.
 - Busca por conflitos de merge: OK.
 - ZIP integrity: OK.
+
+## Testes v6.4.0
+- node --check em JS/core: OK.
+- Import do motor Squad AI: OK.
+- Validador v6.4.0: OK.
+- Render da rota squadAI: OK.
+- Matchday Premium v6.3.0 preservado: OK.
+- Busca por conflitos de merge: OK.
+- ZIP integrity: OK.
+
+Homologação manual em celular real: pendente.
