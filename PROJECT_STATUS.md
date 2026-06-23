@@ -1,3 +1,6 @@
+## Status atual — v7.1.0
+Build sound-ambience-ready. A camada sonora é mobile-first, sem autoplay, sem MP3 obrigatório e com fallback seguro. Próxima etapa recomendada: v7.2.0 pacote de efeitos reais opcionais e tela de mixagem avançada.
+
 
 # Status atualizado — v7.0.0
 
@@ -31,3 +34,12 @@ Base preservada: v6.8.0 Renovação Contratual Profunda.
 Adiciona rota `squadMorale` para crises de vestiário, promessas quebradas, banco, salário, capitão, derrotas e respostas do treinador.
 
 Próxima fase sugerida: v7.0.0 — Simulação 90 minutos 2D/Texto Premium, com momentos táticos mais reais e leitura de campo mais profunda.
+
+
+## Estado v7.2.0
+
+Status: `real-audio-pack-ready`.
+
+A build agora possui um pacote oficial para efeitos reais opcionais, permitindo ao usuário inserir sons de torcida, apito, gol, estádio, CT e diretoria sem risco de quebrar o jogo caso os arquivos ainda não existam.
+
+Próxima etapa sugerida: v7.3.0 — Clima, Estádio e Gramado Dinâmicos.

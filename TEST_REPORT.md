@@ -1,3 +1,26 @@
+## Testes v7.1.0 — Fase 54 — Sons, Ambiência e Torcida
+
+Resultado: OK.
+
+- `node --check` em todos os arquivos JavaScript de `js/` e `core/`: OK.
+- Import do motor `soundAmbienceEngine`: OK.
+- Validador `validateSoundAmbienceSystem`: OK.
+- Render da rota `soundAmbience`: OK.
+- Render da tarja sonora dentro da partida: OK.
+- Rota `matchSimulation90` v7.0.0 preservada: OK.
+- Verificação textual de conflitos de merge em arquivos de texto: OK.
+- ZIP testado com `unzip -t`: OK.
+
+Pendência: homologação manual em Android/iPhone com som real do aparelho.
+
+## Testes v7.1.0
+- node --check em js/core: planejado/executado na geração.
+- Import do motor Sound Ambience.
+- Validador v7.1.0.
+- Render da rota soundAmbience.
+- Integração na partida.
+- Verificação de ZIP.
+
 
 # Test Report — v7.0.0
 
@@ -35,3 +58,17 @@ Homologação manual em celular real: pendente.
 - Import/validator/render v7.0.0: OK
 - Tarja da partida: OK
 - ZIP integrity: OK
+
+
+## Testes v7.2.0
+
+- `node --check` em arquivos JS/core: OK.
+- Import do motor Real Audio Pack: OK.
+- Validador v7.2.0: OK.
+- Render da rota `realAudioPack`: OK.
+- Tarja de áudio real dentro da partida: OK.
+- Sistema de sons v7.1.0 preservado: OK.
+- Busca por conflitos de merge: OK.
+- ZIP testado: OK.
+
+Homologação manual em celular real ainda necessária.

@@ -1,3 +1,19 @@
+## Resultado de integridade v7.1.0
+
+- Nova rota: `soundAmbience`.
+- Novos arquivos de dados, motor, validador, CSS e documentação.
+- Áudio sem autoplay, acionado somente por toque do usuário.
+- Sem dependência de arquivo externo obrigatório.
+- Falha de WebAudio cai em modo silencioso seguro.
+- Build v7.0.0 preservada e expandida.
+
+## Integridade v7.1.0
+- Nova rota soundAmbience registrada.
+- Validador sound-ambience-validator criado.
+- WebAudio só é acionado por toque do usuário.
+- Nenhuma dependência externa obrigatória foi adicionada.
+- Fases anteriores preservadas.
+
 
 # Integridade — v7.0.0
 
@@ -43,3 +59,12 @@ Build completa baseada na v6.8.0.
 - Preserva rotas, assets, save, elencos, match engine e módulos v6.0.0 até v6.8.0.
 - Mantém foco mobile-first.
 - Nenhuma marca de conflito detectada.
+
+
+## Integridade v7.2.0
+
+- Base preservada: v7.1.0 Sons, Ambiência e Torcida.
+- Novos arquivos JS/CSS/documentação adicionados sem remover sistemas anteriores.
+- Manifest de áudio criado em `assets/audio/audio-manifest.json`.
+- Diretórios de áudio opcionais adicionados com README para manter estrutura no ZIP.
+- Validador `real-audio-pack-validator.js` aprovado.

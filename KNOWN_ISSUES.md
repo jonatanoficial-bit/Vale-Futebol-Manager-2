@@ -1,3 +1,8 @@
+## Limites conhecidos v7.1.0
+- iPhone/Safari pode exigir PWA ou toque direto para liberar WebAudio.
+- A fase usa síntese leve; efeitos reais em MP3/WAV podem entrar depois como pacote opcional.
+- Homologação manual em celular real ainda é necessária.
+
 
 # Known Issues — v7.0.0
 
@@ -13,3 +18,11 @@
 
 ## Corrigido na fase
 - Link de CSS da Renovação Contratual v6.8.0 adicionado ao index.html.
+
+
+## Observações v7.2.0
+
+- Áudio real depende de arquivos inseridos manualmente em `assets/audio/`.
+- Em iPhone/Android, o navegador exige toque do usuário antes de qualquer som.
+- A varredura de arquivos pode variar quando o jogo é aberto diretamente por `file://`; o ideal é testar publicado no GitHub Pages/PWA.
+- Nenhuma dessas limitações bloqueia o jogo, pois o fallback WebAudio permanece ativo.

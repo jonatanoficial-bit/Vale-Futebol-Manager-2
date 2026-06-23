@@ -1,6 +1,8 @@
 import { safeScreenFallback } from '../../core/safety/error-recovery.js';
 import { requestFullscreenMode, requestLandscapeForMatch } from './mobileExperienceEngine.js';
 import { getNavigationRouteForActive } from './navigationExperienceEngine.js';
+import { activateSoundAmbiencePreset, stopSoundAmbience } from './soundAmbienceEngine.js';
+import { playRealAudioCue, stopRealAudioPack, scanRealAudioAssets } from './realAudioPackEngine.js';
 import { getState, setState, setManager, setUI, startCareer, advanceMatch, finishMatch, setMatchSpeed, makeSubstitution, setMatchDecision, openTransferNegotiation, acceptTransferDeal, rejectTransferDeal, sellOutgoingPlayer, renewPlayerContract, loanTransferPlayer, generateIncomingOffer, respondIncomingOffer, simulateAIMarket, toggleTransferWindow, generateSmartIncomingOffer, simulateSmartAIMarket, triggerAgentEvent, setMatchAutoPlay, autoSelectBestLineup, setCaptain, setSetPieceTaker, applyRotationPlan, createManualBackup, restoreManualBackup, exportSaveText, importSaveText, toggleAutosave, exportRosterText, importRosterText, resetRosterToDefault, sampleRosterText, generateCareerOffers, respondCareerOffer, registerNationalInterest, toggleCallUpPlayer, finalizeNationalCallUp, completePostMatchAndReturnLobby, simulateBoardReview, renewManagerContract, simulateManagerDismissalRisk, simulateNextInternationalMatch, applyTrainingMicrocycle, signPreContract, openPreMatchPressConference, openPostMatchPressConference, answerPressConference, completePressConference, completeGuidedTutorialStep, completeGuidedTutorialForRoute, addManagerXp, setManagerSpecialty } from './state.js';
 const routes = new Map(); let rootEl = null; let buildInfo = null;
 export function register(name, renderer){ routes.set(name, renderer); }
@@ -18,6 +20,11 @@ function wire(scope){
   scope.querySelectorAll('[data-route]').forEach(btn => btn.addEventListener('click', () => go(btn.dataset.route)));
 
   scope.querySelectorAll('[data-action="ui-fullscreen"]').forEach(btn => btn.addEventListener('click', async () => { await requestFullscreenMode(); requestLandscapeForMatch(getState()?.route); }));
+  scope.querySelectorAll('[data-action="sound-ambience-play"]').forEach(btn => btn.addEventListener('click', async () => { await activateSoundAmbiencePreset(btn.dataset.preset || 'stadium-home'); }));
+  scope.querySelectorAll('[data-action="sound-ambience-stop"]').forEach(btn => btn.addEventListener('click', () => { stopSoundAmbience(); }));
+  scope.querySelectorAll('[data-action="real-audio-play"]').forEach(btn => btn.addEventListener('click', async () => { await playRealAudioCue(btn.dataset.cue || 'crowd-home'); render(); }));
+  scope.querySelectorAll('[data-action="real-audio-stop"]').forEach(btn => btn.addEventListener('click', () => { stopRealAudioPack(); render(); }));
+  scope.querySelectorAll('[data-action="real-audio-scan"]').forEach(btn => btn.addEventListener('click', async () => { await scanRealAudioAssets(); render(); }));
 
   scope.querySelectorAll('[data-action="press-answer"]').forEach(btn => btn.addEventListener('click', () => { answerPressConference(btn.dataset.answer); render(); }));
   scope.querySelectorAll('[data-action="press-complete"]').forEach(btn => btn.addEventListener('click', () => { completeGuidedTutorialStep('press-first'); completePressConference(); render(); }));

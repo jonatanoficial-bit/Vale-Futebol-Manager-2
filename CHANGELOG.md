@@ -1,3 +1,10 @@
+## v7.1.0 — Fase 54 — Sons, Ambiência e Torcida
+- Adicionada central soundAmbience.
+- Adicionados presets leves de estádio, pré-jogo, pressão final, fora de casa, CT e diretoria.
+- Adicionados controles de ativar/parar som com WebAudio e fallback seguro.
+- Integrada tarja sonora na tela de partida.
+- Preservadas as fases v7.0.0 e anteriores.
+
 
 ## v7.0.0 — Fase 53 — Simulação 90 Minutos 2D/Texto Premium
 - Adicionada rota `matchSimulation90`.
@@ -46,3 +53,13 @@
 - CSS de Renovação Contratual v6.8.0 linkado no index.html.
 - Preservadas fases v6.0.0 até v6.8.0.
 - Status: morale-crisis-ready.
+
+
+## v7.2.0 — Fase 55 — Pacote de Efeitos Reais Opcionais
+
+- Adicionada a rota `realAudioPack`.
+- Criado manifest oficial para MP3/WAV/OGG em `assets/audio/`.
+- Criado fallback WebAudio automático quando o arquivo real não existir.
+- Adicionados controles de tocar, verificar arquivos e parar tudo.
+- Integrado com partida, matchday, simulação 90 minutos, configurações e sons v7.1.0.
+- Mantida regra mobile: sem autoplay, apenas após toque do usuário.

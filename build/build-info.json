@@ -1,7 +1,7 @@
 {
-  "version": "v7.0.0",
-  "buildLabel": "Build v7.0.0 | 2026-06-23 | Simulação 90 Minutos 2D/Texto Premium",
-  "phase": "Fase 53 — simulação 90 minutos, leitura tática, pressão e eventos premium",
+  "version": "v7.2.0",
+  "buildLabel": "Build v7.2.0 | 2026-06-23 | Pacote de Efeitos Reais Opcionais",
+  "phase": "Fase 55 — MP3/WAV opcionais, manifest de áudio e fallback WebAudio seguro",
   "dataPack": "2026.05.20",
-  "status": "match-simulation90-ready"
+  "status": "real-audio-pack-ready"
 }

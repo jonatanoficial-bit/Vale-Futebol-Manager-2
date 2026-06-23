@@ -1,0 +1,17 @@
+{
+  "version": "v7.2.0",
+  "root": "assets/audio",
+  "note": "Todos os arquivos são opcionais. Se faltar MP3/WAV/OGG, o jogo usa fallback WebAudio seguro.",
+  "tracks": [
+    { "id": "crowd-home", "paths": ["crowd/crowd-home.mp3", "crowd/crowd-home.wav", "crowd/crowd-home.ogg"], "loop": true },
+    { "id": "crowd-away", "paths": ["crowd/crowd-away.mp3", "crowd/crowd-away.wav", "crowd/crowd-away.ogg"], "loop": true },
+    { "id": "final-pressure", "paths": ["crowd/final-pressure.mp3", "crowd/final-pressure.wav", "crowd/final-pressure.ogg"], "loop": true },
+    { "id": "kickoff-whistle", "paths": ["effects/kickoff-whistle.mp3", "effects/kickoff-whistle.wav", "effects/kickoff-whistle.ogg"], "loop": false },
+    { "id": "final-whistle", "paths": ["effects/final-whistle.mp3", "effects/final-whistle.wav", "effects/final-whistle.ogg"], "loop": false },
+    { "id": "goal-roar", "paths": ["effects/goal-roar.mp3", "effects/goal-roar.wav", "effects/goal-roar.ogg"], "loop": false },
+    { "id": "stadium-anthem", "paths": ["music/stadium-anthem.mp3", "music/stadium-anthem.wav", "music/stadium-anthem.ogg"], "loop": false },
+    { "id": "training-field", "paths": ["ambience/training-field.mp3", "ambience/training-field.wav", "ambience/training-field.ogg"], "loop": true },
+    { "id": "board-room", "paths": ["ambience/board-room.mp3", "ambience/board-room.wav", "ambience/board-room.ogg"], "loop": true },
+    { "id": "ui-confirm", "paths": ["ui/ui-confirm.mp3", "ui/ui-confirm.wav", "ui/ui-confirm.ogg"], "loop": false }
+  ]
+}

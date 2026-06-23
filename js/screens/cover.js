@@ -25,6 +25,8 @@ export function cover(){
           <button class="secondary-btn" data-route="contractRenewal">Renovações</button>
           <button class="secondary-btn" data-route="squadMorale">Crises de vestiário</button>
           <button class="secondary-btn" data-route="matchSimulation90">Simulação 90 minutos</button>
+          <button class="secondary-btn" data-route="soundAmbience">Sons e torcida</button>
+          <button class="secondary-btn" data-route="realAudioPack">Efeitos reais opcionais</button>
           <button class="secondary-btn" data-route="newGame">Iniciar nova carreira</button>
         </div>
       </div>

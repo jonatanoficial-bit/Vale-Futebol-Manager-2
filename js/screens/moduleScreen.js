@@ -71,6 +71,8 @@ import { renderAgentMarketCenter, renderAgentMarketRibbon } from '../systems/age
 import { renderContractRenewalCenter, renderContractRenewalRibbon } from '../systems/contractRenewalEngine.js';
 import { renderMoraleCrisisCenter, renderMoraleCrisisRibbon } from '../systems/moraleCrisisEngine.js';
 import { renderMatchSimulation90Center } from '../systems/matchSimulation90Engine.js';
+import { renderSoundAmbienceCenter } from '../systems/soundAmbienceEngine.js';
+import { renderRealAudioPackCenter } from '../systems/realAudioPackEngine.js';
 export function moduleScreen(route,title,subtitle,state){
   const extra = content(route, state);
   return screenWrap(route, `${topbar(title,subtitle,'lobby')}${clubHeader(state)}${extra}`, true);
@@ -145,6 +147,8 @@ function content(route,state={}){
   if(route==='contractRenewal') return renderContractRenewalCenter(state);
   if(route==='squadMorale') return renderMoraleCrisisCenter(state);
   if(route==='matchSimulation90') return renderMatchSimulation90Center(state);
+  if(route==='soundAmbience') return renderSoundAmbienceCenter(state);
+  if(route==='realAudioPack') return renderRealAudioPackCenter(state);
   if(route==='formation') return formationScreen(state);
   if(route==='instructions') return instructionsScreen(state);
   if(route==='standings') {
@@ -339,7 +343,7 @@ function content(route,state={}){
   }
 
 
-  if(route==='settings') return `<section class="grid grid-2"><div class="panel"><h3>Geral</h3>${['Salvar automaticamente','Dicas','Negociações realistas','Lesões','Progresso offline'].map(x=>`<div class="stat-line"><span>${x}</span><strong>Ativo</strong></div>`).join('')}<button class="main-btn" data-route="saveCenter">Central de save</button><button class="secondary-btn danger" data-action="reset-save">Resetar save</button></div><div class="panel"><h3>Qualidade</h3><p class="alert">Build anti-quebra v5.2.0: fallbacks de assets, rotas seguras, múltiplos saves, backup automático, exportação/importação e recuperação de save corrompido.</p></div></section>`;
+  if(route==='settings') return `<section class="grid grid-2"><div class="panel"><h3>Geral</h3>${['Salvar automaticamente','Dicas','Negociações realistas','Lesões','Progresso offline'].map(x=>`<div class="stat-line"><span>${x}</span><strong>Ativo</strong></div>`).join('')}<button class="main-btn" data-route="saveCenter">Central de save</button><button class="secondary-btn" data-route="soundAmbience">Sons e torcida</button><button class="secondary-btn" data-route="realAudioPack">Efeitos reais</button><button class="secondary-btn danger" data-action="reset-save">Resetar save</button></div><div class="panel"><h3>Qualidade</h3><p class="alert">Build anti-quebra v5.2.0: fallbacks de assets, rotas seguras, múltiplos saves, backup automático, exportação/importação e recuperação de save corrompido.</p></div></section>`;
   return `<section class="module-placeholder panel"><h1>Módulo preparado</h1><p class="subtitle">Esta tela já possui rota segura e será expandida nas próximas builds.</p><button class="main-btn" data-route="lobby">Voltar ao lobby</button></section>`;
 }
 
