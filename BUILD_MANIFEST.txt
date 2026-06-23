@@ -1,21 +1,35 @@
-Vale Futebol Manager v6.9.0 — Fase 52 — Moral Avançada e Crises de Vestiário
+Vale Futebol Manager v7.0.0 — Fase 53
+Build: Simulação 90 Minutos 2D/Texto Premium
+Status: match-simulation90-ready
+Data pack: 2026.05.20
+Gerado em: 2026-06-23
 
-Base: v6.8.0 Renovação Contratual Profunda
-Status: morale-crisis-ready
-Data Pack: 2026.05.20
+Arquivos principais adicionados:
+- js/data/matchSimulation90Data.js
+- js/systems/matchSimulation90Engine.js
+- core/safety/match-simulation90-validator.js
+- css/match-simulation90-v700.css
+- MATCH_SIMULATION_90_GUIDE.md
+- MATCH_SIMULATION_QA_CHECKLIST.md
+- SIMULATION_TACTICAL_RULES.md
 
-Novos módulos:
-- moraleCrisisData
-- moraleCrisisEngine
-- morale-crisis-validator
-- morale-crisis-v690.css
+Arquivos modificados principais:
+- index.html
+- js/app.js
+- js/screens/moduleScreen.js
+- js/screens/match.js
+- js/screens/cover.js
+- js/screens/mainMenu.js
+- js/screens/lobby.js
+- build/build-info.json
 
-Novos documentos:
-- MORALE_CRISIS_GUIDE.md
-- DRESSING_ROOM_CRISIS_RULES.md
-- MORALE_QA_CHECKLIST.md
-
-Correção preservada:
-- CSS de Renovação Contratual v6.8.0 agora está linkado no index.html junto da fase v6.9.0.
-
-Entrega: ZIP completo baseado na build real mais recente.
+SHA-256 principais:
+5085558f628f11baa36ba1287784bb5c97c643668e2d2e6b02a28f5acd00aa83  js/data/matchSimulation90Data.js
+889b87101bc3c32331c70fee11d9690f2733f052af9512c5b513add6bcf55503  js/systems/matchSimulation90Engine.js
+a3e1c1eb33240122f02309d8ebe5218dce730ff6383db3ff33aa0f5ebdd12a37  core/safety/match-simulation90-validator.js
+c3a0f7626640d9744780dc44738123b985edd5e0a82a4cb7c021160734364291  css/match-simulation90-v700.css
+16671eada9fa400c8a6d5960e6bbd94104de1a29abdc366f4d9e29cbecce9fde  build/build-info.json
+7cf1599bd98e3df841e0e1fc0fde4b2721eff18e6a13e4fc077225b61521916b  index.html
+cfe8c44527b6e0148cdeb171a1f8b6ab6d2851547e2fbba54cc59a1f79daa78b  js/app.js
+aad68f2c0103c14b85df9440730d42f6124c0e3975a5526f2d239be2c4aa95e7  js/screens/match.js
+871fc1f3e2a9d3f62708f2d1ba022a1feb4c871af8d28f1d7f7efc92dd96e79d  js/screens/moduleScreen.js

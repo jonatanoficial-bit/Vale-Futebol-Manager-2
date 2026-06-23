@@ -70,6 +70,7 @@ import { renderBoardEmotionalCenter, renderBoardEmotionalRibbon } from '../syste
 import { renderAgentMarketCenter, renderAgentMarketRibbon } from '../systems/agentMarketEngine.js';
 import { renderContractRenewalCenter, renderContractRenewalRibbon } from '../systems/contractRenewalEngine.js';
 import { renderMoraleCrisisCenter, renderMoraleCrisisRibbon } from '../systems/moraleCrisisEngine.js';
+import { renderMatchSimulation90Center } from '../systems/matchSimulation90Engine.js';
 export function moduleScreen(route,title,subtitle,state){
   const extra = content(route, state);
   return screenWrap(route, `${topbar(title,subtitle,'lobby')}${clubHeader(state)}${extra}`, true);
@@ -143,6 +144,7 @@ function content(route,state={}){
   if(route==='agentMarket') return renderAgentMarketCenter(state);
   if(route==='contractRenewal') return renderContractRenewalCenter(state);
   if(route==='squadMorale') return renderMoraleCrisisCenter(state);
+  if(route==='matchSimulation90') return renderMatchSimulation90Center(state);
   if(route==='formation') return formationScreen(state);
   if(route==='instructions') return instructionsScreen(state);
   if(route==='standings') {

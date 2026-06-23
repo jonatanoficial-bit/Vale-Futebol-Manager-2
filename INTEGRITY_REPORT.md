@@ -1,3 +1,14 @@
+
+# Integridade — v7.0.0
+
+- Base utilizada: v6.9.0 Fase 52.
+- Build alvo: v7.0.0 Fase 53.
+- Sistema novo: Simulação 90 Minutos 2D/Texto Premium.
+- Arquivos críticos adicionados: data, engine, validator, CSS e documentação.
+- Rotas antigas preservadas: OK.
+- CSS v6.8.0/v6.9.0 preservado: OK.
+- Anti-quebra: validador v7.0.0 incluído no boot audit.
+
 # Integrity Report — v6.9.0
 
 Build completa baseada na v6.8.0.

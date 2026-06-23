@@ -1,3 +1,11 @@
+
+## v7.0.0 — Fase 53 — Simulação 90 Minutos 2D/Texto Premium
+- Adicionada rota `matchSimulation90`.
+- Criado motor de leitura premium dos 90 minutos com fases táticas, pressão, eventos 2D/texto e microcomandos do treinador.
+- Integrada tarja v7.0.0 dentro da tela de partida.
+- Preservados Matchday Premium, Moral Avançada, Renovações, Empresários, Diretoria Viva, Jornal e sistemas mobile.
+- Adicionado validador anti-quebra `match-simulation90-validator`.
+
 # Changelog
 
 ## v6.2.0 — Fase 45 — Lobby Vivo e Jornal Esportivo

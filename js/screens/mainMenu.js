@@ -28,6 +28,7 @@ export function mainMenu(state){
           <button class="secondary-btn" data-route="agentMarket">🤝 Empresários e negociações</button>
           <button class="secondary-btn" data-route="contractRenewal">📝 Renovações profundas</button>
           <button class="secondary-btn" data-route="squadMorale">🔥 Crises de vestiário</button>
+          <button class="secondary-btn" data-route="matchSimulation90">🎮 Simulação 90 minutos</button>
           <button class="secondary-btn" data-route="liveWorld">📰 Jornal esportivo</button>
           <button class="secondary-btn" data-route="settings">⚙️ Configurações</button>
         </div>

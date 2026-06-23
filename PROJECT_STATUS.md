@@ -1,3 +1,12 @@
+
+# Status atualizado — v7.0.0
+
+Build atual: **v7.0.0 — Fase 53 — Simulação 90 Minutos 2D/Texto Premium**.
+
+Estado: `match-simulation90-ready`.
+
+A versão v7.0.0 adiciona a primeira camada premium de partida com leitura de 90 minutos, campo 2D/texto, fases táticas, pressão e comandos do treinador. A build preserva todas as fases anteriores e mantém prioridade mobile-first.
+
 # Project Status
 
 Versão atual: v6.9.0
