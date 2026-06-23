@@ -1,39 +1,18 @@
-# Integrity Report — v6.2.0
+# Integrity Report — v6.8.0
 
-Build completa baseada na v6.1.0.
+A Fase 51 foi aplicada sobre a build real v6.7.0, preservando módulos anteriores e adicionando somente a camada de Renovação Contratual Profunda.
 
 ## Arquivos novos
-- js/data/liveWorldData.js
-- js/systems/liveWorldEngine.js
-- core/safety/live-world-validator.js
-- css/live-world-v620.css
-- LIVE_WORLD_JOURNAL_GUIDE.md
-- SPORTS_PRESS_CENTER.md
+- `js/data/contractRenewalData.js`
+- `js/systems/contractRenewalEngine.js`
+- `core/safety/contract-renewal-validator.js`
+- `css/contract-renewal-v680.css`
+- `CONTRACT_RENEWAL_GUIDE.md`
+- `CONTRACT_PROMISES_RULES.md`
+- `CONTRACT_QA_CHECKLIST.md`
 
-## Arquivos alterados
-- index.html
-- js/app.js
-- js/screens/moduleScreen.js
-- js/screens/lobby.js
-- js/screens/mainMenu.js
-- js/screens/cover.js
-- build/build-info.json
-- CHANGELOG.md
-- PROJECT_STATUS.md
-- TEST_REPORT.md
-- KNOWN_ISSUES.md
-- AUDIT_REPORT.txt
-- BUILD_MANIFEST.txt
-
-Nenhuma marca de conflito detectada.
-
-
-## Integridade v6.3.0
-A fase adiciona apenas módulos incrementais e integrações de rota. Não remove dados, assets, elencos, save, match engine, beta pública, jornada inicial ou jornal esportivo.
-
-## v6.7.0 — Fase 50 — Mercado com Empresários e Negociações Vivas
-- Nova rota `agentMarket`.
-- Adicionados motor, dados, CSS e validador de empresários/negociações.
-- Integração com capa, menu principal, lobby e menu do treinador.
-- Preservadas fases v6.6.0, v6.5.0, v6.4.0, v6.3.0, v6.2.0, v6.1.0 e v6.0.0.
-- Status: agent-market-ready.
+## Quality gate
+- Sintaxe JS OK.
+- Validador OK.
+- Sem marcadores de conflito.
+- ZIP íntegro.

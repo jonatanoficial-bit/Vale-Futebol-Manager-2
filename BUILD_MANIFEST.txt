@@ -1,45 +1,13 @@
-Vale Futebol Manager — Build Manifest
-Version: v6.2.0
-Phase: Fase 45 — Lobby Vivo e Jornal Esportivo
-Date: 2026-06-22
-Status: live-world-ready
-Base: v6.1.0 Fase 44
-New route: liveWorld
+Vale Futebol Manager v6.8.0 — Fase 51 — Renovação Contratual Profunda
 
+Base: v6.7.0 Mercado com Empresários e Negociações Vivas
+Status: contract-renewal-ready
+Data Pack: 2026.05.20
 
-V6.3.0 ADDED: js/data/matchdayPremiumData.js; js/systems/matchdayPremiumEngine.js; core/safety/matchday-premium-validator.js; css/matchday-premium-v630.css; MATCHDAY_PREMIUM_GUIDE.md; MATCHDAY_QA_CHECKLIST.md
+Novos módulos:
+- contractRenewalData
+- contractRenewalEngine
+- contract-renewal-validator
+- contract-renewal-v680.css
 
-ADICIONADO v6.4.0
-- js/data/squadAiData.js
-- js/systems/squadAiEngine.js
-- core/safety/squad-ai-validator.js
-- css/squad-ai-v640.css
-- SQUAD_AI_GUIDE.md
-- DRESSING_ROOM_QA_CHECKLIST.md
-
-
-V6.5.0 FILES
-- js/data/objectivesRetentionData.js
-- js/systems/objectivesRetentionEngine.js
-- core/safety/objectives-retention-validator.js
-- css/objectives-retention-v650.css
-- OBJECTIVES_RETENTION_GUIDE.md
-- RETENTION_QA_CHECKLIST.md
-- ACHIEVEMENTS_SYSTEM_GUIDE.md
-
-
-## v6.6.0 — Fase 49 — arquivos novos
-- js/data/boardEmotionalData.js
-- js/systems/boardEmotionalEngine.js
-- core/safety/board-emotional-validator.js
-- css/board-emotional-v660.css
-- EMOTIONAL_BOARD_GUIDE.md
-- BOARD_MEETING_QA_CHECKLIST.md
-- ECONOMY_EMOTIONAL_RULES.md
-
-## v6.7.0 — Fase 50 — Mercado com Empresários e Negociações Vivas
-- Nova rota `agentMarket`.
-- Adicionados motor, dados, CSS e validador de empresários/negociações.
-- Integração com capa, menu principal, lobby e menu do treinador.
-- Preservadas fases v6.6.0, v6.5.0, v6.4.0, v6.3.0, v6.2.0, v6.1.0 e v6.0.0.
-- Status: agent-market-ready.
+Entrega: ZIP completo baseado na build real mais recente.

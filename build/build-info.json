@@ -1,7 +1,7 @@
 {
-  "version": "v6.7.0",
-  "buildLabel": "Build v6.7.0 | 2026-06-22 | Mercado com Empresários e Negociações Vivas",
-  "phase": "Fase 50 — empresários, propostas rivais, conversas e fechamento seguro",
+  "version": "v6.8.0",
+  "buildLabel": "Build v6.8.0 | 2026-06-23 | Renovação Contratual Profunda",
+  "phase": "Fase 51 — contratos profundos, promessas, luvas, multas e moral do jogador",
   "dataPack": "2026.05.20",
-  "status": "agent-market-ready"
+  "status": "contract-renewal-ready"
 }
