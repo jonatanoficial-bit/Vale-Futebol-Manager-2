@@ -1,5 +1,8 @@
-# Known Issues — v6.8.0
+# Known Issues — v6.9.0
 
-- Homologação manual em Android/iOS ainda pendente.
-- A Renovação Contratual Profunda é uma camada de decisão e simulação; assinatura persistente avançada será aprofundada em fase futura.
-- Valores financeiros usam escala interna em milhões para manter compatibilidade com motores existentes.
+- Homologação manual em celular real ainda pendente.
+- A fase v6.9.0 usa dados internos e determinísticos para simular crises; integração persistente por save pode ser aprofundada nas próximas fases.
+- Sem vídeo pesado ou áudio novo nesta fase para manter ZIP estável.
+
+## Corrigido na fase
+- Link de CSS da Renovação Contratual v6.8.0 adicionado ao index.html.

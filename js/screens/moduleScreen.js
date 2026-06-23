@@ -69,6 +69,7 @@ import { renderObjectivesRetentionCenter, renderObjectivesRetentionRibbon } from
 import { renderBoardEmotionalCenter, renderBoardEmotionalRibbon } from '../systems/boardEmotionalEngine.js';
 import { renderAgentMarketCenter, renderAgentMarketRibbon } from '../systems/agentMarketEngine.js';
 import { renderContractRenewalCenter, renderContractRenewalRibbon } from '../systems/contractRenewalEngine.js';
+import { renderMoraleCrisisCenter, renderMoraleCrisisRibbon } from '../systems/moraleCrisisEngine.js';
 export function moduleScreen(route,title,subtitle,state){
   const extra = content(route, state);
   return screenWrap(route, `${topbar(title,subtitle,'lobby')}${clubHeader(state)}${extra}`, true);
@@ -141,6 +142,7 @@ function content(route,state={}){
   if(route==='emotionalBoard') return renderBoardEmotionalCenter(state);
   if(route==='agentMarket') return renderAgentMarketCenter(state);
   if(route==='contractRenewal') return renderContractRenewalCenter(state);
+  if(route==='squadMorale') return renderMoraleCrisisCenter(state);
   if(route==='formation') return formationScreen(state);
   if(route==='instructions') return instructionsScreen(state);
   if(route==='standings') {
@@ -326,6 +328,7 @@ function content(route,state={}){
     const needsHtml = squadNeeds.map(n=>`<div class="need-row"><div><strong>${n.sector}</strong><small>${n.reason}</small></div><span>${n.urgency}</span><div class="meter"><span style="width:${n.urgency}%"></span></div></div>`).join('');
     return `<section class="squad-v090 squad-v290"><div class="panel squad-hero"><div><span class="tag">Elenco v2.9 · realidade esportiva</span><h1>Plantel vivo</h1><p class="small">Agora o elenco calcula posição natural, improvisação, prontidão, moral, forma, capitão, bolas paradas, rotação e risco antes da partida.</p></div><div class="row gap"><button class="secondary-btn" data-action="apply-rotation">Aplicar rotação</button><button class="main-btn" data-route="formation">Mesa tática</button></div></div>
     ${renderSquadAiRibbon(state)}
+    ${renderMoraleCrisisRibbon(state)}
     ${renderObjectivesRetentionRibbon(state)}
     <section class="grid desktop-4"><div class="card kpi-card"><span>Nota tática</span><strong>${tacticalReport.grade}</strong><small>média do plano</small></div><div class="card kpi-card"><span>Encaixe posicional</span><strong>${tacticalReport.fit}%</strong><div class="meter"><span style="width:${tacticalReport.fit}%"></span></div></div><div class="card kpi-card"><span>Prontidão</span><strong>${tacticalReport.readiness}%</strong><div class="meter"><span style="width:${tacticalReport.readiness}%"></span></div></div><div class="card kpi-card"><span>Risco físico</span><strong>${tacticalReport.fatigueRisk}%</strong><div class="meter"><span style="width:${tacticalReport.fatigueRisk}%"></span></div></div></section>
     <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Onze ideal calculado</span><h2>${lineup.formation.name}</h2></div><button class="secondary-btn mini" data-action="auto-lineup">Recalcular</button></div><div class="lineup-list">${startersHtml}</div></article><article class="panel"><div class="row space"><div><span class="tag">Banco e rotação</span><h2>Opções reais</h2></div><strong class="grade">${lineup.bench.length}</strong></div><div class="bench-list">${benchHtml}</div><div class="squad-alert-list">${alerts}</div></article></section>

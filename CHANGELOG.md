@@ -29,9 +29,12 @@
 - Preservadas fases v6.6.0, v6.5.0, v6.4.0, v6.3.0, v6.2.0, v6.1.0 e v6.0.0.
 - Status: agent-market-ready.
 
-## v6.8.0 — Fase 51 — Renovação Contratual Profunda
-- Nova rota `contractRenewal`.
-- Adicionados motor, dados, CSS e validador de contratos profundos.
-- Contratos agora mostram salário atual/pedido, luvas, multa, promessas, moral e efeito dominó.
-- Integração com Empresários v6.7.0, Diretoria Viva, IA de Elenco, Objetivos e Jornal.
-- Status: contract-renewal-ready.
+## v6.9.0 — Fase 52 — Moral Avançada e Crises de Vestiário
+- Nova rota `squadMorale`.
+- Adicionados motor, dados, CSS e validador de moral avançada.
+- Adicionado sistema de gatilhos de crise: promessa quebrada, salário, banco, capitão, derrotas e vazamento da diretoria.
+- Adicionadas respostas do treinador: conversa individual, reunião de grupo, minutos no matchday, defesa pública e linha dura.
+- Integração com IA de elenco, contratos, empresários, matchday, diretoria, jornal e coletiva.
+- CSS de Renovação Contratual v6.8.0 linkado no index.html.
+- Preservadas fases v6.0.0 até v6.8.0.
+- Status: morale-crisis-ready.

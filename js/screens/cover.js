@@ -23,6 +23,7 @@ export function cover(){
           <button class="secondary-btn" data-route="emotionalBoard">Diretoria viva</button>
           <button class="secondary-btn" data-route="agentMarket">Empresários</button>
           <button class="secondary-btn" data-route="contractRenewal">Renovações</button>
+          <button class="secondary-btn" data-route="squadMorale">Crises de vestiário</button>
           <button class="secondary-btn" data-route="newGame">Iniciar nova carreira</button>
         </div>
       </div>

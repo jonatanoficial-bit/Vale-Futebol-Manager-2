@@ -1,13 +1,21 @@
-Vale Futebol Manager v6.8.0 — Fase 51 — Renovação Contratual Profunda
+Vale Futebol Manager v6.9.0 — Fase 52 — Moral Avançada e Crises de Vestiário
 
-Base: v6.7.0 Mercado com Empresários e Negociações Vivas
-Status: contract-renewal-ready
+Base: v6.8.0 Renovação Contratual Profunda
+Status: morale-crisis-ready
 Data Pack: 2026.05.20
 
 Novos módulos:
-- contractRenewalData
-- contractRenewalEngine
-- contract-renewal-validator
-- contract-renewal-v680.css
+- moraleCrisisData
+- moraleCrisisEngine
+- morale-crisis-validator
+- morale-crisis-v690.css
+
+Novos documentos:
+- MORALE_CRISIS_GUIDE.md
+- DRESSING_ROOM_CRISIS_RULES.md
+- MORALE_QA_CHECKLIST.md
+
+Correção preservada:
+- CSS de Renovação Contratual v6.8.0 agora está linkado no index.html junto da fase v6.9.0.
 
 Entrega: ZIP completo baseado na build real mais recente.
