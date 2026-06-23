@@ -9,4 +9,4 @@
 7. Voltar e abrir Objetivos.
 8. Verificar se não existe popup bloqueando a rolagem.
 9. Confirmar que Jornal, Vestiário e Matchday continuam acessíveis.
-10. Rodar busca por conflitos usando o comando padrão do Git Bash e confirmar que nada aparece.
+10. Rodar busca por conflitos de merge usando o comando padrão do projeto e confirmar saída vazia.
