@@ -1,23 +1,24 @@
 {
-  "version": "v7.5.0",
-  "buildLabel": "Build v7.5.0 | 2026-06-24 19:05:00 BRT | Fase 58 Calendário Vivo, Viagens e Fadiga Realista",
-  "phase": "Fase 58 — Calendário Vivo, Viagens e Fadiga Realista",
+  "version": "v7.6.0",
+  "buildLabel": "Build v7.6.0 | 2026-06-24 16:07:34 BRT | Fase 59 Scout Observadores e Recrutamento Profundo",
+  "phase": "Fase 59 — Scout, Observadores e Recrutamento Profundo",
   "dataPack": "2026.05.20",
-  "status": "live-calendar-travel-fatigue-ready",
-  "generatedAt": "2026-06-24 19:05:00 BRT",
+  "status": "scout-observers-recruitment-ready",
+  "generatedAt": "2026-06-24 16:07:34 BRT",
   "mandatoryFlow": "cover -> mainMenu/save slots -> newGame/teamSelect/confirmCareer or lobby",
   "playableSlots": [
     "principal",
     "career-2",
     "career-3"
   ],
-  "schema": 750,
+  "schema": 760,
   "majorSystems": [
     "3 save slots definitivos preservados",
-    "calendário vivo",
-    "viagens fora de casa",
-    "fadiga e recuperação",
-    "treino leve/pesado/descanso",
-    "risco de lesão e desempenho"
+    "calendário vivo preservado",
+    "observadores por região",
+    "relatórios de jogadores",
+    "potencial e risco de contratação",
+    "comparação com elenco",
+    "custo, salário e lista de desejos"
   ]
 }

@@ -1,22 +1,19 @@
-Build v7.4.0 | Fase 57 | Save Slots 2.0 Definitivo
-Gerado em: 2026-06-24 15:37:35 BRT
+Build v7.6.0 | Fase 59 | Scout, Observadores e Recrutamento Profundo
+Gerado em: 2026-06-24 16:07:34 BRT
 
 Arquivos chave:
-- index.html | sha256:ea7cbdcf268ba93c
-- build/build-info.json | sha256:1899ecab17ac483a
-- js/data/saveSlotsData.js | sha256:218a7d27b124186d
-- js/systems/saveSlotsEngine.js | sha256:be98f7c56521be8a
-- js/systems/saveManager.js | sha256:fbd4cb24925b5a90
-- js/systems/state.js | sha256:7a0dc896ad511d6f
-- js/systems/router.js | sha256:6cc0b7bf344573c9
-- core/safety/save-slots-v2-validator.js | sha256:26a54237da55087b
-- css/save-slots-v740.css | sha256:fd8af96a97c9eb6d
-- js/screens/common.js | sha256:01cb2c8db49cf852
-- js/screens/moduleScreen.js | sha256:91faa6de2f81dda3
-- js/screens/mainMenu.js | sha256:0ef18767b2cc2f94
-- js/screens/cover.js | sha256:2fe4731d7c6df5c7
-- js/screens/lobby.js | sha256:9e56a6e51262760d
-- js/app.js | sha256:8aa75f469306f46c
-- PHASE_57_SAVE_SLOTS_FINAL_REPORT.md | sha256:fe85f3cd20bdde7f
-- SAVE_SLOTS_QA_CHECKLIST.md | sha256:ba5df7b765c7ff30
-- INTEGRITY_REPORT.md | sha256:c4a52ccb2bb642f6
+- index.html | sha256:89db77d2b548280e
+- build/build-info.json | sha256:7cc3684825bea002
+- manifest.webmanifest | sha256:3778d645b089c383
+- js/data/scoutingData.js | sha256:55dc8f7bce5fed62
+- js/systems/scoutingEngine.js | sha256:2372789edf4b4518
+- core/safety/scouting-validator.js | sha256:2d3b62ad8eac0be5
+- css/scouting-v760.css | sha256:e70657197706ab13
+- js/systems/state.js | sha256:74d42822b115f3f6
+- js/systems/router.js | sha256:3c1970142e0070a6
+- js/screens/moduleScreen.js | sha256:4eb7aeedf545a0a2
+- js/screens/lobby.js | sha256:febdd0a3999d62ef
+- js/app.js | sha256:dd35d2cd61a20713
+- CHANGELOG.md | sha256:3ccb15d4a4ef5d02
+- PROJECT_STATUS.md | sha256:467cf28da088d341
+- PHASE_59_SCOUTING_RECRUITMENT_REPORT.md | sha256:e4e34e592690b05d

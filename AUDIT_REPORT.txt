@@ -1,8 +1,12 @@
-Vale Futebol Manager v7.4.0 Fase 57
-Save Slots 2.0 e Fluxo de Carreira Definitivo
-Gerado em: 2026-06-24 15:37:35 BRT
-Conflitos de merge: OK
+Vale Futebol Manager v7.6.0 Fase 59
+Scout, Observadores e Recrutamento Profundo
+Gerado em: 2026-06-24 16:07:34 BRT
 3 slots oficiais: OK
-Auto-start bloqueado: OK
-JS syntax: OK (206 arquivos)
+Calendário vivo preservado: OK
+Scout schema 760: OK
+Observadores por região: OK
+Relatórios + lista de desejos: OK
+JS syntax: OK (212 arquivos)
+Render academyScouting: OK
+Render lobby ribbon: OK
 ZIP: OK

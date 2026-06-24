@@ -1,3 +1,14 @@
+## v7.6.0 — Fase 59: Scout, Observadores e Recrutamento Profundo
+
+- Adicionado motor de scout profissional com schema 760.
+- Criadas regiões de observação: Brasil, América do Sul, África Ocidental e Europa Leste.
+- Adicionados observadores com qualidade, especialidade, confiabilidade, salário e perfil de análise.
+- Relatórios de jogadores agora calculam overall, potencial, encaixe, risco, custo, salário, confiança e comparação com o melhor jogador do elenco na posição.
+- Adicionada lista de desejos persistente no save para acompanhar alvos de recrutamento.
+- Scout integrado ao lobby, menu completo, mercado e Smart Market.
+- Preservados Save Slots 2.0 da Fase 57 e Calendário Vivo da Fase 58.
+- Auditoria: 212 arquivos JS verificados com `node --check`; render do scout validado.
+
 
 ## v7.5.0 — Fase 58: Calendário Vivo, Viagens e Fadiga Realista
 

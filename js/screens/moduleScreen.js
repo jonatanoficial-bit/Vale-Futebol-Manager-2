@@ -76,6 +76,7 @@ import { renderRealAudioPackCenter } from '../systems/realAudioPackEngine.js';
 import { renderStadiumClimateCenter } from '../systems/stadiumClimateEngine.js';
 import { renderSaveSlotsV2Center } from '../systems/saveSlotsEngine.js';
 import { renderLiveCalendarCenter, renderLiveCalendarStrip } from '../systems/liveCalendarEngine.js';
+import { renderScoutingCenter, renderScoutingRibbon } from '../systems/scoutingEngine.js';
 export function moduleScreen(route,title,subtitle,state){
   const extra = content(route, state);
   return screenWrap(route, `${topbar(title,subtitle,'lobby')}${clubHeader(state)}${extra}`, true);
@@ -133,7 +134,7 @@ function content(route,state={}){
   if(route==='database2026') return databaseMay2026ScreenV460(state);
   if(route==='dataPack2026') return renderDataPack2026Center(state);
   if(route==='rosterLock2026') return renderRosterLock2026Center(state);
-  if(route==='academyScouting') return academyScoutingScreenV380(state);
+  if(route==='academyScouting' || route==='scoutingCenter') return renderScoutingCenter(state);
   if(route==='visualLibrary') return visualLibraryScreen(state);
   if(route==='rosterUpdate') return rosterUpdateScreen(state, squadPlayers, squadSummary, rosterMeta);
   if(route==='assetChecklist') return assetChecklistScreen(state);
@@ -586,7 +587,8 @@ function transfersScreen(state={}){
   const rules = [...contractRules, ...boardTransferPolicy].map(r=>`<div class="stat-line"><span>${r.label}</span><strong>${r.value}</strong></div>`).join('');
   const log = (transferState.negotiationLog||[]).slice(-8).reverse().map(l=>`<div class="mail-row compact"><strong>${l.message || l}</strong><small>${l.time ? new Date(l.time).toLocaleString('pt-BR') : 'Registro local'}</small></div>`).join('') || '<p class="small">Nenhuma negociação registrada nesta sessão.</p>';
   return `<section class="transfers-v280">
-    <div class="panel transfer-hero"><div><span class="tag">Mercado internacional ${TRANSFER_ENGINE_VERSION}</span><h1>Central de transferências global</h1><p class="small">Compra, venda, empréstimo, pré-contrato, propostas recebidas, renovações, orçamento seguro, folha protegida, IA global e registro anti-duplicação de jogadores.</p></div><div class="row gap"><button class="secondary-btn" data-action="transfer-window-toggle">${transferState.windowOpen?'Fechar janela teste':'Abrir janela teste'}</button><button class="secondary-btn" data-route="smartMarket">Mercado inteligente</button><button class="main-btn" data-route="contracts">Ver contratos</button></div></div>
+    <div class="panel transfer-hero"><div><span class="tag">Mercado internacional ${TRANSFER_ENGINE_VERSION}</span><h1>Central de transferências global</h1><p class="small">Compra, venda, empréstimo, pré-contrato, propostas recebidas, renovações, orçamento seguro, folha protegida, IA global e registro anti-duplicação de jogadores.</p></div><div class="row gap"><button class="secondary-btn" data-action="transfer-window-toggle">${transferState.windowOpen?'Fechar janela teste':'Abrir janela teste'}</button><button class="secondary-btn" data-route="academyScouting">Scout profissional</button><button class="secondary-btn" data-route="smartMarket">Mercado inteligente</button><button class="main-btn" data-route="contracts">Ver contratos</button></div></div>
+    ${renderScoutingRibbon(state)}
     <section class="grid desktop-4"><div class="card kpi-card"><span>Janela</span><strong>${transferState.windowOpen?'Aberta':'Fechada'}</strong><small>${transferWindow.daysLeft} dias restantes</small></div><div class="card kpi-card"><span>Saldo mercado</span><strong>€ ${marketSnapshot.net.toFixed(1)}M</strong><small>receita ${marketSnapshot.revenue.toFixed(1)} · gasto ${marketSnapshot.spent.toFixed(1)}</small></div><div class="card kpi-card"><span>Folha livre</span><strong>€ ${Number(transferState.wageRoom).toFixed(2)}M</strong><small>comprometido € ${marketSnapshot.salaryCommitted.toFixed(2)}M</small></div><div class="card kpi-card"><span>Integridade</span><strong>${marketSnapshot.health}</strong><small>${marketSnapshot.registrySize} registros anti-duplicação</small></div></section>
     <section class="grid grid-2 transfer-layout"><article class="panel transfer-market"><div class="row space"><div><span class="tag">Radar</span><h2>Alvos de compra e empréstimo</h2></div><div class="filter-row">${filters}</div></div><div class="transfer-list">${cards}</div></article>
     <article class="panel"><div class="row space"><div><span class="tag">Negociações</span><h2>Em andamento</h2></div><span class="status-pill">Estado real</span></div><div class="negotiation-list">${negRows}</div><div class="transfer-note"><strong>Necessidades da diretoria:</strong> ${transferWindow.needs.join(', ')}.</div><div class="news-list">${events}</div></article></section>

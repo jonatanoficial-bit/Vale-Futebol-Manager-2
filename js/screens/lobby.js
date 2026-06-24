@@ -4,6 +4,7 @@ import { safeImg, clubLogo, country } from '../systems/assets.js';
 import { money } from '../utils/dom.js';
 import { renderSlotCompactBar } from '../systems/saveSlotsEngine.js';
 import { renderLiveCalendarStrip } from '../systems/liveCalendarEngine.js';
+import { renderScoutingRibbon } from '../systems/scoutingEngine.js';
 
 export const PRIMARY_ACTIONS_V550 = [
   ['match','Jogar partida','⚽','Entrar no próximo compromisso oficial'],
@@ -39,11 +40,12 @@ export const MANAGER_MENU_GROUPS_V550 = [
     ['formation','Tática','🧩','Escalação, campo, banco e desenho tático','Pré-jogo'],
     ['instructions','Instruções','🎯','Pressão, passes, mentalidade e bolas paradas','Avançado'],
     ['training','Treino','🔶','Plano semanal, evolução, fadiga e lesões','Elenco'],
-    ['academyScouting','Base & Scouting','🌱','Promessas, olheiros e captação de talentos','Novo']
+    ['academyScouting','Scout & Recrutamento','🔎','Observadores por região, relatórios, potencial e lista de desejos','v7.6']
   ]],
   ['Mercado e finanças', [
     ['transfers','Transferências','🔁','Compra, venda, empréstimo e renovação','Janela'],
     ['smartMarket','Mercado Inteligente','🧠','Empresários, IA de clubes e oportunidades','Novo'],
+    ['academyScouting','Scout Profissional','🔎','Observadores, relatórios, comparação com elenco e lista de desejos','v7.6'],
     ['agentMarket','Empresários e Negociações','🤝','Conversas vivas, propostas rivais, comissões e fechamento seguro','v6.7'],
     ['contracts','Contratos','📝','Salários, vencimentos, luvas e renovações','Gestão'],
     ['contractRenewal','Renovação Contratual','📝','Promessas, multa, luvas, moral, salário e efeito dominó','v6.8'],
@@ -134,6 +136,7 @@ export function lobby(state){
       </section>
 
       ${renderLiveCalendarStrip(state)}
+      ${renderScoutingRibbon(state)}
 
       <section class="quick-actions-v550" aria-label="Ações principais">
         ${PRIMARY_ACTIONS_V550.map(([route,title,icon,desc])=>`<button class="card quick-action-v550" data-route="${route}"><span>${icon}</span><strong>${title}</strong><em>${desc}</em></button>`).join('')}

@@ -1,3 +1,13 @@
+## Status atual — v7.6.0
+
+Build atual: **v7.6.0 — Fase 59 — Scout, Observadores e Recrutamento Profundo**.
+
+Status: `scout-observers-recruitment-ready`.
+
+Esta versão adiciona departamento de scout profissional com observadores por região, relatórios de jogadores, cálculo de potencial, risco, custo, salário, comparação com elenco e lista de desejos persistente no save. A base preserva o fluxo de 3 slots da Fase 57 e o calendário vivo da Fase 58.
+
+Próxima etapa sugerida: v7.7.0 — Fase 60: Treino Semanal Realista.
+
 ## Status atual — v7.1.0
 Build sound-ambience-ready. A camada sonora é mobile-first, sem autoplay, sem MP3 obrigatório e com fallback seguro. Próxima etapa recomendada: v7.2.0 pacote de efeitos reais opcionais e tela de mixagem avançada.
 
