@@ -3,6 +3,7 @@ import { teams } from '../data/gameData.js';
 import { safeImg, clubLogo, country } from '../systems/assets.js';
 import { money } from '../utils/dom.js';
 import { renderSlotCompactBar } from '../systems/saveSlotsEngine.js';
+import { renderLiveCalendarStrip } from '../systems/liveCalendarEngine.js';
 
 export const PRIMARY_ACTIONS_V550 = [
   ['match','Jogar partida','⚽','Entrar no próximo compromisso oficial'],
@@ -131,6 +132,8 @@ export function lobby(state){
           <button class="main-btn compact" data-route="match">⚽ Iniciar jogo</button>
         </div>
       </section>
+
+      ${renderLiveCalendarStrip(state)}
 
       <section class="quick-actions-v550" aria-label="Ações principais">
         ${PRIMARY_ACTIONS_V550.map(([route,title,icon,desc])=>`<button class="card quick-action-v550" data-route="${route}"><span>${icon}</span><strong>${title}</strong><em>${desc}</em></button>`).join('')}

@@ -75,6 +75,7 @@ import { renderSoundAmbienceCenter } from '../systems/soundAmbienceEngine.js';
 import { renderRealAudioPackCenter } from '../systems/realAudioPackEngine.js';
 import { renderStadiumClimateCenter } from '../systems/stadiumClimateEngine.js';
 import { renderSaveSlotsV2Center } from '../systems/saveSlotsEngine.js';
+import { renderLiveCalendarCenter, renderLiveCalendarStrip } from '../systems/liveCalendarEngine.js';
 export function moduleScreen(route,title,subtitle,state){
   const extra = content(route, state);
   return screenWrap(route, `${topbar(title,subtitle,'lobby')}${clubHeader(state)}${extra}`, true);
@@ -204,22 +205,7 @@ function content(route,state={}){
       <section class="panel"><div class="row space"><div><span class="tag">Temporada</span><h2>Mapa anual</h2></div><strong class="grade">12 meses</strong></div><div class="month-mini-grid">${seasonMonths.map(m=>`<div class="month-mini"><strong>${m.name}</strong><span>${m.matches} eventos</span><small>${m.focus}</small></div>`).join('')}</div></section>
     </section>`;
   }
-  if(route==='calendar') {
-    const integratedSchedule = scheduleWithState(state);
-    const integratedDays = Array.from({length:31}, (_,i)=>{ const day=i+1; return {day, events: integratedSchedule.filter(ev => Number(ev.date.slice(-2)) === day)}; });
-    const dayCells = integratedDays.map(d=>`<div class="calendar-day ${d.events.length?'has-event':''}"><div class="day-number">${d.day}</div>${d.events.slice(0,2).map(ev=>`<span class="calendar-event ${eventClass(ev)} ${ev.completed?'event-completed':''}">${ev.result || (ev.type==='match' ? ev.competition.replace('Brasileirão Série A','Brasileirão').replace('Copa do Brasil','Copa BR') : ev.competition)}</span>`).join('')}${d.events.length>2?`<small>+${d.events.length-2}</small>`:''}</div>`).join('');
-    const timeline = integratedSchedule.slice().sort((a,b)=>a.date.localeCompare(b.date)).map(ev=>`<div class="timeline-item ${eventClass(ev)} ${ev.completed?'completed-fixture':''}">
-      <div class="fixture-date"><strong>${ev.date.slice(8,10)}</strong><small>${ev.day}</small></div>
-      <div class="fixture-main"><strong>${eventTitle(ev)} ${ev.result ? '· '+ev.result : ''}</strong><span>${ev.competition} · ${ev.stage}</span><small>${ev.venue}</small></div>
-      <div class="status-pill">${ev.status}</div>
-    </div>`).join('');
-    return `<section class="calendar-v070">
-      <div class="panel championship-hero"><div><span class="tag">Maio · Temporada ${state.season || 2026}</span><h1>Calendário completo</h1><p class="small">Agenda com partidas, treinos, reuniões, mercado e eventos de imprensa. Esta tela já nasce preparada para puxar temporadas completas nas próximas builds.</p></div><button class="secondary-btn" data-route="championship">Ver competições</button></div>
-      <section class="grid grid-2 calendar-layout"><article class="panel"><div class="row space"><h2>Visão mensal</h2><span class="tag">31 dias</span></div><div class="calendar-weekdays"><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span><span>Dom</span></div><div class="calendar-grid-full">${dayCells}</div></article>
-      <article class="panel"><div class="row space"><div><span class="tag">Linha do tempo</span><h2>Compromissos do mês</h2></div><strong class="grade">${integratedSchedule.length}</strong></div><div class="timeline-list">${timeline}</div></article></section>
-      <section class="grid desktop-4"><div class="card kpi-card"><span>Jogos oficiais</span><strong>${integratedSchedule.filter(e=>e.type==='match').length}</strong><small>partidas no mês</small></div><div class="card kpi-card"><span>Treinos</span><strong>${integratedSchedule.filter(e=>e.type==='training').length}</strong><small>sessões planejadas</small></div><div class="card kpi-card"><span>Decisões</span><strong>${integratedSchedule.filter(e=>e.importance>=90).length}</strong><small>alta pressão</small></div><div class="card kpi-card"><span>Viagens</span><strong>${integratedSchedule.filter(e=>e.type==='match' && e.awayId===(state.clubId||'santos')).length}</strong><small>fora de casa</small></div></section>
-    </section>`;
-  }
+  if(route==='calendar') return renderLiveCalendarCenter(state);
   if(route==='club') {
     const t = teams.find(x => x.id === state.clubId) || teams[0];
     const boardTrust = Number(state.boardTrust || 76);

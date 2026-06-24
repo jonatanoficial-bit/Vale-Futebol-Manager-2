@@ -1,14 +1,23 @@
 {
-  "version": "v7.4.0",
-  "buildLabel": "Build v7.4.0 | 2026-06-24 15:37:35 BRT | Fase 57 Save Slots 2.0 Definitivo",
-  "phase": "Fase 57 — Save Slots 2.0 e Fluxo de Carreira Definitivo",
+  "version": "v7.5.0",
+  "buildLabel": "Build v7.5.0 | 2026-06-24 19:05:00 BRT | Fase 58 Calendário Vivo, Viagens e Fadiga Realista",
+  "phase": "Fase 58 — Calendário Vivo, Viagens e Fadiga Realista",
   "dataPack": "2026.05.20",
-  "status": "3-save-slots-final-flow-ready",
-  "generatedAt": "2026-06-24 15:37:35 BRT",
+  "status": "live-calendar-travel-fatigue-ready",
+  "generatedAt": "2026-06-24 19:05:00 BRT",
   "mandatoryFlow": "cover -> mainMenu/save slots -> newGame/teamSelect/confirmCareer or lobby",
   "playableSlots": [
     "principal",
     "career-2",
     "career-3"
+  ],
+  "schema": 750,
+  "majorSystems": [
+    "3 save slots definitivos preservados",
+    "calendário vivo",
+    "viagens fora de casa",
+    "fadiga e recuperação",
+    "treino leve/pesado/descanso",
+    "risco de lesão e desempenho"
   ]
 }

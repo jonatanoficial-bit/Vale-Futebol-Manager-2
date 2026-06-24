@@ -1,3 +1,13 @@
+
+## v7.5.0 — Fase 58: Calendário Vivo, Viagens e Fadiga Realista
+
+- Adicionado motor de calendário vivo com sequência de jogos, viagens, fadiga, recuperação e risco de lesão.
+- Calendário agora permite aplicar treino leve, treino pesado, recuperação, descanso, viagem e avanço de dia.
+- Lobby exibe faixa rápida de calendário vivo.
+- Pós-jogo e treino agora alimentam o calendário e o departamento médico.
+- Schema de save atualizado para 750 preservando os 3 slots definitivos da Fase 57.
+- Auditoria: 209 arquivos JS verificados com `node --check`; render do calendário validado.
+
 ## v7.1.0 — Fase 54 — Sons, Ambiência e Torcida
 - Adicionada central soundAmbience.
 - Adicionados presets leves de estádio, pré-jogo, pressão final, fora de casa, CT e diretoria.

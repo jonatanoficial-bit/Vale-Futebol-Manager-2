@@ -1,0 +1,8 @@
+Vale Futebol Manager v7.5.0 — Fase 58
+Auditoria local concluída.
+Base preservada: v7.4.0 Fase 57 Save Slots 2.0 definitivo.
+JS syntax: OK em 209 arquivos.
+Engine smoke test: OK.
+Calendar render: OK.
+Save schema: 750.
+Slots preservados: principal, career-2, career-3.
