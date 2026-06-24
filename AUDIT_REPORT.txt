@@ -1,12 +1,18 @@
-Vale Futebol Manager v7.6.0 Fase 59
-Scout, Observadores e Recrutamento Profundo
-Gerado em: 2026-06-24 16:07:34 BRT
-3 slots oficiais: OK
-Calendário vivo preservado: OK
-Scout schema 760: OK
-Observadores por região: OK
-Relatórios + lista de desejos: OK
-JS syntax: OK (212 arquivos)
-Render academyScouting: OK
-Render lobby ribbon: OK
-ZIP: OK
+VALE FUTEBOL MANAGER — AUDIT REPORT
+Build: v7.7.0
+Fase: 60 — Treino Semanal Realista
+Data/hora: 2026-06-24 16:38:02 BRT
+
+Auditoria executada:
+- node --check em 213 arquivos JavaScript: OK
+- Teste lógico do motor de treino semanal v7.7.0: OK
+- validateWeeklyTrainingSystem: OK
+- buildDeepMatchSnapshot lendo training.matchImpact: OK
+- index.html com css/weekly-training-v770.css: OK
+- build/build-info.json schema 770: OK
+
+Preservação validada:
+- Save Slots 2.0: preservado
+- Calendário Vivo: preservado
+- Scout Profissional: preservado
+- Assets completos: preservados

@@ -1,19 +1,25 @@
-Build v7.6.0 | Fase 59 | Scout, Observadores e Recrutamento Profundo
-Gerado em: 2026-06-24 16:07:34 BRT
+VALE FUTEBOL MANAGER — BUILD MANIFEST
+Arquivo: Vale-Futebol-Manager-v7.7.0-Fase-60-Treino-Semanal-Realista.zip
+Versão: v7.7.0
+Fase: 60 — Treino Semanal Realista
+Data/hora: 2026-06-24 16:38:02 BRT
+Schema: 770
 
-Arquivos chave:
-- index.html | sha256:89db77d2b548280e
-- build/build-info.json | sha256:7cc3684825bea002
-- manifest.webmanifest | sha256:3778d645b089c383
-- js/data/scoutingData.js | sha256:55dc8f7bce5fed62
-- js/systems/scoutingEngine.js | sha256:2372789edf4b4518
-- core/safety/scouting-validator.js | sha256:2d3b62ad8eac0be5
-- css/scouting-v760.css | sha256:e70657197706ab13
-- js/systems/state.js | sha256:74d42822b115f3f6
-- js/systems/router.js | sha256:3c1970142e0070a6
-- js/screens/moduleScreen.js | sha256:4eb7aeedf545a0a2
-- js/screens/lobby.js | sha256:febdd0a3999d62ef
-- js/app.js | sha256:dd35d2cd61a20713
-- CHANGELOG.md | sha256:3ccb15d4a4ef5d02
-- PROJECT_STATUS.md | sha256:467cf28da088d341
-- PHASE_59_SCOUTING_RECRUITMENT_REPORT.md | sha256:e4e34e592690b05d
+Contagem:
+- JS: 213
+- CSS: 37
+- HTML: 1
+
+Novos/alterados principais:
+- js/systems/trainingEngine.js
+- js/data/trainingData.js
+- js/screens/moduleScreen.js
+- js/systems/state.js
+- js/systems/router.js
+- js/systems/matchEngine.js
+- js/app.js
+- core/safety/weekly-training-validator.js
+- css/weekly-training-v770.css
+- PHASE_60_WEEKLY_TRAINING_REPORT.md
+- build/build-info.json
+- manifest.webmanifest

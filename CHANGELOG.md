@@ -1,3 +1,14 @@
+# v7.7.0 — Fase 60: Treino Semanal Realista
+
+Data/build: 2026-06-24 16:34:17 BRT
+
+- Criado microciclo profissional de 7 dias: recuperação, tático, físico, bola parada, finalização, coletivo e descanso.
+- Adicionados presets de semana: equilibrada, calendário congestionado, ofensiva, defensiva e recuperação.
+- Treino agora gera impacto direto no motor da partida: ataque, defesa, bola parada, controle tático, condição e risco físico.
+- Integração com Calendário Vivo: carga semanal, fadiga, recuperação e risco de lesão são atualizados no save.
+- Preservados Save Slots 2.0 da Fase 57, Calendário Vivo da Fase 58 e Scout Profissional da Fase 59.
+- Schema atualizado para 770.
+
 ## v7.6.0 — Fase 59: Scout, Observadores e Recrutamento Profundo
 
 - Adicionado motor de scout profissional com schema 760.

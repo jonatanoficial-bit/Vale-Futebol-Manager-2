@@ -11,7 +11,7 @@ import { squadPlayers as defaultRosterPlayers, rosterMeta as defaultRosterMeta, 
 import { buildMay2026RosterForClub } from './playerDatabase2026Engine.js';
 import { generateOffers, validateCareerState, validateManagerCareerState, buildManagerCareerSnapshot, buildInternationalCalendar, defaultCallUpSelection } from './careerEngine.js';
 import { buildNationalCalendar, buildNationalTeamSnapshot, safeCallUpPool, simulateNationalFixture, NATIONAL_TEAM_ENGINE_VERSION } from './nationalTeamEngine.js';
-import { ensureTrainingState, applyTrainingWeek, TRAINING_ENGINE_VERSION } from './trainingEngine.js';
+import { ensureTrainingState, applyTrainingWeek, applyTrainingSession, setWeeklyTrainingPreset, buildTrainingSnapshot, TRAINING_ENGINE_VERSION } from './trainingEngine.js';
 import { TRANSFER_ENGINE_VERSION, ensureTransferLedger, evaluateDealSafety, registerTransaction, buildTransferSnapshot, simulateGlobalMarketCycle, createPreContract, validateTransferIntegrity, renewalById } from './transferEngine.js';
 import { SAVE_MANAGER_VERSION, SAVE_KEY, writeAutoBackup, readAutoBackup, preserveCorruptSave, exportEnvelopeText, validateSavePayload, migrateLegacyState, writeSlot, readSlot, listSlots, listPlayableSlots, deleteSlot, renameSlot, slotLabel, saveIntegritySnapshot } from './saveManager.js';
 import { createPressConferenceSession, answerPressQuestion, applyPressConferenceEffects } from './pressConferenceEngine.js';
@@ -57,7 +57,7 @@ export const defaultState = () => ({
   career:{ currentDate:'2026-05-19', matchday:1, completedMatches:[], lastResult:null, promotionRelegation:{serieARelegation:4,serieBPromotion:4,libertadoresTop:5,sulamericanaRange:[6,12],serieBRelegation:4}, integrationLog:['Carreira migrada para v5.1.0 com save profissional, múltiplos slots, backups automáticos e recuperação de carreira.'], jobOffers:[], offerHistory:[], jobMarket:null, nationalTeamJob:null, dualCareer:{enabled:false, club:true, nationalTeam:null}, callUpSelection:defaultCallUpSelection(), internationalCalendar:buildNationalCalendar(2026, 'brasil'), managerProfile:null, activeContract:null, contractHistory:[], titleHistory:[], sackRiskLog:[], managerTimeline:[], unlockedMilestones:[], boardRelationship:76, fanRelationship:82, dressingRoomTrust:69, mediaPressure:54, worldCompetitionCycle:{libertadores:true,sulamericana:true,clubWorldCupCycle:4,worldCupCycle:4,lastUpdated:'v4.3.0'}, financeReport:{profile:'balanced', lastMonthlyCycle:null, crisisLog:[], boardWarnings:[], sponsorReview:'v3.5.0'}, tutorial:{seen:false, step:1, completed:false}, missions:[], completedSeasons:0, seasonHistory:[], lifetimeEarnings:0, reputationHistory:[], activeStory:['Bem-vindo ao modo carreira: jogue partidas, cumpra missões, aumente renda e reputação sem limite de temporadas.'], pressHistory:[], pressConference:null, managerProgression:null },
   gameplay:{ difficulty:'realistic', aiVersion:'v5.4.0', realism:88, variance:18, balanceLog:[] },
   stability:{ autosave:true, lastBackup:null, backupCount:0, lastExport:null, lastImport:null, safeModeEvents:0, health:'Excelente', auditVersion:SAVE_MANAGER_VERSION, saveManagerVersion:SAVE_MANAGER_VERSION, saveIntegrity:'ok', commercialAudit:'v3.7.0-ok', fullscreenMobile:true, overflowGuard:true, rosterSafeMode:true, matchEngineSafeMode:true, matchEngineVersion:'v4.7.0', matchStressTest:'passed-100', trainingEngineVersion:TRAINING_ENGINE_VERSION, trainingStressTest:'passed-4-weeks', transferEngineVersion:TRANSFER_ENGINE_VERSION, transferIntegrity:'pending' },
-  save:{ version:SAVE_MANAGER_VERSION, schema:760, activeSlot:'principal', slotLabel:'Carreira principal', careerStarted:false, migratedFrom:null, lastMigrationAt:null, exportCount:0, importCount:0, autosaveCheckpoints:[] },
+  save:{ version:SAVE_MANAGER_VERSION, schema:770, activeSlot:'principal', slotLabel:'Carreira principal', careerStarted:false, migratedFrom:null, lastMigrationAt:null, exportCount:0, importCount:0, autosaveCheckpoints:[] },
   roster:clubRosterPackage('santos'),
   finance:{profile:'balanced', lastMonthlyCycle:null, crisisLog:[], boardWarnings:[], sponsorReview:'v3.5.0'},
   training:ensureTrainingState(),
@@ -117,7 +117,7 @@ function normalize(next){
   merged.stability.saveManagerVersion = SAVE_MANAGER_VERSION;
   merged.save = {...base.save, ...(next?.save || {})};
   merged.save.version = SAVE_MANAGER_VERSION;
-  merged.save.schema = 760;
+  merged.save.schema = 770;
   merged.save.activeSlot = String(merged.save.activeSlot || 'principal').slice(0,32);
   merged.save.exportCount = Math.max(0, Number(merged.save.exportCount || 0));
   merged.save.importCount = Math.max(0, Number(merged.save.importCount || 0));
@@ -240,7 +240,7 @@ export function startCareer(){
     ui:{...state.ui, selectedClub:chosenClub, standingsCompetition:chosenTeam?.leagueId || 'brasileirao-a', ...starters},
     route:'lobby',
     scouting: normalizeScoutingState({observerLog:[`Fase 59: scout profissional iniciado para ${chosenTeam?.name || chosenClub}.`]}, {clubId:chosenClub, ui:{selectedClub:chosenClub}}),
-    save:{...(state.save||{}), version:SAVE_MANAGER_VERSION, schema:760, activeSlot:state.save?.activeSlot || 'principal', slotLabel:state.save?.slotLabel || slotLabel(state.save?.activeSlot || 'principal'), careerStarted:true}
+    save:{...(state.save||{}), version:SAVE_MANAGER_VERSION, schema:770, activeSlot:state.save?.activeSlot || 'principal', slotLabel:state.save?.slotLabel || slotLabel(state.save?.activeSlot || 'principal'), careerStarted:true}
   });
   persist();
 }
@@ -914,12 +914,57 @@ export function simulateManagerDismissalRisk(){
 
 export function applyTrainingMicrocycle(){
   const nextTraining = applyTrainingWeek(state);
+  const impact = nextTraining.matchImpact || {};
   state = normalize({
     ...state,
     training: nextTraining,
     fanMood: Math.max(0, Math.min(100, Number(state.fanMood||75) + Math.round((nextTraining.moraleEffect||0)/2))),
-    calendar: normalizeLiveCalendarState({...(state.calendar||{}), teamFatigue:Math.max(0, Number(state.calendar?.teamFatigue||24)+Math.round(Number(nextTraining.injuryRisk||18)/8)), recoveryScore:nextTraining.recoveryScore, injuryRisk:nextTraining.injuryRisk, calendarLog:[...((state.calendar?.calendarLog)||[]), `Treino integrado ao Calendário Vivo: semana ${Math.max(1, Number(nextTraining.week||2)-1)} · risco ${nextTraining.injuryRisk}%.`].slice(-30)}, state),
-    career:{...(state.career||{}), integrationLog:[...((state.career||{}).integrationLog||[]), `Treino v7.5.0 aplicado: semana ${Math.max(1, Number(nextTraining.week||2)-1)} integrada ao calendário vivo com risco físico ${nextTraining.injuryRisk}%.`].slice(-8)}
+    calendar: normalizeLiveCalendarState({
+      ...(state.calendar||{}),
+      teamFatigue:Math.max(0, Number(state.calendar?.teamFatigue||24)+Math.round(Number(nextTraining.weeklyLoad||46)/9)),
+      recoveryScore:nextTraining.recoveryScore,
+      injuryRisk:nextTraining.injuryRisk,
+      weekLoad:nextTraining.weeklyLoad,
+      trainingLog:[...((state.calendar?.trainingLog)||[]), `Microciclo v7.7 aplicado · prontidão ${nextTraining.matchReadiness}% · impacto jogo ATQ ${impact.attack>=0?'+':''}${impact.attack}/DEF ${impact.defense>=0?'+':''}${impact.defense}.`].slice(-30),
+      calendarLog:[...((state.calendar?.calendarLog)||[]), `Treino Semanal Realista: semana ${Math.max(1, Number(nextTraining.week||2)-1)} · carga ${nextTraining.weeklyLoad}% · risco ${nextTraining.injuryRisk}%.`].slice(-30)
+    }, state),
+    career:{...(state.career||{}), integrationLog:[...((state.career||{}).integrationLog||[]), `Treino v7.7.0 aplicado: microciclo semanal realista integrado ao calendário e ao motor de jogo.`].slice(-12)},
+    stability:{...(state.stability||{}), health:'Treino semanal realista aplicado', trainingEngineVersion:TRAINING_ENGINE_VERSION}
+  });
+  persist();
+  return state.training;
+}
+
+export function applyWeeklyTrainingSession(sessionId='tactical'){
+  const nextTraining = applyTrainingSession(state, sessionId);
+  state = normalize({
+    ...state,
+    training: nextTraining,
+    fanMood: Math.max(0, Math.min(100, Number(state.fanMood||75) + Math.round((nextTraining.moraleEffect||0)/5))),
+    calendar: normalizeLiveCalendarState({
+      ...(state.calendar||{}),
+      teamFatigue:Math.max(0, Number(state.calendar?.teamFatigue||24)+Math.round(Number(nextTraining.weeklyLoad||46)/18)),
+      recoveryScore:nextTraining.recoveryScore,
+      injuryRisk:nextTraining.injuryRisk,
+      weekLoad:nextTraining.weeklyLoad,
+      trainingLog:[...((state.calendar?.trainingLog)||[]), `Sessão de treino aplicada: ${sessionId} · prontidão ${nextTraining.matchReadiness || buildTrainingSnapshot({...state, training:nextTraining}).readiness}%.`].slice(-30),
+      calendarLog:[...((state.calendar?.calendarLog)||[]), `Sessão individual de treino: ${sessionId}.`].slice(-30)
+    }, state),
+    career:{...(state.career||{}), integrationLog:[...((state.career||{}).integrationLog||[]), `Sessão semanal v7.7.0 aplicada: ${sessionId}.`].slice(-12)},
+    stability:{...(state.stability||{}), health:'Sessão do microciclo aplicada', trainingEngineVersion:TRAINING_ENGINE_VERSION}
+  });
+  persist();
+  return state.training;
+}
+
+export function setTrainingWeeklyPreset(presetId='balanced'){
+  const nextTraining = setWeeklyTrainingPreset(state.training || {}, presetId);
+  state = normalize({
+    ...state,
+    training:nextTraining,
+    ui:{...(state.ui||{}), weeklyTrainingPreset:presetId},
+    career:{...(state.career||{}), integrationLog:[...((state.career||{}).integrationLog||[]), `Preset de treino semanal definido: ${presetId}.`].slice(-12)},
+    stability:{...(state.stability||{}), health:'Preset de treino semanal atualizado', trainingEngineVersion:TRAINING_ENGINE_VERSION}
   });
   persist();
   return state.training;

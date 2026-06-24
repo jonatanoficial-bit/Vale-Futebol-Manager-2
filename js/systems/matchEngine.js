@@ -14,6 +14,15 @@ function rand(seed, step=1){
 }
 function team(id){ return teams.find(t=>t.id===id) || teams[0] || {id:'generic', name:'Time', level:70, reputation:70, league:'Liga', stadium:'Estádio'}; }
 function clubLevel(id){ const t = team(id); return clamp(t.level || t.reputation || 70, 45, 96); }
+function trainingEdgeFor(state={}, sideId=''){
+  const club = state.clubId || state.ui?.selectedClub || 'santos';
+  if(sideId !== club) return 0;
+  const impact = state.training?.matchImpact || {};
+  const readiness = Number(state.training?.matchReadiness || impact.readiness || 74);
+  const fatigue = Number(state.calendar?.teamFatigue || 24);
+  const edge = Number(impact.attack||0)*0.12 + Number(impact.defense||0)*0.10 + Number(impact.setPieces||0)*0.06 + Number(impact.tacticalControl||0)*0.14 + Number(impact.fitness||0)*0.10 + (readiness-74)*0.045 - Math.max(0, fatigue-66)*0.07 - Math.max(0, Number(impact.injury||0))*0.05;
+  return clamp(edge, -7, 8);
+}
 function tacticBoost(state={}, homeId=''){
   const club = state.clubId || state.ui?.selectedClub || homeId;
   const isHomeClub = club === homeId;
@@ -25,6 +34,7 @@ function tacticBoost(state={}, homeId=''){
   if(profile === 'direct') boost += .8;
   if(profile === 'lowblock') boost -= .4;
   boost += Number(state.match?.tacticalBoost || 0);
+  boost += Number(state.training?.matchImpact?.tacticalControl || 0) * 0.08;
   return isHomeClub ? boost : -boost * .6;
 }
 function squadBoost(state={}){
@@ -46,8 +56,10 @@ export function getDeepMatchContext(match={}, state={}){
   const refereeTone = rand(seed, 9) > .66 ? 'Rigoroso' : rand(seed, 9) < .28 ? 'Permissivo' : 'Equilibrado';
   const homeSquad = state.clubId === home.id ? squadBoost(state) : {overall:clubLevel(home.id), fitness:82, morale:76, value:(clubLevel(home.id)-70)*.38};
   const awaySquad = state.clubId === away.id ? squadBoost(state) : {overall:clubLevel(away.id), fitness:80, morale:74, value:(clubLevel(away.id)-70)*.38};
-  const homeBase = clubLevel(home.id) + homeSquad.value + 3.5 + tacticBoost(state, home.id);
-  const awayBase = clubLevel(away.id) + awaySquad.value - tacticBoost(state, home.id)*.45;
+  const homeTrainingEdge = trainingEdgeFor(state, home.id);
+  const awayTrainingEdge = trainingEdgeFor(state, away.id);
+  const homeBase = clubLevel(home.id) + homeSquad.value + 3.5 + tacticBoost(state, home.id) + homeTrainingEdge;
+  const awayBase = clubLevel(away.id) + awaySquad.value - tacticBoost(state, home.id)*.45 + awayTrainingEdge;
   const diff = clamp(homeBase - awayBase, -24, 24);
   const tempoBase = clamp(58 + Math.abs(diff)*.55 + rand(seed, 10)*18, 48, 82);
   return {home, away, seed, weather, attendance, refereeTone, homeSquad, awaySquad, homePower:homeBase, awayPower:awayBase, diff, tempoBase};
@@ -182,12 +194,14 @@ export function buildAdvancedMatchMetrics(match={}, state={}){
   const fatigue = clamp(100 - minute*.46 - (decision==='pressure'?10:0) + subCount*2.5, 34, 100);
   const homeCardRisk = clamp(18 + phase*38 + tacticalRisk + refereeRisk - Math.max(0,ctx.diff)*.18, 4, 86);
   const awayCardRisk = clamp(22 + phase*42 + refereeRisk + Math.max(0,ctx.diff)*.22, 5, 88);
-  const injuryRisk = clamp((100-fatigue)*.23 + (ctx.weather === 'Gramado pesado' ? 8 : 0) + (decision==='pressure'?4:0), 2, 28);
+  const trainingInjury = Number(state.training?.matchImpact?.injury || 0) + Math.max(0, Number(state.calendar?.injuryRisk || 18)-35)*0.12;
+  const injuryRisk = clamp((100-fatigue)*.23 + (ctx.weather === 'Gramado pesado' ? 8 : 0) + (decision==='pressure'?4:0) + trainingInjury, 2, 38);
   const varRisk = clamp(7 + (score.home+score.away)*3 + Math.abs(ctx.diff)*.12 + phase*8, 4, 35);
   const penaltyRisk = clamp(6 + phase*11 + (decision==='pressure'?3:0) + rand(ctx.seed,404)*8, 3, 27);
   const tacticalControl = clamp(50 + ctx.diff*.65 + (decision==='possession'?8:0) + (decision==='lowblock'?-4:0), 22, 78);
   const transitionDanger = clamp(42 - ctx.diff*.42 + (decision==='pressure'?8:0) - (decision==='lowblock'?5:0), 18, 82);
-  const setPieceThreat = clamp(34 + rand(ctx.seed,405)*28 + (ctx.refereeTone==='Rigoroso'?4:0), 18, 75);
+  const setPieceTraining = Number(state.training?.matchImpact?.setPieces || 0);
+  const setPieceThreat = clamp(34 + rand(ctx.seed,405)*28 + (ctx.refereeTone==='Rigoroso'?4:0) + setPieceTraining, 18, 88);
   const substitutionImpact = clamp(subCount * 7 + (subCount ? rand(ctx.seed,406)*8 : 0), 0, 36);
   return {
     version:'v4.7.0', fatigue:Math.round(fatigue), homeCardRisk:Math.round(homeCardRisk), awayCardRisk:Math.round(awayCardRisk),

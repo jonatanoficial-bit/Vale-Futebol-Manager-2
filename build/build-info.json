@@ -1,24 +1,24 @@
 {
-  "version": "v7.6.0",
-  "buildLabel": "Build v7.6.0 | 2026-06-24 16:07:34 BRT | Fase 59 Scout Observadores e Recrutamento Profundo",
-  "phase": "Fase 59 — Scout, Observadores e Recrutamento Profundo",
+  "version": "v7.7.0",
+  "buildLabel": "Build v7.7.0 | 2026-06-24 16:34:17 BRT | Fase 60 Treino Semanal Realista",
+  "phase": "Fase 60 — Treino Semanal Realista",
   "dataPack": "2026.05.20",
-  "status": "scout-observers-recruitment-ready",
-  "generatedAt": "2026-06-24 16:07:34 BRT",
+  "status": "weekly-training-realistic-ready",
+  "generatedAt": "2026-06-24 16:34:17 BRT",
   "mandatoryFlow": "cover -> mainMenu/save slots -> newGame/teamSelect/confirmCareer or lobby",
   "playableSlots": [
     "principal",
     "career-2",
     "career-3"
   ],
-  "schema": 760,
+  "schema": 770,
   "majorSystems": [
     "3 save slots definitivos preservados",
     "calendário vivo preservado",
-    "observadores por região",
-    "relatórios de jogadores",
-    "potencial e risco de contratação",
-    "comparação com elenco",
-    "custo, salário e lista de desejos"
+    "scout profissional preservado",
+    "microciclo de 7 dias",
+    "recuperação/tático/físico/bola parada/finalização/coletivo/descanso",
+    "impacto direto no motor da partida",
+    "carga semanal e risco de lesão"
   ]
 }

@@ -1,3 +1,17 @@
+# PROJECT STATUS — v7.7.0 / Fase 60
+
+Build: 2026-06-24 16:34:17 BRT
+Status: Treino Semanal Realista integrado e preservando fases anteriores.
+
+Sistemas principais ativos:
+- Save Slots 2.0 com 3 carreiras reais.
+- Calendário Vivo com viagens, fadiga e recuperação.
+- Scout, observadores e recrutamento profundo.
+- Microciclo semanal realista com impacto direto no jogo.
+- Schema atual: 770.
+
+
+---
 ## Status atual — v7.6.0
 
 Build atual: **v7.6.0 — Fase 59 — Scout, Observadores e Recrutamento Profundo**.

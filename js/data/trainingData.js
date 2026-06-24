@@ -37,3 +37,31 @@ export const trainingAlerts = [
   {level:'Oportunidade', title:'Evolução de jovens', text:'Três atletas sub-21 estão próximos de ganho técnico se mantiverem foco individual.'},
   {level:'Diretoria', title:'Meta de valorização', text:'Desenvolver jovens aumenta valor de elenco e melhora sustentabilidade financeira.'}
 ];
+
+
+export const WEEKLY_TRAINING_VERSION = 'v7.7.0';
+
+export const realisticMicrocycleSessions = [
+  {id:'recovery', day:'Seg', type:'Recuperação', title:'Regenerativo + fisioterapia', subtitle:'D+1 pós-jogo', load:18, icon:'🧊', goal:'Recuperar titulares, tratar pancadas, sono e hidratação.', effects:{recovery:18, fatigue:-16, sharpness:-2, tactical:1, physical:-1, setPieces:0, finishing:0, collective:1, injuryRisk:-8, morale:2}, matchImpact:{fitness:6, injury:-5, control:1, attack:0, defense:1, setPieces:0}},
+  {id:'tactical', day:'Ter', type:'Tático', title:'Modelo de jogo e vídeo', subtitle:'Organização com bola e sem bola', load:42, icon:'♟️', goal:'Ajustar bloco, saída de bola, pressão e coberturas sem carga física alta.', effects:{recovery:3, fatigue:6, sharpness:4, tactical:10, physical:0, setPieces:1, finishing:1, collective:4, injuryRisk:1, morale:1}, matchImpact:{fitness:0, injury:0, control:7, attack:2, defense:4, setPieces:1}},
+  {id:'physical', day:'Qua', type:'Físico', title:'Pico físico controlado', subtitle:'Força, aceleração e resistência', load:74, icon:'🔥', goal:'Elevar condição física quando há distância segura para o próximo jogo.', effects:{recovery:-8, fatigue:18, sharpness:6, tactical:2, physical:12, setPieces:0, finishing:2, collective:2, injuryRisk:8, morale:-1}, matchImpact:{fitness:4, injury:4, control:1, attack:2, defense:2, setPieces:0}},
+  {id:'setpieces', day:'Qui', type:'Bola parada', title:'Escanteios, faltas e laterais', subtitle:'Ataque e defesa de bola parada', load:36, icon:'🎯', goal:'Preparar jogadas ensaiadas, cobranças, marcação mista e segunda bola.', effects:{recovery:2, fatigue:5, sharpness:3, tactical:4, physical:0, setPieces:12, finishing:2, collective:3, injuryRisk:1, morale:1}, matchImpact:{fitness:0, injury:0, control:2, attack:2, defense:2, setPieces:9}},
+  {id:'finishing', day:'Sex', type:'Finalização', title:'Último terço e tomada de decisão', subtitle:'Chutes, cruzamentos e infiltrações', load:52, icon:'🥅', goal:'Melhorar xG, aproveitamento e confiança ofensiva sem exagerar na carga.', effects:{recovery:-2, fatigue:9, sharpness:8, tactical:2, physical:1, setPieces:2, finishing:12, collective:2, injuryRisk:3, morale:2}, matchImpact:{fitness:0, injury:1, control:1, attack:8, defense:0, setPieces:1}},
+  {id:'collective', day:'Sáb', type:'Coletivo', title:'Ensaio 11 contra 11', subtitle:'Plano de jogo completo', load:66, icon:'⚽', goal:'Sincronizar titulares e reservas, testar transições e gatilhos de pressão.', effects:{recovery:-5, fatigue:14, sharpness:8, tactical:7, physical:2, setPieces:2, finishing:4, collective:10, injuryRisk:5, morale:2}, matchImpact:{fitness:1, injury:2, control:6, attack:4, defense:4, setPieces:1}},
+  {id:'rest', day:'Dom', type:'Descanso', title:'Folga monitorada', subtitle:'Controle mental e muscular', load:6, icon:'🌙', goal:'Baixar fadiga, preservar moral e evitar lesões em sequência apertada.', effects:{recovery:14, fatigue:-14, sharpness:-3, tactical:0, physical:-1, setPieces:0, finishing:0, collective:1, injuryRisk:-6, morale:3}, matchImpact:{fitness:4, injury:-4, control:0, attack:0, defense:0, setPieces:0}}
+];
+
+export const weeklyTrainingPresets = [
+  {id:'balanced', name:'Semana equilibrada', description:'Uma carga realista para semana normal com 5 a 6 dias até o jogo.', sessions:['recovery','tactical','physical','setpieces','finishing','collective','rest']},
+  {id:'congested', name:'Semana com jogo perto', description:'Reduz físico/coletivo e protege titulares quando há viagem ou 2 jogos em poucos dias.', sessions:['recovery','tactical','setpieces','rest','finishing','recovery','rest']},
+  {id:'attacking', name:'Semana ofensiva', description:'Dá prioridade a finalização, último terço e coletivo ofensivo.', sessions:['recovery','tactical','finishing','finishing','setpieces','collective','rest']},
+  {id:'defensive', name:'Semana defensiva', description:'Foco em organização, bola parada defensiva e bloco compacto.', sessions:['recovery','tactical','tactical','setpieces','collective','recovery','rest']},
+  {id:'recovery', name:'Semana de recuperação', description:'Para calendário pesado, viagem longa ou risco físico alto.', sessions:['recovery','rest','tactical','recovery','setpieces','rest','recovery']}
+];
+
+export const weeklyTrainingRules = [
+  {id:'match-close', label:'Jogo em até 2 dias', rule:'bloquear carga física pesada e recomendar recuperação/bola parada'},
+  {id:'away-trip', label:'Viagem fora de casa', rule:'aumentar peso de descanso, sono e regenerativo'},
+  {id:'injury-red', label:'Risco acima de 60%', rule:'reduzir treino físico, preservar titulares e rodar elenco'},
+  {id:'form-low', label:'Ritmo abaixo de 70%', rule:'usar treino tático curto e finalização controlada'}
+];
