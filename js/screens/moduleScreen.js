@@ -6,7 +6,8 @@ import { standingsCompetitions, standingsTables, scorers, competitionStats } fro
 import { competitions, seasonMonths, schedule, calendarDays, eventTitle, eventClass } from '../data/seasonData.js';
 import { trainingThemes, weeklyPlan, developmentFocus, trainingStaffImpact, trainingAlerts, realisticMicrocycleSessions, weeklyTrainingPresets, weeklyTrainingRules } from '../data/trainingData.js';
 import { buildTrainingSnapshot } from '../systems/trainingEngine.js';
-import { staffBudget, currentStaff, staffCandidates, staffDepartmentKpis, sponsorsOverview, activeSponsors, sponsorProposals, financeSnapshot } from '../data/staffData.js';
+import { staffBudget, staffFocusModes, sponsorsOverview, activeSponsors, sponsorProposals, financeSnapshot } from '../data/staffData.js';
+import { buildStaffSnapshot } from '../systems/staffEngine.js';
 import { transferWindow, transferShortlist, outgoingList, negotiations, scoutingReports, contractRules, renewalTargets, boardTransferPolicy, loanTargets, aiClubProfiles, agentEvents } from '../data/transferData.js';
 import { negotiationRules, marketEvents } from '../data/marketIntelligenceData.js';
 import { inboxMessages, careerProfile, jobOffers, nationalTeams, callUpPool, seasonObjectives } from '../data/careerData.js';
@@ -446,23 +447,42 @@ function labelWeight(key){
 }
 
 function staffScreen(state={}){
-  const usedPct = Math.round((staffBudget.used / staffBudget.monthlyLimit) * 100);
-  const current = currentStaff.map(s=>`<article class="staff-card">
-    ${safeImg(s.photo,'staff',s.name,'staff-photo')}
-    <div><span class="tag">${s.role}</span><h3>${s.name}</h3><p>${s.effect}</p><small>Salário mensal: ${money(s.salary)}</small></div>
-    <strong class="grade">${s.grade}</strong>
-    <div class="meter"><span style="width:${s.impact}%"></span></div>
+  const snap = buildStaffSnapshot(state);
+  const usedPct = Math.round((snap.metrics.usedMonthly / Math.max(1,snap.metrics.monthlyLimit)) * 100);
+  const current = snap.roles.map(r=>`<article class="staff-role-card-v780">
+    <div class="staff-role-icon">${r.icon}</div>
+    <div>
+      <span class="tag">${r.area} · ${r.status}</span>
+      <h3>${r.role}</h3>
+      <p class="small">${r.description}</p>
+      <div class="staff-member-mini-v780">
+        ${safeImg(r.member?.photo || 'assets/placeholders/staff-generic.png','staff',r.member?.name || r.role,'staff-photo-v780')}
+        <div><strong>${r.member?.name || 'Interino'}</strong><small>${r.member?.grade || 'C'} · ${r.member?.style || 'departamento'}</small></div>
+        <span class="staff-score-pill-v780">${r.score}%</span>
+      </div>
+      <div class="meter"><span style="width:${r.score}%"></span></div>
+    </div>
   </article>`).join('');
-  const candidates = staffCandidates.map(c=>`<article class="candidate-card">
-    <div><span class="tag">${c.role} · ${c.country}</span><h3>${c.name}</h3><p>${c.style}</p><small>${c.bonus}</small></div>
-    <div class="candidate-side"><strong>${c.grade}</strong><span>${money(c.salary)}/mês</span><em>${c.fit}% encaixe</em><button class="secondary-btn mini" data-action="safe-toast" data-message="Negociação de staff preparada para build financeira.">Analisar</button></div>
+  const candidates = snap.candidates.map(c=>`<article class="staff-candidate-v780">
+    <div><span class="tag">${c.role} · ${c.country}</span><h3>${c.name}</h3><p class="small">${c.style} · ${c.bonus}</p><small>Taxa ${money(c.fee)} · salário ${money(c.salary)}/mês</small></div>
+    <div class="staff-candidate-side-v780"><strong class="grade">${c.grade}</strong><span>${c.fit}% encaixe</span><button class="secondary-btn mini" data-action="staff-hire" data-candidate="${c.id}">Contratar</button></div>
   </article>`).join('');
-  const kpis = staffDepartmentKpis.map(k=>`<div class="department-kpi"><div class="row space"><span>${k.label}</span><strong>${k.value}</strong></div><div class="meter"><span style="width:${k.value}%"></span></div><small>${k.status}</small></div>`).join('');
-  return `<section class="staff-v120">
-    <div class="panel staff-hero"><div><span class="tag">Staff e departamento</span><h1>Comissão técnica profissional</h1><p class="small">Controle treinadores auxiliares, médico, fisioterapeuta, preparador físico, olheiro, analista e diretor comercial. Tudo com fallback de imagem e preparado para contratação real em builds futuras.</p></div><button class="main-btn" data-route="training">Ver impacto no treino</button></div>
-    <section class="grid desktop-4"><div class="card kpi-card"><span>Orçamento mensal</span><strong>${money(staffBudget.monthlyLimit)}</strong><small>${usedPct}% utilizado</small></div><div class="card kpi-card"><span>Disponível</span><strong>${money(staffBudget.remaining)}</strong><small>Margem para contratação</small></div><div class="card kpi-card"><span>Confiança da diretoria</span><strong>${staffBudget.boardConfidence}%</strong><small>${staffBudget.departmentLevel}</small></div><div class="card kpi-card"><span>Recomendação</span><strong>Olheiro</strong><small>Prioridade estratégica</small></div></section>
-    <section class="grid grid-2 staff-layout"><article class="panel"><div class="row space"><div><span class="tag">Equipe atual</span><h2>Departamentos do clube</h2></div><span class="status-pill">Anti-quebra ativo</span></div><div class="staff-list">${current}</div></article><article class="panel"><div class="row space"><div><span class="tag">Contratações possíveis</span><h2>Mercado de staff</h2></div><strong class="grade">6 alvos</strong></div><div class="candidate-list">${candidates}</div></article></section>
-    <section class="panel"><div class="row space"><div><span class="tag">Diagnóstico interno</span><h2>Qualidade por departamento</h2></div><button class="secondary-btn mini" data-route="club">Ver clube</button></div><div class="department-grid">${kpis}</div><div class="training-note"><strong>Diretoria:</strong> ${staffBudget.recommendation}</div></section>
+  const focusCards = staffFocusModes.map(f=>`<button class="staff-focus-card-v780 ${snap.focus.id===f.id?'active':''}" data-action="staff-focus" data-focus="${f.id}"><strong>${f.name}</strong><small>${f.description}</small></button>`).join('');
+  const impacts = [
+    ['Qualidade no treino', snap.metrics.trainingQuality, 'Afeta microciclo, carga e prontidão'],
+    ['Redução de lesão', snap.metrics.injuryReduction, 'Médico, fisio e físico reduzem risco'],
+    ['Precisão do scout', snap.metrics.scoutAccuracy, 'Melhora relatórios e risco de contratação'],
+    ['Preparação de jogo', snap.metrics.matchPrep, 'Auxiliar e analista ajudam o motor da partida'],
+    ['Goleiros', Math.max(0, Math.round(70 + snap.metrics.goalkeeperBoost*3)), 'Preparador de goleiros melhora defesa e pênaltis'],
+    ['Moral interna', snap.metrics.morale, 'Reuniões e qualidade do staff afetam confiança']
+  ].map(([label,value,desc])=>`<div class="staff-impact-box-v780"><span>${label}</span><strong>${value}%</strong><div class="meter"><span style="width:${Math.max(0,Math.min(100,value))}%"></span></div><small>${desc}</small></div>`).join('');
+  const logs = (snap.staff.staffLog || []).slice(-8).reverse().map(l=>`<div class="staff-log-line-v780">${l}</div>`).join('') || '<p class="muted">Nenhum evento de staff ainda.</p>';
+  return `<section class="staff-v780">
+    <div class="panel staff-hero-v780"><div><span class="tag">v7.8.0 · Fase 61</span><h1>Staff e Comissão Técnica Viva</h1><p class="small">Auxiliar técnico, preparador físico, analista, médico, olheiro e preparador de goleiros agora têm qualidade, salário, foco e influência real no treino, scout e motor da partida.</p></div><div class="staff-hero-actions"><button class="main-btn" data-action="staff-meeting">Reunião de comissão</button><button class="secondary-btn" data-route="training">Ver treino</button><button class="secondary-btn" data-route="academyScouting">Ver scout</button></div></div>
+    <section class="grid desktop-4"><div class="card kpi-card"><span>Força geral</span><strong>${snap.metrics.overall}%</strong><small>${snap.recommendation}</small></div><div class="card kpi-card"><span>Orçamento mensal</span><strong>${money(snap.metrics.monthlyLimit)}</strong><small>${usedPct}% utilizado · sobra ${money(snap.metrics.remaining)}</small></div><div class="card kpi-card"><span>Confiança diretoria</span><strong>${snap.metrics.boardConfidence}%</strong><small>${snap.staff.departmentLevel}</small></div><div class="card kpi-card"><span>Ponto fraco</span><strong>${snap.weakest.role}</strong><small>${snap.weakest.score}% · prioridade</small></div></section>
+    <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Funções obrigatórias</span><h2>Comissão atual</h2></div><span class="status-pill">Save integrado</span></div><div class="staff-role-grid-v780">${current}</div></article><article class="panel"><div class="row space"><div><span class="tag">Mercado de staff</span><h2>Contratações disponíveis</h2></div><strong class="grade">${snap.metrics.candidateCount}</strong></div><div class="staff-candidate-list-v780">${candidates}</div></article></section>
+    <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Foco da semana</span><h2>Prioridade da comissão</h2></div><strong class="grade">${snap.focus.name}</strong></div><div class="staff-focus-grid-v780">${focusCards}</div><p class="alert">O foco altera pesos de treino, prevenção de lesão, preparação de jogo, scout e desenvolvimento dos goleiros.</p></article><article class="panel"><div class="row space"><div><span class="tag">Influência real</span><h2>Impactos calculados</h2></div><button class="secondary-btn mini" data-route="match">Testar jogo</button></div><div class="staff-impact-grid-v780">${impacts}</div></article></section>
+    <section class="panel"><div class="row space"><div><span class="tag">Diário interno</span><h2>Últimas decisões da comissão</h2></div><button class="secondary-btn mini" data-route="managerMenu">Menu</button></div><div class="staff-log-v780">${logs}</div></section>
   </section>`;
 }
 
@@ -615,7 +635,8 @@ function trainingScreen(state={}){
   </button>`).join('');
   const legacyWeek = weeklyPlan.slice(0,7).map(d=>`<article class="training-day ${d.type==='Jogo'?'match-day':''}"><div><strong>${d.day}</strong><span>${d.type}</span></div><h3>${d.title}</h3><p>${d.effect}</p><div class="meter"><span style="width:${d.load}%"></span></div><small>Carga ${d.load}%</small></article>`).join('');
   const focus = snapshot.progress.map(p=>`<div class="development-row"><div class="dev-avatar">${p.role}</div><div><strong>${p.player}</strong><small>${p.age} anos · ${p.focus} · ${p.status}</small></div><b>${p.progress}%</b><em>${p.delta>=0?'+':''}${p.delta}</em><div class="meter"><span style="width:${p.progress}%"></span></div></div>`).join('');
-  const staff = trainingStaffImpact.map(s=>`<div class="staff-impact"><div><span>${s.area}</span><strong>${s.grade}</strong></div><p>${s.effect}</p><div class="meter"><span style="width:${s.value}%"></span></div></div>`).join('');
+  const staffSnap = buildStaffSnapshot(state);
+  const staff = staffSnap.roles.filter(r=>['assistant','fitness','analyst','doctor','goalkeeper'].includes(r.id)).map(r=>`<div class="staff-impact"><div><span>${r.role}</span><strong>${r.member?.grade || 'C'}</strong></div><p>${r.member?.effect || r.description}</p><div class="meter"><span style="width:${r.score}%"></span></div></div>`).join('');
   const alerts = trainingAlerts.map(a=>`<div class="training-alert"><span>${a.level}</span><strong>${a.title}</strong><p>${a.text}</p></div>`).join('');
   const rules = weeklyTrainingRules.map(r=>`<div class="training-alert"><span>${r.label}</span><strong>${r.id}</strong><p>${r.rule}</p></div>`).join('');
   const academy = snapshot.academyProspects.map(p=>`<div class="scout-row"><strong>${p.name}</strong><span>${p.pos} · ${p.age} anos</span><p>${p.focus} · Potencial ${p.potential} · Prontidão ${p.readiness}%</p><div class="meter"><span style="width:${p.readiness}%"></span></div></div>`).join('');

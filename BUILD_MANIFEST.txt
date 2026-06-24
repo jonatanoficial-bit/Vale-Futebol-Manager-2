@@ -1,25 +1,33 @@
 VALE FUTEBOL MANAGER — BUILD MANIFEST
-Arquivo: Vale-Futebol-Manager-v7.7.0-Fase-60-Treino-Semanal-Realista.zip
-Versão: v7.7.0
-Fase: 60 — Treino Semanal Realista
-Data/hora: 2026-06-24 16:38:02 BRT
-Schema: 770
+Arquivo: Vale-Futebol-Manager-v7.8.0-Fase-61-Staff-Comissao-Tecnica-Viva.zip
+Versão: v7.8.0
+Fase: 61 — Staff e Comissão Técnica Viva
+Data/hora: 2026-06-24 17:00:22 BRT
+Schema: 780
 
 Contagem:
-- JS: 213
-- CSS: 37
+- JS: 215
+- CSS: 38
 - HTML: 1
 
 Novos/alterados principais:
-- js/systems/trainingEngine.js
-- js/data/trainingData.js
+- js/systems/staffEngine.js
+- js/data/staffData.js
 - js/screens/moduleScreen.js
+- js/screens/lobby.js
 - js/systems/state.js
 - js/systems/router.js
+- js/systems/trainingEngine.js
+- js/systems/scoutingEngine.js
 - js/systems/matchEngine.js
 - js/app.js
-- core/safety/weekly-training-validator.js
-- css/weekly-training-v770.css
-- PHASE_60_WEEKLY_TRAINING_REPORT.md
+- core/safety/staff-validator.js
+- css/staff-v780.css
+- PHASE_61_STAFF_TECHNICAL_COMMISSION_REPORT.md
 - build/build-info.json
-- manifest.webmanifest
+- index.html
+
+Auditoria:
+- node --check em 215 arquivos JS/core: OK
+- smoke test staff/treino/scout: OK
+- build data e hora visíveis: OK

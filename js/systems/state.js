@@ -19,6 +19,7 @@ import { normalizeManagerProgression, awardManagerXpPatch, xpForMatchResult, set
 import { normalizeManagerJobMarket, createJobMarketPatch, registerJobDecisionPatch } from './managerJobMarketEngine.js';
 import { normalizeLiveCalendarState, buildCalendarActionPatch, buildMatchCalendarPatch, LIVE_CALENDAR_VERSION } from './liveCalendarEngine.js';
 import { normalizeScoutingState, createScoutReportPatch, setScoutAssignmentPatch, setScoutFocusPatch, wishlistScoutPlayerPatch, SCOUTING_VERSION } from './scoutingEngine.js';
+import { ensureStaffState, hireStaffPatch, setStaffFocusPatch, runStaffMeetingPatch, buildStaffSnapshot, STAFF_VERSION } from './staffEngine.js';
 
 const key = SAVE_KEY;
 const legacyKeys = ['vfm_gold_save_v510','vfm_gold_save_v500','vfm_gold_save_v490','vfm_gold_save_v480','vfm_gold_save_v470','vfm_gold_save_v460','vfm_gold_save_v450','vfm_gold_save_v440', 'vfm_gold_save_v430', 'vfm_gold_save_v420', 'vfm_gold_save_v410', 'vfm_gold_save_v400', 'vfm_gold_save_v390', 'vfm_gold_save_v370', 'vfm_gold_save_v360', 'vfm_gold_save_v350', 'vfm_gold_save_v340', 'vfm_gold_save_v330', 'vfm_gold_save_v320', 'vfm_gold_save_v310', 'vfm_gold_save_v300', 'vfm_gold_save_v290', 'vfm_gold_save_v280', 'vfm_gold_save_v270', 'vfm_gold_save_v262', 'vfm_gold_save_v261', 'vfm_gold_save_v260', 'vfm_gold_save_v251', 'vfm_gold_save_v240', 'vfm_gold_save_v230', 'vfm_gold_save_v220', 'vfm_gold_save_v210', 'vfm_gold_save_v200', 'vfm_gold_save_v190', 'vfm_gold_save_v180', 'vfm_gold_save_v170', 'vfm_gold_save_v160', 'vfm_gold_save_v150', 'vfm_gold_save_v140', 'vfm_gold_save_v130', 'vfm_gold_save_v120', 'vfm_gold_save_v110', 'vfm_gold_save_v100', 'vfm_gold_save_v090', 'vfm_gold_save_v080', 'vfm_gold_save_v050', 'vfm_gold_save_v040', 'vfm_gold_save_v030', 'vfm_gold_save_v020', 'vfm_gold_save_v010'];
@@ -57,12 +58,13 @@ export const defaultState = () => ({
   career:{ currentDate:'2026-05-19', matchday:1, completedMatches:[], lastResult:null, promotionRelegation:{serieARelegation:4,serieBPromotion:4,libertadoresTop:5,sulamericanaRange:[6,12],serieBRelegation:4}, integrationLog:['Carreira migrada para v5.1.0 com save profissional, múltiplos slots, backups automáticos e recuperação de carreira.'], jobOffers:[], offerHistory:[], jobMarket:null, nationalTeamJob:null, dualCareer:{enabled:false, club:true, nationalTeam:null}, callUpSelection:defaultCallUpSelection(), internationalCalendar:buildNationalCalendar(2026, 'brasil'), managerProfile:null, activeContract:null, contractHistory:[], titleHistory:[], sackRiskLog:[], managerTimeline:[], unlockedMilestones:[], boardRelationship:76, fanRelationship:82, dressingRoomTrust:69, mediaPressure:54, worldCompetitionCycle:{libertadores:true,sulamericana:true,clubWorldCupCycle:4,worldCupCycle:4,lastUpdated:'v4.3.0'}, financeReport:{profile:'balanced', lastMonthlyCycle:null, crisisLog:[], boardWarnings:[], sponsorReview:'v3.5.0'}, tutorial:{seen:false, step:1, completed:false}, missions:[], completedSeasons:0, seasonHistory:[], lifetimeEarnings:0, reputationHistory:[], activeStory:['Bem-vindo ao modo carreira: jogue partidas, cumpra missões, aumente renda e reputação sem limite de temporadas.'], pressHistory:[], pressConference:null, managerProgression:null },
   gameplay:{ difficulty:'realistic', aiVersion:'v5.4.0', realism:88, variance:18, balanceLog:[] },
   stability:{ autosave:true, lastBackup:null, backupCount:0, lastExport:null, lastImport:null, safeModeEvents:0, health:'Excelente', auditVersion:SAVE_MANAGER_VERSION, saveManagerVersion:SAVE_MANAGER_VERSION, saveIntegrity:'ok', commercialAudit:'v3.7.0-ok', fullscreenMobile:true, overflowGuard:true, rosterSafeMode:true, matchEngineSafeMode:true, matchEngineVersion:'v4.7.0', matchStressTest:'passed-100', trainingEngineVersion:TRAINING_ENGINE_VERSION, trainingStressTest:'passed-4-weeks', transferEngineVersion:TRANSFER_ENGINE_VERSION, transferIntegrity:'pending' },
-  save:{ version:SAVE_MANAGER_VERSION, schema:770, activeSlot:'principal', slotLabel:'Carreira principal', careerStarted:false, migratedFrom:null, lastMigrationAt:null, exportCount:0, importCount:0, autosaveCheckpoints:[] },
+  save:{ version:SAVE_MANAGER_VERSION, schema:780, activeSlot:'principal', slotLabel:'Carreira principal', careerStarted:false, migratedFrom:null, lastMigrationAt:null, exportCount:0, importCount:0, autosaveCheckpoints:[] },
   roster:clubRosterPackage('santos'),
   finance:{profile:'balanced', lastMonthlyCycle:null, crisisLog:[], boardWarnings:[], sponsorReview:'v3.5.0'},
   training:ensureTrainingState(),
   calendar:normalizeLiveCalendarState({currentDate:'2026-05-19'}),
   scouting:normalizeScoutingState({}, {clubId:'santos'}),
+  staff:ensureStaffState({}, {clubId:'santos'}),
   transfer:ensureTransferLedger({ budget:42.8, wageRoom:2.4, negotiationLog:[], activeNegotiations:[], acceptedDeals:[], rejectedDeals:[], outgoingDeals:[], renewals:[], loanDeals:[], incomingOffers:[], aiDeals:[], agentEvents:[], smartReports:[], windowOpen:true, boardApproval:82, marketDay:1, intelligenceVersion:'v3.7.0' }),
   ui:{ selectedAvatar:'assets/avatars/manager-01.png', selectedMode:'career', selectedCountry:'br', selectedClub:'santos', teamCountryFilter:'all', teamLeagueFilter:'all', teamSort:'level', standingsCompetition:'brasileirao-a', selectedFormation:'433-possession', tacticalProfile:'possession', trainingTheme:'possession', transferFilter:'all', squadView:'best', captainId:'neymar', penaltyTakerId:'neymar', freeKickTakerId:'neymar', cornerTakerId:'gabriel-menino' }
 });
@@ -117,7 +119,7 @@ function normalize(next){
   merged.stability.saveManagerVersion = SAVE_MANAGER_VERSION;
   merged.save = {...base.save, ...(next?.save || {})};
   merged.save.version = SAVE_MANAGER_VERSION;
-  merged.save.schema = 770;
+  merged.save.schema = 780;
   merged.save.activeSlot = String(merged.save.activeSlot || 'principal').slice(0,32);
   merged.save.exportCount = Math.max(0, Number(merged.save.exportCount || 0));
   merged.save.importCount = Math.max(0, Number(merged.save.importCount || 0));
@@ -133,6 +135,12 @@ function normalize(next){
   if(!Array.isArray(merged.finance.boardWarnings)) merged.finance.boardWarnings = [];
   merged.scouting = normalizeScoutingState({...(base.scouting||{}), ...(next?.scouting || {})}, merged);
   merged.stability.scoutingVersion = SCOUTING_VERSION;
+  merged.staff = ensureStaffState({...(base.staff||{}), ...(next?.staff || {})}, merged);
+  const staffSnapshot = buildStaffSnapshot(merged);
+  merged.staff.matchImpact = staffSnapshot.matchImpact;
+  merged.staff.trainingQuality = staffSnapshot.metrics.trainingQuality;
+  merged.staff.scoutAccuracy = staffSnapshot.metrics.scoutAccuracy;
+  merged.stability.staffVersion = STAFF_VERSION;
   merged.training = ensureTrainingState({...(base.training||{}), ...(next?.training || {})});
   merged.calendar = normalizeLiveCalendarState({...(base.calendar||{}), ...(next?.calendar || {})}, merged);
   merged.stability.trainingEngineVersion = TRAINING_ENGINE_VERSION;
@@ -240,7 +248,8 @@ export function startCareer(){
     ui:{...state.ui, selectedClub:chosenClub, standingsCompetition:chosenTeam?.leagueId || 'brasileirao-a', ...starters},
     route:'lobby',
     scouting: normalizeScoutingState({observerLog:[`Fase 59: scout profissional iniciado para ${chosenTeam?.name || chosenClub}.`]}, {clubId:chosenClub, ui:{selectedClub:chosenClub}}),
-    save:{...(state.save||{}), version:SAVE_MANAGER_VERSION, schema:770, activeSlot:state.save?.activeSlot || 'principal', slotLabel:state.save?.slotLabel || slotLabel(state.save?.activeSlot || 'principal'), careerStarted:true}
+    staff: ensureStaffState({staffLog:[`Fase 61: comissão técnica viva iniciada para ${chosenTeam?.name || chosenClub}.`]}, {clubId:chosenClub, ui:{selectedClub:chosenClub}}),
+    save:{...(state.save||{}), version:SAVE_MANAGER_VERSION, schema:780, activeSlot:state.save?.activeSlot || 'principal', slotLabel:state.save?.slotLabel || slotLabel(state.save?.activeSlot || 'principal'), careerStarted:true}
   });
   persist();
 }
@@ -1050,6 +1059,44 @@ export function removeScoutWishlist(reportId=''){
   });
   persist();
   return state.scouting;
+}
+
+export function hireStaffMember(candidateId=''){
+  const patch = hireStaffPatch(state, candidateId);
+  state = normalize({
+    ...state,
+    staff:patch.staff,
+    transfer:patch.transfer || state.transfer,
+    career:{...(state.career||{}), integrationLog:[...((state.career||{}).integrationLog||[]), ...((patch.integrationLog)||[])].slice(-12)},
+    stability:{...(state.stability||{}), health:'Comissão técnica atualizada', staffVersion:STAFF_VERSION}
+  });
+  persist();
+  return state.staff;
+}
+
+export function setStaffFocus(focusId='balanced'){
+  const patch = setStaffFocusPatch(state, focusId);
+  state = normalize({
+    ...state,
+    staff:patch.staff,
+    ui:patch.ui || state.ui,
+    career:{...(state.career||{}), integrationLog:[...((state.career||{}).integrationLog||[]), ...((patch.integrationLog)||[])].slice(-12)},
+    stability:{...(state.stability||{}), health:'Foco da comissão técnica atualizado', staffVersion:STAFF_VERSION}
+  });
+  persist();
+  return state.staff;
+}
+
+export function runStaffMeeting(){
+  const patch = runStaffMeetingPatch(state);
+  state = normalize({
+    ...state,
+    staff:patch.staff,
+    career:{...(state.career||{}), integrationLog:[...((state.career||{}).integrationLog||[]), ...((patch.integrationLog)||[])].slice(-12)},
+    stability:{...(state.stability||{}), health:'Reunião de comissão técnica realizada', staffVersion:STAFF_VERSION}
+  });
+  persist();
+  return state.staff;
 }
 
 export function getCareerLoopSnapshot(){

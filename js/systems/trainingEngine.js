@@ -1,5 +1,6 @@
 import { trainingThemes, developmentFocus, trainingStaffImpact, realisticMicrocycleSessions, weeklyTrainingPresets, WEEKLY_TRAINING_VERSION } from '../data/trainingData.js';
 import { getActiveSquad } from '../data/squadData.js';
+import { buildStaffSnapshot } from './staffEngine.js';
 
 export const TRAINING_ENGINE_VERSION = WEEKLY_TRAINING_VERSION;
 
@@ -65,13 +66,17 @@ export function buildTrainingSnapshot(state={}){
   const avgAge = avg(squad.map(p=>p.age || 24));
   const young = squad.filter(p=>Number(p.age||99)<=21).length;
   const veterans = squad.filter(p=>Number(p.age||0)>=31).length;
-  const staffQuality = avg(trainingStaffImpact.map(s=>s.value));
+  const staffSnap = buildStaffSnapshot(state);
+  const staffQuality = staffSnap.metrics?.trainingQuality || avg(trainingStaffImpact.map(s=>s.value));
+  const medicalStaff = staffSnap.scores?.medical || staffQuality;
+  const tacticalStaff = staffSnap.scores?.tactical || staffQuality;
+  const goalkeeperStaff = staffSnap.scores?.goalkeeper || staffQuality;
   const weeklyLoad = clamp(avg(sessions.map(s=>s.load)) + Math.round(theme.fatigue/10));
   const recoveryDelta = sumEffects(sessions,'recovery') - Math.round(sumEffects(sessions,'fatigue')/8) + Math.round((staffQuality-72)/4);
   const fatigueDelta = sumEffects(sessions,'fatigue') + Math.round(theme.fatigue/4) - Math.round(staffQuality/14);
-  const tacticalDelta = sumEffects(sessions,'tactical') + (['possession','defense','pressing'].includes(theme.id) ? 4 : 1);
+  const tacticalDelta = sumEffects(sessions,'tactical') + (['possession','defense','pressing'].includes(theme.id) ? 4 : 1) + Math.round((tacticalStaff-74)/10);
   const sharpnessDelta = sumEffects(sessions,'sharpness') + Math.round(theme.intensity/16);
-  const physicalDelta = sumEffects(sessions,'physical');
+  const physicalDelta = sumEffects(sessions,'physical') + Math.round((staffSnap.scores?.physical || staffQuality)-74)/12;
   const setPieceDelta = sumEffects(sessions,'setPieces') + (theme.id==='setpieces' ? 5 : 0);
   const finishingDelta = sumEffects(sessions,'finishing') + (theme.id==='finishing' ? 5 : 0);
   const collectiveDelta = sumEffects(sessions,'collective');
@@ -84,13 +89,13 @@ export function buildTrainingSnapshot(state={}){
   const setPieceEfficiency = clamp(training.setPieceEfficiency + Math.round(setPieceDelta/7));
   const finishingConfidence = clamp(training.finishingConfidence + Math.round(finishingDelta/7));
   const collectiveChemistry = clamp(training.collectiveChemistry + Math.round(collectiveDelta/7));
-  const injuryRisk = clamp(10 + calendarRisk*0.28 + weeklyLoad*0.34 + veterans*1.7 - staffQuality/8 - recovery/10 + Math.max(0, fatigueDelta)/14);
+  const injuryRisk = clamp(10 + calendarRisk*0.28 + weeklyLoad*0.34 + veterans*1.7 - staffQuality/10 - medicalStaff/12 - recovery/10 + Math.max(0, fatigueDelta)/14);
   const readiness = clamp(Math.round(recovery*0.24 + teamSharpness*0.18 + tacticalFamiliarity*0.18 + physicalCondition*0.14 + setPieceEfficiency*0.08 + finishingConfidence*0.08 + collectiveChemistry*0.10 - injuryRisk*0.20), 35, 98);
   const youthGrowth = clamp(42 + young*7 + Math.round(staffQuality/5) + (theme.id==='possession'?5:0) + Math.round(collectiveDelta/12));
   const veteranDeclineRisk = clamp(10 + veterans*6 + Math.max(0, weeklyLoad-55)/2 - recovery/8);
   const medicalStatus = injuryRisk > 59 ? 'Zona vermelha' : injuryRisk > 34 ? 'Zona amarela' : 'Zona verde';
   const attackImpact = clamp(sumImpact(sessions,'attack') + Math.round((finishingConfidence-65)/6) + (theme.id==='finishing'?4:0), -12, 20);
-  const defenseImpact = clamp(sumImpact(sessions,'defense') + Math.round((tacticalFamiliarity-68)/7) + (theme.id==='defense'?4:0), -12, 20);
+  const defenseImpact = clamp(sumImpact(sessions,'defense') + Math.round((tacticalFamiliarity-68)/7) + (theme.id==='defense'?4:0) + Math.round((goalkeeperStaff-74)/15), -12, 20);
   const setPieceImpact = clamp(sumImpact(sessions,'setPieces') + Math.round((setPieceEfficiency-62)/6), -8, 22);
   const tacticalControl = clamp(sumImpact(sessions,'control') + Math.round((tacticalFamiliarity-68)/5) + Math.round((collectiveChemistry-68)/7), -12, 24);
   const fitnessImpact = clamp(sumImpact(sessions,'fitness') + Math.round((physicalCondition-72)/8) - Math.max(0, calendarFatigue-66)/10, -10, 14);
@@ -109,7 +114,7 @@ export function buildTrainingSnapshot(state={}){
     {name:'Luan Costa', pos:'VOL', age:18, potential:77, focus:'Marcação e passe vertical', readiness:clamp(youthGrowth-5)}
   ];
   const recommendation = injuryRisk>59 ? 'Semana pesada demais: trocar físico/coletivo por recuperação antes do jogo.' : readiness<70 ? 'Prontidão média: manter tático e bola parada sem aumentar carga física.' : tacticalControl<5 ? 'Falta automação coletiva: priorizar tático e coletivo.' : 'Microciclo aprovado para jogo oficial.';
-  return { version: TRAINING_ENGINE_VERSION, schema:770, theme, preset, sessions, training, squadSize:squad.length, avgAge, young, veterans, staffQuality, weekLoad:weeklyLoad, weeklyLoad, recovery, injuryRisk, teamSharpness, tacticalFamiliarity, physicalCondition, setPieceEfficiency, finishingConfidence, collectiveChemistry, readiness, matchReadiness:readiness, matchImpact, youthGrowth, veteranDeclineRisk, medicalStatus, progress, academyProspects, recommendation, flags:{saveIntegrated:true, calendarLinked:true, matchLinked:true, mobileFirst:true} };
+  return { version: TRAINING_ENGINE_VERSION, schema:770, theme, preset, sessions, training, squadSize:squad.length, avgAge, young, veterans, staffQuality, weekLoad:weeklyLoad, weeklyLoad, recovery, injuryRisk, teamSharpness, tacticalFamiliarity, physicalCondition, setPieceEfficiency, finishingConfidence, collectiveChemistry, readiness, matchReadiness:readiness, matchImpact, youthGrowth, veteranDeclineRisk, medicalStatus, progress, academyProspects, recommendation, flags:{saveIntegrated:true, calendarLinked:true, matchLinked:true, staffLinked:true, mobileFirst:true} };
 }
 
 export function applyTrainingSession(state={}, sessionId='tactical'){

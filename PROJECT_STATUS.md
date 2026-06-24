@@ -1,3 +1,21 @@
+# PROJECT STATUS — v7.8.0 / Fase 61
+
+Build: 2026-06-24 17:00:22 BRT
+Status: Staff e Comissão Técnica Viva integrado e preservando fases anteriores.
+
+Sistemas principais ativos:
+- Save Slots 2.0 com 3 carreiras reais.
+- Calendário Vivo com viagens, fadiga e recuperação.
+- Scout, observadores e recrutamento profundo.
+- Microciclo semanal realista com impacto direto no jogo.
+- Staff vivo com auxiliar técnico, preparador físico, analista, médico, olheiro, fisioterapeuta e preparador de goleiros.
+- Contratação de staff, foco semanal e influência real em treino, scout e partida.
+- Schema atual: 780.
+
+Próxima etapa sugerida: v7.9.0 — Fase 62: Finanças, Patrocínio e Bilheteria Profunda.
+
+---
+
 # PROJECT STATUS — v7.7.0 / Fase 60
 
 Build: 2026-06-24 16:34:17 BRT

@@ -1,5 +1,6 @@
 import { teams } from '../data/gameData.js';
 import { getActiveSquad, getSquadSummary } from '../data/squadData.js';
+import { buildStaffSnapshot } from './staffEngine.js';
 
 function clamp(n, min, max){ return Math.max(min, Math.min(max, Number(n)||0)); }
 function hashString(text=''){
@@ -20,7 +21,8 @@ function trainingEdgeFor(state={}, sideId=''){
   const impact = state.training?.matchImpact || {};
   const readiness = Number(state.training?.matchReadiness || impact.readiness || 74);
   const fatigue = Number(state.calendar?.teamFatigue || 24);
-  const edge = Number(impact.attack||0)*0.12 + Number(impact.defense||0)*0.10 + Number(impact.setPieces||0)*0.06 + Number(impact.tacticalControl||0)*0.14 + Number(impact.fitness||0)*0.10 + (readiness-74)*0.045 - Math.max(0, fatigue-66)*0.07 - Math.max(0, Number(impact.injury||0))*0.05;
+  const staffImpact = buildStaffSnapshot(state).matchImpact || {};
+  const edge = Number(impact.attack||0)*0.12 + Number(impact.defense||0)*0.10 + Number(impact.setPieces||0)*0.06 + Number(impact.tacticalControl||0)*0.14 + Number(impact.fitness||0)*0.10 + Number(staffImpact.attack||0)*0.10 + Number(staffImpact.defense||0)*0.10 + Number(staffImpact.tacticalControl||0)*0.08 + Number(staffImpact.goalkeeper||0)*0.05 + (readiness-74)*0.045 - Math.max(0, fatigue-66)*0.07 - Math.max(0, Number(impact.injury||0))*0.05;
   return clamp(edge, -7, 8);
 }
 function tacticBoost(state={}, homeId=''){
@@ -35,6 +37,7 @@ function tacticBoost(state={}, homeId=''){
   if(profile === 'lowblock') boost -= .4;
   boost += Number(state.match?.tacticalBoost || 0);
   boost += Number(state.training?.matchImpact?.tacticalControl || 0) * 0.08;
+  boost += Number(buildStaffSnapshot(state).matchImpact?.tacticalControl || 0) * 0.06;
   return isHomeClub ? boost : -boost * .6;
 }
 function squadBoost(state={}){
@@ -194,7 +197,8 @@ export function buildAdvancedMatchMetrics(match={}, state={}){
   const fatigue = clamp(100 - minute*.46 - (decision==='pressure'?10:0) + subCount*2.5, 34, 100);
   const homeCardRisk = clamp(18 + phase*38 + tacticalRisk + refereeRisk - Math.max(0,ctx.diff)*.18, 4, 86);
   const awayCardRisk = clamp(22 + phase*42 + refereeRisk + Math.max(0,ctx.diff)*.22, 5, 88);
-  const trainingInjury = Number(state.training?.matchImpact?.injury || 0) + Math.max(0, Number(state.calendar?.injuryRisk || 18)-35)*0.12;
+  const staffInjury = Number(buildStaffSnapshot(state).matchImpact?.injury || 0);
+  const trainingInjury = Number(state.training?.matchImpact?.injury || 0) + staffInjury + Math.max(0, Number(state.calendar?.injuryRisk || 18)-35)*0.12;
   const injuryRisk = clamp((100-fatigue)*.23 + (ctx.weather === 'Gramado pesado' ? 8 : 0) + (decision==='pressure'?4:0) + trainingInjury, 2, 38);
   const varRisk = clamp(7 + (score.home+score.away)*3 + Math.abs(ctx.diff)*.12 + phase*8, 4, 35);
   const penaltyRisk = clamp(6 + phase*11 + (decision==='pressure'?3:0) + rand(ctx.seed,404)*8, 3, 27);

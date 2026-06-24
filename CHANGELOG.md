@@ -1,3 +1,19 @@
+# v7.8.0 — Fase 61: Staff e Comissão Técnica Viva
+
+Data/build: 2026-06-24 17:00:22 BRT
+
+- Transformada a tela de staff em departamento vivo e persistente no save.
+- Adicionadas funções reais: auxiliar técnico, preparador físico, analista de desempenho, médico, olheiro, fisioterapeuta e preparador de goleiros.
+- Cada membro agora possui qualidade, influência, salário, estilo, nota e impacto por área.
+- Adicionado mercado de staff com contratação por cargo, reposição automática e controle de teto mensal.
+- Adicionado foco semanal da comissão: equilíbrio, preparação de jogo, prevenção de lesões, recrutamento e escola de goleiros.
+- Staff agora influencia treino semanal, risco de lesão, scout/recrutamento e motor da partida.
+- Lobby recebeu faixa de Comissão Técnica Viva.
+- Schema geral atualizado para 780 preservando Fases 57, 58, 59 e 60.
+- Auditoria: 215 arquivos JavaScript verificados com `node --check`; smoke test do staff/treino/scout OK.
+
+---
+
 # v7.7.0 — Fase 60: Treino Semanal Realista
 
 Data/build: 2026-06-24 16:34:17 BRT

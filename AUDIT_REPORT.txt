@@ -1,18 +1,14 @@
-VALE FUTEBOL MANAGER — AUDIT REPORT
-Build: v7.7.0
-Fase: 60 — Treino Semanal Realista
-Data/hora: 2026-06-24 16:38:02 BRT
+VALE FUTEBOL MANAGER — AUDITORIA v7.8.0 FASE 61
 
-Auditoria executada:
-- node --check em 213 arquivos JavaScript: OK
-- Teste lógico do motor de treino semanal v7.7.0: OK
-- validateWeeklyTrainingSystem: OK
-- buildDeepMatchSnapshot lendo training.matchImpact: OK
-- index.html com css/weekly-training-v770.css: OK
-- build/build-info.json schema 770: OK
+Status: OK
+Arquivos JS/core verificados: 215
+Comando: find js core -name '*.js' -print0 | xargs -0 -n1 node --check
 
-Preservação validada:
-- Save Slots 2.0: preservado
-- Calendário Vivo: preservado
-- Scout Profissional: preservado
-- Assets completos: preservados
+Validações adicionais:
+- validateStaffSystem: OK
+- buildStaffSnapshot: OK
+- integração staff -> treino: OK
+- integração staff -> scout: OK
+- integração staff -> partida: OK
+
+Observação: homologação visual/manual ainda recomendada em Android, iOS, desktop e PWA instalada.

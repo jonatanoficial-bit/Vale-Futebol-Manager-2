@@ -2,6 +2,7 @@ import { esc } from '../utils/dom.js';
 import { getActiveSquad, squadNeeds } from '../data/squadData.js';
 import { transferShortlist } from '../data/transferData.js';
 import { SCOUTING_VERSION, scoutingStatus, scoutingRegions, scoutObservers, recruitmentPriorities, externalRecruitmentPool } from '../data/scoutingData.js';
+import { buildStaffSnapshot } from './staffEngine.js';
 export { SCOUTING_VERSION };
 
 const clamp = (value, min=0, max=100) => Math.max(min, Math.min(max, Math.round(Number(value || 0))));
@@ -72,12 +73,13 @@ export function evaluateRecruitmentCandidate(player={}, state={}, observer={}, r
   const depth = positionDepth(state, player.pos);
   const potentialGap = Math.max(0, Number(player.potential||70) - Number(own?.potential || own?.overall || 68));
   const immediateGap = Number(player.overall||70) - Number(own?.overall || 68);
-  const observerBoost = Number(observer.quality||70) * 0.18 + Number(observer.reliability||70) * 0.12;
+  const staffScout = buildStaffSnapshot(state).metrics?.scoutAccuracy || 72;
+  const observerBoost = Number(observer.quality||70) * 0.18 + Number(observer.reliability||70) * 0.12 + (staffScout-72)*0.10;
   const regionalBoost = Number(region.chance||65) * 0.16;
   const fit = clamp(44 + Number(player.adaptation||65)*0.22 + need.urgency*0.18 + Math.max(0, immediateGap)*4 + Math.max(0,potentialGap)*2 + observerBoost + regionalBoost - Math.max(0, depth-3)*4);
   const risk = clamp(Number(player.injury||30)*0.4 + Number(region.risk||35)*0.34 + Math.max(0, 72-Number(player.adaptation||65))*0.28 + (String(player.personality||'').includes('temper') ? 8 : 0));
   const costPressure = clamp((Number(player.value||0) / Math.max(1, Number(state.transfer?.budget || 40))) * 100 + (Number(player.wage||0) / Math.max(0.1, Number(state.transfer?.wageRoom || 2.4))) * 24);
-  const scoutConfidence = clamp(48 + observerBoost + regionalBoost - risk*0.22 + Number(observer.patience||70)*0.06);
+  const scoutConfidence = clamp(48 + observerBoost + regionalBoost - risk*0.22 + Number(observer.patience||70)*0.06 + (staffScout-72)*0.12);
   const recommendation = risk > Number(priority.riskLimit || 58)
     ? 'Monitorar mais antes de avançar'
     : costPressure > Number(priority.costTolerance || 62)
