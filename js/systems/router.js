@@ -5,9 +5,30 @@ import { activateSoundAmbiencePreset, stopSoundAmbience } from './soundAmbienceE
 import { playRealAudioCue, stopRealAudioPack, scanRealAudioAssets } from './realAudioPackEngine.js';
 import { getState, setState, setManager, setUI, startCareer, advanceMatch, finishMatch, setMatchSpeed, makeSubstitution, setMatchDecision, openTransferNegotiation, acceptTransferDeal, rejectTransferDeal, sellOutgoingPlayer, renewPlayerContract, loanTransferPlayer, generateIncomingOffer, respondIncomingOffer, simulateAIMarket, toggleTransferWindow, generateSmartIncomingOffer, simulateSmartAIMarket, triggerAgentEvent, setMatchAutoPlay, autoSelectBestLineup, setCaptain, setSetPieceTaker, applyRotationPlan, createManualBackup, restoreManualBackup, exportSaveText, importSaveText, toggleAutosave, exportRosterText, importRosterText, resetRosterToDefault, sampleRosterText, generateCareerOffers, respondCareerOffer, registerNationalInterest, toggleCallUpPlayer, finalizeNationalCallUp, completePostMatchAndReturnLobby, simulateBoardReview, renewManagerContract, simulateManagerDismissalRisk, simulateNextInternationalMatch, applyTrainingMicrocycle, signPreContract, openPreMatchPressConference, openPostMatchPressConference, answerPressConference, completePressConference, completeGuidedTutorialStep, completeGuidedTutorialForRoute, addManagerXp, setManagerSpecialty, loadSaveSlot, createNewCareerSlot, saveCurrentCareerSlot, deleteSaveSlot, renameSaveSlot, listSaveSlots } from './state.js';
 const routes = new Map(); let rootEl = null; let buildInfo = null;
+const PUBLIC_ROUTES_V740 = new Set(['cover','mainMenu','newGame','teamSelect','confirmCareer','saveSlotsV2','saveCenter','settings','assetChecklist','visualLibrary']);
 export function register(name, renderer){ routes.set(name, renderer); }
 export function initRouter(root, build){ rootEl = root; buildInfo = build; }
-export function go(route){ const target = routes.has(route) ? route : 'lobby'; if(target !== 'match') completeGuidedTutorialForRoute(target); if(target === 'match'){ const s=getState(); if(!s.match?.finalized && s.match?.prePressDoneFor !== s.match?.id){ openPreMatchPressConference(); render(); return; } } setState({route:target}); if(target === 'match'){ const s=getState(); if(!s.match?.finalized){ setMatchSpeed(s.match?.speed || 2); setMatchAutoPlay(true); requestLandscapeForMatch('match'); } } render(); }
+function requiresCareer(route){ return !PUBLIC_ROUTES_V740.has(route); }
+export function go(route){
+  let target = routes.has(route) ? route : 'mainMenu';
+  const state = getState();
+  if(requiresCareer(target) && state?.save?.careerStarted === false){
+    setState({route:'mainMenu', stability:{...(state.stability||{}), health:'Abra ou crie uma carreira antes de entrar no lobby.'}});
+    render();
+    return;
+  }
+  if(target !== 'match') completeGuidedTutorialForRoute(target);
+  if(target === 'match'){
+    const s=getState();
+    if(!s.match?.finalized && s.match?.prePressDoneFor !== s.match?.id){ openPreMatchPressConference(); render(); return; }
+  }
+  setState({route:target});
+  if(target === 'match'){
+    const s=getState();
+    if(!s.match?.finalized){ setMatchSpeed(s.match?.speed || 2); setMatchAutoPlay(true); requestLandscapeForMatch('match'); }
+  }
+  render();
+}
 export function render(){
   const state = getState(); const renderer = routes.get(state.route) || routes.get('lobby');
   try { rootEl.innerHTML = renderer(state); wire(rootEl); fillBuildBadges(); }
@@ -59,11 +80,41 @@ function wire(scope){
 
   scope.querySelectorAll('[data-action="toggle-autosave"]').forEach(btn => btn.addEventListener('click', () => { toggleAutosave(); render(); }));
   scope.querySelectorAll('[data-action="reset-save"]').forEach(btn => btn.addEventListener('click', () => { localStorage.clear(); location.reload(); }));
-  scope.querySelectorAll('[data-action="load-save-slot"]').forEach(btn => btn.addEventListener('click', () => { if(getState()?.save?.careerStarted !== false) saveCurrentCareerSlot(); loadSaveSlot(btn.dataset.slot || 'principal'); go('lobby'); }));
-  scope.querySelectorAll('[data-action="new-career-slot"]').forEach(btn => btn.addEventListener('click', () => { const targetSlot = btn.dataset.slot || 'career-2'; const occupied = btn.dataset.occupied === 'true' || listSaveSlots().some(s=>s.slot===targetSlot && s.occupied); if(occupied && typeof confirm === 'function' && !confirm('Este slot já tem carreira. Criar nova carreira aqui vai substituir este slot depois da confirmação final. Continuar?')) return; createNewCareerSlot(targetSlot); go('newGame'); }));
-  scope.querySelectorAll('[data-action="save-current-slot"]').forEach(btn => btn.addEventListener('click', () => { saveCurrentCareerSlot(btn.dataset.slot || null); render(); }));
+  scope.querySelectorAll('[data-action="load-save-slot"]').forEach(btn => btn.addEventListener('click', () => {
+    const targetSlot = btn.dataset.slot || 'principal';
+    const current = getState();
+    if(current?.save?.careerStarted !== false && current?.save?.activeSlot !== targetSlot) saveCurrentCareerSlot();
+    const ok = loadSaveSlot(targetSlot);
+    if(ok) go('lobby'); else go('mainMenu');
+  }));
+  scope.querySelectorAll('[data-action="new-career-slot"]').forEach(btn => btn.addEventListener('click', () => {
+    const targetSlot = btn.dataset.slot || 'career-2';
+    const occupied = btn.dataset.occupied === 'true' || listSaveSlots().some(s=>s.slot===targetSlot && s.occupied);
+    if(occupied && typeof confirm === 'function' && !confirm('Este slot já tem carreira. Criar nova carreira aqui vai substituir este slot somente quando você confirmar a nova carreira. Continuar?')) return;
+    createNewCareerSlot(targetSlot);
+    go('newGame');
+  }));
+  scope.querySelectorAll('[data-action="save-current-slot"]').forEach(btn => btn.addEventListener('click', () => {
+    const targetSlot = btn.dataset.slot || getState()?.save?.activeSlot || 'principal';
+    const currentSlot = getState()?.save?.activeSlot || 'principal';
+    const occupied = listSaveSlots().some(s=>s.slot===targetSlot && s.occupied);
+    if(targetSlot !== currentSlot && occupied && typeof confirm === 'function' && !confirm('Salvar a carreira atual neste slot ocupado vai substituir a carreira que está nele. Continuar?')) return;
+    saveCurrentCareerSlot(targetSlot);
+    render();
+  }));
+  scope.querySelectorAll('[data-action="copy-current-to-empty-slot"]').forEach(btn => btn.addEventListener('click', () => {
+    const targetSlot = btn.dataset.slot || 'career-2';
+    if(typeof confirm === 'function' && !confirm('Copiar a carreira atual para este slot vazio? O slot ativo passará a ser a cópia.')) return;
+    saveCurrentCareerSlot(targetSlot);
+    render();
+  }));
   scope.querySelectorAll('[data-action="save-slot-delete"]').forEach(btn => btn.addEventListener('click', () => { const slot = btn.dataset.slot || 'principal'; if(typeof confirm === 'function' && !confirm('Apagar este slot? Esta ação remove apenas esta carreira local.')) return; deleteSaveSlot(slot); go('mainMenu'); }));
-  scope.querySelectorAll('[data-action="save-slot-rename"]').forEach(btn => btn.addEventListener('click', () => { const slot = btn.dataset.slot || 'principal'; const label = typeof prompt === 'function' ? prompt('Nome do slot:', '') : ''; if(label && label.trim()){ renameSaveSlot(slot, label.trim()); render(); } }));
+  scope.querySelectorAll('[data-action="save-slot-rename"]').forEach(btn => btn.addEventListener('click', () => {
+    const slot = btn.dataset.slot || 'principal';
+    const item = listSaveSlots().find(s=>s.slot===slot);
+    const label = typeof prompt === 'function' ? prompt('Nome do slot:', item?.slotLabel || '') : '';
+    if(label && label.trim()){ renameSaveSlot(slot, label.trim()); render(); }
+  }));
   scope.querySelectorAll('[data-action="exit-career"]').forEach(btn => btn.addEventListener('click', () => { saveCurrentCareerSlot(); go('mainMenu'); }));
   scope.querySelectorAll('[data-action="select-avatar"]').forEach(btn => btn.addEventListener('click', () => { setUI({selectedAvatar:btn.dataset.avatar}); render(); }));
   scope.querySelectorAll('[data-action="select-mode"]').forEach(btn => btn.addEventListener('click', () => { setUI({selectedMode:btn.dataset.mode}); render(); }));

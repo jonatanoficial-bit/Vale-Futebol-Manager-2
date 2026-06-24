@@ -1,4 +1,4 @@
-import { CAREER_SLOT_DEFINITIONS, SAVE_FLOW_STEPS_V740, SAVE_SLOT_POLICIES_V740, SAVE_SLOTS_V2_VERSION } from '../data/saveSlotsData.js';
+import { CAREER_SLOT_DEFINITIONS, SAVE_FLOW_STEPS_V740, SAVE_SLOT_POLICIES_V740, SAVE_SLOTS_V2_VERSION, MAX_PLAYABLE_SLOTS_V740 } from '../data/saveSlotsData.js';
 import { listPlayableSlots, slotLabel, saveIntegritySnapshot } from './saveManager.js';
 import { teams } from '../data/gameData.js';
 import { safeImg, clubLogo } from './assets.js';
@@ -21,10 +21,19 @@ function slotLogo(slot){
   const team = teams.find(t=>t.id === slot.clubId);
   return team ? safeImg(clubLogo(team.id),'club',team.name,'slot-card-logo-v740') : '<span class="slot-card-empty-ball-v740">⚽</span>';
 }
-function renderSlotCard(slot, activeSlot='principal'){
+function renderSlotCard(slot, activeSlot='principal', hasCurrentCareer=false){
   const active = slot.slot === activeSlot;
   const occupied = !!slot.occupied;
-  const status = active ? 'Ativo' : occupied ? 'Salvo' : 'Vazio';
+  const status = active && occupied ? 'Ativo' : occupied ? 'Salvo' : 'Vazio';
+  const occupiedActions = active
+    ? `<button class="main-btn mini" data-action="load-save-slot" data-slot="${esc(slot.slot)}">Entrar</button>
+       <button class="secondary-btn mini" data-action="save-current-slot" data-slot="${esc(slot.slot)}">Atualizar</button>
+       <button class="secondary-btn mini" data-action="save-slot-rename" data-slot="${esc(slot.slot)}">Renomear</button>
+       <button class="secondary-btn mini danger" data-action="save-slot-delete" data-slot="${esc(slot.slot)}">Apagar</button>`
+    : `<button class="main-btn mini" data-action="load-save-slot" data-slot="${esc(slot.slot)}">Entrar</button>
+       <button class="secondary-btn mini" data-action="save-slot-rename" data-slot="${esc(slot.slot)}">Renomear</button>
+       <button class="secondary-btn mini danger" data-action="save-slot-delete" data-slot="${esc(slot.slot)}">Apagar</button>`;
+  const emptyActions = `<button class="main-btn mini" data-action="new-career-slot" data-slot="${esc(slot.slot)}" data-occupied="false">Criar carreira</button>${hasCurrentCareer ? `<button class="secondary-btn mini" data-action="copy-current-to-empty-slot" data-slot="${esc(slot.slot)}">Copiar atual</button>` : ''}`;
   return `<article class="slot-card-v740 ${occupied?'occupied':'empty'} ${active?'active':''}">
     <div class="slot-card-head-v740">
       <span class="slot-badge-v740">${esc(slot.badge || status)}</span>
@@ -38,23 +47,20 @@ function renderSlotCard(slot, activeSlot='principal'){
         <small>Atualizado: ${fmtDate(slot.updatedAt)} · ${esc(slot.description || '')}</small>
       </div>
     </div>
-    <div class="slot-actions-v740">
-      ${occupied ? `<button class="main-btn mini" data-action="load-save-slot" data-slot="${esc(slot.slot)}">Entrar</button>
-      <button class="secondary-btn mini" data-action="save-current-slot" data-slot="${esc(slot.slot)}">Salvar aqui</button>
-      <button class="secondary-btn mini" data-action="save-slot-rename" data-slot="${esc(slot.slot)}">Renomear</button>
-      <button class="secondary-btn mini danger" data-action="save-slot-delete" data-slot="${esc(slot.slot)}">Apagar</button>` : `<button class="main-btn mini" data-action="new-career-slot" data-slot="${esc(slot.slot)}" data-occupied="false">Criar carreira</button>`}
-    </div>
+    <div class="slot-actions-v740">${occupied ? occupiedActions : emptyActions}</div>
   </article>`;
 }
 export function buildSaveSlotsV2Snapshot(state={}){
-  const slots = listPlayableSlots().map(slot=>({...slot, active:slot.slot === (state.save?.activeSlot || 'principal')}));
+  const slots = listPlayableSlots().slice(0, MAX_PLAYABLE_SLOTS_V740).map(slot=>({...slot, active:slot.slot === (state.save?.activeSlot || 'principal')}));
   const occupied = slots.filter(s=>s.occupied).length;
   const firstOccupied = slots.find(s=>s.occupied);
   const firstEmpty = slots.find(s=>!s.occupied);
   return {
     version:SAVE_SLOTS_V2_VERSION,
+    maxSlots:MAX_PLAYABLE_SLOTS_V740,
     activeSlot:state.save?.activeSlot || 'principal',
     activeSlotLabel:state.save?.slotLabel || slotLabel(state.save?.activeSlot || 'principal'),
+    careerStarted:state.save?.careerStarted !== false,
     occupied,
     free:slots.length - occupied,
     slots,
@@ -68,12 +74,13 @@ export function renderSlotManagerHome(state={}){
   const activeSlot = snap.activeSlot;
   const activeCard = snap.slots.find(s=>s.slot===activeSlot && s.occupied) || snap.slots.find(s=>s.occupied);
   const firstEmpty = snap.slots.find(s=>!s.occupied);
+  const hasCurrentCareer = state.save?.careerStarted !== false && !!activeCard;
   return `<section class="slot-manager-home-v740">
     <div class="slot-hero-v740 panel">
       <div>
         <span class="tag">Save Slots 2.0 · Fase 57</span>
         <h1>Central de carreiras</h1>
-        <p class="subtitle">Escolha exatamente qual carreira abrir. Agora sair, trocar, criar, renomear e apagar slot ficam no mesmo lugar.</p>
+        <p class="subtitle">3 slots reais: criar carreira, trocar carreira, renomear, apagar, continuar o último save e sair sem confundir o jogador.</p>
       </div>
       <div class="slot-hero-actions-v740">
         ${activeCard ? `<button class="main-btn giant" data-action="load-save-slot" data-slot="${esc(activeCard.slot)}">Continuar ${slotTitle(activeCard)}</button>` : `<button class="main-btn giant" data-action="new-career-slot" data-slot="${esc(firstEmpty?.slot || 'principal')}">Criar primeira carreira</button>`}
@@ -81,11 +88,11 @@ export function renderSlotManagerHome(state={}){
       </div>
     </div>
     <section class="slot-summary-grid-v740">
-      <article class="card kpi-card"><span>Slots ocupados</span><strong>${snap.occupied}/5</strong><small>${snap.free} livre(s)</small></article>
-      <article class="card kpi-card"><span>Slot ativo</span><strong>${esc(snap.activeSlotLabel)}</strong><small>${esc(activeSlot)}</small></article>
-      <article class="card kpi-card"><span>Fluxo</span><strong>Definitivo</strong><small>Capa → Slots → Lobby</small></article>
+      <article class="card kpi-card"><span>Slots ocupados</span><strong>${snap.occupied}/${snap.maxSlots}</strong><small>${snap.free} livre(s)</small></article>
+      <article class="card kpi-card"><span>Último slot ativo</span><strong>${esc(activeCard?.slotLabel || snap.activeSlotLabel)}</strong><small>${esc(activeCard?.slot || activeSlot)}</small></article>
+      <article class="card kpi-card"><span>Fluxo</span><strong>Definitivo</strong><small>Capa → Slots → Criação/Lobby</small></article>
     </section>
-    <section class="slot-grid-v740">${snap.slots.map(s=>renderSlotCard(s, activeSlot)).join('')}</section>
+    <section class="slot-grid-v740">${snap.slots.map(s=>renderSlotCard(s, activeSlot, hasCurrentCareer)).join('')}</section>
     <section class="panel slot-policy-v740">
       <div class="row space"><div><span class="tag">Regras de segurança</span><h2>Sem sobrescrever carreira sem querer</h2></div><button class="secondary-btn mini" data-route="saveCenter">Central técnica</button></div>
       <ul class="small-list">${SAVE_SLOT_POLICIES_V740.map(p=>`<li>${esc(p)}</li>`).join('')}</ul>
@@ -98,10 +105,10 @@ export function renderSaveSlotsV2Center(state={}){
   return `<section class="save-slots-v2-center-v740">
     ${renderSlotManagerHome(state)}
     <section class="panel"><div class="row space"><div><span class="tag">Fluxo definitivo</span><h2>Como o jogador deve navegar</h2></div><strong class="grade">v7.4</strong></div><div class="flow-steps-v740">${steps}</div></section>
-    <section class="grid grid-2"><article class="panel"><span class="tag">Quality gate</span><h2>Integridade dos slots</h2><div class="candidate-list">${snap.integrity.gates.map(g=>`<div class="stat-line"><span>${esc(g.name)}</span><strong>${esc(g.status)}</strong></div>`).join('')}</div></article><article class="panel"><span class="tag">Próximo passo</span><h2>Fluxo pronto para carreira longa</h2><p class="alert">Depois desta fase, módulos novos devem entrar no Menu completo. A entrada do jogo deve continuar limpa e centrada em salvar/continuar/trocar carreira.</p></article></section>
+    <section class="grid grid-2"><article class="panel"><span class="tag">Quality gate</span><h2>Integridade dos slots</h2><div class="candidate-list">${snap.integrity.gates.map(g=>`<div class="stat-line"><span>${esc(g.name)}</span><strong>${esc(g.status)}</strong></div>`).join('')}</div></article><article class="panel"><span class="tag">Próximo passo</span><h2>Fluxo pronto para carreira longa</h2><p class="alert">Depois desta fase, calendário, scout, treino, staff e finanças entram no Menu completo sem sujar a entrada inicial.</p></article></section>
   </section>`;
 }
 export function renderSlotCompactBar(state={}){
   const snap = buildSaveSlotsV2Snapshot(state);
-  return `<div class="slot-compact-bar-v740"><strong>Slot ativo: ${esc(snap.activeSlotLabel)}</strong><span>${snap.occupied}/5 carreiras salvas</span><button class="secondary-btn mini" data-action="exit-career">Salvar e sair</button></div>`;
+  return `<div class="slot-compact-bar-v740"><strong>Slot ativo: ${esc(snap.activeSlotLabel)}</strong><span>${snap.occupied}/${snap.maxSlots} carreiras salvas</span><button class="secondary-btn mini" data-action="exit-career">Salvar e sair</button></div>`;
 }

@@ -244,6 +244,6 @@ export function saveIntegritySnapshot(state={}, storage=storageSafe()){
     lastExport:state?.stability?.lastExport || null,
     lastImport:state?.stability?.lastImport || null,
     health:state?.stability?.health || 'Excelente',
-    gates:['slots-fixos','nao-sobrescrever-sem-confirmar','sair-salvando','apagar-slot-isolado','renomear-slot','exportacao-json','fallback-localstorage'].map(name=>({name,status:'OK'}))
+    gates:['3-slots-oficiais','nao-auto-start','nao-sobrescrever-sem-confirmar','sair-salvando','apagar-slot-isolado','renomear-slot','exportacao-json','fallback-localstorage'].map(name=>({name,status:'OK'}))
   };
 }

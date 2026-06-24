@@ -1,7 +1,14 @@
 {
   "version": "v7.4.0",
-  "buildLabel": "Build v7.4.0 | 2026-06-24 | Save Slots 2.0 e Fluxo Definitivo",
+  "buildLabel": "Build v7.4.0 | 2026-06-24 15:37:35 BRT | Fase 57 Save Slots 2.0 Definitivo",
   "phase": "Fase 57 — Save Slots 2.0 e Fluxo de Carreira Definitivo",
   "dataPack": "2026.05.20",
-  "status": "save-slots-2-flow-ready"
+  "status": "3-save-slots-final-flow-ready",
+  "generatedAt": "2026-06-24 15:37:35 BRT",
+  "mandatoryFlow": "cover -> mainMenu/save slots -> newGame/teamSelect/confirmCareer or lobby",
+  "playableSlots": [
+    "principal",
+    "career-2",
+    "career-3"
+  ]
 }

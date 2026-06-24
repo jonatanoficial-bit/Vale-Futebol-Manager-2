@@ -1,16 +1,22 @@
-Build v7.4.0 | Fase 57 | Save Slots 2.0 e Fluxo de Carreira Definitivo
-Gerado em ambiente ChatGPT / VALE GAMES
+Build v7.4.0 | Fase 57 | Save Slots 2.0 Definitivo
+Gerado em: 2026-06-24 15:37:35 BRT
 
 Arquivos chave:
 - index.html | sha256:ea7cbdcf268ba93c
-- build/build-info.json | sha256:3199dd9e32c91070
-- js/data/saveSlotsData.js | sha256:3b39076c50a78184
-- js/systems/saveSlotsEngine.js | sha256:fb88696862997700
-- js/systems/saveManager.js | sha256:657b778fae05206e
-- core/safety/save-slots-v2-validator.js | sha256:cba231ecc2daad17
-- css/save-slots-v740.css | sha256:98b7b1cd2d30d84d
+- build/build-info.json | sha256:1899ecab17ac483a
+- js/data/saveSlotsData.js | sha256:218a7d27b124186d
+- js/systems/saveSlotsEngine.js | sha256:be98f7c56521be8a
+- js/systems/saveManager.js | sha256:fbd4cb24925b5a90
+- js/systems/state.js | sha256:7a0dc896ad511d6f
+- js/systems/router.js | sha256:6cc0b7bf344573c9
+- core/safety/save-slots-v2-validator.js | sha256:26a54237da55087b
+- css/save-slots-v740.css | sha256:fd8af96a97c9eb6d
+- js/screens/common.js | sha256:01cb2c8db49cf852
+- js/screens/moduleScreen.js | sha256:91faa6de2f81dda3
 - js/screens/mainMenu.js | sha256:0ef18767b2cc2f94
 - js/screens/cover.js | sha256:2fe4731d7c6df5c7
 - js/screens/lobby.js | sha256:9e56a6e51262760d
-- js/systems/router.js | sha256:91fa12a40cbb3ac3
 - js/app.js | sha256:8aa75f469306f46c
+- PHASE_57_SAVE_SLOTS_FINAL_REPORT.md | sha256:fe85f3cd20bdde7f
+- SAVE_SLOTS_QA_CHECKLIST.md | sha256:ba5df7b765c7ff30
+- INTEGRITY_REPORT.md | sha256:c4a52ccb2bb642f6

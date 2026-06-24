@@ -973,7 +973,16 @@ export function load(){
     let parsed = raw ? JSON.parse(raw) : null;
     if(parsed?.state) parsed = parsed.state;
     state = parsed ? normalize(migrateLegacyState(parsed)) : defaultState();
-    if(parsed) persist();
+    // Fase 57: o jogo nunca deve abrir direto dentro da carreira salva.
+    // O save é carregado em memória para saber qual é o último slot, mas a rota inicial volta para a capa limpa.
+    state = normalize({...state, route:'cover'});
+    if(parsed){
+      try {
+        const migrated = migrateLegacyState({...state, route:'cover'});
+        localStorage.setItem(key, JSON.stringify(migrated));
+        writeSlot(migrated.save?.activeSlot || 'principal', migrated);
+      } catch(migrationErr){ console.warn('[VFM] migracao de slot sem auto-start falhou', migrationErr); }
+    }
   } catch(err){
     console.warn('[VFM] save corrompido, tentando backup automatico', err);
     try { preserveCorruptSave(localStorage.getItem(key) || ''); } catch(e){}
@@ -1032,14 +1041,25 @@ export function createNewCareerSlot(slot='career-2'){
   try {
     const safeSlot = String(slot || 'career-2').replace(/[^a-z0-9_-]/gi,'_').slice(0,32) || 'career-2';
     const base = defaultState();
-    state = normalize({...base, save:{...base.save, activeSlot:safeSlot, slotLabel:slotLabel(safeSlot), careerStarted:false}, route:'newGame'});
+    state = normalize({
+      ...base,
+      manager:{...base.manager, name:'Manager Vale', country:'br', avatar:'assets/avatars/manager-01.png', mode:'career', reputation:50},
+      clubId:'santos',
+      ui:{...base.ui, selectedAvatar:'assets/avatars/manager-01.png', selectedCountry:'br', selectedMode:'career', selectedClub:'santos'},
+      career:{...base.career, completedMatches:[], lastResult:null, matchday:1, currentDate:'2026-04-13', integrationLog:[`Novo slot ${safeSlot} criado na Fase 57: dados antigos isolados até confirmação da carreira.`]},
+      save:{...base.save, activeSlot:safeSlot, slotLabel:slotLabel(safeSlot), careerStarted:false, createdAt:new Date().toISOString()},
+      route:'newGame'
+    });
     return true;
   } catch(err){ console.warn('[VFM] novo slot bloqueado', err); return false; }
 }
 export function saveCurrentCareerSlot(slot=null){
   try {
+    if(state?.save?.careerStarted === false) return false;
     const safeSlot = String(slot || state?.save?.activeSlot || 'principal').replace(/[^a-z0-9_-]/gi,'_').slice(0,32) || 'principal';
-    state = normalize({...state, save:{...(state.save||{}), activeSlot:safeSlot, slotLabel:state.save?.slotLabel || slotLabel(safeSlot), careerStarted:true}, stability:{...(state.stability||{}), health:`Slot ${safeSlot} salvo`}});
+    const currentSlot = String(state?.save?.activeSlot || safeSlot);
+    const nextLabel = safeSlot === currentSlot ? (state.save?.slotLabel || slotLabel(safeSlot)) : slotLabel(safeSlot);
+    state = normalize({...state, save:{...(state.save||{}), activeSlot:safeSlot, slotLabel:nextLabel, careerStarted:true}, stability:{...(state.stability||{}), health:`Slot ${safeSlot} salvo`}});
     writeSlot(safeSlot, state);
     persist();
     return true;
@@ -1053,6 +1073,7 @@ export function loadSaveSlot(slot='principal'){
     state = normalize(migrateLegacyState(restored));
     state.save = {...(state.save||{}), activeSlot:String(slot||'principal'), slotLabel:state.save?.slotLabel || slotLabel(slot), careerStarted:true};
     state.stability = {...(state.stability||{}), lastImport:new Date().toISOString(), health:`Slot ${slot} carregado`};
+    state.route = 'lobby';
     persist();
     return true;
   } catch(err){ console.warn('[VFM] slot invalido bloqueado', err); return false; }
@@ -1062,7 +1083,7 @@ export function deleteSaveSlot(slot='principal'){
     const safeSlot = String(slot || 'principal').replace(/[^a-z0-9_-]/gi,'_').slice(0,32) || 'principal';
     deleteSlot(safeSlot);
     if(state?.save?.activeSlot === safeSlot){
-      state = normalize({...defaultState(), route:'mainMenu'});
+      state = normalize({...defaultState(), route:'mainMenu', save:{...defaultState().save, careerStarted:false}});
       try { localStorage.removeItem(key); } catch(e){}
     } else {
       state = normalize({...state, stability:{...(state.stability||{}), health:`Slot ${safeSlot} apagado`}});
