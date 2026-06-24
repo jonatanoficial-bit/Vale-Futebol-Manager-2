@@ -43,3 +43,11 @@ Status: `real-audio-pack-ready`.
 A build agora possui um pacote oficial para efeitos reais opcionais, permitindo ao usuário inserir sons de torcida, apito, gol, estádio, CT e diretoria sem risco de quebrar o jogo caso os arquivos ainda não existam.
 
 Próxima etapa sugerida: v7.3.0 — Clima, Estádio e Gramado Dinâmicos.
+
+## Estado v7.3.0
+
+Status: `stadium-climate-ready`.
+
+A build agora possui clima, estádio, horário e gramado dinâmicos com impacto tático offline. A partida ganha leitura de chuva, vento, calor, altitude, pressão da torcida, renda e condição do campo, preservando o pacote de efeitos reais v7.2.0.
+
+Próxima etapa sugerida: v7.4.0 — Calendário Vivo, Viagens e Fadiga Realista.

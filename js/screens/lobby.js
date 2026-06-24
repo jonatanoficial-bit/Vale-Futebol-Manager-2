@@ -9,6 +9,7 @@ export const PRIMARY_ACTIONS_V550 = [
   ['matchSimulation90','Simulação 90','🎮','90 minutos, leitura tática, pressão e drama final'],
   ['soundAmbience','Sons e torcida','🔊','Estádio vivo, apito, clima e controle seguro'],
   ['realAudioPack','Efeitos reais','🎧','MP3/WAV opcionais com fallback seguro'],
+  ['stadiumClimate','Clima/Gramado','🌦️','Clima, estádio, gramado e impacto tático'],
   ['squadAI','Vestiário','🧠','Moral, liderança, rotação e crise interna'],
   ['objectivesHub','Objetivos','🎯','Metas, conquistas, recompensas e retenção diária'],
   ['emotionalBoard','Diretoria','🏦','Economia emocional, promessas e autonomia no cargo'],
@@ -34,9 +35,9 @@ export const MANAGER_MENU_GROUPS_V550 = [
     ['match','Partida','⚽','Próximo jogo oficial','Jogar'],
     ['matchdayPremium','Matchday Premium','🏟️','Central do dia de jogo, drama e transmissão','v6.3'],
     ['matchSimulation90','Simulação 90 Minutos','🎮','Camada 2D/texto premium, fases táticas e decisões do treinador','v7.0'],
-    ['soundAmbience','Sons e Torcida','🔊','Ambiência leve, apito, torcida e estádio vivo','v7.1']
-,
-    ['realAudioPack','Efeitos Reais Opcionais','🎧','MP3/WAV/OGG com manifest, varredura e fallback seguro','v7.2']
+    ['soundAmbience','Sons e Torcida','🔊','Ambiência leve, apito, torcida e estádio vivo','v7.1'],
+    ['realAudioPack','Efeitos Reais Opcionais','🎧','MP3/WAV/OGG com manifest, varredura e fallback seguro','v7.2'],
+    ['stadiumClimate','Clima, Estádio e Gramado','🌦️','Horário, gramado, chuva, vento, pressão e impacto tático','v7.3']
   ]],
   ['Elenco e campo', [
     ['squad','Elenco','👥','Jogadores, forma, moral e contratos','Clube'],
@@ -81,6 +82,7 @@ export const MANAGER_MENU_GROUPS_V550 = [
     ['visualLibrary','Biblioteca Visual','🖼️','Fundos, logos, países e extras','Assets'],
     ['soundAmbience','Sons e Torcida','🔊','Ambiência, apito, torcida e acessibilidade sonora','v7.1'],
     ['realAudioPack','Efeitos Reais','🎧','MP3/WAV opcionais, manifest de assets e fallback WebAudio','v7.2'],
+    ['stadiumClimate','Clima e Gramado','🌦️','Clima offline, gramado dinâmico e pressão do estádio','v7.3'],
     ['settings','Configurações','⚙️','Qualidade, sons, acessibilidade e segurança','Sistema']
   ]]
 ];
@@ -152,7 +154,7 @@ export function lobby(state){
       </section>
 
       <section class="panel coach-feed-v550">
-        <div class="row space"><div><span class="tag">Resumo do dia</span><h3>Central do treinador</h3></div><div class="row"><button class="secondary-btn mini" data-route="matchdayPremium">Matchday</button><button class="secondary-btn mini" data-route="matchSimulation90">90 min</button><button class="secondary-btn mini" data-route="soundAmbience">Som</button><button class="secondary-btn mini" data-route="realAudioPack">Áudio real</button><button class="secondary-btn mini" data-route="squadAI">Vestiário</button><button class="secondary-btn mini" data-route="objectivesHub">Objetivos</button><button class="secondary-btn mini" data-route="liveWorld">Jornal</button><button class="secondary-btn mini" data-route="emotionalBoard">Diretoria</button><button class="secondary-btn mini" data-route="agentMarket">Empresários</button><button class="secondary-btn mini" data-route="contractRenewal">Renovações</button><button class="secondary-btn mini" data-route="squadMorale">Crises</button><button class="secondary-btn mini" data-route="messages">Ver e-mails</button></div></div>
+        <div class="row space"><div><span class="tag">Resumo do dia</span><h3>Central do treinador</h3></div><div class="row"><button class="secondary-btn mini" data-route="matchdayPremium">Matchday</button><button class="secondary-btn mini" data-route="matchSimulation90">90 min</button><button class="secondary-btn mini" data-route="soundAmbience">Som</button><button class="secondary-btn mini" data-route="realAudioPack">Áudio real</button><button class="secondary-btn mini" data-route="stadiumClimate">Clima</button><button class="secondary-btn mini" data-route="squadAI">Vestiário</button><button class="secondary-btn mini" data-route="objectivesHub">Objetivos</button><button class="secondary-btn mini" data-route="liveWorld">Jornal</button><button class="secondary-btn mini" data-route="emotionalBoard">Diretoria</button><button class="secondary-btn mini" data-route="agentMarket">Empresários</button><button class="secondary-btn mini" data-route="contractRenewal">Renovações</button><button class="secondary-btn mini" data-route="squadMorale">Crises</button><button class="secondary-btn mini" data-route="messages">Ver e-mails</button></div></div>
         <div class="coach-feed-grid-v550">
           <div class="news-item"><strong>Diretoria</strong><span>Objetivo ativo: ${t.board}</span></div>
           <div class="news-item"><strong>Jogo</strong><span>${nextTitle}</span></div>

@@ -73,6 +73,7 @@ import { renderMoraleCrisisCenter, renderMoraleCrisisRibbon } from '../systems/m
 import { renderMatchSimulation90Center } from '../systems/matchSimulation90Engine.js';
 import { renderSoundAmbienceCenter } from '../systems/soundAmbienceEngine.js';
 import { renderRealAudioPackCenter } from '../systems/realAudioPackEngine.js';
+import { renderStadiumClimateCenter } from '../systems/stadiumClimateEngine.js';
 export function moduleScreen(route,title,subtitle,state){
   const extra = content(route, state);
   return screenWrap(route, `${topbar(title,subtitle,'lobby')}${clubHeader(state)}${extra}`, true);
@@ -149,6 +150,7 @@ function content(route,state={}){
   if(route==='matchSimulation90') return renderMatchSimulation90Center(state);
   if(route==='soundAmbience') return renderSoundAmbienceCenter(state);
   if(route==='realAudioPack') return renderRealAudioPackCenter(state);
+  if(route==='stadiumClimate') return renderStadiumClimateCenter(state);
   if(route==='formation') return formationScreen(state);
   if(route==='instructions') return instructionsScreen(state);
   if(route==='standings') {

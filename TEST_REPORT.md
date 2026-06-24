@@ -72,3 +72,16 @@ Homologação manual em celular real: pendente.
 - ZIP testado: OK.
 
 Homologação manual em celular real ainda necessária.
+
+## Testes v7.3.0
+
+- `node --check` em arquivos JS/core: OK.
+- Import do motor Stadium Climate: OK.
+- Validador v7.3.0: OK.
+- Render da rota `stadiumClimate`: OK.
+- Tarja de clima e gramado dentro da partida: OK.
+- Sistema de efeitos reais v7.2.0 preservado: OK.
+- Busca por conflitos de merge: OK.
+- ZIP testado: OK.
+
+Homologação manual em celular real ainda necessária.

@@ -63,3 +63,14 @@
 - Adicionados controles de tocar, verificar arquivos e parar tudo.
 - Integrado com partida, matchday, simulação 90 minutos, configurações e sons v7.1.0.
 - Mantida regra mobile: sem autoplay, apenas após toque do usuário.
+
+## v7.3.0 — Fase 56 — Clima, Estádio e Gramado Dinâmicos
+
+- Adicionada rota `stadiumClimate`.
+- Criado sistema offline de clima, estádio, horário e gramado dinâmico.
+- Adicionados 8 presets climáticos, 6 perfis de gramado e 6 contextos de estádio.
+- Nova leitura tática: ritmo da bola, fadiga, passe, risco físico, pressão de torcida e receita.
+- Tarja de clima integrada na tela de partida.
+- Botões na capa, menu principal, lobby e menu do treinador.
+- Validador anti-quebra v7.3.0.
+- CSS mobile-first sem popup fixo bloqueando a rolagem.

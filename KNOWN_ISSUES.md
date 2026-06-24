@@ -26,3 +26,9 @@
 - Em iPhone/Android, o navegador exige toque do usuário antes de qualquer som.
 - A varredura de arquivos pode variar quando o jogo é aberto diretamente por `file://`; o ideal é testar publicado no GitHub Pages/PWA.
 - Nenhuma dessas limitações bloqueia o jogo, pois o fallback WebAudio permanece ativo.
+
+## v7.3.0 — Observações
+
+- O clima é simulado/offline nesta fase, não consulta previsão real.
+- O impacto no motor de partida ainda é leitura premium e camada de decisão; a física completa será aprofundada em fases futuras.
+- Homologação manual em Android/iPhone ainda precisa ser feita.

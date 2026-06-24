@@ -10,6 +10,7 @@ import { renderMatchdayPremiumStrip } from '../systems/matchdayPremiumEngine.js'
 import { renderMatchSimulation90Strip } from '../systems/matchSimulation90Engine.js';
 import { renderSoundAmbienceStrip } from '../systems/soundAmbienceEngine.js';
 import { renderRealAudioPackStrip } from '../systems/realAudioPackEngine.js';
+import { renderStadiumClimateStrip } from '../systems/stadiumClimateEngine.js';
 
 function pct(n){ return `${Math.max(0, Math.min(100, Math.round(n)))}%`; }
 function eventIcon(type){ return {goal:'⚽', chance:'🎯', shot:'🥅', save:'🧤', danger:'⚠️', card:'🟨', var:'📺', penalty:'⚪', injury:'🚑', sub:'🔁', pressure:'🔥', halftime:'⏱️', fulltime:'🏁', kickoff:'▶'}[type] || '•'; }
@@ -103,6 +104,7 @@ export function match(state){
       <div class="match-v700-sim-ribbon">${renderMatchSimulation90Strip(state)}</div>
       <div class="match-v710-sound-ribbon">${renderSoundAmbienceStrip(state)}</div>
       <div class="match-v720-real-audio-ribbon">${renderRealAudioPackStrip(state)}</div>
+      <div class="match-v730-climate-ribbon">${renderStadiumClimateStrip(state)}</div>
       <article class="panel match-score-hero">
         <div class="match-team-side">${safeImg(clubLogo(home.id),'club',home.name,'match-logo')}<h2>${home.name}</h2><span>${home.league}</span></div>
         <div class="match-score-center"><span class="tag">${matchHeader}</span><div class="score ultra">${score.home} - ${score.away}</div><div class="clock premium">${String(minute).padStart(2,'0')}:00</div><div class="match-progress"><span style="width:${pct((minute/90)*100)}"></span></div><small>${isOver ? 'Partida encerrada. Pós-jogo pronto para retorno ao lobby.' : experienceCopy}</small><div class="match-v570-status"><span class="status-chip">${state.match?.autoPlay ? '▶ Automático ligado' : '⏸ Pausado'}</span><span class="status-chip">Velocidade ${speed}x</span><span class="status-chip">Trocas ${subsLeft}/${state.match?.maxSubs || 5}</span></div></div>

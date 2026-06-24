@@ -68,3 +68,12 @@ Build completa baseada na v6.8.0.
 - Manifest de áudio criado em `assets/audio/audio-manifest.json`.
 - Diretórios de áudio opcionais adicionados com README para manter estrutura no ZIP.
 - Validador `real-audio-pack-validator.js` aprovado.
+
+## Integridade v7.3.0
+
+- Nova rota: `stadiumClimate`.
+- Novos arquivos JS, CSS e docs incluídos.
+- Integração preservada com v7.2.0, v7.1.0, v7.0.0 e fases anteriores.
+- Sem dependência de API externa para clima.
+- Sem imagens, sons ou arquivos externos obrigatórios.
+- Anti-quebra validado por snapshot e validador dedicado.
