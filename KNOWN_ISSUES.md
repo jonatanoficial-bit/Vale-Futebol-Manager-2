@@ -32,3 +32,8 @@
 - O clima é simulado/offline nesta fase, não consulta previsão real.
 - O impacto no motor de partida ainda é leitura premium e camada de decisão; a física completa será aprofundada em fases futuras.
 - Homologação manual em Android/iPhone ainda precisa ser feita.
+
+
+## v7.3.1 — Fase 56.1 — Hotfix Fluxo Inicial e Slots
+- Homologar manualmente em celular real o fluxo: capa → central inicial → criar carreira → lobby → salvar e sair → carregar outro slot.
+- Reset local ainda apaga todos os saves e deve ser usado apenas em Configurações.

@@ -1,17 +1,12 @@
-VALE FUTEBOL MANAGER — AUDITORIA v7.3.0
+Vale Futebol Manager v7.3.1 — Fase 56.1 — Hotfix Fluxo Inicial e Slots
 
-Base: v7.2.0 — Pacote de Efeitos Reais Opcionais.
-Nova fase: Fase 56 — Clima, Estádio e Gramado Dinâmicos.
-Status: stadium-climate-ready.
-
-Verificações executadas:
-- Busca por marcadores de conflito: OK.
-- node --check em js/core: OK.
-- Import do motor Stadium Climate: OK.
-- Validador stadium-climate-validator: OK.
-- Render da rota stadiumClimate: OK.
-- Tarja de clima/gramado na partida: OK.
-- Sistema de áudio real v7.2.0 preservado: OK.
-- ZIP integrity test: OK.
-
-Observação: sistema de clima é offline e não depende de API externa. Homologação manual em Android/iPhone ainda é necessária.
+Auditoria:
+- Capa simplificada: OK
+- Menu principal convertido em central de slots: OK
+- Lobby reduzido para ações essenciais: OK
+- Módulos avançados preservados no Menu do Treinador: OK
+- Botões de sair para central inicial/save adicionados: OK
+- Múltiplos slots jogáveis expostos: OK
+- Sintaxe JS: OK
+- Conflitos de merge: 0
+- ZIP íntegro: será validado após compactação

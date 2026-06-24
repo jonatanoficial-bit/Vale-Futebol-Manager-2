@@ -77,3 +77,8 @@ Build completa baseada na v6.8.0.
 - Sem dependência de API externa para clima.
 - Sem imagens, sons ou arquivos externos obrigatórios.
 - Anti-quebra validado por snapshot e validador dedicado.
+
+
+## v7.3.1 — Fase 56.1 — Hotfix Fluxo Inicial e Slots
+- Hotfix preserva sistemas v7.3.0 e adiciona somente ajustes de fluxo/slots.
+- Sem remoção de módulos avançados; eles foram recolocados dentro do Menu do Treinador.

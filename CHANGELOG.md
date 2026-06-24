@@ -74,3 +74,11 @@
 - Botões na capa, menu principal, lobby e menu do treinador.
 - Validador anti-quebra v7.3.0.
 - CSS mobile-first sem popup fixo bloqueando a rolagem.
+
+
+## v7.3.1 — Fase 56.1 — Hotfix Fluxo Inicial e Slots
+- Corrigida sensação de duas telas iguais entre capa e menu principal.
+- Capa agora tem apenas continuar, central inicial, nova carreira e saves.
+- Menu principal virou central de slots, não vitrine de módulos.
+- Lobby agora mostra ações essenciais e envia módulos avançados para Menu Completo.
+- Adicionados botões de sair para central inicial e gerenciar save.

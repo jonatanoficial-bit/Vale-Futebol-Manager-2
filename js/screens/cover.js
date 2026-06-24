@@ -1,39 +1,25 @@
 import { screenWrap, brand } from './common.js';
-import { safeImg } from '../systems/assets.js';
+import { hasSave } from '../systems/state.js';
 
 export function cover(){
-  const leagueStrip = ['brasileirao_a','copa_do_brasil','libertadores','sulamericana','champions','europa_league'];
+  const saveReady = hasSave();
   return screenWrap('cover', `
-    <section class="title-screen">
+    <section class="title-screen title-screen-clean-v731">
       <div class="cinema-overlay"></div>
-      <div class="title-hero-card">
+      <div class="title-hero-card flow-cover-card-v731">
         ${brand('cover-logo')}
-        <p class="title-kicker">Gold Edition</p>
+        <p class="title-kicker">Gold Edition · Fluxo reorganizado</p>
         <h1>Construa sua dinastia no futebol.</h1>
-        <p class="subtitle wide">Gestão completa de clube, carreira esportiva, tática, mercado, calendário, staff, patrocínio, seleção nacional e partidas simuladas com estatísticas ao vivo.</p>
-        <div class="title-feature-row">
-          <span>⚽ Carreira</span><span>📰 Jornal</span><span>📊 Dados ao vivo</span><span>🏆 Competições</span><span>💼 Gestão realista</span>
+        <p class="subtitle wide">Entrada limpa: continue seu save, crie uma nova carreira ou gerencie slots. Os módulos avançados ficam dentro do jogo, no Menu do Treinador.</p>
+        <div class="menu-actions main-menu-actions clean-entry-actions-v731">
+          <button class="main-btn giant" data-route="${saveReady ? 'lobby' : 'newGame'}">${saveReady ? 'Continuar carreira' : 'Criar primeira carreira'}</button>
+          <button class="secondary-btn giant" data-route="mainMenu">Central inicial / slots</button>
+          <button class="secondary-btn" data-route="newGame">Nova carreira</button>
+          <button class="secondary-btn" data-route="saveCenter">Gerenciar saves</button>
         </div>
-        <div class="menu-actions main-menu-actions">
-          <button class="main-btn giant" data-route="mainMenu">Entrar no jogo</button>
-          <button class="secondary-btn" data-route="careerIntro">Jornada inicial</button>
-          <button class="secondary-btn" data-route="matchdayPremium">Matchday premium</button>
-          <button class="secondary-btn" data-route="squadAI">IA de elenco</button>
-          <button class="secondary-btn" data-route="objectivesHub">Objetivos</button>
-          <button class="secondary-btn" data-route="emotionalBoard">Diretoria viva</button>
-          <button class="secondary-btn" data-route="agentMarket">Empresários</button>
-          <button class="secondary-btn" data-route="contractRenewal">Renovações</button>
-          <button class="secondary-btn" data-route="squadMorale">Crises de vestiário</button>
-          <button class="secondary-btn" data-route="matchSimulation90">Simulação 90 minutos</button>
-          <button class="secondary-btn" data-route="soundAmbience">Sons e torcida</button>
-          <button class="secondary-btn" data-route="realAudioPack">Efeitos reais opcionais</button>
-          <button class="secondary-btn" data-route="stadiumClimate">Clima e gramado</button>
-          <button class="secondary-btn" data-route="newGame">Iniciar nova carreira</button>
+        <div class="flow-note-v731">
+          <strong>Fluxo corrigido:</strong> capa → central inicial → carreira/saves. Sem duplicar todos os módulos na primeira tela.
         </div>
-      </div>
-      <div class="league-strip" aria-label="Competições principais">
-        ${leagueStrip.map(id=>`<div class="league-pill">${safeImg(`assets/competitions/${id}.png`,'competition',id,'league-icon')}<span>${label(id)}</span></div>`).join('')}
       </div>
     </section>`, false);
 }
-function label(id){ return ({brasileirao_a:'Brasileirão',copa_do_brasil:'Copa do Brasil',libertadores:'Libertadores',sulamericana:'Sul-Americana',champions:'Champions',europa_league:'Europa'})[id] || id; }

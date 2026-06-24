@@ -85,3 +85,10 @@ Homologação manual em celular real ainda necessária.
 - ZIP testado: OK.
 
 Homologação manual em celular real ainda necessária.
+
+
+## v7.3.1 — Fase 56.1 — Hotfix Fluxo Inicial e Slots
+- node --check em js/core executado.
+- Import de app/rotas principais executado.
+- Validação de ausência de conflitos executada.
+- ZIP testado com unzip -t.

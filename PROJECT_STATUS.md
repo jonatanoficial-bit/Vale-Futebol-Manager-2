@@ -51,3 +51,8 @@ Status: `stadium-climate-ready`.
 A build agora possui clima, estádio, horário e gramado dinâmicos com impacto tático offline. A partida ganha leitura de chuva, vento, calor, altitude, pressão da torcida, renda e condição do campo, preservando o pacote de efeitos reais v7.2.0.
 
 Próxima etapa sugerida: v7.4.0 — Calendário Vivo, Viagens e Fadiga Realista.
+
+
+## v7.3.1 — Fase 56.1 — Hotfix Fluxo Inicial e Slots
+- Status atualizado para flow-save-hotfix-ready.
+- Objetivo: reduzir confusão de entrada e permitir múltiplos slots claros.

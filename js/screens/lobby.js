@@ -5,25 +5,15 @@ import { money } from '../utils/dom.js';
 
 export const PRIMARY_ACTIONS_V550 = [
   ['match','Jogar partida','⚽','Entrar no próximo compromisso oficial'],
-  ['matchdayPremium','Matchday','🏟️','Pré-jogo, tensão, banco e pós-jogo premium'],
-  ['matchSimulation90','Simulação 90','🎮','90 minutos, leitura tática, pressão e drama final'],
-  ['soundAmbience','Sons e torcida','🔊','Estádio vivo, apito, clima e controle seguro'],
-  ['realAudioPack','Efeitos reais','🎧','MP3/WAV opcionais com fallback seguro'],
-  ['stadiumClimate','Clima/Gramado','🌦️','Clima, estádio, gramado e impacto tático'],
-  ['squadAI','Vestiário','🧠','Moral, liderança, rotação e crise interna'],
-  ['objectivesHub','Objetivos','🎯','Metas, conquistas, recompensas e retenção diária'],
-  ['emotionalBoard','Diretoria','🏦','Economia emocional, promessas e autonomia no cargo'],
-  ['agentMarket','Empresários','🤝','Negociações vivas, agentes, rivais e fechamento seguro'],
-  ['contractRenewal','Renovações','📝','Salários, luvas, multa, promessas e moral contratual'],
-  ['squadMorale','Crises','🔥','Promessas quebradas, banco, salário, capitão e liderança'],
-  ['formation','Ajustar tática','🧩','Escalação, plano de jogo e banco'],
-  ['squad','Ver elenco','👥','Jogadores, moral, contratos e forma'],
-  ['messages','Abrir e-mail','✉️','Diretoria, imprensa e empresários'],
-  ['managerMenu','Menu completo','☰','Todos os módulos avançados'],
-  ['careerIntro','Jornada inicial','🎬','Arco cinematográfico, onboarding e primeiro jogo'],
-  ['liveWorld','Jornal esportivo','📰','Manchetes, bastidores e pulso do clube'],
-  ['careerTutorial','Tutorial e missões','🎓','Entenda o modo carreira e acompanhe metas'],
-  ['managerProgression','Evolução','⭐','XP, nível e licença do treinador']
+  ['formation','Tática','🧩','Escalação, plano de jogo e banco'],
+  ['squad','Elenco','👥','Jogadores, moral, contratos e forma'],
+  ['training','Treino','🔶','Plano semanal, evolução e recuperação'],
+  ['standings','Tabela','📊','Classificação e estatísticas'],
+  ['transfers','Mercado','🔁','Contratações, vendas e empréstimos'],
+  ['messages','E-mail','✉️','Diretoria, imprensa e empresários'],
+  ['liveWorld','Jornal','📰','Manchetes e bastidores do dia'],
+  ['saveCenter','Saves','💾','Slots, exportação, importação e backups'],
+  ['managerMenu','Menu completo','☰','Todos os módulos avançados']
 ];
 
 export const MANAGER_MENU_GROUPS_V550 = [
@@ -107,6 +97,8 @@ export function lobby(state){
           <div class="resource">⭐ Clube ${t.reputation || 78}</div>
           <div class="resource">🧠 Técnico ${state.manager?.reputation || 50}</div>
           <button class="icon-btn mail-alert" data-route="messages" aria-label="E-mail do treinador">✉${unread ? `<span>${unread}</span>` : ''}</button>
+          <button class="icon-btn" data-route="saveCenter" aria-label="Gerenciar saves">💾</button>
+          <button class="icon-btn" data-route="mainMenu" aria-label="Sair para central inicial">⏻</button>
           <button class="icon-btn" data-route="managerMenu" aria-label="Menu completo">☰</button>
         </div>
       </div>
@@ -154,7 +146,7 @@ export function lobby(state){
       </section>
 
       <section class="panel coach-feed-v550">
-        <div class="row space"><div><span class="tag">Resumo do dia</span><h3>Central do treinador</h3></div><div class="row"><button class="secondary-btn mini" data-route="matchdayPremium">Matchday</button><button class="secondary-btn mini" data-route="matchSimulation90">90 min</button><button class="secondary-btn mini" data-route="soundAmbience">Som</button><button class="secondary-btn mini" data-route="realAudioPack">Áudio real</button><button class="secondary-btn mini" data-route="stadiumClimate">Clima</button><button class="secondary-btn mini" data-route="squadAI">Vestiário</button><button class="secondary-btn mini" data-route="objectivesHub">Objetivos</button><button class="secondary-btn mini" data-route="liveWorld">Jornal</button><button class="secondary-btn mini" data-route="emotionalBoard">Diretoria</button><button class="secondary-btn mini" data-route="agentMarket">Empresários</button><button class="secondary-btn mini" data-route="contractRenewal">Renovações</button><button class="secondary-btn mini" data-route="squadMorale">Crises</button><button class="secondary-btn mini" data-route="messages">Ver e-mails</button></div></div>
+        <div class="row space"><div><span class="tag">Resumo do dia</span><h3>Central do treinador</h3></div><div class="row"><button class="secondary-btn mini" data-route="matchdayPremium">Matchday</button><button class="secondary-btn mini" data-route="squadAI">Vestiário</button><button class="secondary-btn mini" data-route="objectivesHub">Objetivos</button><button class="secondary-btn mini" data-route="liveWorld">Jornal</button><button class="secondary-btn mini" data-route="managerMenu">Mais módulos</button></div></div>
         <div class="coach-feed-grid-v550">
           <div class="news-item"><strong>Diretoria</strong><span>Objetivo ativo: ${t.board}</span></div>
           <div class="news-item"><strong>Jogo</strong><span>${nextTitle}</span></div>

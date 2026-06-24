@@ -1,53 +1,60 @@
 import { screenWrap, brand } from './common.js';
-import { hasSave } from '../systems/state.js';
-import { safeImg } from '../systems/assets.js';
+import { hasSave, getState } from '../systems/state.js';
+import { listSlots } from '../systems/saveManager.js';
+import { teams } from '../data/gameData.js';
+import { clubLogo, safeImg } from '../systems/assets.js';
 
-export function mainMenu(state){
+function slotLabel(slot){
+  return String(slot || 'principal').replace('principal','Carreira principal').replace('career-2','Carreira 2').replace('career-3','Carreira 3').replace('career-4','Carreira 4').replace('career-5','Carreira 5').replace(/-/g,' ');
+}
+function renderSlotRows(){
+  let slots = [];
+  try { slots = listSlots(); } catch(err){ slots = []; }
+  if(!slots.length) return '<div class="empty-slot-v731"><strong>Nenhum slot salvo ainda.</strong><span>Crie uma nova carreira para liberar continuar.</span></div>';
+  return slots.slice(0,5).map(s=>{
+    const team = teams.find(t=>t.id === s.clubId);
+    return `<button class="save-slot-row-v731" data-action="load-save-slot" data-slot="${s.slot}">
+      <span class="slot-logo-v731">${team ? safeImg(clubLogo(team.id),'club',team.name,'mini-crest-v731') : '💾'}</span>
+      <span><strong>${slotLabel(s.slot)}</strong><small>${s.manager || 'Manager'} · ${team?.name || s.clubId || 'Clube'} · ${s.updatedAt ? String(s.updatedAt).slice(0,10) : 'sem data'}</small></span>
+      <em>Carregar</em>
+    </button>`;
+  }).join('');
+}
+export function mainMenu(state=getState()){
   const saveReady = hasSave();
-  const quick = [
-    ['intro','Jornada inicial','Abertura cinematográfica, primeira chance, pressão da diretoria e caminho até o primeiro jogo.'],
-    ['career','Modo Carreira','Comece pequeno, evolua sua reputação e receba propostas de clubes e seleções.'],
-    ['sandbox','Sandbox','Liberdade para testar elencos, competições e cenários sem travas.'],
-    ['assets','Assets prontos','Use imagens genéricas agora e substitua depois sem mexer no código.']
-  ];
+  const activeSlot = state?.save?.activeSlot || 'principal';
   return screenWrap('mainMenu', `
-    <section class="main-title-layout">
-      <div class="menu-top-brand">${brand('cover-logo')}</div>
-      <div class="gold-divider"></div>
-      <div class="menu-panel glass-panel">
-        <h1>Menu principal</h1>
-        <p class="subtitle">Escolha como iniciar sua jornada no Vale Futebol Manager: Gold Edition.</p>
-        <div class="menu-actions main-menu-actions">
-          <button class="main-btn giant" data-route="careerIntro">🎬 Jornada inicial</button>
-          <button class="secondary-btn giant" data-route="newGame">⚽ Novo jogo direto</button>
-          <button class="secondary-btn giant ${saveReady?'':'disabled-soft'}" data-route="${saveReady?'lobby':'newGame'}">📁 Continuar ${saveReady?'':'(novo save)'}</button>
-          <button class="secondary-btn" data-route="matchdayPremium">🏟️ Matchday premium</button>
-          <button class="secondary-btn" data-route="squadAI">🧠 IA de elenco</button>
-          <button class="secondary-btn" data-route="objectivesHub">🎯 Objetivos e conquistas</button>
-          <button class="secondary-btn" data-route="emotionalBoard">🏦 Diretoria viva</button>
-          <button class="secondary-btn" data-route="agentMarket">🤝 Empresários e negociações</button>
-          <button class="secondary-btn" data-route="contractRenewal">📝 Renovações profundas</button>
-          <button class="secondary-btn" data-route="squadMorale">🔥 Crises de vestiário</button>
-          <button class="secondary-btn" data-route="matchSimulation90">🎮 Simulação 90 minutos</button>
-          <button class="secondary-btn" data-route="soundAmbience">🔊 Sons e torcida</button>
-          <button class="secondary-btn" data-route="realAudioPack">🎧 Efeitos reais opcionais</button>
-          <button class="secondary-btn" data-route="stadiumClimate">🌦️ Clima e gramado</button>
-          <button class="secondary-btn" data-route="liveWorld">📰 Jornal esportivo</button>
-          <button class="secondary-btn" data-route="settings">⚙️ Configurações</button>
+    <section class="main-title-layout main-menu-clean-v731">
+      <div class="menu-top-brand compact-brand-v731">${brand('cover-logo')}</div>
+      <div class="menu-panel glass-panel entry-panel-v731">
+        <span class="tag">Central inicial corrigida</span>
+        <h1>Escolha seu save</h1>
+        <p class="subtitle">Aqui o jogador decide se continua, cria outra carreira ou gerencia slots. As telas premium ficam dentro do jogo, não na entrada.</p>
+        <div class="entry-grid-v731">
+          <article class="panel entry-card-v731 primary-entry-v731">
+            <h2>${saveReady ? 'Continuar carreira' : 'Começar agora'}</h2>
+            <p>${saveReady ? `Slot ativo: ${slotLabel(activeSlot)}.` : 'Nenhum save encontrado neste navegador.'}</p>
+            <button class="main-btn giant" data-route="${saveReady ? 'lobby' : 'newGame'}">${saveReady ? 'Entrar no lobby' : 'Nova carreira'}</button>
+          </article>
+          <article class="panel entry-card-v731">
+            <h2>Nova carreira</h2>
+            <p>Crie outro treinador sem precisar apagar o save principal.</p>
+            <div class="slot-create-row-v731">
+              <button class="secondary-btn" data-action="new-career-slot" data-slot="principal">Principal</button>
+              <button class="secondary-btn" data-action="new-career-slot" data-slot="career-2">Slot 2</button>
+              <button class="secondary-btn" data-action="new-career-slot" data-slot="career-3">Slot 3</button>
+            </div>
+          </article>
         </div>
-      </div>
-      <div class="mode-grid">
-        ${quick.map(([icon,title,desc])=>`<article class="mode-card"><div class="mode-icon">${iconSymbol(icon)}</div><strong>${title}</strong><p>${desc}</p></article>`).join('')}
-      </div>
-      <div class="asset-preview panel">
-        <div>
-          <strong>Sistema de imagens preparado</strong>
-          <p class="small">O jogo usa placeholders se uma imagem não existir. Quando você subir um arquivo no caminho oficial, ele aparece automaticamente.</p>
-        </div>
-        <div class="asset-mini-row">
-          ${['br','ar','gb','es','it','de'].map(code=>safeImg(`assets/countries/${code}.png`,'country',code,'mini-flag')).join('')}
+        <section class="panel saved-slots-panel-v731">
+          <div class="row space"><div><span class="tag">Slots salvos</span><h2>Carreiras disponíveis</h2></div><button class="secondary-btn mini" data-route="saveCenter">Central de save</button></div>
+          <div class="save-slot-list-v731">${renderSlotRows()}</div>
+        </section>
+        <div class="menu-actions footer-entry-actions-v731">
+          <button class="secondary-btn" data-route="cover">Voltar para capa</button>
+          <button class="secondary-btn" data-route="settings">Configurações</button>
+          <button class="secondary-btn danger" data-action="reset-save">Resetar dados locais</button>
         </div>
       </div>
     </section>`, false);
 }
-function iconSymbol(id){ return ({intro:'🎬',career:'🏆',sandbox:'🧪',assets:'🖼️'})[id] || '⚽'; }

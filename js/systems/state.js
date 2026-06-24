@@ -1015,6 +1015,25 @@ export function importSaveText(text=''){
     return true;
   } catch(err){ console.warn('[VFM] importacao invalida bloqueada', err); state = normalize({...state, stability:{...(state.stability||{}), health:'Importacao invalida bloqueada', saveIntegrity:'blocked-import'}}); persist(); return false; }
 }
+
+export function createNewCareerSlot(slot='career-2'){
+  try {
+    const safeSlot = String(slot || 'career-2').replace(/[^a-z0-9_-]/gi,'_').slice(0,32) || 'career-2';
+    state = normalize({...defaultState(), save:{...defaultState().save, activeSlot:safeSlot}, route:'newGame'});
+    persist();
+    return true;
+  } catch(err){ console.warn('[VFM] novo slot bloqueado', err); return false; }
+}
+export function saveCurrentCareerSlot(slot=null){
+  try {
+    const safeSlot = String(slot || state?.save?.activeSlot || 'principal').replace(/[^a-z0-9_-]/gi,'_').slice(0,32) || 'principal';
+    state = normalize({...state, save:{...(state.save||{}), activeSlot:safeSlot}, stability:{...(state.stability||{}), health:`Slot ${safeSlot} salvo`}});
+    writeSlot(safeSlot, state);
+    persist();
+    return true;
+  } catch(err){ console.warn('[VFM] salvar slot falhou', err); return false; }
+}
+
 export function loadSaveSlot(slot='principal'){
   try {
     const restored = readSlot(slot);

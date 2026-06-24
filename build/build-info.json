@@ -1,7 +1,7 @@
 {
-  "version": "v7.3.0",
-  "buildLabel": "Build v7.3.0 | 2026-06-23 | Clima, Estádio e Gramado Dinâmicos",
-  "phase": "Fase 56 — Clima, estádio, gramado, horário e impacto tático",
+  "version": "v7.3.1",
+  "buildLabel": "Build v7.3.1 | 2026-06-24 | Hotfix Fluxo Inicial e Slots",
+  "phase": "Fase 56.1 — Correção de fluxo, menus limpos e múltiplos slots de carreira",
   "dataPack": "2026.05.20",
-  "status": "stadium-climate-ready"
+  "status": "flow-save-hotfix-ready"
 }
