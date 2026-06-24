@@ -82,3 +82,12 @@
 - Menu principal virou central de slots, não vitrine de módulos.
 - Lobby agora mostra ações essenciais e envia módulos avançados para Menu Completo.
 - Adicionados botões de sair para central inicial e gerenciar save.
+
+
+## v7.4.0 — Fase 57 — Save Slots 2.0 e Fluxo de Carreira Definitivo
+- Central inicial convertida em gerenciador real de slots.
+- Capa limpa sem módulos avançados.
+- Cinco slots jogáveis oficiais.
+- Ações de carregar, criar, salvar, renomear e apagar slot.
+- Botão de sair da carreira salva e volta para a central.
+- Save técnico preservado para backup/exportação/importação.

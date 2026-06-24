@@ -4,22 +4,18 @@ import { hasSave } from '../systems/state.js';
 export function cover(){
   const saveReady = hasSave();
   return screenWrap('cover', `
-    <section class="title-screen title-screen-clean-v731">
+    <section class="title-screen title-screen-clean-v740">
       <div class="cinema-overlay"></div>
       <div class="title-hero-card flow-cover-card-v731">
         ${brand('cover-logo')}
-        <p class="title-kicker">Gold Edition · Fluxo reorganizado</p>
+        <p class="title-kicker">Gold Edition · Save Slots 2.0</p>
         <h1>Construa sua dinastia no futebol.</h1>
-        <p class="subtitle wide">Entrada limpa: continue seu save, crie uma nova carreira ou gerencie slots. Os módulos avançados ficam dentro do jogo, no Menu do Treinador.</p>
+        <p class="subtitle wide">Entrada definitiva: primeiro escolha o slot, depois jogue. Nada de módulos avançados na capa.</p>
         <div class="menu-actions main-menu-actions clean-entry-actions-v731">
-          <button class="main-btn giant" data-route="${saveReady ? 'lobby' : 'newGame'}">${saveReady ? 'Continuar carreira' : 'Criar primeira carreira'}</button>
-          <button class="secondary-btn giant" data-route="mainMenu">Central inicial / slots</button>
-          <button class="secondary-btn" data-route="newGame">Nova carreira</button>
-          <button class="secondary-btn" data-route="saveCenter">Gerenciar saves</button>
+          <button class="main-btn giant" data-route="mainMenu">${saveReady ? 'Continuar / escolher save' : 'Começar carreira'}</button>
+          <button class="secondary-btn giant" data-route="mainMenu">Gerenciar slots</button>
         </div>
-        <div class="flow-note-v731">
-          <strong>Fluxo corrigido:</strong> capa → central inicial → carreira/saves. Sem duplicar todos os módulos na primeira tela.
-        </div>
+        <div class="flow-note-v731"><strong>Fluxo final:</strong> capa → central de slots → criação/continuação → lobby limpo → salvar e sair.</div>
       </div>
     </section>`, false);
 }

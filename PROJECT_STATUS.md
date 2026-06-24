@@ -56,3 +56,7 @@ Próxima etapa sugerida: v7.4.0 — Calendário Vivo, Viagens e Fadiga Realista.
 ## v7.3.1 — Fase 56.1 — Hotfix Fluxo Inicial e Slots
 - Status atualizado para flow-save-hotfix-ready.
 - Objetivo: reduzir confusão de entrada e permitir múltiplos slots claros.
+
+
+## Status v7.4.0
+Build focada em UX estrutural: fluxo de carreira definitivo e Save Slots 2.0. Status: save-slots-2-flow-ready.

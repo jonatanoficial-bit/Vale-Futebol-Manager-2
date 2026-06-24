@@ -2,6 +2,7 @@ import { screenWrap, brand, moneyCard } from './common.js';
 import { teams } from '../data/gameData.js';
 import { safeImg, clubLogo, country } from '../systems/assets.js';
 import { money } from '../utils/dom.js';
+import { renderSlotCompactBar } from '../systems/saveSlotsEngine.js';
 
 export const PRIMARY_ACTIONS_V550 = [
   ['match','Jogar partida','⚽','Entrar no próximo compromisso oficial'],
@@ -64,7 +65,8 @@ export const MANAGER_MENU_GROUPS_V550 = [
   ['Sistema e desenvolvimento', [
     ['careerIntro','Jornada Inicial','🎬','Abertura cinematográfica e primeira sessão guiada','v6.1'],
     ['releaseCandidate','Beta Pública','🚀','Checklist público, mobile real e fluxo de teste','v6.0'],
-    ['saveCenter','Save Profissional','💾','Backups, exportar/importar e recuperação','v5.1'],
+    ['saveSlotsV2','Slots de Carreira','💾','Continuar, criar, trocar, renomear e apagar carreiras','v7.4'],
+    ['saveCenter','Save Técnico','🛡️','Backups, exportar/importar e recuperação','v5.1'],
     ['polishCenter','UI AAA','✨','Visual, responsividade e performance','v5.0'],
     ['data2026','Dados 2026','🗃️','Divisões, elencos e caminhos de fotos','Dados'],
     ['database2026','Banco Maio/2026','🧾','Atributos, contratos e auditoria de dados','Novo'],
@@ -90,6 +92,7 @@ export function lobby(state){
   const unread = Number(state.notifications || 0);
   return screenWrap('lobby', `
     <section class="lobby-shell lobby-v550-shell">
+      ${renderSlotCompactBar(state)}
       <div class="premium-topbar panel lobby-topbar-v550">
         <div class="top-left-brand">${brand()}</div>
         <div class="top-status">
@@ -98,7 +101,7 @@ export function lobby(state){
           <div class="resource">🧠 Técnico ${state.manager?.reputation || 50}</div>
           <button class="icon-btn mail-alert" data-route="messages" aria-label="E-mail do treinador">✉${unread ? `<span>${unread}</span>` : ''}</button>
           <button class="icon-btn" data-route="saveCenter" aria-label="Gerenciar saves">💾</button>
-          <button class="icon-btn" data-route="mainMenu" aria-label="Sair para central inicial">⏻</button>
+          <button class="icon-btn" data-action="exit-career" aria-label="Salvar e sair para slots">⏻</button>
           <button class="icon-btn" data-route="managerMenu" aria-label="Menu completo">☰</button>
         </div>
       </div>

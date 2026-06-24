@@ -1,7 +1,7 @@
 {
-  "version": "v7.3.1",
-  "buildLabel": "Build v7.3.1 | 2026-06-24 | Hotfix Fluxo Inicial e Slots",
-  "phase": "Fase 56.1 — Correção de fluxo, menus limpos e múltiplos slots de carreira",
+  "version": "v7.4.0",
+  "buildLabel": "Build v7.4.0 | 2026-06-24 | Save Slots 2.0 e Fluxo Definitivo",
+  "phase": "Fase 57 — Save Slots 2.0 e Fluxo de Carreira Definitivo",
   "dataPack": "2026.05.20",
-  "status": "flow-save-hotfix-ready"
+  "status": "save-slots-2-flow-ready"
 }

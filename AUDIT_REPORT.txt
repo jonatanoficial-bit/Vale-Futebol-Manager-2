@@ -1,12 +1,5 @@
-Vale Futebol Manager v7.3.1 — Fase 56.1 — Hotfix Fluxo Inicial e Slots
-
-Auditoria:
-- Capa simplificada: OK
-- Menu principal convertido em central de slots: OK
-- Lobby reduzido para ações essenciais: OK
-- Módulos avançados preservados no Menu do Treinador: OK
-- Botões de sair para central inicial/save adicionados: OK
-- Múltiplos slots jogáveis expostos: OK
-- Sintaxe JS: OK
-- Conflitos de merge: 0
-- ZIP íntegro: será validado após compactação
+Vale Futebol Manager v7.4.0 Fase 57
+Save Slots 2.0 e Fluxo de Carreira Definitivo
+Conflitos de merge: OK
+JS syntax: OK
+ZIP: OK

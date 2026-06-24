@@ -13,7 +13,7 @@ import { generateOffers, validateCareerState, validateManagerCareerState, buildM
 import { buildNationalCalendar, buildNationalTeamSnapshot, safeCallUpPool, simulateNationalFixture, NATIONAL_TEAM_ENGINE_VERSION } from './nationalTeamEngine.js';
 import { ensureTrainingState, applyTrainingWeek, TRAINING_ENGINE_VERSION } from './trainingEngine.js';
 import { TRANSFER_ENGINE_VERSION, ensureTransferLedger, evaluateDealSafety, registerTransaction, buildTransferSnapshot, simulateGlobalMarketCycle, createPreContract, validateTransferIntegrity, renewalById } from './transferEngine.js';
-import { SAVE_MANAGER_VERSION, SAVE_KEY, writeAutoBackup, readAutoBackup, preserveCorruptSave, exportEnvelopeText, validateSavePayload, migrateLegacyState, writeSlot, readSlot, listSlots, saveIntegritySnapshot } from './saveManager.js';
+import { SAVE_MANAGER_VERSION, SAVE_KEY, writeAutoBackup, readAutoBackup, preserveCorruptSave, exportEnvelopeText, validateSavePayload, migrateLegacyState, writeSlot, readSlot, listSlots, listPlayableSlots, deleteSlot, renameSlot, slotLabel, saveIntegritySnapshot } from './saveManager.js';
 import { createPressConferenceSession, answerPressQuestion, applyPressConferenceEffects } from './pressConferenceEngine.js';
 import { normalizeManagerProgression, awardManagerXpPatch, xpForMatchResult, setManagerSpecialtyPatch } from './managerProgressionEngine.js';
 import { normalizeManagerJobMarket, createJobMarketPatch, registerJobDecisionPatch } from './managerJobMarketEngine.js';
@@ -55,7 +55,7 @@ export const defaultState = () => ({
   career:{ currentDate:'2026-05-19', matchday:1, completedMatches:[], lastResult:null, promotionRelegation:{serieARelegation:4,serieBPromotion:4,libertadoresTop:5,sulamericanaRange:[6,12],serieBRelegation:4}, integrationLog:['Carreira migrada para v5.1.0 com save profissional, múltiplos slots, backups automáticos e recuperação de carreira.'], jobOffers:[], offerHistory:[], jobMarket:null, nationalTeamJob:null, dualCareer:{enabled:false, club:true, nationalTeam:null}, callUpSelection:defaultCallUpSelection(), internationalCalendar:buildNationalCalendar(2026, 'brasil'), managerProfile:null, activeContract:null, contractHistory:[], titleHistory:[], sackRiskLog:[], managerTimeline:[], unlockedMilestones:[], boardRelationship:76, fanRelationship:82, dressingRoomTrust:69, mediaPressure:54, worldCompetitionCycle:{libertadores:true,sulamericana:true,clubWorldCupCycle:4,worldCupCycle:4,lastUpdated:'v4.3.0'}, financeReport:{profile:'balanced', lastMonthlyCycle:null, crisisLog:[], boardWarnings:[], sponsorReview:'v3.5.0'}, tutorial:{seen:false, step:1, completed:false}, missions:[], completedSeasons:0, seasonHistory:[], lifetimeEarnings:0, reputationHistory:[], activeStory:['Bem-vindo ao modo carreira: jogue partidas, cumpra missões, aumente renda e reputação sem limite de temporadas.'], pressHistory:[], pressConference:null, managerProgression:null },
   gameplay:{ difficulty:'realistic', aiVersion:'v5.4.0', realism:88, variance:18, balanceLog:[] },
   stability:{ autosave:true, lastBackup:null, backupCount:0, lastExport:null, lastImport:null, safeModeEvents:0, health:'Excelente', auditVersion:SAVE_MANAGER_VERSION, saveManagerVersion:SAVE_MANAGER_VERSION, saveIntegrity:'ok', commercialAudit:'v3.7.0-ok', fullscreenMobile:true, overflowGuard:true, rosterSafeMode:true, matchEngineSafeMode:true, matchEngineVersion:'v4.7.0', matchStressTest:'passed-100', trainingEngineVersion:TRAINING_ENGINE_VERSION, trainingStressTest:'passed-4-weeks', transferEngineVersion:TRANSFER_ENGINE_VERSION, transferIntegrity:'pending' },
-  save:{ version:SAVE_MANAGER_VERSION, schema:530, activeSlot:'principal', migratedFrom:null, lastMigrationAt:null, exportCount:0, importCount:0, autosaveCheckpoints:[] },
+  save:{ version:SAVE_MANAGER_VERSION, schema:740, activeSlot:'principal', slotLabel:'Carreira principal', careerStarted:false, migratedFrom:null, lastMigrationAt:null, exportCount:0, importCount:0, autosaveCheckpoints:[] },
   roster:clubRosterPackage('santos'),
   finance:{profile:'balanced', lastMonthlyCycle:null, crisisLog:[], boardWarnings:[], sponsorReview:'v3.5.0'},
   training:ensureTrainingState(),
@@ -229,7 +229,8 @@ export function startCareer(){
     roster: rosterPack,
     transfer: ensureTransferLedger({...(state.transfer || {}), budget: Number((transferBudget * 0.45).toFixed(1)), wageRoom: Math.max(0.8, Number((transferBudget/40).toFixed(2))), acceptedDeals:[], rejectedDeals:[], outgoingDeals:[], renewals:[], loanDeals:[], incomingOffers:[], aiDeals:[], agentEvents:[], smartReports:[], marketDay:1}),
     ui:{...state.ui, selectedClub:chosenClub, standingsCompetition:chosenTeam?.leagueId || 'brasileirao-a', ...starters},
-    route:'lobby'
+    route:'lobby',
+    save:{...(state.save||{}), version:SAVE_MANAGER_VERSION, schema:740, activeSlot:state.save?.activeSlot || 'principal', slotLabel:state.save?.slotLabel || slotLabel(state.save?.activeSlot || 'principal'), careerStarted:true}
   });
   persist();
 }
@@ -944,31 +945,42 @@ export function completeGuidedTutorialForRoute(route){
 
 export function persist(){
   try {
-    if(state?.stability?.autosave !== false){
+    const careerStarted = state?.save?.careerStarted !== false;
+    if(state?.stability?.autosave !== false && careerStarted){
       const checkpoints = Array.isArray(state.save?.autosaveCheckpoints) ? state.save.autosaveCheckpoints.slice(-9) : [];
       state = normalize({...state, save:{...(state.save||{}), autosaveCheckpoints:[...checkpoints, new Date().toISOString()]}});
       writeAutoBackup(state);
     }
-    localStorage.setItem(key, JSON.stringify(migrateLegacyState(state)));
-    try { writeSlot(state.save?.activeSlot || 'principal', state); } catch(slotErr){ console.warn('[VFM] slot save indisponivel', slotErr); }
+    if(careerStarted){
+      const migrated = migrateLegacyState(state);
+      localStorage.setItem(key, JSON.stringify(migrated));
+      try { writeSlot(state.save?.activeSlot || 'principal', migrated); } catch(slotErr){ console.warn('[VFM] slot save indisponivel', slotErr); }
+    }
   } catch(err){ console.warn('[VFM] save local indisponivel', err); }
 }
-export function hasSave(){ try { return !!localStorage.getItem(key) || legacyKeys.some(k=>!!localStorage.getItem(k)) || listSlots().length>0; } catch(err){ return false; } }
+export function hasSave(){ try { return listSlots().some(s=>s.careerStarted !== false) || legacyKeys.some(k=>!!localStorage.getItem(k)); } catch(err){ return false; } }
 export function load(){
   try {
     let raw = localStorage.getItem(key);
+    if(!raw){
+      const playable = listPlayableSlots().filter(s=>s.occupied);
+      if(playable[0]){
+        const slotState = readSlot(playable[0].slot);
+        if(slotState) raw = JSON.stringify({state:slotState});
+      }
+    }
     if(!raw){ const legacy = legacyKeys.find(k=>localStorage.getItem(k)); raw = legacy ? localStorage.getItem(legacy) : null; }
     let parsed = raw ? JSON.parse(raw) : null;
     if(parsed?.state) parsed = parsed.state;
     state = parsed ? normalize(migrateLegacyState(parsed)) : defaultState();
-    persist();
+    if(parsed) persist();
   } catch(err){
     console.warn('[VFM] save corrompido, tentando backup automatico', err);
     try { preserveCorruptSave(localStorage.getItem(key) || ''); } catch(e){}
     const backup = readAutoBackup();
     state = backup ? normalize(migrateLegacyState(backup)) : defaultState();
     state.stability = {...(state.stability||{}), safeModeEvents:Number(state.stability?.safeModeEvents||0)+1, health:backup?'Save recuperado do backup automatico':'Save recriado com seguranca', saveIntegrity:backup?'recovered':'reset'};
-    persist();
+    if(backup) persist();
   }
   return state;
 }
@@ -1019,15 +1031,15 @@ export function importSaveText(text=''){
 export function createNewCareerSlot(slot='career-2'){
   try {
     const safeSlot = String(slot || 'career-2').replace(/[^a-z0-9_-]/gi,'_').slice(0,32) || 'career-2';
-    state = normalize({...defaultState(), save:{...defaultState().save, activeSlot:safeSlot}, route:'newGame'});
-    persist();
+    const base = defaultState();
+    state = normalize({...base, save:{...base.save, activeSlot:safeSlot, slotLabel:slotLabel(safeSlot), careerStarted:false}, route:'newGame'});
     return true;
   } catch(err){ console.warn('[VFM] novo slot bloqueado', err); return false; }
 }
 export function saveCurrentCareerSlot(slot=null){
   try {
     const safeSlot = String(slot || state?.save?.activeSlot || 'principal').replace(/[^a-z0-9_-]/gi,'_').slice(0,32) || 'principal';
-    state = normalize({...state, save:{...(state.save||{}), activeSlot:safeSlot}, stability:{...(state.stability||{}), health:`Slot ${safeSlot} salvo`}});
+    state = normalize({...state, save:{...(state.save||{}), activeSlot:safeSlot, slotLabel:state.save?.slotLabel || slotLabel(safeSlot), careerStarted:true}, stability:{...(state.stability||{}), health:`Slot ${safeSlot} salvo`}});
     writeSlot(safeSlot, state);
     persist();
     return true;
@@ -1039,14 +1051,34 @@ export function loadSaveSlot(slot='principal'){
     const restored = readSlot(slot);
     if(!restored) return false;
     state = normalize(migrateLegacyState(restored));
-    state.save = {...(state.save||{}), activeSlot:String(slot||'principal')};
+    state.save = {...(state.save||{}), activeSlot:String(slot||'principal'), slotLabel:state.save?.slotLabel || slotLabel(slot), careerStarted:true};
     state.stability = {...(state.stability||{}), lastImport:new Date().toISOString(), health:`Slot ${slot} carregado`};
     persist();
     return true;
   } catch(err){ console.warn('[VFM] slot invalido bloqueado', err); return false; }
 }
+export function deleteSaveSlot(slot='principal'){
+  try {
+    const safeSlot = String(slot || 'principal').replace(/[^a-z0-9_-]/gi,'_').slice(0,32) || 'principal';
+    deleteSlot(safeSlot);
+    if(state?.save?.activeSlot === safeSlot){
+      state = normalize({...defaultState(), route:'mainMenu'});
+      try { localStorage.removeItem(key); } catch(e){}
+    } else {
+      state = normalize({...state, stability:{...(state.stability||{}), health:`Slot ${safeSlot} apagado`}});
+    }
+    return true;
+  } catch(err){ console.warn('[VFM] apagar slot falhou', err); return false; }
+}
+export function renameSaveSlot(slot='principal', label='Carreira'){
+  try {
+    const clean = renameSlot(slot, label);
+    if(state?.save?.activeSlot === slot){ state = normalize({...state, save:{...(state.save||{}), slotLabel:clean}}); persist(); }
+    return clean;
+  } catch(err){ console.warn('[VFM] renomear slot falhou', err); return false; }
+}
 export function listSaveSlots(){
-  try { return listSlots(); } catch(err){ return []; }
+  try { return listPlayableSlots(); } catch(err){ return []; }
 }
 export function getSaveIntegritySnapshot(){ return saveIntegritySnapshot(state); }
 export function toggleAutosave(){

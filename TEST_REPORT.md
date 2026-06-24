@@ -92,3 +92,12 @@ Homologação manual em celular real ainda necessária.
 - Import de app/rotas principais executado.
 - Validação de ausência de conflitos executada.
 - ZIP testado com unzip -t.
+
+
+## v7.4.0 — Testes Save Slots 2.0
+- node --check em js/core.
+- Import do motor Save Slots 2.0.
+- Validador v7.4.0.
+- Render de mainMenu/slots.
+- Ações de roteador para carregar/criar/renomear/apagar.
+- ZIP integrity.

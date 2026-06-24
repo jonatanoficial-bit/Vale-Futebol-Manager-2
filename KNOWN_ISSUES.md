@@ -37,3 +37,9 @@
 ## v7.3.1 — Fase 56.1 — Hotfix Fluxo Inicial e Slots
 - Homologar manualmente em celular real o fluxo: capa → central inicial → criar carreira → lobby → salvar e sair → carregar outro slot.
 - Reset local ainda apaga todos os saves e deve ser usado apenas em Configurações.
+
+
+## v7.4.0
+- Exclusão de slot usa confirmação nativa do navegador.
+- Saves antigos sem rótulo são migrados automaticamente para o nome oficial do slot.
+- Homologação manual em celular real ainda necessária.

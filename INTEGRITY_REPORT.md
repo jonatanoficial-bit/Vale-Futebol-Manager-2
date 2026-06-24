@@ -82,3 +82,7 @@ Build completa baseada na v6.8.0.
 ## v7.3.1 — Fase 56.1 — Hotfix Fluxo Inicial e Slots
 - Hotfix preserva sistemas v7.3.0 e adiciona somente ajustes de fluxo/slots.
 - Sem remoção de módulos avançados; eles foram recolocados dentro do Menu do Treinador.
+
+
+## v7.4.0 Integrity
+Save Slots 2.0 validado com 5 slots oficiais, fluxo definitivo, central técnica preservada e ausência de marcadores de conflito.
