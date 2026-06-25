@@ -1,3 +1,39 @@
+# v7.9.0 — Fase 62: Finanças, Patrocínio e Bilheteria Profunda
+
+Data: 2026-06-24 17:11:11 BRT  
+Base: v7.8.0 — Fase 61 Staff e Comissão Técnica Viva
+
+## Implementado
+
+- Novo motor financeiro `FINANCE_ENGINE_VERSION = v7.9.0`.
+- Estado `finance` migrado para schema 790 no save.
+- Caixa, dívida, folha salarial, teto de folha, fluxo mensal e projeção anual.
+- Receitas por transmissão, bilheteria, patrocínio, premiações, loja/licenciamento e sócio-torcedor.
+- Despesas por elenco, staff, operação/viagens, dívida, base e bônus.
+- Patrocínios ativos com satisfação, bônus, valor anual, valor mensal e meses restantes.
+- Mercado comercial com propostas negociáveis por reputação, torcida e score da diretoria.
+- Política de ingressos com preço popular, equilibrado, premium e jogo decisivo.
+- Bilheteria com capacidade, ocupação, público estimado, receita bruta, custos e renda líquida.
+- Premiações por vitória/empate e botões de simulação controlada.
+- Reunião financeira da diretoria ajustando limite de mercado, confiança e alertas.
+- Integração pós-jogo: matchday + premiação entram no financeiro salvo.
+- Ribbon financeiro no lobby e nova tela mobile-first do centro financeiro.
+
+## Preservado
+
+- Fase 57: Save Slots 2.0 e fluxo inicial limpo.
+- Fase 58: Calendário vivo, viagens e fadiga.
+- Fase 59: Scout, observadores e recrutamento.
+- Fase 60: Treino semanal realista.
+- Fase 61: Staff e comissão técnica viva.
+
+## Auditoria
+
+- 216 arquivos JavaScript/core verificados com `node --check`.
+- Smoke test do motor financeiro v7.9.0 concluído com snapshot, validação, render, ações e ledger.
+
+---
+
 # v7.8.0 — Fase 61: Staff e Comissão Técnica Viva
 
 Data/build: 2026-06-24 17:00:22 BRT

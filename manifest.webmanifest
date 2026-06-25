@@ -1,11 +1,11 @@
 {
-  "name": "Vale Futebol Manager v7.8.0",
-  "short_name": "VFM v7.8",
+  "name": "Vale Futebol Manager v7.9.0",
+  "short_name": "VFM v7.9",
   "start_url": "./index.html",
   "display": "fullscreen",
   "orientation": "any",
   "background_color": "#020407",
   "theme_color": "#05070a",
-  "description": "Futebol manager premium mobile-first com staff vivo, treino semanal realista, scout profissional, calendário vivo e save slots.",
+  "description": "Vale Futebol Manager — Fase 62 Finanças, Patrocínio e Bilheteria Profunda",
   "icons": []
 }

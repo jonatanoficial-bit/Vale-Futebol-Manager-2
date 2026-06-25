@@ -56,6 +56,7 @@ import { validateLiveCalendarSystem } from '../core/safety/live-calendar-validat
 import { validateScoutingSystem } from '../core/safety/scouting-validator.js';
 import { validateWeeklyTrainingSystem } from '../core/safety/weekly-training-validator.js';
 import { validateStaffSystem } from '../core/safety/staff-validator.js';
+import { validateFinanceV790System } from '../core/safety/finance-v790-validator.js';
 import { buildSquadAiSnapshot } from './systems/squadAiEngine.js';
 import { buildObjectivesRetentionSnapshot } from './systems/objectivesRetentionEngine.js';
 import { buildBoardEmotionalSnapshot } from './systems/boardEmotionalEngine.js';
@@ -71,6 +72,7 @@ import { buildLiveCalendarSnapshot } from './systems/liveCalendarEngine.js';
 import { buildScoutingSnapshot } from './systems/scoutingEngine.js';
 import { buildWeeklyTrainingSnapshot } from './systems/trainingEngine.js';
 import { buildStaffSnapshot } from './systems/staffEngine.js';
+import { buildFinanceSnapshot } from './systems/financeEngine.js';
 import { validateDataPack2026System } from '../core/safety/datapack-validator.js';
 import { runRuntimeAudit } from './systems/auditLogger.js';
 import { loadVisualLibrary } from './systems/visualAssetManager.js';
@@ -90,7 +92,7 @@ async function boot(){
   applyMobileUxFinalShell();
   applyNavigationExperienceShell();
   load();
-  runRuntimeAudit(getState(), {phase:'v7.8.0 staff technical commission boot', staff: validateStaffSystem(buildStaffSnapshot(getState())), weeklyTraining: validateWeeklyTrainingSystem(buildWeeklyTrainingSnapshot(getState())), scouting: validateScoutingSystem(buildScoutingSnapshot(getState())), saveSlotsV2: validateSaveSlotsV2System(buildSaveSlotsV2Snapshot(getState())), liveCalendar: validateLiveCalendarSystem(buildLiveCalendarSnapshot(getState())), stadiumClimate: validateStadiumClimateSystem(buildStadiumClimateSnapshot(getState())), realAudioPack: validateRealAudioPackSystem(buildRealAudioPackSnapshot(getState())), soundAmbience: validateSoundAmbienceSystem(buildSoundAmbienceSnapshot(getState())), matchSimulation90: validateMatchSimulation90System(buildMatchSimulation90Snapshot(getState())), moraleCrisis: validateMoraleCrisisSystem(buildMoraleCrisisSnapshot(getState())), contractRenewal: validateContractRenewalSystem(buildContractRenewalSnapshot(getState())), agentMarket: validateAgentMarketSystem(buildAgentMarketSnapshot(getState())), boardEmotional: validateBoardEmotionalSystem(buildBoardEmotionalSnapshot(getState())), objectivesRetention: validateObjectivesRetentionSystem(buildObjectivesRetentionSnapshot(getState())), squadAI: validateSquadAiSystem(buildSquadAiSnapshot(getState())), matchdayPremium: validateMatchdayPremiumSystem(buildMatchdayPremiumSnapshot(getState())), liveWorld: validateLiveWorldSystem(buildLiveWorldSnapshot(getState())), introCinematic: validateIntroCinematicSystem(buildIntroCinematicSnapshot(getState())), releaseCandidate: validateReleaseCandidateSystem(buildReleaseCandidateSnapshot(getState())), balanceGeneral: validateBalanceGeneralSystem(getState()), guidedTutorial: validateGuidedTutorialSystem(getState()), managerProgression: validateManagerProgressionSystem(getState()), managerJobMarket: validateManagerJobMarketSystem(getState()), pressConference: validatePressConferenceSystem(getState()), careerLoop: validateCareerLoopV592(getState()), rosterLock2026: validateRosterLock2026(getState()), rosterLockSnapshot: buildRosterLock2026Snapshot(getState()), dataPack2026: validateDataPack2026System(getState()), dataPackSnapshot: buildDataPack2026Snapshot(getState()), matchFlow: validateMatchFlowV570(buildMatchExperienceSnapshot(getState())), ux: runtimeSafetySnapshot(getState()), aaa: buildUiAaaSnapshot(getState()), mobile: buildMobileExperienceSnapshot(), mobileCertification: validateMobileCertificationV598(buildMobileCertificationSnapshot()), mobileUxFinal: validateMobileUxFinalV599(buildMobileUxFinalSnapshot()), navigation: validateNavigationSystem({currentRoute:getState().route}), menuHierarchy: validateMenuHierarchy({primaryActions:PRIMARY_ACTIONS_V550, menuGroups:MANAGER_MENU_GROUPS_V550}), touchTargets: validateTouchTargets(), lobby: validateLobbyCompactSystem({primaryActions:PRIMARY_ACTIONS_V550, menuGroups:MANAGER_MENU_GROUPS_V550})});
+  runRuntimeAudit(getState(), {phase:'v7.9.0 finance sponsorship ticketing boot', financeV790: validateFinanceV790System(buildFinanceSnapshot(getState())), staff: validateStaffSystem(buildStaffSnapshot(getState())), weeklyTraining: validateWeeklyTrainingSystem(buildWeeklyTrainingSnapshot(getState())), scouting: validateScoutingSystem(buildScoutingSnapshot(getState())), saveSlotsV2: validateSaveSlotsV2System(buildSaveSlotsV2Snapshot(getState())), liveCalendar: validateLiveCalendarSystem(buildLiveCalendarSnapshot(getState())), stadiumClimate: validateStadiumClimateSystem(buildStadiumClimateSnapshot(getState())), realAudioPack: validateRealAudioPackSystem(buildRealAudioPackSnapshot(getState())), soundAmbience: validateSoundAmbienceSystem(buildSoundAmbienceSnapshot(getState())), matchSimulation90: validateMatchSimulation90System(buildMatchSimulation90Snapshot(getState())), moraleCrisis: validateMoraleCrisisSystem(buildMoraleCrisisSnapshot(getState())), contractRenewal: validateContractRenewalSystem(buildContractRenewalSnapshot(getState())), agentMarket: validateAgentMarketSystem(buildAgentMarketSnapshot(getState())), boardEmotional: validateBoardEmotionalSystem(buildBoardEmotionalSnapshot(getState())), objectivesRetention: validateObjectivesRetentionSystem(buildObjectivesRetentionSnapshot(getState())), squadAI: validateSquadAiSystem(buildSquadAiSnapshot(getState())), matchdayPremium: validateMatchdayPremiumSystem(buildMatchdayPremiumSnapshot(getState())), liveWorld: validateLiveWorldSystem(buildLiveWorldSnapshot(getState())), introCinematic: validateIntroCinematicSystem(buildIntroCinematicSnapshot(getState())), releaseCandidate: validateReleaseCandidateSystem(buildReleaseCandidateSnapshot(getState())), balanceGeneral: validateBalanceGeneralSystem(getState()), guidedTutorial: validateGuidedTutorialSystem(getState()), managerProgression: validateManagerProgressionSystem(getState()), managerJobMarket: validateManagerJobMarketSystem(getState()), pressConference: validatePressConferenceSystem(getState()), careerLoop: validateCareerLoopV592(getState()), rosterLock2026: validateRosterLock2026(getState()), rosterLockSnapshot: buildRosterLock2026Snapshot(getState()), dataPack2026: validateDataPack2026System(getState()), dataPackSnapshot: buildDataPack2026Snapshot(getState()), matchFlow: validateMatchFlowV570(buildMatchExperienceSnapshot(getState())), ux: runtimeSafetySnapshot(getState()), aaa: buildUiAaaSnapshot(getState()), mobile: buildMobileExperienceSnapshot(), mobileCertification: validateMobileCertificationV598(buildMobileCertificationSnapshot()), mobileUxFinal: validateMobileUxFinalV599(buildMobileUxFinalSnapshot()), navigation: validateNavigationSystem({currentRoute:getState().route}), menuHierarchy: validateMenuHierarchy({primaryActions:PRIMARY_ACTIONS_V550, menuGroups:MANAGER_MENU_GROUPS_V550}), touchTargets: validateTouchTargets(), lobby: validateLobbyCompactSystem({primaryActions:PRIMARY_ACTIONS_V550, menuGroups:MANAGER_MENU_GROUPS_V550})});
   validateCommercialState(getState());
   initRouter(app, buildInfo);
   register('cover', cover);
@@ -105,7 +107,7 @@ async function boot(){
   const modules = {
     seasonCenter:['Temporada','Tabela viva, rodada completa, acesso, queda e vagas continentais'],
     copaDoBrasil:['Copa do Brasil','Mata-mata, agregado, pênaltis, premiação e vaga na Libertadores'],
-    financeCenter:['Economia','Diretoria, orçamento, patrocínio e crise financeira realista'],
+    financeCenter:['Finanças Profundas','Patrocínios, folha, bilheteria, premiações, bônus e risco de crise'],
     polishCenter:['UI AAA','Polimento visual, responsividade, performance e prontidão comercial'],
     mobileAudit:['Auditoria Mobile','Fluxo real, smoke test de rotas, pós-jogo, save e estabilidade'],
     data2026:['Dados 2026','Divisões, elencos, avatares de jogadores e manutenção segura'],
@@ -123,9 +125,9 @@ async function boot(){
     smartMarket:['Mercado Inteligente','Empresários, propostas rivais, IA de clubes e disputa por atletas'],
     academyScouting:['Scout & Recrutamento','Observadores, regiões, relatórios, base e lista de desejos'],
     staff:['Staff Vivo','Auxiliar, físico, analista, médico, olheiro e preparador de goleiros'],
-    sponsorship:['Patrocínio','Receitas comerciais e propostas'],
+    sponsorship:['Patrocínio','Propostas comerciais, bônus, satisfação e exposição de marca'],
     club:['Clube','Resumo institucional e financeiro'],
-    finances:['Financeiro','Orçamento, receitas e despesas'],
+    finances:['Financeiro','Caixa, receitas, despesas, folha, dívida e projeção mensal'],
     contracts:['Contratos','Contratos de jogadores e renovações'],
     messages:['E-mail','Diretoria, imprensa, empresários, propostas e seleção nacional'],
     careerOffers:['Mercado de treinadores','Propostas, sondagens, contratos, rumores e troca de clube/seleção'],

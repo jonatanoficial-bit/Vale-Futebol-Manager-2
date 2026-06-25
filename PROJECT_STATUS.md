@@ -1,104 +1,32 @@
-# PROJECT STATUS — v7.8.0 / Fase 61
+# PROJECT STATUS — v7.9.0 / Fase 62
 
-Build: 2026-06-24 17:00:22 BRT
-Status: Staff e Comissão Técnica Viva integrado e preservando fases anteriores.
+Gerado em: **2026-06-24 17:11:11 BRT**
 
-Sistemas principais ativos:
-- Save Slots 2.0 com 3 carreiras reais.
-- Calendário Vivo com viagens, fadiga e recuperação.
-- Scout, observadores e recrutamento profundo.
-- Microciclo semanal realista com impacto direto no jogo.
-- Staff vivo com auxiliar técnico, preparador físico, analista, médico, olheiro, fisioterapeuta e preparador de goleiros.
-- Contratação de staff, foco semanal e influência real em treino, scout e partida.
-- Schema atual: 780.
+## Status
 
-Próxima etapa sugerida: v7.9.0 — Fase 62: Finanças, Patrocínio e Bilheteria Profunda.
-
----
-
-# PROJECT STATUS — v7.7.0 / Fase 60
-
-Build: 2026-06-24 16:34:17 BRT
-Status: Treino Semanal Realista integrado e preservando fases anteriores.
-
-Sistemas principais ativos:
-- Save Slots 2.0 com 3 carreiras reais.
-- Calendário Vivo com viagens, fadiga e recuperação.
-- Scout, observadores e recrutamento profundo.
-- Microciclo semanal realista com impacto direto no jogo.
-- Schema atual: 770.
-
-
----
-## Status atual — v7.6.0
-
-Build atual: **v7.6.0 — Fase 59 — Scout, Observadores e Recrutamento Profundo**.
-
-Status: `scout-observers-recruitment-ready`.
-
-Esta versão adiciona departamento de scout profissional com observadores por região, relatórios de jogadores, cálculo de potencial, risco, custo, salário, comparação com elenco e lista de desejos persistente no save. A base preserva o fluxo de 3 slots da Fase 57 e o calendário vivo da Fase 58.
-
-Próxima etapa sugerida: v7.7.0 — Fase 60: Treino Semanal Realista.
-
-## Status atual — v7.1.0
-Build sound-ambience-ready. A camada sonora é mobile-first, sem autoplay, sem MP3 obrigatório e com fallback seguro. Próxima etapa recomendada: v7.2.0 pacote de efeitos reais opcionais e tela de mixagem avançada.
-
-
-# Status atualizado — v7.0.0
-
-Build atual: **v7.0.0 — Fase 53 — Simulação 90 Minutos 2D/Texto Premium**.
-
-Estado: `match-simulation90-ready`.
-
-A versão v7.0.0 adiciona a primeira camada premium de partida com leitura de 90 minutos, campo 2D/texto, fases táticas, pressão e comandos do treinador. A build preserva todas as fases anteriores e mantém prioridade mobile-first.
-
-# Project Status
-
-Versão atual: v6.9.0
-Fase: 52 — Moral Avançada e Crises de Vestiário
-Status: morale-crisis-ready
-Data Pack: 2026.05.20
-
-Base preservada: v6.8.0 Renovação Contratual Profunda.
+Build completo do **Vale Futebol Manager v7.9.0** pronto para teste manual e upload.
 
 ## Sistemas preservados
-- Beta Pública Mobile v6.0.0
-- Jornada Inicial Cinematográfica v6.1.0
-- Lobby Vivo e Jornal Esportivo v6.2.0
-- Matchday Premium v6.3.0
-- IA de Elenco e Vestiário v6.4.0
-- Objetivos, Conquistas e Retenção v6.5.0
-- Economia Emocional e Diretoria Viva v6.6.0
-- Mercado com Empresários v6.7.0
-- Renovação Contratual Profunda v6.8.0
 
-## v6.9.0
-Adiciona rota `squadMorale` para crises de vestiário, promessas quebradas, banco, salário, capitão, derrotas e respostas do treinador.
+- Save Slots 2.0 definitivo — schema anterior preservado e migrado para 790.
+- Calendário Vivo, viagens, fadiga e recuperação.
+- Scout profissional, observadores, relatórios e lista de desejos.
+- Treino semanal realista com microciclo de 7 dias.
+- Staff e comissão técnica viva.
 
-Próxima fase sugerida: v7.0.0 — Simulação 90 minutos 2D/Texto Premium, com momentos táticos mais reais e leitura de campo mais profunda.
+## Novo sistema principal
 
+**Fase 62 — Finanças, Patrocínio e Bilheteria Profunda**
 
-## Estado v7.2.0
+- Caixa, dívida, folha e teto salarial.
+- Fluxo de receitas e despesas mensais.
+- Patrocínios ativos e propostas negociáveis.
+- Bilheteria com política de ingresso e ocupação.
+- Premiações e bônus esportivos.
+- Pressão financeira, crise, reunião de diretoria e limite de mercado.
 
-Status: `real-audio-pack-ready`.
+## Próxima fase recomendada
 
-A build agora possui um pacote oficial para efeitos reais opcionais, permitindo ao usuário inserir sons de torcida, apito, gol, estádio, CT e diretoria sem risco de quebrar o jogo caso os arquivos ainda não existam.
+**v8.0.0 — Fase 63: Beta Profissional / Consolidação Geral**
 
-Próxima etapa sugerida: v7.3.0 — Clima, Estádio e Gramado Dinâmicos.
-
-## Estado v7.3.0
-
-Status: `stadium-climate-ready`.
-
-A build agora possui clima, estádio, horário e gramado dinâmicos com impacto tático offline. A partida ganha leitura de chuva, vento, calor, altitude, pressão da torcida, renda e condição do campo, preservando o pacote de efeitos reais v7.2.0.
-
-Próxima etapa sugerida: v7.4.0 — Calendário Vivo, Viagens e Fadiga Realista.
-
-
-## v7.3.1 — Fase 56.1 — Hotfix Fluxo Inicial e Slots
-- Status atualizado para flow-save-hotfix-ready.
-- Objetivo: reduzir confusão de entrada e permitir múltiplos slots claros.
-
-
-## Status v7.4.0
-Build focada em UX estrutural: fluxo de carreira definitivo e Save Slots 2.0. Status: save-slots-2-flow-ready.
+Foco: limpar telas, reduzir botões duplicados, organizar menus, corrigir bugs, testar mobile e preparar versão jogável para divulgação.

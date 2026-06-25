@@ -20,6 +20,7 @@ import { normalizeManagerJobMarket, createJobMarketPatch, registerJobDecisionPat
 import { normalizeLiveCalendarState, buildCalendarActionPatch, buildMatchCalendarPatch, LIVE_CALENDAR_VERSION } from './liveCalendarEngine.js';
 import { normalizeScoutingState, createScoutReportPatch, setScoutAssignmentPatch, setScoutFocusPatch, wishlistScoutPlayerPatch, SCOUTING_VERSION } from './scoutingEngine.js';
 import { ensureStaffState, hireStaffPatch, setStaffFocusPatch, runStaffMeetingPatch, buildStaffSnapshot, STAFF_VERSION } from './staffEngine.js';
+import { ensureFinanceState, signSponsorPatch, setTicketPolicyPatch, simulateMatchdayRevenuePatch, applyPrizeMoneyPatch, runFinanceBoardMeetingPatch, buildFinanceMatchPatch, buildFinanceSnapshot, FINANCE_VERSION } from './financeEngine.js';
 
 const key = SAVE_KEY;
 const legacyKeys = ['vfm_gold_save_v510','vfm_gold_save_v500','vfm_gold_save_v490','vfm_gold_save_v480','vfm_gold_save_v470','vfm_gold_save_v460','vfm_gold_save_v450','vfm_gold_save_v440', 'vfm_gold_save_v430', 'vfm_gold_save_v420', 'vfm_gold_save_v410', 'vfm_gold_save_v400', 'vfm_gold_save_v390', 'vfm_gold_save_v370', 'vfm_gold_save_v360', 'vfm_gold_save_v350', 'vfm_gold_save_v340', 'vfm_gold_save_v330', 'vfm_gold_save_v320', 'vfm_gold_save_v310', 'vfm_gold_save_v300', 'vfm_gold_save_v290', 'vfm_gold_save_v280', 'vfm_gold_save_v270', 'vfm_gold_save_v262', 'vfm_gold_save_v261', 'vfm_gold_save_v260', 'vfm_gold_save_v251', 'vfm_gold_save_v240', 'vfm_gold_save_v230', 'vfm_gold_save_v220', 'vfm_gold_save_v210', 'vfm_gold_save_v200', 'vfm_gold_save_v190', 'vfm_gold_save_v180', 'vfm_gold_save_v170', 'vfm_gold_save_v160', 'vfm_gold_save_v150', 'vfm_gold_save_v140', 'vfm_gold_save_v130', 'vfm_gold_save_v120', 'vfm_gold_save_v110', 'vfm_gold_save_v100', 'vfm_gold_save_v090', 'vfm_gold_save_v080', 'vfm_gold_save_v050', 'vfm_gold_save_v040', 'vfm_gold_save_v030', 'vfm_gold_save_v020', 'vfm_gold_save_v010'];
@@ -58,9 +59,9 @@ export const defaultState = () => ({
   career:{ currentDate:'2026-05-19', matchday:1, completedMatches:[], lastResult:null, promotionRelegation:{serieARelegation:4,serieBPromotion:4,libertadoresTop:5,sulamericanaRange:[6,12],serieBRelegation:4}, integrationLog:['Carreira migrada para v5.1.0 com save profissional, múltiplos slots, backups automáticos e recuperação de carreira.'], jobOffers:[], offerHistory:[], jobMarket:null, nationalTeamJob:null, dualCareer:{enabled:false, club:true, nationalTeam:null}, callUpSelection:defaultCallUpSelection(), internationalCalendar:buildNationalCalendar(2026, 'brasil'), managerProfile:null, activeContract:null, contractHistory:[], titleHistory:[], sackRiskLog:[], managerTimeline:[], unlockedMilestones:[], boardRelationship:76, fanRelationship:82, dressingRoomTrust:69, mediaPressure:54, worldCompetitionCycle:{libertadores:true,sulamericana:true,clubWorldCupCycle:4,worldCupCycle:4,lastUpdated:'v4.3.0'}, financeReport:{profile:'balanced', lastMonthlyCycle:null, crisisLog:[], boardWarnings:[], sponsorReview:'v3.5.0'}, tutorial:{seen:false, step:1, completed:false}, missions:[], completedSeasons:0, seasonHistory:[], lifetimeEarnings:0, reputationHistory:[], activeStory:['Bem-vindo ao modo carreira: jogue partidas, cumpra missões, aumente renda e reputação sem limite de temporadas.'], pressHistory:[], pressConference:null, managerProgression:null },
   gameplay:{ difficulty:'realistic', aiVersion:'v5.4.0', realism:88, variance:18, balanceLog:[] },
   stability:{ autosave:true, lastBackup:null, backupCount:0, lastExport:null, lastImport:null, safeModeEvents:0, health:'Excelente', auditVersion:SAVE_MANAGER_VERSION, saveManagerVersion:SAVE_MANAGER_VERSION, saveIntegrity:'ok', commercialAudit:'v3.7.0-ok', fullscreenMobile:true, overflowGuard:true, rosterSafeMode:true, matchEngineSafeMode:true, matchEngineVersion:'v4.7.0', matchStressTest:'passed-100', trainingEngineVersion:TRAINING_ENGINE_VERSION, trainingStressTest:'passed-4-weeks', transferEngineVersion:TRANSFER_ENGINE_VERSION, transferIntegrity:'pending' },
-  save:{ version:SAVE_MANAGER_VERSION, schema:780, activeSlot:'principal', slotLabel:'Carreira principal', careerStarted:false, migratedFrom:null, lastMigrationAt:null, exportCount:0, importCount:0, autosaveCheckpoints:[] },
+  save:{ version:SAVE_MANAGER_VERSION, schema:790, activeSlot:'principal', slotLabel:'Carreira principal', careerStarted:false, migratedFrom:null, lastMigrationAt:null, exportCount:0, importCount:0, autosaveCheckpoints:[] },
   roster:clubRosterPackage('santos'),
-  finance:{profile:'balanced', lastMonthlyCycle:null, crisisLog:[], boardWarnings:[], sponsorReview:'v3.5.0'},
+  finance:ensureFinanceState({profile:'balanced', cash:92.5, crisisLog:[], boardWarnings:[], sponsorReview:FINANCE_VERSION}, {clubId:'santos', money:92.5}),
   training:ensureTrainingState(),
   calendar:normalizeLiveCalendarState({currentDate:'2026-05-19'}),
   scouting:normalizeScoutingState({}, {clubId:'santos'}),
@@ -119,7 +120,7 @@ function normalize(next){
   merged.stability.saveManagerVersion = SAVE_MANAGER_VERSION;
   merged.save = {...base.save, ...(next?.save || {})};
   merged.save.version = SAVE_MANAGER_VERSION;
-  merged.save.schema = 780;
+  merged.save.schema = 790;
   merged.save.activeSlot = String(merged.save.activeSlot || 'principal').slice(0,32);
   merged.save.exportCount = Math.max(0, Number(merged.save.exportCount || 0));
   merged.save.importCount = Math.max(0, Number(merged.save.importCount || 0));
@@ -129,10 +130,13 @@ function normalize(next){
   if(normalizedRoster.length >= 11) merged.roster.players = normalizedRoster; else { merged.roster.players = base.roster.players; merged.roster.validationLog = [...(merged.roster.validationLog||[]), 'Roster importado recusado: menos de 11 jogadores validos.']; }
   merged.roster.meta = {...base.roster.meta, ...(merged.roster.meta || {})};
   if(!Array.isArray(merged.roster.validationLog)) merged.roster.validationLog = [];
-  merged.finance = {...(base.finance||{}), ...(next?.finance || {})};
-  if(!['conservative','balanced','aggressive'].includes(merged.finance.profile)) merged.finance.profile = 'balanced';
-  if(!Array.isArray(merged.finance.crisisLog)) merged.finance.crisisLog = [];
-  if(!Array.isArray(merged.finance.boardWarnings)) merged.finance.boardWarnings = [];
+  merged.finance = ensureFinanceState({...(base.finance||{}), ...(next?.finance || {})}, merged);
+  const financeSnap = buildFinanceSnapshot(merged);
+  merged.finance.health = financeSnap.health;
+  merged.finance.monthlyBalance = financeSnap.monthlyBalance;
+  merged.finance.sponsorSatisfaction = financeSnap.sponsorSatisfaction;
+  merged.money = Number(merged.finance.cash ?? merged.money ?? 0);
+  merged.stability.financeVersion = FINANCE_VERSION;
   merged.scouting = normalizeScoutingState({...(base.scouting||{}), ...(next?.scouting || {})}, merged);
   merged.stability.scoutingVersion = SCOUTING_VERSION;
   merged.staff = ensureStaffState({...(base.staff||{}), ...(next?.staff || {})}, merged);
@@ -247,9 +251,10 @@ export function startCareer(){
     transfer: ensureTransferLedger({...(state.transfer || {}), budget: Number((transferBudget * 0.45).toFixed(1)), wageRoom: Math.max(0.8, Number((transferBudget/40).toFixed(2))), acceptedDeals:[], rejectedDeals:[], outgoingDeals:[], renewals:[], loanDeals:[], incomingOffers:[], aiDeals:[], agentEvents:[], smartReports:[], marketDay:1}),
     ui:{...state.ui, selectedClub:chosenClub, standingsCompetition:chosenTeam?.leagueId || 'brasileirao-a', ...starters},
     route:'lobby',
+    finance: ensureFinanceState({cash:Number(chosenTeam?.budget || state.money || 40), profile:'balanced', ledger:[`Fase 62: financeiro profundo iniciado para ${chosenTeam?.name || chosenClub}.`]}, {clubId:chosenClub, ui:{selectedClub:chosenClub}, money:Number(chosenTeam?.budget || state.money || 40)}),
     scouting: normalizeScoutingState({observerLog:[`Fase 59: scout profissional iniciado para ${chosenTeam?.name || chosenClub}.`]}, {clubId:chosenClub, ui:{selectedClub:chosenClub}}),
     staff: ensureStaffState({staffLog:[`Fase 61: comissão técnica viva iniciada para ${chosenTeam?.name || chosenClub}.`]}, {clubId:chosenClub, ui:{selectedClub:chosenClub}}),
-    save:{...(state.save||{}), version:SAVE_MANAGER_VERSION, schema:780, activeSlot:state.save?.activeSlot || 'principal', slotLabel:state.save?.slotLabel || slotLabel(state.save?.activeSlot || 'principal'), careerStarted:true}
+    save:{...(state.save||{}), version:SAVE_MANAGER_VERSION, schema:790, activeSlot:state.save?.activeSlot || 'principal', slotLabel:state.save?.slotLabel || slotLabel(state.save?.activeSlot || 'principal'), careerStarted:true}
   });
   persist();
 }
@@ -337,19 +342,21 @@ export function finishMatch(){
   career = progressionPatch.career;
   const xpPatch = already ? {} : awardManagerXpPatch({...state, manager:{...(state.manager||{}), reputation:progressionPatch.managerReputation}, career}, xpForMatchResult(result), `partida: ${result.summary}`, {match:result.id});
   const liveCalendarPatch = already ? {} : buildMatchCalendarPatch(state, result, current);
+  const financePatch = already ? {} : buildFinanceMatchPatch({...state, calendar:liveCalendarPatch.calendar || state.calendar}, result);
   state = normalize({
     ...state,
     match: {...current, nextMatchQueued:next || null, reportViewed:false},
     manager:{...(state.manager||{}), reputation:xpPatch.manager?.reputation ?? progressionPatch.managerReputation},
-    career: {...(xpPatch.career || career), integrationLog:[...(((xpPatch.career || career).integrationLog)||[]), ...((liveCalendarPatch.integrationLog)||[])].slice(-12)},
+    career: {...(xpPatch.career || career), integrationLog:[...(((xpPatch.career || career).integrationLog)||[]), ...((liveCalendarPatch.integrationLog)||[]), ...((financePatch.integrationLog)||[])].slice(-12)},
     training: liveCalendarPatch.training || state.training,
     calendar: liveCalendarPatch.calendar || state.calendar,
-    money: Number((Number(state.money || 0) + (already ? 0 : moneyBonus)).toFixed(1)),
+    finance: financePatch.finance || state.finance,
+    money: Number((Number(financePatch.money ?? state.money ?? 0) + (already ? 0 : moneyBonus)).toFixed(1)),
     boardTrust: Math.max(0, Math.min(100, Number(state.boardTrust || 76) + (already ? 0 : trustDelta))),
     fanMood: Math.max(0, Math.min(100, Number(state.fanMood || 82) + (already ? 0 : fanDelta))),
     notifications: Number(state.notifications || 0) + (already ? 0 : 1),
     gameplay:{...state.gameplay, balanceLog},
-    stability:{...(state.stability||{}), health:'Pós-jogo salvo com segurança', auditVersion:'v4.9.0'}
+    stability:{...(state.stability||{}), health:'Pós-jogo salvo com segurança', auditVersion:'v7.9.0', financeVersion:FINANCE_VERSION}
   });
   logIntegration(`Resultado integrado: ${result.competition} ${result.stage} terminou ${result.summary}. Relatório pós-jogo preservado antes do retorno ao lobby.`);
   persist();
@@ -1097,6 +1104,75 @@ export function runStaffMeeting(){
   });
   persist();
   return state.staff;
+}
+
+export function signFinanceSponsor(sponsorId=''){
+  const patch = signSponsorPatch(state, sponsorId);
+  state = normalize({
+    ...state,
+    finance:patch.finance,
+    money:patch.money ?? state.money,
+    notifications:patch.notifications ?? state.notifications,
+    career:{...(state.career||{}), integrationLog:[...((state.career||{}).integrationLog||[]), ...((patch.integrationLog)||[])].slice(-12)},
+    stability:{...(state.stability||{}), health:'Patrocínio atualizado', financeVersion:FINANCE_VERSION}
+  });
+  persist();
+  return state.finance;
+}
+
+export function setFinanceTicketPolicy(policyId='balanced'){
+  const patch = setTicketPolicyPatch(state, policyId);
+  state = normalize({
+    ...state,
+    finance:patch.finance,
+    fanMood:patch.fanMood ?? state.fanMood,
+    ui:patch.ui || state.ui,
+    career:{...(state.career||{}), integrationLog:[...((state.career||{}).integrationLog||[]), ...((patch.integrationLog)||[])].slice(-12)},
+    stability:{...(state.stability||{}), health:'Política de bilheteria atualizada', financeVersion:FINANCE_VERSION}
+  });
+  persist();
+  return state.finance;
+}
+
+export function simulateFinanceMatchday(){
+  const patch = simulateMatchdayRevenuePatch(state);
+  state = normalize({
+    ...state,
+    finance:patch.finance,
+    money:patch.money ?? state.money,
+    career:{...(state.career||{}), integrationLog:[...((state.career||{}).integrationLog||[]), ...((patch.integrationLog)||[])].slice(-12)},
+    stability:{...(state.stability||{}), health:'Bilheteria processada', financeVersion:FINANCE_VERSION}
+  });
+  persist();
+  return state.finance;
+}
+
+export function applyFinancePrize(prizeId='league-win'){
+  const patch = applyPrizeMoneyPatch(state, prizeId);
+  state = normalize({
+    ...state,
+    finance:patch.finance,
+    money:patch.money ?? state.money,
+    notifications:patch.notifications ?? state.notifications,
+    career:{...(state.career||{}), integrationLog:[...((state.career||{}).integrationLog||[]), ...((patch.integrationLog)||[])].slice(-12)},
+    stability:{...(state.stability||{}), health:'Premiação financeira aplicada', financeVersion:FINANCE_VERSION}
+  });
+  persist();
+  return state.finance;
+}
+
+export function runFinanceBoardMeeting(){
+  const patch = runFinanceBoardMeetingPatch(state);
+  state = normalize({
+    ...state,
+    finance:patch.finance,
+    transfer:patch.transfer || state.transfer,
+    boardTrust:patch.boardTrust ?? state.boardTrust,
+    career:{...(state.career||{}), integrationLog:[...((state.career||{}).integrationLog||[]), ...((patch.integrationLog)||[])].slice(-12)},
+    stability:{...(state.stability||{}), health:'Reunião financeira realizada', financeVersion:FINANCE_VERSION}
+  });
+  persist();
+  return state.finance;
 }
 
 export function getCareerLoopSnapshot(){

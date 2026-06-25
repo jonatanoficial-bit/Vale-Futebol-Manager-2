@@ -22,7 +22,7 @@ import { buildRoundRobin, flattenFixtures, deriveStandings, leagueZones, qualifi
 import { copaDoBrasilSnapshot } from '../systems/copaDoBrasilEngine.js';
 import { continentalCompetitions, worldCompetitions, nationalTeamCompetitions, buildWorldCalendar, continentalStatusForClub, nextGlobalCycle, qualificationRules, renderCompetitionLogo, worldCompetitionSummary, conmebolSeasonSnapshot, buildIntercontinentalSnapshot, validateIntercontinentalIntegrity } from '../systems/worldCompetitionEngine.js';
 import { financeProfiles } from '../data/financeData.js';
-import { buildFinanceSnapshot, boardObjectiveStatus, financeEventFeed } from '../systems/financeEngine.js';
+import { buildFinanceSnapshot, boardObjectiveStatus, financeEventFeed, renderFinanceCenterV790 } from '../systems/financeEngine.js';
 import { uxAuditChecklist, premiumPolishNotes, releaseReadiness } from '../data/uxData.js';
 import { buildUXAudit } from '../systems/uxEngine.js';
 import { regressionFixesV350 } from '../data/mobileAuditData.js';
@@ -128,7 +128,7 @@ function content(route,state={}){
   if(route==='copaDoBrasil') return copaDoBrasilScreenV410(state);
   if(route==='worldCompetitions') return worldCompetitionsScreenV430(state);
   if(route==='worldComplete') return renderWorldCompleteCenter(state);
-  if(route==='financeCenter') return financeCenterScreenV330(state);
+  if(route==='financeCenter') return renderFinanceCenterV790(state, 'overview');
   if(route==='polishCenter') return polishCenterScreenV500(state);
   if(route==='mobileAudit') return mobileAuditScreenV350(state);
   if(route==='data2026') return data2026ScreenV360(state);
@@ -186,7 +186,7 @@ function content(route,state={}){
   if(route==='nationalTeam') return nationalTeamScreenV310(state);
   if(route==='training') return trainingScreen(state);
   if(route==='staff') return staffScreen(state);
-  if(route==='sponsorship') return sponsorshipScreen(state);
+  if(route==='sponsorship') return renderFinanceCenterV790(state, 'sponsorship');
   if(route==='championship') {
     const cup = copaDoBrasilSnapshot(state);
     const compCards = competitions.map(c=>`<article class="competition-card ${c.color}">
@@ -304,7 +304,7 @@ function content(route,state={}){
     </section>`;
   }
 
-  if(route==='finances') return `<section class="grid grid-2"><div class="panel"><h3>Orçamento do clube</h3><div class="stat-line"><span>Saldo disponível</span><strong>€ 92.5M</strong></div><div class="stat-line"><span>Folha salarial mensal</span><strong>€ 5.32M</strong></div><div class="stat-line"><span>Receita projetada</span><strong>€ 128.4M</strong></div><div class="stat-line"><span>Risco financeiro</span><strong>Baixo</strong></div></div><div class="panel"><h3>Diretoria financeira</h3><p class="alert">Build v0.5 prepara o painel para que patrocínio, mercado e premiações influenciem o caixa nas próximas fases.</p><button class="main-btn" data-route="sponsorship">Ver patrocínios</button></div></section>`;
+  if(route==='finances') return renderFinanceCenterV790(state, 'finance');
   if(route==='contracts') {
     const alerts = contractAlerts.map(a=>`<div class="contract-alert-row"><div><strong>${a.player}</strong><small>${a.type} · ${a.action}</small></div><b>${a.months} meses</b><button class="secondary-btn mini">Analisar</button></div>`).join('');
     const wageRisk = squadPlayers.filter(p=>p.salary>200).map(p=>`<div class="stat-line"><span>${p.name}</span><strong>€ ${p.salary}k/mês</strong></div>`).join('');

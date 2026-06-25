@@ -6,6 +6,7 @@ import { renderSlotCompactBar } from '../systems/saveSlotsEngine.js';
 import { renderLiveCalendarStrip } from '../systems/liveCalendarEngine.js';
 import { renderScoutingRibbon } from '../systems/scoutingEngine.js';
 import { renderStaffRibbon } from '../systems/staffEngine.js';
+import { renderFinanceRibbon } from '../systems/financeEngine.js';
 
 export const PRIMARY_ACTIONS_V550 = [
   ['match','Jogar partida','⚽','Entrar no próximo compromisso oficial'],
@@ -52,10 +53,10 @@ export const MANAGER_MENU_GROUPS_V550 = [
     ['agentMarket','Empresários e Negociações','🤝','Conversas vivas, propostas rivais, comissões e fechamento seguro','v6.7'],
     ['contracts','Contratos','📝','Salários, vencimentos, luvas e renovações','Gestão'],
     ['contractRenewal','Renovação Contratual','📝','Promessas, multa, luvas, moral, salário e efeito dominó','v6.8'],
-    ['financeCenter','Economia','🏦','Diretoria, orçamento, patrocínio e crise','Novo'],
+    ['financeCenter','Finanças Profundas','🏦','Patrocínio, bilheteria, folha, premiações e crise','v7.9'],
     ['emotionalBoard','Diretoria Viva','🏦','Economia emocional, promessas, reuniões e autonomia','v6.6'],
-    ['finances','Financeiro','💼','Receitas, despesas e folha salarial','Diretoria'],
-    ['sponsorship','Patrocínio','🤝','Receitas comerciais e bônus','Finanças']
+    ['finances','Financeiro','💼','Caixa, receitas, despesas, folha e dívida','v7.9'],
+    ['sponsorship','Patrocínio','🤝','Propostas comerciais, bônus e satisfação','v7.9']
   ]],
   ['Carreira e mundo', [
     ['messages','E-mail','✉️','Diretoria, imprensa, empresários e seleção','Carreira'],
@@ -141,6 +142,7 @@ export function lobby(state){
       ${renderLiveCalendarStrip(state)}
       ${renderScoutingRibbon(state)}
       ${renderStaffRibbon(state)}
+      ${renderFinanceRibbon(state)}
 
       <section class="quick-actions-v550" aria-label="Ações principais">
         ${PRIMARY_ACTIONS_V550.map(([route,title,icon,desc])=>`<button class="card quick-action-v550" data-route="${route}"><span>${icon}</span><strong>${title}</strong><em>${desc}</em></button>`).join('')}

@@ -1,25 +1,27 @@
 {
-  "version": "v7.8.0",
-  "buildLabel": "Build v7.8.0 | 2026-06-24 16:58:22 BRT | Fase 61 Staff e Comissão Técnica Viva",
-  "phase": "Fase 61 — Staff e Comissão Técnica Viva",
+  "version": "v7.9.0",
+  "buildLabel": "Build v7.9.0 | 2026-06-24 17:11:11 BRT | Fase 62 Finanças, Patrocínio e Bilheteria Profunda",
+  "phase": "Fase 62 — Finanças, Patrocínio e Bilheteria Profunda",
   "dataPack": "2026.05.20",
-  "status": "staff-technical-commission-ready",
-  "generatedAt": "2026-06-24 16:58:22 BRT",
+  "status": "finance-sponsorship-ticketing-ready",
+  "generatedAt": "2026-06-24 17:11:11 BRT",
   "mandatoryFlow": "cover -> mainMenu/save slots -> newGame/teamSelect/confirmCareer or lobby",
   "playableSlots": [
     "principal",
     "career-2",
     "career-3"
   ],
-  "schema": 780,
+  "schema": 790,
   "majorSystems": [
     "3 save slots definitivos preservados",
-    "calendário vivo preservado",
+    "calendário vivo, viagens e fadiga preservados",
     "scout profissional preservado",
     "treino semanal realista preservado",
-    "staff vivo com auxiliar técnico, preparador físico, analista, médico, olheiro e preparador de goleiros",
-    "contratação de staff com orçamento mensal",
-    "foco semanal da comissão técnica",
-    "impacto real no treino, scout e partida"
+    "staff e comissão técnica viva preservados",
+    "financeiro profundo com caixa, dívida, folha e fluxo mensal",
+    "patrocínios ativos e propostas comerciais negociáveis",
+    "bilheteria com política de ingresso, ocupação e renda líquida de estádio",
+    "premiações por resultado e integração pós-jogo",
+    "pressão financeira, risco de crise e reunião da diretoria"
   ]
 }

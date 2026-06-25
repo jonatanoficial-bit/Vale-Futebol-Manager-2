@@ -1,0 +1,26 @@
+/* v7.9.0 Fase 62 — Finanças, Patrocínio e Bilheteria Profunda */
+.finance-ribbon-v790{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:12px 0;border:1px solid rgba(245,199,92,.22);background:linear-gradient(135deg,rgba(42,33,13,.88),rgba(8,16,28,.9));}
+.finance-v790{display:flex;flex-direction:column;gap:16px;padding-bottom:90px;}
+.finance-hero-v790{display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:150px;background:radial-gradient(circle at top left,rgba(245,199,92,.24),transparent 34%),linear-gradient(135deg,rgba(14,28,45,.96),rgba(6,10,18,.96));border:1px solid rgba(245,199,92,.22);}
+.finance-hero-v790 h1{margin:.2rem 0;font-size:clamp(1.45rem,3.2vw,2.4rem);}
+.finance-hero-actions-v790{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
+.finance-list-v790,.finance-sponsor-list-v790,.finance-proposal-list-v790,.finance-objective-list-v790,.finance-crisis-list-v790,.finance-ledger-v790{display:flex;flex-direction:column;gap:10px;}
+.finance-row-v790,.finance-sponsor-card-v790,.finance-proposal-v790,.finance-objective-v790,.finance-crisis-v790,.finance-ledger-line-v790{border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:12px;background:rgba(255,255,255,.045);}
+.finance-row-v790,.finance-sponsor-card-v790,.finance-proposal-v790,.finance-objective-v790{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.finance-row-v790 small,.finance-sponsor-card-v790 small,.finance-proposal-v790 small,.finance-objective-v790 small{display:block;opacity:.72;margin-top:4px;}
+.finance-proposal-v790.locked{opacity:.55;filter:saturate(.7);}
+.finance-proposal-v790.available{border-color:rgba(96,210,146,.35);box-shadow:inset 0 0 0 1px rgba(96,210,146,.08);}
+.finance-ticket-grid-v790{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px;}
+.finance-ticket-card-v790{border:1px solid rgba(255,255,255,.12);border-radius:16px;background:rgba(255,255,255,.05);color:inherit;text-align:left;padding:12px;cursor:pointer;min-height:96px;}
+.finance-ticket-card-v790.active{border-color:rgba(245,199,92,.5);background:rgba(245,199,92,.12);}
+.finance-ticket-card-v790 span{display:block;font-size:1.2rem;font-weight:800;margin:5px 0;}
+.finance-stadium-v790{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+.finance-stadium-v790>div,.finance-pressure-v790>div{border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:12px;background:rgba(0,0,0,.18);}
+.finance-stadium-v790 span,.finance-pressure-v790 span{display:block;opacity:.75;font-size:.82rem;}
+.finance-stadium-v790 strong,.finance-pressure-v790 b{font-size:1.25rem;}
+.finance-pressure-v790{display:flex;flex-direction:column;gap:10px;}
+.finance-crisis-v790{border-color:rgba(255,122,122,.3);}
+.finance-crisis-v790.safe{border-color:rgba(96,210,146,.3);}
+.finance-objective-v790 em{display:block;font-style:normal;opacity:.75;text-align:right;}
+.finance-ledger-line-v790{font-size:.92rem;line-height:1.35;}
+@media(max-width:760px){.finance-ribbon-v790,.finance-hero-v790,.finance-row-v790,.finance-sponsor-card-v790,.finance-proposal-v790,.finance-objective-v790{align-items:stretch;flex-direction:column;}.finance-hero-actions-v790{justify-content:stretch}.finance-hero-actions-v790 button{width:100%;}.finance-ticket-grid-v790,.finance-stadium-v790{grid-template-columns:1fr;}}

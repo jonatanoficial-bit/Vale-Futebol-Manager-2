@@ -1,14 +1,5 @@
-VALE FUTEBOL MANAGER — AUDITORIA v7.8.0 FASE 61
-
-Status: OK
-Arquivos JS/core verificados: 215
-Comando: find js core -name '*.js' -print0 | xargs -0 -n1 node --check
-
-Validações adicionais:
-- validateStaffSystem: OK
-- buildStaffSnapshot: OK
-- integração staff -> treino: OK
-- integração staff -> scout: OK
-- integração staff -> partida: OK
-
-Observação: homologação visual/manual ainda recomendada em Android, iOS, desktop e PWA instalada.
+VALE FUTEBOL MANAGER — AUDITORIA v7.9.0 FASE 62
+Data: 2026-06-24 17:11:11 BRT
+JS/core node --check: 216 arquivos OK
+Smoke test financeiro: OK
+Schema: 790
