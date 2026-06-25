@@ -1,0 +1,503 @@
+{
+  "version": "v8.0.0",
+  "phase": "Fase 63 — Beta Profissional / Consolidação Geral",
+  "generatedAt": "2026-06-25 15:58:00 BRT",
+  "status": "OK",
+  "betaScore": 98,
+  "duplicateRoutesRemoved": 5,
+  "routeSmoke": {
+    "tested": 22,
+    "failed": 0,
+    "routes": [
+      {
+        "route": "cover",
+        "ok": true,
+        "htmlLength": 1315
+      },
+      {
+        "route": "mainMenu",
+        "ok": true,
+        "htmlLength": 4891
+      },
+      {
+        "route": "newGame",
+        "ok": true,
+        "htmlLength": 9509
+      },
+      {
+        "route": "teamSelect",
+        "ok": true,
+        "htmlLength": 57628
+      },
+      {
+        "route": "confirmCareer",
+        "ok": true,
+        "htmlLength": 3018
+      },
+      {
+        "route": "lobby",
+        "ok": true,
+        "htmlLength": 9835
+      },
+      {
+        "route": "managerMenu",
+        "ok": true,
+        "htmlLength": 16981
+      },
+      {
+        "route": "match",
+        "ok": true,
+        "htmlLength": 17043
+      },
+      {
+        "route": "pressConference",
+        "ok": true,
+        "htmlLength": 3824
+      },
+      {
+        "route": "betaProfessional",
+        "ok": true,
+        "htmlLength": 8819
+      },
+      {
+        "route": "saveSlotsV2",
+        "ok": true,
+        "htmlLength": 8671
+      },
+      {
+        "route": "calendar",
+        "ok": true,
+        "htmlLength": 12111
+      },
+      {
+        "route": "academyScouting",
+        "ok": true,
+        "htmlLength": 11062
+      },
+      {
+        "route": "training",
+        "ok": true,
+        "htmlLength": 20653
+      },
+      {
+        "route": "staff",
+        "ok": true,
+        "htmlLength": 16759
+      },
+      {
+        "route": "financeCenter",
+        "ok": true,
+        "htmlLength": 15007
+      },
+      {
+        "route": "finances",
+        "ok": true,
+        "htmlLength": 15004
+      },
+      {
+        "route": "sponsorship",
+        "ok": true,
+        "htmlLength": 15007
+      },
+      {
+        "route": "squad",
+        "ok": true,
+        "htmlLength": 52002
+      },
+      {
+        "route": "formation",
+        "ok": true,
+        "htmlLength": 15382
+      },
+      {
+        "route": "transfers",
+        "ok": true,
+        "htmlLength": 29971
+      },
+      {
+        "route": "messages",
+        "ok": true,
+        "htmlLength": 12673
+      }
+    ]
+  },
+  "systemChecks": {
+    "betaProfessional": {
+      "ok": true,
+      "status": "ok",
+      "errors": [],
+      "warnings": [],
+      "phase": "v8.0.0-beta-professional-consolidation",
+      "checkedAt": "runtime"
+    },
+    "saveSlots": {
+      "ok": true,
+      "errors": [],
+      "warnings": [],
+      "phase": "v7.4.0-save-slots-2-3-slots-definitive",
+      "checkedAt": "runtime"
+    },
+    "liveCalendar": {
+      "ok": true,
+      "status": "ok",
+      "errors": [],
+      "warnings": [],
+      "phase": "v7.5.0-live-calendar-travel-fatigue",
+      "checkedAt": "runtime"
+    },
+    "scouting": {
+      "ok": true,
+      "status": "ok",
+      "errors": [],
+      "warnings": [],
+      "phase": "v7.6.0-scout-observers-recruitment",
+      "checkedAt": "runtime"
+    },
+    "weeklyTraining": {
+      "ok": true,
+      "status": "ok",
+      "errors": [],
+      "warnings": [],
+      "phase": "v7.7.0-weekly-training-realistic",
+      "checkedAt": "runtime"
+    },
+    "staff": {
+      "ok": true,
+      "status": "ok",
+      "errors": [],
+      "warnings": [],
+      "phase": "v7.8.0-staff-technical-commission",
+      "checkedAt": "runtime"
+    },
+    "finance": {
+      "ok": true,
+      "status": "ok",
+      "errors": [],
+      "warnings": [],
+      "phase": "v7.9.0-finance-sponsorship-ticketing",
+      "checkedAt": "runtime"
+    }
+  },
+  "betaSnapshot": {
+    "version": "v8.0.0",
+    "schema": 800,
+    "generatedAt": "2026-06-25 15:58:00 BRT",
+    "systems": [
+      {
+        "id": "save-slots",
+        "label": "Save Slots 2.0",
+        "ok": true,
+        "status": "ok",
+        "errors": [],
+        "warnings": [],
+        "phase": "v7.4.0-save-slots-2-3-slots-definitive"
+      },
+      {
+        "id": "calendar",
+        "label": "Calendário Vivo",
+        "ok": true,
+        "status": "ok",
+        "errors": [],
+        "warnings": [],
+        "phase": "v7.5.0-live-calendar-travel-fatigue"
+      },
+      {
+        "id": "scout",
+        "label": "Scout/Recrutamento",
+        "ok": true,
+        "status": "ok",
+        "errors": [],
+        "warnings": [],
+        "phase": "v7.6.0-scout-observers-recruitment"
+      },
+      {
+        "id": "training",
+        "label": "Treino Semanal",
+        "ok": true,
+        "status": "ok",
+        "errors": [],
+        "warnings": [],
+        "phase": "v7.7.0-weekly-training-realistic"
+      },
+      {
+        "id": "staff",
+        "label": "Staff Vivo",
+        "ok": true,
+        "status": "ok",
+        "errors": [],
+        "warnings": [],
+        "phase": "v7.8.0-staff-technical-commission"
+      },
+      {
+        "id": "finance",
+        "label": "Finanças v7.9",
+        "ok": true,
+        "status": "ok",
+        "errors": [],
+        "warnings": [],
+        "phase": "v7.9.0-finance-sponsorship-ticketing"
+      },
+      {
+        "id": "career-flow",
+        "label": "Fluxo de Carreira",
+        "ok": true,
+        "status": "ok",
+        "errors": [],
+        "warnings": [],
+        "phase": "v8.0.0-cover-slots-lobby-flow"
+      },
+      {
+        "id": "match-flow",
+        "label": "Partida/Pós-jogo",
+        "ok": true,
+        "status": "ok",
+        "errors": [],
+        "warnings": [],
+        "phase": "v8.0.0-match-critical-flow"
+      },
+      {
+        "id": "mobile-menu",
+        "label": "Mobile/Menu",
+        "ok": true,
+        "status": "ok",
+        "errors": [],
+        "warnings": [],
+        "phase": "v8.0.0-mobile-menu-consolidation"
+      }
+    ],
+    "overallScore": 98,
+    "systemScore": 100,
+    "flowScore": 100,
+    "mobileScore": 96,
+    "menuScore": 95,
+    "menuRoutesVisible": 48,
+    "menuRoutesTotalBeforeCleanup": 53,
+    "duplicateRoutesRemoved": 5,
+    "requiredRoutesTotal": 22,
+    "requiredRoutesOk": 22,
+    "requiredRoutes": [
+      "cover",
+      "mainMenu",
+      "newGame",
+      "teamSelect",
+      "confirmCareer",
+      "lobby",
+      "managerMenu",
+      "match",
+      "pressConference",
+      "saveSlotsV2",
+      "calendar",
+      "academyScouting",
+      "training",
+      "staff",
+      "financeCenter",
+      "finances",
+      "sponsorship",
+      "squad",
+      "formation",
+      "transfers",
+      "messages",
+      "betaProfessional"
+    ],
+    "gates": [
+      {
+        "id": "career-flow",
+        "label": "Fluxo de carreira",
+        "critical": true,
+        "route": "mainMenu"
+      },
+      {
+        "id": "save-slots",
+        "label": "3 slots reais",
+        "critical": true,
+        "route": "saveSlotsV2"
+      },
+      {
+        "id": "calendar-fatigue",
+        "label": "Calendário e fadiga",
+        "critical": true,
+        "route": "calendar"
+      },
+      {
+        "id": "scouting",
+        "label": "Scout profissional",
+        "critical": true,
+        "route": "academyScouting"
+      },
+      {
+        "id": "weekly-training",
+        "label": "Treino semanal",
+        "critical": true,
+        "route": "training"
+      },
+      {
+        "id": "staff",
+        "label": "Comissão técnica",
+        "critical": true,
+        "route": "staff"
+      },
+      {
+        "id": "finance",
+        "label": "Finanças profundas",
+        "critical": true,
+        "route": "financeCenter"
+      },
+      {
+        "id": "match",
+        "label": "Partida e pós-jogo",
+        "critical": true,
+        "route": "match"
+      },
+      {
+        "id": "mobile",
+        "label": "Mobile-first",
+        "critical": true,
+        "route": "mobileAudit"
+      },
+      {
+        "id": "release",
+        "label": "Divulgação Beta",
+        "critical": false,
+        "route": "betaProfessional"
+      }
+    ],
+    "manualFlow": [
+      "Abrir capa e conferir build v8.0.0 visível.",
+      "Entrar na central de saves sem carregar lobby automaticamente.",
+      "Criar carreira nova no slot 2 e confirmar clube/avatar.",
+      "Salvar e sair da carreira; voltar para a central sem confusão.",
+      "Carregar o slot salvo e abrir lobby.",
+      "Abrir calendário, aplicar treino leve/pesado e conferir fadiga.",
+      "Abrir scout, gerar relatório e adicionar atleta à lista de desejos.",
+      "Abrir treino semanal, trocar preset e conferir impacto.",
+      "Abrir staff, contratar membro e mudar foco da comissão.",
+      "Abrir finanças, alterar política de ingresso e simular bilheteria.",
+      "Iniciar partida, avançar, finalizar e conferir pós-jogo/premiação.",
+      "Testar menu completo no celular em retrato e paisagem."
+    ],
+    "mobileReady": true,
+    "saveSlotsLocked": true,
+    "saveSlots": {
+      "version": "v7.4.0",
+      "maxSlots": 3,
+      "activeSlot": "principal",
+      "activeSlotLabel": "Carreira principal",
+      "careerStarted": false,
+      "occupied": 0,
+      "free": 3,
+      "slots": [
+        {
+          "id": "principal",
+          "label": "Carreira principal",
+          "badge": "Principal",
+          "order": 1,
+          "description": "Slot oficial 1: carreira principal do jogador.",
+          "slot": "principal",
+          "occupied": false,
+          "active": true,
+          "slotLabel": "Carreira principal",
+          "manager": null,
+          "clubId": null,
+          "season": null,
+          "matchday": null,
+          "completedMatches": null,
+          "careerStarted": false,
+          "createdAt": null,
+          "updatedAt": null,
+          "health": "OK"
+        },
+        {
+          "id": "career-2",
+          "label": "Carreira 2",
+          "badge": "Slot 2",
+          "order": 2,
+          "description": "Slot oficial 2: outra carreira sem apagar a principal.",
+          "slot": "career-2",
+          "occupied": false,
+          "active": false,
+          "slotLabel": "Carreira 2",
+          "manager": null,
+          "clubId": null,
+          "season": null,
+          "matchday": null,
+          "completedMatches": null,
+          "careerStarted": false,
+          "createdAt": null,
+          "updatedAt": null,
+          "health": "OK"
+        },
+        {
+          "id": "career-3",
+          "label": "Carreira 3",
+          "badge": "Slot 3",
+          "order": 3,
+          "description": "Slot oficial 3: desafio paralelo, seleção ou clube menor.",
+          "slot": "career-3",
+          "occupied": false,
+          "active": false,
+          "slotLabel": "Carreira 3",
+          "manager": null,
+          "clubId": null,
+          "season": null,
+          "matchday": null,
+          "completedMatches": null,
+          "careerStarted": false,
+          "createdAt": null,
+          "updatedAt": null,
+          "health": "OK"
+        }
+      ],
+      "firstOccupied": null,
+      "firstEmpty": "principal",
+      "integrity": {
+        "version": "v7.4.0",
+        "slots": 0,
+        "playableSlots": 3,
+        "freeSlots": 3,
+        "autosave": true,
+        "activeSlot": "principal",
+        "activeSlotLabel": "Carreira principal",
+        "hasAutoBackup": false,
+        "lastBackup": null,
+        "lastExport": null,
+        "lastImport": null,
+        "health": "Excelente",
+        "gates": [
+          {
+            "name": "3-slots-oficiais",
+            "status": "OK"
+          },
+          {
+            "name": "nao-auto-start",
+            "status": "OK"
+          },
+          {
+            "name": "nao-sobrescrever-sem-confirmar",
+            "status": "OK"
+          },
+          {
+            "name": "sair-salvando",
+            "status": "OK"
+          },
+          {
+            "name": "apagar-slot-isolado",
+            "status": "OK"
+          },
+          {
+            "name": "renomear-slot",
+            "status": "OK"
+          },
+          {
+            "name": "exportacao-json",
+            "status": "OK"
+          },
+          {
+            "name": "fallback-localstorage",
+            "status": "OK"
+          }
+        ]
+      }
+    },
+    "status": "ok"
+  }
+}

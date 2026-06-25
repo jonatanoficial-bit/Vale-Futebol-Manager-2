@@ -1,38 +1,50 @@
-# TEST REPORT — v7.9.0 / Fase 62
+# TEST REPORT — v8.0.0 / Fase 63
 
-Data: **2026-06-24 17:11:11 BRT**
+Data: **2026-06-25 15:58:00 BRT**
 
 ## Resultado
 
-Status: **APROVADO PARA TESTE MANUAL**
+Status: **APROVADO PARA HOMOLOGAÇÃO MANUAL**
 
-## Auditoria executada
+## Auditoria automatizada executada
 
 ```bash
-find js core -name '*.js' -type f | sort | xargs -I{} node --check {}
+find js core tools -name '*.js' -o -name '*.mjs' | sort | xargs -I{} node --check {}
 ```
 
-Resultado: **216 arquivos JavaScript/core verificados sem erro de sintaxe.**
+Resultado: **221 arquivos JavaScript/core/tools verificados sem erro de sintaxe.**
 
-## Smoke test financeiro
+## Auditoria Beta Profissional
 
-- `defaultState()` carregou sem erro.
-- `buildFinanceSnapshot()` retornou versão `v7.9.0` e schema `790`.
-- `validateFinanceV790System()` retornou `ok: true`.
-- `renderFinanceCenterV790()` retornou HTML funcional.
-- Ações financeiras principais foram executadas sem erro:
-  - política de ingresso;
-  - bilheteria;
-  - reunião financeira;
-  - fechamento de patrocinador.
+```bash
+node tools/audit_beta_professional_v800.mjs
+```
 
-## Itens para homologação manual
+Resultado: **OK**
 
-- Abrir jogo no PC e no mobile.
-- Conferir se o lobby não entra direto sem selecionar carreira.
-- Abrir Centro financeiro.
-- Testar fechar patrocínio.
-- Testar política popular/premium.
-- Processar bilheteria.
-- Rodar uma partida e conferir se matchday/premiação aparecem no livro financeiro.
-- Salvar, sair e reabrir o slot.
+- Score Beta: **98/100**.
+- Rotas renderizadas: **22**.
+- Falhas de rota: **0**.
+- Duplicatas visuais removidas do menu: **5**.
+- Schema principal: **800**.
+
+## Gates críticos
+
+- Save Slots 2.0: OK.
+- Calendário Vivo: OK.
+- Scout Profissional: OK.
+- Treino Semanal: OK.
+- Staff Vivo: OK.
+- Finanças Profundas: OK.
+- Fluxo de carreira: OK.
+- Partida/pós-jogo: OK em smoke render.
+- Mobile/menu: OK em auditoria estrutural.
+
+## Homologação manual obrigatória
+
+- Abrir no PC e no celular.
+- Confirmar que o jogo começa na capa/central de save, sem cair direto no lobby.
+- Criar, carregar, renomear e apagar slots.
+- Testar partida completa.
+- Testar calendário, scout, treino, staff e finanças.
+- Conferir rolagem e botões no mobile.

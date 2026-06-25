@@ -1,0 +1,20 @@
+/* Vale Futebol Manager v8.0.0 — Beta Profissional / Consolidação Geral */
+:root{--beta-ok:rgba(89,255,170,.18);--beta-warn:rgba(255,205,89,.18);--beta-danger:rgba(255,89,89,.18)}
+.beta-v800{display:grid;gap:18px;padding-bottom:92px}
+.beta-hero-v800{display:flex;align-items:center;justify-content:space-between;gap:18px;overflow:hidden;position:relative}
+.beta-hero-v800:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 10% 20%,rgba(255,217,120,.16),transparent 38%),radial-gradient(circle at 90% 0%,rgba(80,160,255,.12),transparent 34%);pointer-events:none}
+.beta-hero-v800>*{position:relative;z-index:1}.beta-hero-actions-v800{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.beta-score-v800{min-width:160px;text-align:center;border:1px solid rgba(255,255,255,.16);border-radius:22px;padding:16px;background:rgba(0,0,0,.24)}
+.beta-score-v800 strong{font-size:44px;line-height:1;color:var(--gold,#ffd86b);display:block}.beta-score-v800 span{font-size:12px;text-transform:uppercase;letter-spacing:.12em;opacity:.8}
+.beta-grid-v800{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.beta-card-v800{padding:14px;border-radius:18px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.20)}
+.beta-card-v800.ok{background:var(--beta-ok)}.beta-card-v800.warning{background:var(--beta-warn)}.beta-card-v800.error{background:var(--beta-danger)}
+.beta-card-v800 strong{display:block;font-size:22px}.beta-card-v800 small{display:block;opacity:.78;margin-top:4px}.beta-system-list-v800{display:grid;gap:10px}
+.beta-system-row-v800{display:grid;grid-template-columns:1.2fr auto auto;align-items:center;gap:10px;padding:12px;border:1px solid rgba(255,255,255,.1);border-radius:16px;background:rgba(255,255,255,.04)}
+.beta-system-row-v800.ok{box-shadow:inset 4px 0 0 rgba(90,255,170,.55)}.beta-system-row-v800.warning{box-shadow:inset 4px 0 0 rgba(255,205,89,.65)}.beta-system-row-v800.error{box-shadow:inset 4px 0 0 rgba(255,89,89,.65)}
+.beta-route-grid-v800{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}.beta-route-pill-v800{padding:9px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.20);font-size:12px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.beta-menu-note-v800{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.beta-menu-note-v800 div{border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:12px;background:rgba(255,255,255,.04)}
+.beta-checklist-v800{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.beta-check-v800{padding:12px;border-radius:16px;background:rgba(0,0,0,.20);border:1px solid rgba(255,255,255,.1)}
+.beta-check-v800:before{content:"✓";color:var(--gold,#ffd86b);font-weight:800;margin-right:8px}.beta-footer-v800{font-size:12px;opacity:.78;text-align:center}
+.manager-menu-shell-v550 .menu-tile[data-beta-duplicate="true"]{display:none!important}.manager-menu-shell-v550 .menu-group-v550{scroll-margin-top:88px}
+@media(max-width:900px){.beta-hero-v800{display:grid}.beta-score-v800{min-width:0}.beta-grid-v800{grid-template-columns:repeat(2,minmax(0,1fr))}.beta-route-grid-v800{grid-template-columns:repeat(3,minmax(0,1fr))}.beta-menu-note-v800,.beta-checklist-v800{grid-template-columns:1fr}.beta-system-row-v800{grid-template-columns:1fr auto}.beta-system-row-v800 small{grid-column:1/-1}.beta-hero-actions-v800{justify-content:stretch}.beta-hero-actions-v800 button{flex:1 1 140px}}
+@media(max-width:520px){.beta-grid-v800{grid-template-columns:1fr}.beta-route-grid-v800{grid-template-columns:repeat(2,minmax(0,1fr))}}

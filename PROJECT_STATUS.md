@@ -1,32 +1,35 @@
-# PROJECT STATUS — v7.9.0 / Fase 62
+# PROJECT STATUS — v8.0.0 / Fase 63
 
-Gerado em: **2026-06-24 17:11:11 BRT**
+Gerado em: **2026-06-25 15:58:00 BRT**
 
 ## Status
 
-Build completo do **Vale Futebol Manager v7.9.0** pronto para teste manual e upload.
+Build completo do **Vale Futebol Manager v8.0.0 Beta Profissional** pronto para homologação manual e upload.
+
+## Objetivo da fase
+
+Consolidar a base v7.9.0 em uma versão beta realmente jogável, com menu mais limpo, rotas principais organizadas, sistemas críticos preservados e auditoria final antes de divulgação.
 
 ## Sistemas preservados
 
-- Save Slots 2.0 definitivo — schema anterior preservado e migrado para 790.
-- Calendário Vivo, viagens, fadiga e recuperação.
-- Scout profissional, observadores, relatórios e lista de desejos.
-- Treino semanal realista com microciclo de 7 dias.
-- Staff e comissão técnica viva.
+- Fase 57: Save Slots 2.0 e fluxo de carreira definitivo.
+- Fase 58: Calendário vivo, viagens e fadiga.
+- Fase 59: Scout, observadores e recrutamento profundo.
+- Fase 60: Treino semanal realista.
+- Fase 61: Staff e comissão técnica viva.
+- Fase 62: Finanças, patrocínio e bilheteria profunda.
 
 ## Novo sistema principal
 
-**Fase 62 — Finanças, Patrocínio e Bilheteria Profunda**
+**Fase 63 — Beta Profissional / Consolidação Geral**
 
-- Caixa, dívida, folha e teto salarial.
-- Fluxo de receitas e despesas mensais.
-- Patrocínios ativos e propostas negociáveis.
-- Bilheteria com política de ingresso e ocupação.
-- Premiações e bônus esportivos.
-- Pressão financeira, crise, reunião de diretoria e limite de mercado.
+- Centro Beta Profissional.
+- Quality gates por sistema crítico.
+- Deduplicação visual de atalhos repetidos no menu completo.
+- Manifest e build-info atualizados para v8.0.0.
+- Schema principal atualizado para 800.
+- Roteiro manual final de homologação PC + mobile.
 
 ## Próxima fase recomendada
 
-**v8.0.0 — Fase 63: Beta Profissional / Consolidação Geral**
-
-Foco: limpar telas, reduzir botões duplicados, organizar menus, corrigir bugs, testar mobile e preparar versão jogável para divulgação.
+Depois de testar no celular e no PC: **v8.0.1 — Hotfix de Homologação**, apenas corrigindo erros reais encontrados no teste manual.

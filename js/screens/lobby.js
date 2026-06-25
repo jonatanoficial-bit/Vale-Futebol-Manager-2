@@ -71,6 +71,7 @@ export const MANAGER_MENU_GROUPS_V550 = [
   ]],
   ['Sistema e desenvolvimento', [
     ['careerIntro','Jornada Inicial','🎬','Abertura cinematográfica e primeira sessão guiada','v6.1'],
+    ['betaProfessional','Beta Profissional','🚀','Auditoria v8.0, limpeza de menus, gates de publicação e roteiro final','v8.0'],
     ['releaseCandidate','Beta Pública','🚀','Checklist público, mobile real e fluxo de teste','v6.0'],
     ['saveSlotsV2','Slots de Carreira','💾','Continuar, criar, trocar, renomear e apagar carreiras','v7.4'],
     ['saveCenter','Save Técnico','🛡️','Backups, exportar/importar e recuperação','v5.1'],
@@ -85,6 +86,17 @@ export const MANAGER_MENU_GROUPS_V550 = [
     ['settings','Configurações','⚙️','Qualidade, sons, acessibilidade e segurança','Sistema']
   ]]
 ];
+
+
+function dedupeMenuGroupsV800(groups=[]){
+  const seen = new Set();
+  return groups.map(([group, items=[]]) => [group, items.map(item => {
+    const route = item[0];
+    if(seen.has(route)) return [...item, 'duplicate-v800'];
+    seen.add(route);
+    return item;
+  })]);
+}
 
 export function lobby(state){
   const t = teams.find(x => x.id === state.clubId) || teams[0];
@@ -173,6 +185,8 @@ export function lobby(state){
 
 export function managerMenu(state){
   const t = teams.find(x => x.id === state.clubId) || teams[0];
+  const displayGroups = dedupeMenuGroupsV800(MANAGER_MENU_GROUPS_V550);
+  try { window.__VFM_MANAGER_MENU_GROUPS__ = MANAGER_MENU_GROUPS_V550; } catch(e) {}
   return screenWrap('managerMenu', `
     <section class="manager-menu-shell-v550">
       <div class="premium-topbar panel lobby-topbar-v550">
@@ -180,11 +194,11 @@ export function managerMenu(state){
         <div class="top-status"><button class="secondary-btn mini" data-route="lobby">Voltar ao lobby</button><div class="resource">${t.name}</div></div>
       </div>
       <section class="menu-groups-v550">
-        ${MANAGER_MENU_GROUPS_V550.map(([group,items])=>`
+        ${displayGroups.map(([group,items])=>`
           <article class="panel menu-group-v550">
             <div class="row space"><h2>${group}</h2><span class="tag">${items.length} atalhos</span></div>
             <div class="menu-grid-v550">
-              ${items.map(([r,title,icon,desc,badge])=>`<button class="card menu-tile premium-tile" data-route="${r}"><span class="tile-badge">${badge}</span><span class="tile-icon">${icon}</span><strong>${title}</strong><span class="small">${desc}</span></button>`).join('')}
+              ${items.map(([r,title,icon,desc,badge,duplicate])=>`<button class="card menu-tile premium-tile" data-route="${r}" ${duplicate?'data-beta-duplicate="true" aria-hidden="true" tabindex="-1"':''}><span class="tile-badge">${badge}</span><span class="tile-icon">${icon}</span><strong>${title}</strong><span class="small">${desc}</span></button>`).join('')}
             </div>
           </article>`).join('')}
       </section>

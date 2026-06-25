@@ -1,0 +1,13 @@
+{
+  "version": "v8.0.0",
+  "phase": "Fase 63 — Beta Profissional / Consolidação Geral",
+  "generatedAt": "2026-06-25 15:58:00 BRT",
+  "schema": 800,
+  "fileCount": 1191,
+  "javascriptChecked": 221,
+  "routeSmokeTested": 22,
+  "routeSmokeFailed": 0,
+  "betaScore": 98,
+  "duplicateRoutesRemoved": 5,
+  "status": "OK - aprovado para homologação manual PC/mobile"
+}

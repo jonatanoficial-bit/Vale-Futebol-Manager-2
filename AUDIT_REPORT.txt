@@ -1,5 +1,8 @@
-VALE FUTEBOL MANAGER — AUDITORIA v7.9.0 FASE 62
-Data: 2026-06-24 17:11:11 BRT
-JS/core node --check: 216 arquivos OK
-Smoke test financeiro: OK
-Schema: 790
+VFM v8.0.0 Fase 63
+Status: OK
+JS/core/tools verificados: 221
+Imports ausentes: 0
+Index refs ausentes: 0
+Smoke de rotas: 22 OK / 0 falhas
+Score beta: 98/100
+Duplicatas visuais removidas: 5

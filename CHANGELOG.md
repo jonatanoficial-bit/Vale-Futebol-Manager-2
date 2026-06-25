@@ -1,3 +1,11 @@
+# v8.0.0 — Fase 63: Beta Profissional / Consolidação Geral
+
+- Auditoria geral dos sistemas críticos para divulgação beta.
+- Adicionado Centro Beta Profissional com score, gates, rotas e roteiro manual.
+- Menu completo consolidado com deduplicação visual de atalhos repetidos.
+- Build atualizado para v8.0.0, schema 800 e manifest PWA revisado.
+- Preservados Save Slots 2.0, Calendário Vivo, Scout, Treino Semanal, Staff Vivo e Finanças Profundas.
+
 # v7.9.0 — Fase 62: Finanças, Patrocínio e Bilheteria Profunda
 
 Data: 2026-06-24 17:11:11 BRT  

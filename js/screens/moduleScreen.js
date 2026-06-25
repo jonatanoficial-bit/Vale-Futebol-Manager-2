@@ -78,6 +78,7 @@ import { renderStadiumClimateCenter } from '../systems/stadiumClimateEngine.js';
 import { renderSaveSlotsV2Center } from '../systems/saveSlotsEngine.js';
 import { renderLiveCalendarCenter, renderLiveCalendarStrip } from '../systems/liveCalendarEngine.js';
 import { renderScoutingCenter, renderScoutingRibbon } from '../systems/scoutingEngine.js';
+import { renderBetaProfessionalCenter } from '../systems/betaProfessionalEngine.js';
 export function moduleScreen(route,title,subtitle,state){
   const extra = content(route, state);
   return screenWrap(route, `${topbar(title,subtitle,'lobby')}${clubHeader(state)}${extra}`, true);
@@ -128,6 +129,7 @@ function content(route,state={}){
   if(route==='copaDoBrasil') return copaDoBrasilScreenV410(state);
   if(route==='worldCompetitions') return worldCompetitionsScreenV430(state);
   if(route==='worldComplete') return renderWorldCompleteCenter(state);
+  if(route==='betaProfessional') return renderBetaProfessionalCenter(state, (typeof window !== 'undefined' && window.__VFM_MANAGER_MENU_GROUPS__) || []);
   if(route==='financeCenter') return renderFinanceCenterV790(state, 'overview');
   if(route==='polishCenter') return polishCenterScreenV500(state);
   if(route==='mobileAudit') return mobileAuditScreenV350(state);

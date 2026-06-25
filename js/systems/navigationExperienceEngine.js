@@ -15,7 +15,7 @@ export const ROUTE_SECTION_MAP_V560 = {
   training:'tactics', instructions:'tactics', academyScouting:'squad', staff:'menu', club:'menu',
   messages:'menu', careerOffers:'menu', nationalTeam:'menu', worldCompetitions:'menu', worldComplete:'menu',
   saveCenter:'menu', polishCenter:'menu', mobileAudit:'menu', data2026:'menu', database2026:'menu',
-  visualLibrary:'menu', dataPack2026:'menu', settings:'menu', aiBalance:'menu', assetChecklist:'menu', rosterUpdate:'menu'
+  visualLibrary:'menu', dataPack2026:'menu', settings:'menu', betaProfessional:'menu', aiBalance:'menu', assetChecklist:'menu', rosterUpdate:'menu'
 };
 
 export function applyNavigationExperienceShell(){

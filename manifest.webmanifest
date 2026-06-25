@@ -1,11 +1,11 @@
 {
-  "name": "Vale Futebol Manager v7.9.0",
-  "short_name": "VFM v7.9",
+  "name": "Vale Futebol Manager v8.0.0 Beta Profissional",
+  "short_name": "VFM v8.0",
   "start_url": "./index.html",
   "display": "fullscreen",
   "orientation": "any",
   "background_color": "#020407",
   "theme_color": "#05070a",
-  "description": "Vale Futebol Manager — Fase 62 Finanças, Patrocínio e Bilheteria Profunda",
+  "description": "Vale Futebol Manager — Fase 63 Beta Profissional / Consolidação Geral",
   "icons": []
 }
