@@ -1,24 +1,22 @@
 {
-  "version": "v8.0.1",
-  "buildLabel": "Build v8.0.1 | 2026-06-26 10:58:00 BRT | Hotfix Beta Profissional — Avatares reais nos slots de criação",
-  "phase": "Fase 63.1 — Hotfix Beta Profissional / Assets de Avatares",
+  "version": "v8.1.0",
+  "buildLabel": "Build v8.1.0 | 2026-06-26 11:18:00 BRT | Beta Profissional — Integridade de Assets, Avatares v810 e Cache Anti-Vercel",
+  "phase": "Fase 64 — Asset Integrity, Cache Buster e Homologação Visual Pós-Beta",
   "dataPack": "2026.05.20",
-  "status": "professional-beta-avatar-hotfix",
-  "generatedAt": "2026-06-26 10:58:00 BRT",
+  "status": "professional-beta-asset-integrity",
+  "generatedAt": "2026-06-26 11:18:00 BRT",
   "mandatoryFlow": "cover -> mainMenu/save slots -> newGame/teamSelect/confirmCareer or lobby",
   "playableSlots": [
     "principal",
     "career-2",
     "career-3"
   ],
-  "schema": 801,
+  "schema": 810,
   "majorSystems": [
-    "Hotfix visual corrigindo os 12 avatares do fluxo Criar Manager",
-    "Arquivos antigos manager-01..12 substituídos por PNGs distintos",
-    "Novos arquivos versionados manager-v801-01..12 para evitar cache do navegador/Vercel",
-    "Migração automática de saves antigos para caminhos manager-v801 quando aplicável",
-    "Save Slots 2.0 preservado",
-    "Calendário vivo, scout, treino, staff e finanças preservados",
-    "Auditoria de assets e JavaScript executada após o hotfix"
+    "Auditoria visual reforçada para assets críticos antes da divulgação beta",
+    "Avatares versionados manager-v810-01..12 e migração automática de v801/legado",
+    "Painel Assets & Cache com caminhos reais, previews e checklist pós-deploy Vercel",
+    "Quality gate de integridade de assets integrado ao Beta Profissional",
+    "Save Slots, Calendário, Scout, Treino, Staff e Finanças preservados"
   ]
 }

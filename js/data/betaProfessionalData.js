@@ -1,5 +1,5 @@
-export const BETA_PROFESSIONAL_VERSION = 'v8.0.1';
-export const BETA_PROFESSIONAL_SCHEMA = 801;
+export const BETA_PROFESSIONAL_VERSION = 'v8.1.0';
+export const BETA_PROFESSIONAL_SCHEMA = 810;
 export const BETA_PROFESSIONAL_GATES = [
   {id:'career-flow', label:'Fluxo de carreira', critical:true, route:'mainMenu'},
   {id:'save-slots', label:'3 slots reais', critical:true, route:'saveSlotsV2'},
@@ -10,12 +10,13 @@ export const BETA_PROFESSIONAL_GATES = [
   {id:'finance', label:'Finanças profundas', critical:true, route:'financeCenter'},
   {id:'match', label:'Partida e pós-jogo', critical:true, route:'match'},
   {id:'mobile', label:'Mobile-first', critical:true, route:'mobileAudit'},
+  {id:'assets', label:'Integridade de Assets', critical:true, route:'assetChecklist'},
   {id:'release', label:'Divulgação Beta', critical:false, route:'betaProfessional'}
 ];
 export const BETA_PROFESSIONAL_MANUAL_FLOW = [
-  'Abrir capa e conferir build v8.0.1 visível.',
+  'Abrir capa e conferir build v8.1.0 visível.',
   'Entrar na central de saves sem carregar lobby automaticamente.',
-  'Criar carreira nova no slot 2 e confirmar que os 12 avatares reais aparecem e o avatar escolhido segue para a confirmação.',
+  'Criar carreira nova no slot 2 e confirmar que os 12 avatares reais versionados v810 aparecem e o avatar escolhido segue para a confirmação.',
   'Salvar e sair da carreira; voltar para a central sem confusão.',
   'Carregar o slot salvo e abrir lobby.',
   'Abrir calendário, aplicar treino leve/pesado e conferir fadiga.',
@@ -28,5 +29,5 @@ export const BETA_PROFESSIONAL_MANUAL_FLOW = [
 ];
 export const BETA_PROFESSIONAL_ROUTE_GATES = [
   'cover','mainMenu','newGame','teamSelect','confirmCareer','lobby','managerMenu','match','pressConference',
-  'saveSlotsV2','calendar','academyScouting','training','staff','financeCenter','finances','sponsorship','squad','formation','transfers','messages','betaProfessional'
+  'saveSlotsV2','calendar','academyScouting','training','staff','financeCenter','finances','sponsorship','squad','formation','transfers','messages','assetChecklist','betaProfessional'
 ];

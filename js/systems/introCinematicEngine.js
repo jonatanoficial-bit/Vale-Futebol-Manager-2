@@ -29,7 +29,7 @@ export function buildIntroCinematicSnapshot(state={}){
     score,
     phase: INTRO_PUBLIC_STATUS_V610.phase,
     managerName: manager.name || 'Novo Manager',
-    managerAvatar: manager.avatar || 'assets/avatars/manager-v801-01.png',
+    managerAvatar: manager.avatar || 'assets/avatars/manager-v810-01.png',
     clubId: club.id,
     clubName: club.name,
     clubLeague: club.league,

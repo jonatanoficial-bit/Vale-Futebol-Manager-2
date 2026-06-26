@@ -1,3 +1,15 @@
+# v8.1.0 — Fase 64 — Asset Integrity, Cache Buster e Homologação Visual Pós-Beta
+
+- Adicionado painel **Assets & Cache** para auditoria visual real dentro do jogo.
+- Avatares da criação migrados para `manager-v810-01..12`.
+- Saves antigos `manager-01..12` e `manager-v801-01..12` são normalizados para v810.
+- `index.html` agora usa `js/app.js?v=810-asset-integrity` para reduzir risco de cache antigo no Vercel.
+- `asset-map.json` atualizado para v8.1.0.
+- Criados placeholders físicos para zerar referências ausentes do asset-map.
+- Auditoria: 223 JS/core/tools OK, 43 referências do index OK, 739 referências únicas do asset-map OK, 12 avatares v810 com 12 hashes únicos.
+
+---
+
 # v8.0.1 — Fase 63.1: Hotfix Beta Profissional / Avatares reais
 
 - Corrigido problema visual em que os 12 avatares do fluxo Criar Manager apareciam como o mesmo placeholder.

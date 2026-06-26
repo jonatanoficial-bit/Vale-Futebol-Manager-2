@@ -1,45 +1,24 @@
-# PROJECT STATUS — v8.0.1 / Fase 63.1
+# PROJECT STATUS — v8.1.0 / Fase 64
 
-Hotfix aplicado após homologação visual: os avatares do fluxo **Criar Manager** agora são 12 assets reais/distintos e versionados para evitar cache.
+Build completo do **Vale Futebol Manager v8.1.0 Beta Profissional** pronto para novo deploy.
 
-Status: **pronto para novo deploy no Vercel/GitHub**.
+## Foco da fase
 
-Relatório técnico: `PHASE_63_1_AVATAR_HOTFIX_REPORT.md`.
-
----
-
-# PROJECT STATUS — v8.0.0 / Fase 63
-
-Gerado em: **2026-06-25 15:58:00 BRT**
+Asset Integrity, Cache Buster e Homologação Visual Pós-Beta.
 
 ## Status
 
-Build completo do **Vale Futebol Manager v8.0.0 Beta Profissional** pronto para homologação manual e upload.
+**OK para upload GitHub/Vercel.**
 
-## Objetivo da fase
+## Auditoria
 
-Consolidar a base v7.9.0 em uma versão beta realmente jogável, com menu mais limpo, rotas principais organizadas, sistemas críticos preservados e auditoria final antes de divulgação.
+- JavaScript/core/tools: 223 arquivos com `node --check`, sem erro.
+- `index.html`: 43 referências, 0 ausentes.
+- `asset-map.json`: 739 referências únicas, 0 ausentes.
+- Avatares v810: 12 arquivos, 12 hashes únicos.
+- Placeholders físicos criados: 162 arquivos para paths futuros.
+- ZIP testado antes da entrega.
 
-## Sistemas preservados
+## Relatório principal
 
-- Fase 57: Save Slots 2.0 e fluxo de carreira definitivo.
-- Fase 58: Calendário vivo, viagens e fadiga.
-- Fase 59: Scout, observadores e recrutamento profundo.
-- Fase 60: Treino semanal realista.
-- Fase 61: Staff e comissão técnica viva.
-- Fase 62: Finanças, patrocínio e bilheteria profunda.
-
-## Novo sistema principal
-
-**Fase 63 — Beta Profissional / Consolidação Geral**
-
-- Centro Beta Profissional.
-- Quality gates por sistema crítico.
-- Deduplicação visual de atalhos repetidos no menu completo.
-- Manifest e build-info atualizados para v8.0.0.
-- Schema principal atualizado para 800.
-- Roteiro manual final de homologação PC + mobile.
-
-## Próxima fase recomendada
-
-Depois de testar no celular e no PC: **v8.0.1 — Hotfix de Homologação**, apenas corrigindo erros reais encontrados no teste manual.
+`PHASE_64_ASSET_INTEGRITY_REPORT.md`

@@ -71,7 +71,7 @@ export const MANAGER_MENU_GROUPS_V550 = [
   ]],
   ['Sistema e desenvolvimento', [
     ['careerIntro','Jornada Inicial','🎬','Abertura cinematográfica e primeira sessão guiada','v6.1'],
-    ['betaProfessional','Beta Profissional','🚀','Auditoria v8.0, limpeza de menus, gates de publicação e roteiro final','v8.0'],
+    ['betaProfessional','Beta Profissional','🚀','Auditoria v8.1, assets, menus, gates de publicação e roteiro final','v8.1'],
     ['releaseCandidate','Beta Pública','🚀','Checklist público, mobile real e fluxo de teste','v6.0'],
     ['saveSlotsV2','Slots de Carreira','💾','Continuar, criar, trocar, renomear e apagar carreiras','v7.4'],
     ['saveCenter','Save Técnico','🛡️','Backups, exportar/importar e recuperação','v5.1'],

@@ -1,0 +1,269 @@
+{
+  "generatedAt": "2026-06-26 11:18:00 BRT",
+  "version": "v8.1.0",
+  "phase": "Fase 64 — Asset Integrity, Cache Buster e Homologação Visual Pós-Beta",
+  "schema": 810,
+  "indexReferences": {
+    "total": 43,
+    "missing": 0,
+    "missingRefs": []
+  },
+  "assetMapReferences": {
+    "total": 853,
+    "unique": 739,
+    "missing": 0,
+    "missingSamples": []
+  },
+  "avatarSets": {
+    "legacy": {
+      "count": 12,
+      "exists": 12,
+      "uniqueHashes": 12,
+      "files": [
+        {
+          "path": "assets/avatars/manager-01.png",
+          "exists": true,
+          "size": 168925,
+          "sha256": "6ebf90e8df28effcacb106b29c2e77abd6b95b5960eba44a210269e6ce8919d9"
+        },
+        {
+          "path": "assets/avatars/manager-02.png",
+          "exists": true,
+          "size": 166496,
+          "sha256": "4c8a6932d56021f2fa19e3fd82ad41a70dc351485238604dadcdb4bb97c5bf78"
+        },
+        {
+          "path": "assets/avatars/manager-03.png",
+          "exists": true,
+          "size": 167321,
+          "sha256": "68ffcd331112aa3e7c3a96d5d8ce6e3bfe415c935243323f67d3fe86fab8ae90"
+        },
+        {
+          "path": "assets/avatars/manager-04.png",
+          "exists": true,
+          "size": 166461,
+          "sha256": "a0925af6cf9e688440c0e3d56ce5e2fe0d133fa04e7b8017b61171f80c088ebb"
+        },
+        {
+          "path": "assets/avatars/manager-05.png",
+          "exists": true,
+          "size": 162544,
+          "sha256": "e8a2a320346438ca5fc03cda20d57ba2a5e25e7d32a86f82d5b5e25f55aefcb8"
+        },
+        {
+          "path": "assets/avatars/manager-06.png",
+          "exists": true,
+          "size": 170047,
+          "sha256": "1878004ee92f6af8b8988cc777406e6a1d390cdb7b77682fa29017b9587e3239"
+        },
+        {
+          "path": "assets/avatars/manager-07.png",
+          "exists": true,
+          "size": 187867,
+          "sha256": "e882051f5d386443adae9f3d087519c8a7814ddcf563038ffe23871d6ce46de2"
+        },
+        {
+          "path": "assets/avatars/manager-08.png",
+          "exists": true,
+          "size": 179597,
+          "sha256": "f88032a352690b19ea8bcc71a33023293ee0134f2db3c7bf068b251f4d28f981"
+        },
+        {
+          "path": "assets/avatars/manager-09.png",
+          "exists": true,
+          "size": 144281,
+          "sha256": "92690bc5b555185145242066722748739e2a23f20071c0623926d0f19b6faf7e"
+        },
+        {
+          "path": "assets/avatars/manager-10.png",
+          "exists": true,
+          "size": 174161,
+          "sha256": "d3aa44c6e79b1bc8c79ba17b2f8fb45801e71a503d655d83818595baf8855db3"
+        },
+        {
+          "path": "assets/avatars/manager-11.png",
+          "exists": true,
+          "size": 172149,
+          "sha256": "84aaf81ffd1efaa7b08d7f60e7359893817997d6bce478932b219ac39109218b"
+        },
+        {
+          "path": "assets/avatars/manager-12.png",
+          "exists": true,
+          "size": 187404,
+          "sha256": "1cfff9ea1eef365ffc72cdad566c84a64e72398d3b3cf7191181d470358ab21e"
+        }
+      ]
+    },
+    "v801": {
+      "count": 12,
+      "exists": 12,
+      "uniqueHashes": 12,
+      "files": [
+        {
+          "path": "assets/avatars/manager-v801-01.png",
+          "exists": true,
+          "size": 168925,
+          "sha256": "6ebf90e8df28effcacb106b29c2e77abd6b95b5960eba44a210269e6ce8919d9"
+        },
+        {
+          "path": "assets/avatars/manager-v801-02.png",
+          "exists": true,
+          "size": 166496,
+          "sha256": "4c8a6932d56021f2fa19e3fd82ad41a70dc351485238604dadcdb4bb97c5bf78"
+        },
+        {
+          "path": "assets/avatars/manager-v801-03.png",
+          "exists": true,
+          "size": 167321,
+          "sha256": "68ffcd331112aa3e7c3a96d5d8ce6e3bfe415c935243323f67d3fe86fab8ae90"
+        },
+        {
+          "path": "assets/avatars/manager-v801-04.png",
+          "exists": true,
+          "size": 166461,
+          "sha256": "a0925af6cf9e688440c0e3d56ce5e2fe0d133fa04e7b8017b61171f80c088ebb"
+        },
+        {
+          "path": "assets/avatars/manager-v801-05.png",
+          "exists": true,
+          "size": 162544,
+          "sha256": "e8a2a320346438ca5fc03cda20d57ba2a5e25e7d32a86f82d5b5e25f55aefcb8"
+        },
+        {
+          "path": "assets/avatars/manager-v801-06.png",
+          "exists": true,
+          "size": 170047,
+          "sha256": "1878004ee92f6af8b8988cc777406e6a1d390cdb7b77682fa29017b9587e3239"
+        },
+        {
+          "path": "assets/avatars/manager-v801-07.png",
+          "exists": true,
+          "size": 187867,
+          "sha256": "e882051f5d386443adae9f3d087519c8a7814ddcf563038ffe23871d6ce46de2"
+        },
+        {
+          "path": "assets/avatars/manager-v801-08.png",
+          "exists": true,
+          "size": 179597,
+          "sha256": "f88032a352690b19ea8bcc71a33023293ee0134f2db3c7bf068b251f4d28f981"
+        },
+        {
+          "path": "assets/avatars/manager-v801-09.png",
+          "exists": true,
+          "size": 144281,
+          "sha256": "92690bc5b555185145242066722748739e2a23f20071c0623926d0f19b6faf7e"
+        },
+        {
+          "path": "assets/avatars/manager-v801-10.png",
+          "exists": true,
+          "size": 174161,
+          "sha256": "d3aa44c6e79b1bc8c79ba17b2f8fb45801e71a503d655d83818595baf8855db3"
+        },
+        {
+          "path": "assets/avatars/manager-v801-11.png",
+          "exists": true,
+          "size": 172149,
+          "sha256": "84aaf81ffd1efaa7b08d7f60e7359893817997d6bce478932b219ac39109218b"
+        },
+        {
+          "path": "assets/avatars/manager-v801-12.png",
+          "exists": true,
+          "size": 187404,
+          "sha256": "1cfff9ea1eef365ffc72cdad566c84a64e72398d3b3cf7191181d470358ab21e"
+        }
+      ]
+    },
+    "v810": {
+      "count": 12,
+      "exists": 12,
+      "uniqueHashes": 12,
+      "files": [
+        {
+          "path": "assets/avatars/manager-v810-01.png",
+          "exists": true,
+          "size": 168925,
+          "sha256": "6ebf90e8df28effcacb106b29c2e77abd6b95b5960eba44a210269e6ce8919d9"
+        },
+        {
+          "path": "assets/avatars/manager-v810-02.png",
+          "exists": true,
+          "size": 166496,
+          "sha256": "4c8a6932d56021f2fa19e3fd82ad41a70dc351485238604dadcdb4bb97c5bf78"
+        },
+        {
+          "path": "assets/avatars/manager-v810-03.png",
+          "exists": true,
+          "size": 167321,
+          "sha256": "68ffcd331112aa3e7c3a96d5d8ce6e3bfe415c935243323f67d3fe86fab8ae90"
+        },
+        {
+          "path": "assets/avatars/manager-v810-04.png",
+          "exists": true,
+          "size": 166461,
+          "sha256": "a0925af6cf9e688440c0e3d56ce5e2fe0d133fa04e7b8017b61171f80c088ebb"
+        },
+        {
+          "path": "assets/avatars/manager-v810-05.png",
+          "exists": true,
+          "size": 162544,
+          "sha256": "e8a2a320346438ca5fc03cda20d57ba2a5e25e7d32a86f82d5b5e25f55aefcb8"
+        },
+        {
+          "path": "assets/avatars/manager-v810-06.png",
+          "exists": true,
+          "size": 170047,
+          "sha256": "1878004ee92f6af8b8988cc777406e6a1d390cdb7b77682fa29017b9587e3239"
+        },
+        {
+          "path": "assets/avatars/manager-v810-07.png",
+          "exists": true,
+          "size": 187867,
+          "sha256": "e882051f5d386443adae9f3d087519c8a7814ddcf563038ffe23871d6ce46de2"
+        },
+        {
+          "path": "assets/avatars/manager-v810-08.png",
+          "exists": true,
+          "size": 179597,
+          "sha256": "f88032a352690b19ea8bcc71a33023293ee0134f2db3c7bf068b251f4d28f981"
+        },
+        {
+          "path": "assets/avatars/manager-v810-09.png",
+          "exists": true,
+          "size": 144281,
+          "sha256": "92690bc5b555185145242066722748739e2a23f20071c0623926d0f19b6faf7e"
+        },
+        {
+          "path": "assets/avatars/manager-v810-10.png",
+          "exists": true,
+          "size": 174161,
+          "sha256": "d3aa44c6e79b1bc8c79ba17b2f8fb45801e71a503d655d83818595baf8855db3"
+        },
+        {
+          "path": "assets/avatars/manager-v810-11.png",
+          "exists": true,
+          "size": 172149,
+          "sha256": "84aaf81ffd1efaa7b08d7f60e7359893817997d6bce478932b219ac39109218b"
+        },
+        {
+          "path": "assets/avatars/manager-v810-12.png",
+          "exists": true,
+          "size": 187404,
+          "sha256": "1cfff9ea1eef365ffc72cdad566c84a64e72398d3b3cf7191181d470358ab21e"
+        }
+      ]
+    }
+  },
+  "placeholderFilesCreated": {
+    "count": 162,
+    "report": "AUDIT_ASSET_PLACEHOLDER_FILES_CREATED_V810.json"
+  },
+  "javascriptAudit": {
+    "filesChecked": 221,
+    "command": "node --check js core tools",
+    "status": "ok"
+  },
+  "cssFiles": 41,
+  "buildManifest": "BUILD_MANIFEST_V810.json",
+  "sha256": "SHA256SUMS.txt",
+  "status": "ok"
+}
