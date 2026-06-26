@@ -5,7 +5,7 @@ import { activateSoundAmbiencePreset, stopSoundAmbience } from './soundAmbienceE
 import { playRealAudioCue, stopRealAudioPack, scanRealAudioAssets } from './realAudioPackEngine.js';
 import { getState, setState, setManager, setUI, startCareer, advanceMatch, finishMatch, setMatchSpeed, makeSubstitution, setMatchDecision, openTransferNegotiation, acceptTransferDeal, rejectTransferDeal, sellOutgoingPlayer, renewPlayerContract, loanTransferPlayer, generateIncomingOffer, respondIncomingOffer, simulateAIMarket, toggleTransferWindow, generateSmartIncomingOffer, simulateSmartAIMarket, triggerAgentEvent, setMatchAutoPlay, autoSelectBestLineup, setCaptain, setSetPieceTaker, applyRotationPlan, createManualBackup, restoreManualBackup, exportSaveText, importSaveText, toggleAutosave, exportRosterText, importRosterText, resetRosterToDefault, sampleRosterText, generateCareerOffers, respondCareerOffer, registerNationalInterest, toggleCallUpPlayer, finalizeNationalCallUp, completePostMatchAndReturnLobby, simulateBoardReview, renewManagerContract, simulateManagerDismissalRisk, simulateNextInternationalMatch, applyTrainingMicrocycle, signPreContract, openPreMatchPressConference, openPostMatchPressConference, answerPressConference, completePressConference, completeGuidedTutorialStep, completeGuidedTutorialForRoute, addManagerXp, setManagerSpecialty, loadSaveSlot, createNewCareerSlot, saveCurrentCareerSlot, deleteSaveSlot, renameSaveSlot, listSaveSlots, applyCalendarAction, applyWeeklyTrainingSession, setTrainingWeeklyPreset, generateScoutReport, assignScoutRegion, setScoutFocus, addScoutWishlist, removeScoutWishlist, hireStaffMember, setStaffFocus, runStaffMeeting, signFinanceSponsor, setFinanceTicketPolicy, simulateFinanceMatchday, applyFinancePrize, runFinanceBoardMeeting } from './state.js';
 const routes = new Map(); let rootEl = null; let buildInfo = null;
-const PUBLIC_ROUTES_V740 = new Set(['cover','mainMenu','newGame','teamSelect','confirmCareer','saveSlotsV2','saveCenter','settings','assetChecklist','visualLibrary']);
+const PUBLIC_ROUTES_V740 = new Set(['cover','mainMenu','newGame','teamSelect','confirmCareer','saveSlotsV2','saveCenter','settings']);
 export function register(name, renderer){ routes.set(name, renderer); }
 export function initRouter(root, build){ rootEl = root; buildInfo = build; }
 function requiresCareer(route){ return !PUBLIC_ROUTES_V740.has(route); }
@@ -31,11 +31,11 @@ export function go(route){
 }
 export function render(){
   const state = getState(); const renderer = routes.get(state.route) || routes.get('lobby');
-  try { rootEl.innerHTML = renderer(state); wire(rootEl); fillBuildBadges(); }
-  catch(err){ console.error('[VFM] erro na tela, tela segura acionada', err); rootEl.innerHTML = safeScreenFallback(buildInfo?.buildLabel || 'Build v5.7.0'); wire(rootEl); }
+  try { rootEl.innerHTML = renderer(state); wire(rootEl); markActiveNavigation(); }
+  catch(err){ console.error('[VFM] erro na tela, tela segura acionada', err); rootEl.innerHTML = safeScreenFallback('Vale Futebol Manager'); wire(rootEl); }
 }
-function build(){ return `<div class="build-badge">${buildInfo?.buildLabel || 'Build v5.7.0'}</div>`; }
-function fillBuildBadges(){ rootEl.querySelectorAll('#buildBadge,.build-badge').forEach(el=>{ if(!el.textContent.trim()) el.textContent = buildInfo?.buildLabel || 'Build v5.7.0'; }); markActiveNavigation(); }
+function build(){ return ''; }
+function fillBuildBadges(){ markActiveNavigation(); }
 function markActiveNavigation(){ const active = getNavigationRouteForActive(getState()?.route || 'lobby'); rootEl.querySelectorAll('[data-nav-route]').forEach(btn => { const isActive = btn.dataset.navRoute === active; btn.classList.toggle('active', isActive); if(isActive) btn.setAttribute('aria-current','page'); else btn.removeAttribute('aria-current'); }); }
 function wire(scope){
   scope.querySelectorAll('[data-route]').forEach(btn => btn.addEventListener('click', () => go(btn.dataset.route)));

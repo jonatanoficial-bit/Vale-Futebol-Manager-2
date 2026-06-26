@@ -1,3 +1,12 @@
+# v8.3.0 — Fase 66: Interface Pública Limpa para Jogadores
+
+- Removeu rodapé técnico de build das telas do jogador.
+- Limpou textos de fase, schema, QA e auditoria da entrada pública.
+- Ocultou módulos internos do Menu do Treinador.
+- Removeu o ribbon de QA Final do lobby.
+- Atualizou cache buster para `js/app.js?v=830-player-ui-clean`.
+- Preservou relatórios técnicos dentro do ZIP, fora da experiência normal do jogador.
+
 # v8.2.0 — Fase 65 — QA Final do Beta Profissional e Homologação de Primeira Sessão
 
 ## Implementado

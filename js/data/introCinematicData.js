@@ -1,7 +1,7 @@
 export const INTRO_CINEMATIC_VERSION = 'v6.1.0';
 
 export const INTRO_PUBLIC_STATUS_V610 = {
-  phase: 'Fase 44',
+  phase: 'Jornada inicial',
   label: 'Jornada Inicial Cinematográfica',
   buildDate: '2026-06-22',
   readinessTarget: 96,

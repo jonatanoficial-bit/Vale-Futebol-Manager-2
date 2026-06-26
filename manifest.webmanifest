@@ -1,11 +1,11 @@
 {
-  "name": "Vale Futebol Manager v8.2.0 Beta Profissional",
-  "short_name": "VFM v8.2.0",
+  "name": "Vale Futebol Manager",
+  "short_name": "VFM",
   "start_url": "./index.html",
   "display": "fullscreen",
   "orientation": "any",
   "background_color": "#020407",
   "theme_color": "#05070a",
-  "description": "Vale Futebol Manager — Fase 65 QA Final do Beta Profissional / primeira sessão e homologação mobile",
+  "description": "Vale Futebol Manager — simulador de carreira de treinador com fluxo limpo para jogadores.",
   "icons": []
 }

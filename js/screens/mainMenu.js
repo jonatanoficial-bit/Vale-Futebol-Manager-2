@@ -10,7 +10,7 @@ export function mainMenu(state=getState()){
       <div class="menu-actions footer-entry-actions-v731">
         <button class="secondary-btn" data-route="cover">Voltar para capa</button>
         <button class="secondary-btn" data-route="settings">Configurações</button>
-        <button class="secondary-btn" data-route="saveCenter">Central técnica de save</button>
+        <button class="secondary-btn" data-route="saveCenter">Gerenciar saves</button>
       </div>
     </section>`, false);
 }

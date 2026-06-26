@@ -3,7 +3,7 @@ export const SOUND_AMBIENCE_VERSION = 'v7.1.0';
 export const SOUND_AMBIENCE_STATUS_V710 = {
   label: 'Sons, Ambiência e Torcida',
   status: 'sound-ambience-ready',
-  phase: 'Fase 54 — sons leves, estádio vivo, torcida, apito e clima controlado',
+  phase: 'Sons e torcida',
   build: 'v7.1.0'
 };
 

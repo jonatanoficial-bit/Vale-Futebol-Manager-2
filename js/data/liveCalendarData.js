@@ -2,7 +2,7 @@ export const LIVE_CALENDAR_VERSION = 'v7.5.0';
 
 export const liveCalendarStatus = {
   version: LIVE_CALENDAR_VERSION,
-  phase: 'Fase 58 — Calendário Vivo, Viagens e Fadiga Realista',
+  phase: 'Calendário vivo',
   label: 'Calendário Vivo 2.0',
   status: 'ready',
   schema: 750

@@ -3,7 +3,7 @@ export const STADIUM_CLIMATE_VERSION = 'v7.3.0';
 export const STADIUM_CLIMATE_STATUS_V730 = {
   label: 'Clima, Estádio e Gramado Dinâmicos',
   status: 'stadium-climate-ready',
-  phase: 'Fase 56 — clima, estádio, gramado, horário e impacto tático',
+  phase: 'Clima e gramado',
   build: 'v7.3.0'
 };
 

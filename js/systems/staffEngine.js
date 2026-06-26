@@ -68,7 +68,7 @@ export function ensureStaffState(staff={}, state={}){
     morale: clamp(staff.morale ?? 76),
     boardConfidence: clamp(staff.boardConfidence ?? staffBudget.boardConfidence ?? 82),
     departmentLevel: staff.departmentLevel || staffBudget.departmentLevel,
-    staffLog: Array.isArray(staff.staffLog) ? staff.staffLog.slice(-40) : ['Fase 61: comissão técnica viva preparada para influenciar treino, scout e jogo.'],
+    staffLog: Array.isArray(staff.staffLog) ? staff.staffLog.slice(-40) : ['Comissão técnica preparada para influenciar treino, scout e jogo.'],
     lastMeetingAt: staff.lastMeetingAt || null,
     lastHireAt: staff.lastHireAt || null
   };
@@ -174,5 +174,5 @@ export function runStaffMeetingPatch(state={}){
 
 export function renderStaffRibbon(state={}){
   const snap = buildStaffSnapshot(state);
-  return `<section class="staff-ribbon-v780 panel"><div><span class="tag">v7.8 · Comissão técnica</span><h3>Staff ${snap.metrics.overall}% · foco ${snap.focus.name}</h3><p class="small">Treino ${snap.metrics.trainingQuality}% · Scout ${snap.metrics.scoutAccuracy}% · Jogo ${snap.metrics.matchPrep}% · ponto fraco: ${snap.weakest.role}</p></div><div class="row gap"><button class="secondary-btn mini" data-route="staff">Gerir staff</button><button class="secondary-btn mini" data-action="staff-meeting">Reunião</button></div></section>`;
+  return `<section class="staff-ribbon-v780 panel"><div><span class="tag">Comissão técnica</span><h3>Staff ${snap.metrics.overall}% · foco ${snap.focus.name}</h3><p class="small">Treino ${snap.metrics.trainingQuality}% · Scout ${snap.metrics.scoutAccuracy}% · Jogo ${snap.metrics.matchPrep}% · ponto fraco: ${snap.weakest.role}</p></div><div class="row gap"><button class="secondary-btn mini" data-route="staff">Gerir staff</button><button class="secondary-btn mini" data-action="staff-meeting">Reunião</button></div></section>`;
 }

@@ -1,18 +1,22 @@
 {
-  "version": "v8.2.0",
-  "buildLabel": "Build v8.2.0 | 2026-06-26 11:13:18 BRT | Beta Profissional — QA Final, Primeira Sessão e Homologação Mobile",
-  "phase": "Fase 65 — QA Final do Beta Profissional e Homologação de Primeira Sessão",
+  "version": "v8.3.0",
+  "buildLabel": "Vale Futebol Manager",
+  "phase": "Interface Pública Limpa para Jogadores",
   "dataPack": "2026.05.20",
-  "status": "professional-beta-final-qa",
-  "generatedAt": "2026-06-26 11:13:18 BRT",
+  "status": "public-player-ui-clean",
+  "generatedAt": "2026-06-26 12:30:00 BRT",
   "mandatoryFlow": "cover -> mainMenu/save slots -> newGame/teamSelect/confirmCareer or lobby",
-  "playableSlots": ["principal", "career-2", "career-3"],
-  "schema": 820,
+  "playableSlots": [
+    "principal",
+    "career-2",
+    "career-3"
+  ],
+  "schema": 830,
   "majorSystems": [
-    "Painel QA Final do Beta com rota betaQaCenter",
-    "Roteiro de primeira sessão PC/celular antes da divulgação",
-    "Matriz No-Go para bloquear publicação se houver avatar genérico, slot errado ou botão sem resposta",
-    "Quality gate de 16 rotas críticas incluindo assets, save, partida, finanças e beta profissional",
-    "Cache buster v820 para Vercel e preservação dos avatares v810"
+    "Interface de jogador sem rodapé técnico de build, fase ou schema",
+    "Menu do treinador sem módulos de desenvolvimento, QA, auditoria ou assets técnicos",
+    "Lobby limpo com foco em jogar, treino, scout, staff, calendário e finanças",
+    "Telas internas sanitizadas para usar termos de jogo em vez de termos de desenvolvimento",
+    "Cache buster v830 para publicação online"
   ]
 }

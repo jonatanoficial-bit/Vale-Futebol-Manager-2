@@ -3,7 +3,7 @@ export const SQUAD_AI_VERSION = 'v6.4.0';
 export const SQUAD_AI_STATUS_V640 = {
   label: 'IA de Elenco e Vestiário',
   status: 'squad-ai-dressing-room-ready',
-  phase: 'Fase 47 — IA de elenco, moral, liderança e vestiário',
+  phase: 'IA de elenco',
   build: 'v6.4.0'
 };
 

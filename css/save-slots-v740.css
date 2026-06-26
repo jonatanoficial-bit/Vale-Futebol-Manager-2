@@ -2,3 +2,6 @@
 .slot-card-v740.active .slot-status-v740{background:rgba(255,209,84,.18);color:#ffe99a}.slot-actions-v740 .main-btn.mini,.slot-actions-v740 .secondary-btn.mini{min-height:40px}.slot-manager-home-v740 .slot-hero-v740 .subtitle{max-width:760px}@media(min-width:1051px){.slot-grid-v740{grid-template-columns:repeat(3,minmax(0,1fr))}.slot-card-v740{min-height:250px}}
 
 html.vfm-mobile-v540 .build-badge,html.vfm-aaa-v500 .screen.no-bottom-nav .build-badge{display:block!important;position:fixed!important;left:10px!important;right:auto!important;bottom:calc(8px + env(safe-area-inset-bottom))!important;z-index:90!important;background:rgba(0,0,0,.62)!important;border:1px solid rgba(255,209,84,.28)!important;border-radius:999px!important;padding:5px 9px!important;color:#ffe9ac!important;font-size:10px!important;max-width:calc(100vw - 20px)!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}.screen.no-bottom-nav{padding-bottom:calc(52px + var(--safe-bottom))}
+
+/* Public player UI: hide technical build labels */
+.build-badge,#buildBadge{display:none!important;visibility:hidden!important;}

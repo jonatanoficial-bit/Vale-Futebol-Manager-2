@@ -3,7 +3,7 @@ export const CONTRACT_RENEWAL_VERSION = 'v6.8.0';
 export const CONTRACT_RENEWAL_STATUS_V680 = {
   label: 'Renovação Contratual Profunda',
   status: 'contract-renewal-ready',
-  phase: 'Fase 51 — contratos profundos, promessas, luvas, multas e moral do jogador',
+  phase: 'Renovação contratual',
   build: 'v6.8.0'
 };
 

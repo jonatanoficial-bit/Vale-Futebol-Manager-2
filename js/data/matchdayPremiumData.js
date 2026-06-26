@@ -3,7 +3,7 @@ export const MATCHDAY_PREMIUM_VERSION = 'v6.3.0';
 export const MATCHDAY_PREMIUM_STATUS_V630 = {
   label: 'Matchday Premium',
   status: 'matchday-premium-ready',
-  phase: 'Fase 46 — Matchday premium, tensão pré-jogo e pós-jogo emocional',
+  phase: 'Dia de jogo premium',
   build: 'v6.3.0'
 };
 

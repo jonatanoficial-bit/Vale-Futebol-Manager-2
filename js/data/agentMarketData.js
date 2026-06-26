@@ -3,7 +3,7 @@ export const AGENT_MARKET_VERSION = 'v6.7.0';
 export const AGENT_MARKET_STATUS_V670 = {
   label: 'Mercado com Empresários e Negociações Vivas',
   status: 'agent-market-ready',
-  phase: 'Fase 50 — empresários, conversas, propostas concorrentes e fechamento de negócios',
+  phase: 'Empresários e negociações',
   build: 'v6.7.0'
 };
 

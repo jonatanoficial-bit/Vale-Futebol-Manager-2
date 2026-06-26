@@ -259,13 +259,13 @@ export function startCareer(){
     match: firstMatch,
     career: {...cleanLeagueStateForNewCareer({...state.career}, chosenClub), tutorial:{seen:false, step:1, completed:false}, missions:[], completedSeasons:0, seasonHistory:[], lifetimeEarnings:0, reputationHistory:[{season:state.season||2026, rep:state.manager?.reputation||82, note:'Início da carreira'}], activeStory:['Primeira missão: participe da coletiva, revise o elenco, ajuste a tática e jogue sua estreia oficial.'], pressHistory:[], pressConference:null, managerProgression:null},
     roster: rosterPack,
-    calendar: normalizeLiveCalendarState({currentDate:firstMatch.date || '2026-05-24', calendarLog:[`Fase 58: calendário vivo iniciado para ${chosenTeam?.name || chosenClub}.`]}),
+    calendar: normalizeLiveCalendarState({currentDate:firstMatch.date || '2026-05-24', calendarLog:[`Calendário vivo iniciado para ${chosenTeam?.name || chosenClub}.`]}),
     transfer: ensureTransferLedger({...(state.transfer || {}), budget: Number((transferBudget * 0.45).toFixed(1)), wageRoom: Math.max(0.8, Number((transferBudget/40).toFixed(2))), acceptedDeals:[], rejectedDeals:[], outgoingDeals:[], renewals:[], loanDeals:[], incomingOffers:[], aiDeals:[], agentEvents:[], smartReports:[], marketDay:1}),
     ui:{...state.ui, selectedClub:chosenClub, standingsCompetition:chosenTeam?.leagueId || 'brasileirao-a', ...starters},
     route:'lobby',
-    finance: ensureFinanceState({cash:Number(chosenTeam?.budget || state.money || 40), profile:'balanced', ledger:[`Fase 62: financeiro profundo iniciado para ${chosenTeam?.name || chosenClub}.`]}, {clubId:chosenClub, ui:{selectedClub:chosenClub}, money:Number(chosenTeam?.budget || state.money || 40)}),
-    scouting: normalizeScoutingState({observerLog:[`Fase 59: scout profissional iniciado para ${chosenTeam?.name || chosenClub}.`]}, {clubId:chosenClub, ui:{selectedClub:chosenClub}}),
-    staff: ensureStaffState({staffLog:[`Fase 61: comissão técnica viva iniciada para ${chosenTeam?.name || chosenClub}.`]}, {clubId:chosenClub, ui:{selectedClub:chosenClub}}),
+    finance: ensureFinanceState({cash:Number(chosenTeam?.budget || state.money || 40), profile:'balanced', ledger:[`Financeiro profundo iniciado para ${chosenTeam?.name || chosenClub}.`]}, {clubId:chosenClub, ui:{selectedClub:chosenClub}, money:Number(chosenTeam?.budget || state.money || 40)}),
+    scouting: normalizeScoutingState({observerLog:[`Scout profissional iniciado para ${chosenTeam?.name || chosenClub}.`]}, {clubId:chosenClub, ui:{selectedClub:chosenClub}}),
+    staff: ensureStaffState({staffLog:[`Comissão técnica iniciada para ${chosenTeam?.name || chosenClub}.`]}, {clubId:chosenClub, ui:{selectedClub:chosenClub}}),
     save:{...(state.save||{}), version:SAVE_MANAGER_VERSION, schema:820, activeSlot:state.save?.activeSlot || 'principal', slotLabel:state.save?.slotLabel || slotLabel(state.save?.activeSlot || 'principal'), careerStarted:true}
   });
   persist();
@@ -368,7 +368,7 @@ export function finishMatch(){
     fanMood: Math.max(0, Math.min(100, Number(state.fanMood || 82) + (already ? 0 : fanDelta))),
     notifications: Number(state.notifications || 0) + (already ? 0 : 1),
     gameplay:{...state.gameplay, balanceLog},
-    stability:{...(state.stability||{}), health:'Pós-jogo salvo com segurança', auditVersion:'v8.2.0-beta-final-qa', financeVersion:FINANCE_VERSION}
+    stability:{...(state.stability||{}), health:'Pós-jogo salvo com segurança', auditVersion:'public-ui', financeVersion:FINANCE_VERSION}
   });
   logIntegration(`Resultado integrado: ${result.competition} ${result.stage} terminou ${result.summary}. Relatório pós-jogo preservado antes do retorno ao lobby.`);
   persist();
@@ -391,7 +391,7 @@ export function completePostMatchAndReturnLobby(){
     route:'lobby',
     match:nextMatch,
     calendar: normalizeLiveCalendarState({...(state.calendar||{}), currentDate: nextMatch?.date || state.calendar?.currentDate || state.career?.currentDate, calendarLog:[...((state.calendar?.calendarLog)||[]), `Próximo compromisso carregado no calendário vivo: ${nextMatch?.date || 'sem data'}.`].slice(-30)}, state),
-    stability:{...(state.stability||{}), health: seasonPatch.season ? 'Nova temporada iniciada com segurança' : 'Fluxo pós-jogo concluído', auditVersion:'v7.5.0'}
+    stability:{...(state.stability||{}), health: seasonPatch.season ? 'Nova temporada iniciada com segurança' : 'Fluxo pós-jogo concluído', auditVersion:'public-ui'}
   });
   logIntegration('Relatório pós-jogo confirmado: save protegido e retorno ao lobby executado.');
   persist();
@@ -953,10 +953,10 @@ export function applyTrainingMicrocycle(){
       recoveryScore:nextTraining.recoveryScore,
       injuryRisk:nextTraining.injuryRisk,
       weekLoad:nextTraining.weeklyLoad,
-      trainingLog:[...((state.calendar?.trainingLog)||[]), `Microciclo v7.7 aplicado · prontidão ${nextTraining.matchReadiness}% · impacto jogo ATQ ${impact.attack>=0?'+':''}${impact.attack}/DEF ${impact.defense>=0?'+':''}${impact.defense}.`].slice(-30),
+      trainingLog:[...((state.calendar?.trainingLog)||[]), `Microciclo aplicado · prontidão ${nextTraining.matchReadiness}% · impacto jogo ATQ ${impact.attack>=0?'+':''}${impact.attack}/DEF ${impact.defense>=0?'+':''}${impact.defense}.`].slice(-30),
       calendarLog:[...((state.calendar?.calendarLog)||[]), `Treino Semanal Realista: semana ${Math.max(1, Number(nextTraining.week||2)-1)} · carga ${nextTraining.weeklyLoad}% · risco ${nextTraining.injuryRisk}%.`].slice(-30)
     }, state),
-    career:{...(state.career||{}), integrationLog:[...((state.career||{}).integrationLog||[]), `Treino v7.7.0 aplicado: microciclo semanal realista integrado ao calendário e ao motor de jogo.`].slice(-12)},
+    career:{...(state.career||{}), integrationLog:[...((state.career||{}).integrationLog||[]), `Treino aplicado: microciclo semanal integrado ao calendário e ao motor de jogo.`].slice(-12)},
     stability:{...(state.stability||{}), health:'Treino semanal realista aplicado', trainingEngineVersion:TRAINING_ENGINE_VERSION}
   });
   persist();
@@ -978,7 +978,7 @@ export function applyWeeklyTrainingSession(sessionId='tactical'){
       trainingLog:[...((state.calendar?.trainingLog)||[]), `Sessão de treino aplicada: ${sessionId} · prontidão ${nextTraining.matchReadiness || buildTrainingSnapshot({...state, training:nextTraining}).readiness}%.`].slice(-30),
       calendarLog:[...((state.calendar?.calendarLog)||[]), `Sessão individual de treino: ${sessionId}.`].slice(-30)
     }, state),
-    career:{...(state.career||{}), integrationLog:[...((state.career||{}).integrationLog||[]), `Sessão semanal v7.7.0 aplicada: ${sessionId}.`].slice(-12)},
+    career:{...(state.career||{}), integrationLog:[...((state.career||{}).integrationLog||[]), `Sessão semanal aplicada: ${sessionId}.`].slice(-12)},
     stability:{...(state.stability||{}), health:'Sessão do microciclo aplicada', trainingEngineVersion:TRAINING_ENGINE_VERSION}
   });
   persist();
@@ -1322,7 +1322,7 @@ export function createNewCareerSlot(slot='career-2'){
       manager:{...base.manager, name:'Manager Vale', country:'br', avatar:DEFAULT_MANAGER_AVATAR_V810, mode:'career', reputation:50},
       clubId:'santos',
       ui:{...base.ui, selectedAvatar:DEFAULT_MANAGER_AVATAR_V810, selectedCountry:'br', selectedMode:'career', selectedClub:'santos'},
-      career:{...base.career, completedMatches:[], lastResult:null, matchday:1, currentDate:'2026-04-13', integrationLog:[`Novo slot ${safeSlot} criado na Fase 57: dados antigos isolados até confirmação da carreira.`]},
+      career:{...base.career, completedMatches:[], lastResult:null, matchday:1, currentDate:'2026-04-13', integrationLog:[`Novo slot ${safeSlot} criado: dados antigos isolados até confirmação da carreira.`]},
       save:{...base.save, activeSlot:safeSlot, slotLabel:slotLabel(safeSlot), careerStarted:false, createdAt:new Date().toISOString()},
       route:'newGame'
     });

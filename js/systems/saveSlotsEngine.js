@@ -78,9 +78,9 @@ export function renderSlotManagerHome(state={}){
   return `<section class="slot-manager-home-v740">
     <div class="slot-hero-v740 panel">
       <div>
-        <span class="tag">Save Slots 2.0 · Fase 57</span>
+        <span class="tag">Carreiras salvas</span>
         <h1>Central de carreiras</h1>
-        <p class="subtitle">3 slots reais: criar carreira, trocar carreira, renomear, apagar, continuar o último save e sair sem confundir o jogador.</p>
+        <p class="subtitle">Crie, continue, renomeie ou apague suas carreiras com segurança.</p>
       </div>
       <div class="slot-hero-actions-v740">
         ${activeCard ? `<button class="main-btn giant" data-action="load-save-slot" data-slot="${esc(activeCard.slot)}">Continuar ${slotTitle(activeCard)}</button>` : `<button class="main-btn giant" data-action="new-career-slot" data-slot="${esc(firstEmpty?.slot || 'principal')}">Criar primeira carreira</button>`}
@@ -90,11 +90,11 @@ export function renderSlotManagerHome(state={}){
     <section class="slot-summary-grid-v740">
       <article class="card kpi-card"><span>Slots ocupados</span><strong>${snap.occupied}/${snap.maxSlots}</strong><small>${snap.free} livre(s)</small></article>
       <article class="card kpi-card"><span>Último slot ativo</span><strong>${esc(activeCard?.slotLabel || snap.activeSlotLabel)}</strong><small>${esc(activeCard?.slot || activeSlot)}</small></article>
-      <article class="card kpi-card"><span>Fluxo</span><strong>Definitivo</strong><small>Capa → Slots → Criação/Lobby</small></article>
+      <article class="card kpi-card"><span>Entrada</span><strong>Segura</strong><small>Capa → Carreiras → Jogo</small></article>
     </section>
     <section class="slot-grid-v740">${snap.slots.map(s=>renderSlotCard(s, activeSlot, hasCurrentCareer)).join('')}</section>
     <section class="panel slot-policy-v740">
-      <div class="row space"><div><span class="tag">Regras de segurança</span><h2>Sem sobrescrever carreira sem querer</h2></div><button class="secondary-btn mini" data-route="saveCenter">Central técnica</button></div>
+      <div class="row space"><div><span class="tag">Regras de segurança</span><h2>Sem sobrescrever carreira sem querer</h2></div><button class="secondary-btn mini" data-route="saveCenter">Gerenciar saves</button></div>
       <ul class="small-list">${SAVE_SLOT_POLICIES_V740.map(p=>`<li>${esc(p)}</li>`).join('')}</ul>
     </section>
   </section>`;
@@ -104,8 +104,8 @@ export function renderSaveSlotsV2Center(state={}){
   const steps = SAVE_FLOW_STEPS_V740.map((s,i)=>`<article class="flow-step-v740"><strong>${i+1}</strong><div><h3>${esc(s.title)}</h3><p>${esc(s.text)}</p></div></article>`).join('');
   return `<section class="save-slots-v2-center-v740">
     ${renderSlotManagerHome(state)}
-    <section class="panel"><div class="row space"><div><span class="tag">Fluxo definitivo</span><h2>Como o jogador deve navegar</h2></div><strong class="grade">v7.4</strong></div><div class="flow-steps-v740">${steps}</div></section>
-    <section class="grid grid-2"><article class="panel"><span class="tag">Quality gate</span><h2>Integridade dos slots</h2><div class="candidate-list">${snap.integrity.gates.map(g=>`<div class="stat-line"><span>${esc(g.name)}</span><strong>${esc(g.status)}</strong></div>`).join('')}</div></article><article class="panel"><span class="tag">Próximo passo</span><h2>Fluxo pronto para carreira longa</h2><p class="alert">Depois desta fase, calendário, scout, treino, staff e finanças entram no Menu completo sem sujar a entrada inicial.</p></article></section>
+    <section class="panel"><div class="row space"><div><span class="tag">Entrada segura</span><h2>Como navegar</h2></div><strong class="grade">OK</strong></div><div class="flow-steps-v740">${steps}</div></section>
+    <section class="grid grid-2"><article class="panel"><span class="tag">Segurança</span><h2>Integridade dos slots</h2><div class="candidate-list">${snap.integrity.gates.map(g=>`<div class="stat-line"><span>${esc(g.name)}</span><strong>${esc(g.status)}</strong></div>`).join('')}</div></article><article class="panel"><span class="tag">Próximo passo</span><h2>Fluxo pronto para carreira longa</h2><p class="alert">Calendário, scout, treino, staff e finanças ficam organizados no Menu do treinador.</p></article></section>
   </section>`;
 }
 export function renderSlotCompactBar(state={}){

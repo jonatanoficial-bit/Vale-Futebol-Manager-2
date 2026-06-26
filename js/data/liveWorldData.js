@@ -1,7 +1,7 @@
 export const LIVE_WORLD_VERSION = 'v6.2.0';
 
 export const LIVE_WORLD_STATUS_V620 = {
-  phase: 'Fase 45 — Lobby Vivo e Jornal Esportivo',
+  phase: 'Lobby vivo',
   label: 'Mundo em movimento',
   goal: 'Fazer o lobby parecer um centro de futebol vivo, com manchetes, bastidores, pressão da torcida, diretoria e mercado.',
   promise: 'O jogador deve sentir que há um mundo acontecendo mesmo antes de clicar em jogar partida.',

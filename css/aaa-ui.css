@@ -185,3 +185,6 @@ html.vfm-aaa-v500 .screen-managerMenu .premium-tile{min-height:132px;}
   html.vfm-aaa-v500 .quick-actions-v550,
   html.vfm-aaa-v500 .menu-grid-v550{grid-template-columns:1fr;}
 }
+
+/* Public player UI: hide technical build labels */
+.build-badge,#buildBadge{display:none!important;visibility:hidden!important;}

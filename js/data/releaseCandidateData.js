@@ -2,7 +2,7 @@ export const RELEASE_CANDIDATE_VERSION = 'v6.0.0';
 
 export const RC_PUBLIC_STATUS_V600 = {
   label: 'Beta Pública',
-  phase: 'Fase 43',
+  phase: 'Primeiros passos',
   readinessTarget: 94,
   buildDate: '2026-06-22',
   publicGoal: 'Primeira build limpa para teste controlado com jogadores reais em celular.',
@@ -55,6 +55,6 @@ export const RC_MANUAL_TEST_FLOW_V600 = [
 export const RC_KNOWN_LIMITS_V600 = [
   { level:'atenção', item:'Fullscreen iPhone', note:'Safari comum pode negar fullscreen real; PWA instalado é o caminho ideal.' },
   { level:'atenção', item:'Celular fraco', note:'A pasta de assets é grande; precisa medir abertura em 4G e Android básico.' },
-  { level:'não bloqueante', item:'Visual técnico', note:'Alguns módulos avançados ainda parecem central de auditoria; serão polidos nas fases v6.1–v6.6.' },
+  { level:'não bloqueante', item:'Visual interno', note:'Alguns módulos avançados ainda parecem central técnica; serão polidos nas fases v6.1–v6.6.' },
   { level:'não bloqueante', item:'Som', note:'Feedback sonoro e trilha ainda não fazem parte da Beta Pública.' }
 ];

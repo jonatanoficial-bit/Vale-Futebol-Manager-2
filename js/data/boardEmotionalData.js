@@ -3,7 +3,7 @@ export const BOARD_EMOTIONAL_VERSION = 'v6.6.0';
 export const BOARD_EMOTIONAL_STATUS_V660 = {
   label: 'Economia Emocional e Diretoria Viva',
   status: 'board-emotional-ready',
-  phase: 'Fase 49 — diretoria viva, economia emocional, torcida e promessas',
+  phase: 'Diretoria viva',
   build: 'v6.6.0'
 };
 

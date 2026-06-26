@@ -1,4 +1,4 @@
-export const BETA_PROFESSIONAL_VERSION = 'v8.2.0';
+export const BETA_PROFESSIONAL_VERSION = 'public-ui';
 export const BETA_PROFESSIONAL_SCHEMA = 820;
 export const BETA_PROFESSIONAL_GATES = [
   {id:'career-flow', label:'Fluxo de carreira', critical:true, route:'mainMenu'},
@@ -12,10 +12,10 @@ export const BETA_PROFESSIONAL_GATES = [
   {id:'mobile', label:'Mobile-first', critical:true, route:'mobileAudit'},
   {id:'assets', label:'Integridade de Assets', critical:true, route:'assetChecklist'},
   {id:'release', label:'Divulgação Beta', critical:false, route:'betaProfessional'},
-  {id:'final-qa', label:'QA Final v8.2', critical:true, route:'betaQaCenter'}
+  {id:'final-qa', label:'Teste rápido', critical:true, route:'betaQaCenter'}
 ];
 export const BETA_PROFESSIONAL_MANUAL_FLOW = [
-  'Abrir capa e conferir build v8.2.0 visível.',
+  'Abrir capa e conferir entrada limpa.',
   'Entrar na central de saves sem carregar lobby automaticamente.',
   'Criar carreira nova no slot 2 e confirmar que os 12 avatares reais versionados v810 aparecem e o avatar escolhido segue para a confirmação.',
   'Salvar e sair da carreira; voltar para a central sem confusão.',

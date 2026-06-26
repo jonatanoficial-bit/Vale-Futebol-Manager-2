@@ -250,7 +250,7 @@ export function renderLiveCalendarStrip(state={}){
   const snap = buildLiveCalendarSnapshot(state);
   const m = snap.metrics;
   return `<section class="live-calendar-strip-v750 panel">
-    <div><span class="tag">v7.5 · Calendário Vivo</span><h3>${safe(m.headline)}</h3><p class="small">Fadiga ${pct(m.teamFatigue)} · recuperação ${pct(m.recovery)} · risco ${pct(m.injuryRisk)} · jogos/14d ${m.weekMatches}</p></div>
+    <div><span class="tag">Calendário vivo</span><h3>${safe(m.headline)}</h3><p class="small">Fadiga ${pct(m.teamFatigue)} · recuperação ${pct(m.recovery)} · risco ${pct(m.injuryRisk)} · jogos/14d ${m.weekMatches}</p></div>
     <div class="row gap"><button class="secondary-btn mini" data-route="calendar">Gerir calendário</button><button class="secondary-btn mini" data-action="calendar-action" data-calendar-action="training-recovery">Recuperar</button></div>
   </section>`;
 }

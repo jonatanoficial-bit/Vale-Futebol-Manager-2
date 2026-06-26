@@ -139,3 +139,6 @@ html.vfm-mobile-v540 .live-pitch{min-height:360px;}
   html.vfm-mobile-v540 .top-status{overflow-x:auto;flex-wrap:nowrap!important;-webkit-overflow-scrolling:touch;padding-bottom:2px;}
   html.vfm-mobile-v540 .resource{flex:0 0 auto;}
 }
+
+/* Public player UI: hide technical build labels */
+.build-badge,#buildBadge{display:none!important;visibility:hidden!important;}

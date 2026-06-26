@@ -6,7 +6,7 @@ export const stabilityChecklist = [
   {area:'Rotas', status:'Seguro', detail:'Se uma tela quebrar, o modo seguro leva o usuário de volta ao lobby.'},
   {area:'Assets', status:'Fallback', detail:'Qualquer imagem ausente usa placeholder sem travar a interface.'},
   {area:'Mobile', status:'Reforçado', detail:'Altura dinâmica e rolagem protegida para evitar tela presa em navegadores móveis.'},
-  {area:'Auditoria', status:'0 bloqueios', detail:'Sintaxe, links internos, manifest e arquivos essenciais verificados.'}
+  {area:'Verificação', status:'0 bloqueios', detail:'Links internos, imagens e arquivos essenciais verificados.'}
 ];
 export const savePolicies = [
   'Autosave após ações críticas de carreira, mercado, partida, treino e configurações.',

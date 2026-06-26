@@ -2,7 +2,7 @@ export const SCOUTING_VERSION = 'v7.6.0';
 
 export const scoutingStatus = {
   version: SCOUTING_VERSION,
-  phase: 'Fase 59 — Scout, Observadores e Recrutamento Profundo',
+  phase: 'Scout e recrutamento',
   label: 'Scout Profissional 1.0',
   status: 'ready',
   schema: 760

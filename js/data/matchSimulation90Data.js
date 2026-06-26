@@ -3,7 +3,7 @@ export const MATCH_SIMULATION_90_VERSION = 'v7.0.0';
 export const MATCH_SIMULATION_90_STATUS_V700 = {
   label: 'Simulação 90 Minutos 2D/Texto Premium',
   status: 'match-simulation90-ready',
-  phase: 'Fase 53 — simulação 90 minutos, leitura tática, pressão e eventos premium',
+  phase: 'Simulação 90 minutos',
   build: 'v7.0.0'
 };
 
@@ -54,6 +54,6 @@ export const SIMULATION_90_RULES_V700 = [
   'Nenhum evento 2D pode depender de imagem externa obrigatória.',
   'A rota matchSimulation90 deve funcionar offline e com save antigo.',
   'Os botões precisam direcionar para rotas já existentes e seguras.',
-  'A camada v7.0.0 não pode bloquear rolagem no mobile nem fixar painel sobre conteúdo.',
-  'O relatório deve expor snapshot técnico para auditoria e regressão.'
+  'A tela de partida não pode bloquear rolagem no mobile nem fixar painel sobre conteúdo.',
+  'O resumo deve ajudar a entender a partida sem poluir a tela.'
 ];

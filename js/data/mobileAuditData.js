@@ -4,7 +4,7 @@ export const mobileAuditFlows = [
     title:'Novo jogo até lobby',
     scope:'Fluxo crítico',
     steps:['Menu inicial','Criação do manager','Escolha de clube','Confirmação','Lobby'],
-    expected:'Criar carreira sem erro, sem tela branca e com build visível.'
+    expected:'Criar carreira sem erro, sem tela branca e com entrada limpa.'
   },
   {
     id:'club-selection-flow',
@@ -67,6 +67,6 @@ export const regressionFixesV350 = [
   'Checklist mobile por dispositivo e rota crítica.',
   'Botões de teste rápido para caminhos de maior risco.',
   'Relatório de riscos com severidade e recomendação objetiva.',
-  'Fallback de auditoria: se algum dado estiver ausente, a central ainda abre.',
-  'Documentação de teste manual para GitHub Pages e Vercel.'
+  'Proteção: se algum dado estiver ausente, a central ainda abre.',
+  'Roteiro de teste manual para publicação online.'
 ];

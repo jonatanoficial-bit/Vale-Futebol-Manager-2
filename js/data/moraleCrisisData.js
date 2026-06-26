@@ -3,7 +3,7 @@ export const MORALE_CRISIS_VERSION = 'v6.9.0';
 export const MORALE_CRISIS_STATUS_V690 = {
   label: 'Moral Avançada e Crises de Vestiário',
   status: 'morale-crisis-ready',
-  phase: 'Fase 52 — moral avançada, promessas quebradas, salário, banco e liderança',
+  phase: 'Moral do elenco',
   build: 'v6.9.0'
 };
 

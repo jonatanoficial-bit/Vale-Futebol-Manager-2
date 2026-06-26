@@ -218,7 +218,7 @@ export function wishlistScoutPlayerPatch(state={}, reportId='', mode='add'){
 
 export function renderScoutingRibbon(state={}){
   const snap = buildScoutingSnapshot(state);
-  return `<section class="scouting-ribbon-v760 panel"><div><span class="tag">v7.6 · Scout</span><h3>${snap.metrics.highPriority} alvo(s) fortes · confiança ${snap.metrics.avgConfidence}%</h3><p class="small">Lista de desejos ${snap.wishList.length} · custo mensal ${moneyM(snap.metrics.monthlyCost)} · foco ${safe(snap.focus.label)}</p></div><div class="row gap"><button class="secondary-btn mini" data-route="academyScouting">Abrir scout</button><button class="secondary-btn mini" data-action="scout-generate-report">Novo relatório</button></div></section>`;
+  return `<section class="scouting-ribbon-v760 panel"><div><span class="tag">Scout</span><h3>${snap.metrics.highPriority} alvo(s) fortes · confiança ${snap.metrics.avgConfidence}%</h3><p class="small">Lista de desejos ${snap.wishList.length} · custo mensal ${moneyM(snap.metrics.monthlyCost)} · foco ${safe(snap.focus.label)}</p></div><div class="row gap"><button class="secondary-btn mini" data-route="academyScouting">Abrir scout</button><button class="secondary-btn mini" data-action="scout-generate-report">Novo relatório</button></div></section>`;
 }
 
 export function renderScoutingCenter(state={}){

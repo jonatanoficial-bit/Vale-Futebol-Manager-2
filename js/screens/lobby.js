@@ -7,7 +7,6 @@ import { renderLiveCalendarStrip } from '../systems/liveCalendarEngine.js';
 import { renderScoutingRibbon } from '../systems/scoutingEngine.js';
 import { renderStaffRibbon } from '../systems/staffEngine.js';
 import { renderFinanceRibbon } from '../systems/financeEngine.js';
-import { renderBetaQaRibbon } from '../systems/betaQaEngine.js';
 
 export const PRIMARY_ACTIONS_V550 = [
   ['match','Jogar partida','⚽','Entrar no próximo compromisso oficial'],
@@ -30,10 +29,10 @@ export const MANAGER_MENU_GROUPS_V550 = [
     ['calendar','Agenda','📅','Calendário completo, treinos e jogos','Temporada'],
     ['match','Partida','⚽','Próximo jogo oficial','Jogar'],
     ['matchdayPremium','Matchday Premium','🏟️','Central do dia de jogo, drama e transmissão','v6.3'],
-    ['matchSimulation90','Simulação 90 Minutos','🎮','Camada 2D/texto premium, fases táticas e decisões do treinador','v7.0'],
-    ['soundAmbience','Sons e Torcida','🔊','Ambiência leve, apito, torcida e estádio vivo','v7.1'],
-    ['realAudioPack','Efeitos Reais Opcionais','🎧','MP3/WAV/OGG com manifest, varredura e fallback seguro','v7.2'],
-    ['stadiumClimate','Clima, Estádio e Gramado','🌦️','Horário, gramado, chuva, vento, pressão e impacto tático','v7.3']
+    ['matchSimulation90','Simulação 90 Minutos','🎮','Camada 2D/texto premium, fases táticas e decisões do treinador',''],
+    ['soundAmbience','Sons e Torcida','🔊','Ambiência leve, apito, torcida e estádio vivo',''],
+    ['realAudioPack','Efeitos Reais Opcionais','🎧','Sons reais opcionais com carregamento seguro',''],
+    ['stadiumClimate','Clima, Estádio e Gramado','🌦️','Horário, gramado, chuva, vento, pressão e impacto tático','']
   ]],
   ['Elenco e campo', [
     ['squad','Elenco','👥','Jogadores, forma, moral e contratos','Clube'],
@@ -43,21 +42,21 @@ export const MANAGER_MENU_GROUPS_V550 = [
     ['formation','Tática','🧩','Escalação, campo, banco e desenho tático','Pré-jogo'],
     ['instructions','Instruções','🎯','Pressão, passes, mentalidade e bolas paradas','Avançado'],
     ['training','Treino','🔶','Plano semanal, evolução, fadiga e lesões','Elenco'],
-    ['academyScouting','Scout & Recrutamento','🔎','Observadores por região, relatórios, potencial e lista de desejos','v7.6'],
-    ['staff','Staff Vivo','🧑‍🏫','Comissão técnica com impacto real no treino, scout e jogo','v7.8']
+    ['academyScouting','Scout & Recrutamento','🔎','Observadores por região, relatórios, potencial e lista de desejos',''],
+    ['staff','Staff Vivo','🧑‍🏫','Comissão técnica com impacto real no treino, scout e jogo','']
   ]],
   ['Mercado e finanças', [
     ['transfers','Transferências','🔁','Compra, venda, empréstimo e renovação','Janela'],
     ['smartMarket','Mercado Inteligente','🧠','Empresários, IA de clubes e oportunidades','Novo'],
-    ['academyScouting','Scout Profissional','🔎','Observadores, relatórios, comparação com elenco e lista de desejos','v7.6'],
-    ['staff','Comissão Técnica Viva','🧑‍🏫','Auxiliar, físico, analista, médico, olheiro e goleiros','v7.8'],
+    ['academyScouting','Scout Profissional','🔎','Observadores, relatórios, comparação com elenco e lista de desejos',''],
+    ['staff','Comissão Técnica Viva','🧑‍🏫','Auxiliar, físico, analista, médico, olheiro e goleiros',''],
     ['agentMarket','Empresários e Negociações','🤝','Conversas vivas, propostas rivais, comissões e fechamento seguro','v6.7'],
     ['contracts','Contratos','📝','Salários, vencimentos, luvas e renovações','Gestão'],
     ['contractRenewal','Renovação Contratual','📝','Promessas, multa, luvas, moral, salário e efeito dominó','v6.8'],
-    ['financeCenter','Finanças Profundas','🏦','Patrocínio, bilheteria, folha, premiações e crise','v7.9'],
+    ['financeCenter','Finanças Profundas','🏦','Patrocínio, bilheteria, folha, premiações e crise',''],
     ['emotionalBoard','Diretoria Viva','🏦','Economia emocional, promessas, reuniões e autonomia','v6.6'],
-    ['finances','Financeiro','💼','Caixa, receitas, despesas, folha e dívida','v7.9'],
-    ['sponsorship','Patrocínio','🤝','Propostas comerciais, bônus e satisfação','v7.9']
+    ['finances','Financeiro','💼','Caixa, receitas, despesas, folha e dívida',''],
+    ['sponsorship','Patrocínio','🤝','Propostas comerciais, bônus e satisfação','']
   ]],
   ['Carreira e mundo', [
     ['messages','E-mail','✉️','Diretoria, imprensa, empresários e seleção','Carreira'],
@@ -72,21 +71,21 @@ export const MANAGER_MENU_GROUPS_V550 = [
   ]],
   ['Sistema e desenvolvimento', [
     ['careerIntro','Jornada Inicial','🎬','Abertura cinematográfica e primeira sessão guiada','v6.1'],
-    ['betaProfessional','Beta Profissional','🚀','Auditoria v8.1, assets, menus, gates de publicação e roteiro final','v8.1'],
-    ['betaQaCenter','QA Final do Beta','✅','Primeira sessão, matriz mobile, No-Go e rotas críticas para divulgação','v8.2'],
+    ['betaProfessional','Painel do jogo','🚀','Resumo da carreira e menus principais',''],
+    ['betaQaCenter','Teste rápido','✅','Teste rápido de entrada, avatar, partida e save',''],
     ['releaseCandidate','Beta Pública','🚀','Checklist público, mobile real e fluxo de teste','v6.0'],
-    ['mobileAudit','Auditoria Mobile','📱','Teste de rotas, rolagem, botões e estabilidade no celular','v8.2'],
-    ['saveSlotsV2','Slots de Carreira','💾','Continuar, criar, trocar, renomear e apagar carreiras','v7.4'],
+    ['mobileAudit','Suporte mobile','📱','Teste de rotas, rolagem, botões e estabilidade no celular',''],
+    ['saveSlotsV2','Slots de Carreira','💾','Continuar, criar, trocar, renomear e apagar carreiras',''],
     ['saveCenter','Save Técnico','🛡️','Backups, exportar/importar e recuperação','v5.1'],
     ['polishCenter','UI AAA','✨','Visual, responsividade e performance','v5.0'],
     ['data2026','Dados 2026','🗃️','Divisões, elencos e caminhos de fotos','Dados'],
-    ['database2026','Banco Maio/2026','🧾','Atributos, contratos e auditoria de dados','Novo'],
-    ['dataPack2026','Data Pack 2026','🔒','Schema oficial, bloqueio anti-genérico e plano 20/05/2026','v5.8'],
+    ['database2026','Banco Maio/2026','🧾','Atributos, contratos e verificação de dados','Novo'],
+    ['dataPack2026','Data Pack 2026','🔒','Base oficial e plano de elencos',''],
     ['visualLibrary','Biblioteca Visual','🖼️','Fundos, logos, países e extras','Assets'],
-    ['assetChecklist','Assets & Cache','🧩','Avatares v810, cache Vercel, asset-map e fallbacks reais','v8.1'],
-    ['soundAmbience','Sons e Torcida','🔊','Ambiência, apito, torcida e acessibilidade sonora','v7.1'],
-    ['realAudioPack','Efeitos Reais','🎧','MP3/WAV opcionais, manifest de assets e fallback WebAudio','v7.2'],
-    ['stadiumClimate','Clima e Gramado','🌦️','Clima offline, gramado dinâmico e pressão do estádio','v7.3'],
+    ['assetChecklist','Assets & Cache','🧩','Avatares, imagens e carregamento seguro',''],
+    ['soundAmbience','Sons e Torcida','🔊','Ambiência, apito, torcida e acessibilidade sonora',''],
+    ['realAudioPack','Efeitos Reais','🎧','Sons reais opcionais com carregamento seguro',''],
+    ['stadiumClimate','Clima e Gramado','🌦️','Clima offline, gramado dinâmico e pressão do estádio',''],
     ['settings','Configurações','⚙️','Qualidade, sons, acessibilidade e segurança','Sistema']
   ]]
 ];
@@ -100,6 +99,21 @@ function dedupeMenuGroupsV800(groups=[]){
     seen.add(route);
     return item;
   })]);
+}
+const PLAYER_HIDDEN_ROUTES_V830 = new Set(['betaProfessional','betaQaCenter','releaseCandidate','mobileAudit','polishCenter','data2026','database2026','dataPack2026','visualLibrary','assetChecklist','rosterLock2026','rosterUpdate']);
+function normalizePlayerMenuGroupsV830(groups=[]){
+  return dedupeMenuGroupsV800(groups).map(([group, items=[]]) => {
+    const publicGroup = group === 'Sistema e desenvolvimento' ? 'Opções do jogo' : group;
+    const publicItems = items
+      .filter(item => !PLAYER_HIDDEN_ROUTES_V830.has(item[0]))
+      .map(item => {
+        const cleaned = [...item];
+        if(/^v\d|Novo|Dados|Assets|Sistema$/i.test(String(cleaned[4] || ''))) cleaned[4] = '';
+        if(cleaned[0] === 'saveCenter') cleaned[1] = 'Gerenciar saves';
+        return cleaned;
+      });
+    return [publicGroup, publicItems];
+  }).filter(([,items]) => items.length);
 }
 
 export function lobby(state){
@@ -159,8 +173,6 @@ export function lobby(state){
       ${renderScoutingRibbon(state)}
       ${renderStaffRibbon(state)}
       ${renderFinanceRibbon(state)}
-      ${renderBetaQaRibbon(state)}
-
       <section class="quick-actions-v550" aria-label="Ações principais">
         ${PRIMARY_ACTIONS_V550.map(([route,title,icon,desc])=>`<button class="card quick-action-v550" data-route="${route}"><span>${icon}</span><strong>${title}</strong><em>${desc}</em></button>`).join('')}
       </section>
@@ -190,12 +202,11 @@ export function lobby(state){
 
 export function managerMenu(state){
   const t = teams.find(x => x.id === state.clubId) || teams[0];
-  const displayGroups = dedupeMenuGroupsV800(MANAGER_MENU_GROUPS_V550);
-  try { window.__VFM_MANAGER_MENU_GROUPS__ = MANAGER_MENU_GROUPS_V550; } catch(e) {}
+  const displayGroups = normalizePlayerMenuGroupsV830(MANAGER_MENU_GROUPS_V550);
   return screenWrap('managerMenu', `
     <section class="manager-menu-shell-v550">
       <div class="premium-topbar panel lobby-topbar-v550">
-        <div><span class="tag">Central organizada</span><h1>Menu do treinador</h1><p class="small">Todos os módulos avançados ficam aqui para o lobby continuar limpo no mobile e no PC.</p></div>
+        <div><span class="tag">Central organizada</span><h1>Menu do treinador</h1><p class="small">Escolha rapidamente o que deseja administrar no clube.</p></div>
         <div class="top-status"><button class="secondary-btn mini" data-route="lobby">Voltar ao lobby</button><div class="resource">${t.name}</div></div>
       </div>
       <section class="menu-groups-v550">
@@ -203,7 +214,7 @@ export function managerMenu(state){
           <article class="panel menu-group-v550">
             <div class="row space"><h2>${group}</h2><span class="tag">${items.length} atalhos</span></div>
             <div class="menu-grid-v550">
-              ${items.map(([r,title,icon,desc,badge,duplicate])=>`<button class="card menu-tile premium-tile" data-route="${r}" ${duplicate?'data-beta-duplicate="true" aria-hidden="true" tabindex="-1"':''}><span class="tile-badge">${badge}</span><span class="tile-icon">${icon}</span><strong>${title}</strong><span class="small">${desc}</span></button>`).join('')}
+              ${items.map(([r,title,icon,desc,badge,duplicate])=>`<button class="card menu-tile premium-tile" data-route="${r}" ${duplicate?'data-beta-duplicate="true" aria-hidden="true" tabindex="-1"':''}>${badge?`<span class="tile-badge">${badge}</span>`:''}<span class="tile-icon">${icon}</span><strong>${title}</strong><span class="small">${desc}</span></button>`).join('')}
             </div>
           </article>`).join('')}
       </section>

@@ -8,7 +8,7 @@ export const uxAuditChecklist = [
   { area:'Assets', status:'OK', score:98, detail:'Fallback de fundos, clubes, jogadores, ligas, paises, patrocinadores e estadios.' },
   { area:'Save', status:'OK', score:97, detail:'Migracao de saves antigos, autosave, backups, exportacao e importacao por JSON.' },
   { area:'Gameplay', status:'OK', score:90, detail:'Temporada, mercado, taticas, partida profunda, economia e carreira conectadas.' },
-  { area:'GitHub/Vercel', status:'OK', score:100, detail:'Build estatica, caminhos relativos e index.html na raiz.' }
+  { area:'Publicação', status:'OK', score:100, detail:'Publicação estática, caminhos relativos e index.html na raiz.' }
 ];
 
 export const premiumPolishNotes = [
@@ -16,7 +16,7 @@ export const premiumPolishNotes = [
   'Menus principais receberam melhor espacamento e toque minimo.',
   'Partida, tabela e lobby priorizam informacao essencial sem esconder o fundo.',
   'Sistema visual entende fundos extras, mas sempre cai para fallback seguro.',
-  'Build preparada para receber novas faces, escudos, fundos e ligas sem alterar codigo.'
+  'Base preparada para receber novas faces, escudos, fundos e ligas sem alterar codigo.'
 ];
 
 export const releaseReadiness = {

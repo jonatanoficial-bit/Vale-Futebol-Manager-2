@@ -3,7 +3,7 @@ export const REAL_AUDIO_PACK_VERSION = 'v7.2.0';
 export const REAL_AUDIO_PACK_STATUS_V720 = {
   label: 'Pacote de Efeitos Reais Opcionais',
   status: 'real-audio-pack-ready',
-  phase: 'Fase 55 — MP3/WAV opcionais, manifest de áudio, fallback WebAudio e teste mobile',
+  phase: 'Efeitos de áudio',
   build: 'v7.2.0'
 };
 
@@ -40,7 +40,7 @@ export const REAL_AUDIO_IMPORT_STEPS_V720 = [
 export const REAL_AUDIO_SAFETY_RULES_V720 = [
   'Áudio real é sempre opcional: nenhum MP3/WAV é obrigatório para abrir o jogo.',
   'Autoplay continua bloqueado: tocar áudio exige clique/toque do usuário.',
-  'Se um arquivo não existir, o jogo usa o preset WebAudio v7.1.0 correspondente.',
+  'Se um arquivo não existir, o jogo usa o preset áudio seguro correspondente.',
   'Botão de parar som deve interromper MP3/WAV e também o fallback sintético.',
   'Volume padrão precisa ficar abaixo de 40% para proteger experiência mobile.',
   'Falha de decode, formato ou caminho errado não pode travar partida, save ou navegação.'

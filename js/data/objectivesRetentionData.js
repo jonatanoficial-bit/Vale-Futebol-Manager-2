@@ -3,7 +3,7 @@ export const OBJECTIVES_RETENTION_VERSION = 'v6.5.0';
 export const OBJECTIVES_RETENTION_STATUS_V650 = {
   label: 'Objetivos, Conquistas e Retenção',
   status: 'objectives-retention-ready',
-  phase: 'Fase 48 — objetivos, conquistas, missões e retenção diária',
+  phase: 'Objetivos e conquistas',
   build: 'v6.5.0'
 };
 

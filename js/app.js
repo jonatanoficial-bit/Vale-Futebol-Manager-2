@@ -87,7 +87,7 @@ import { runBootSafety } from '../core/safety/safe-loader.js';
 
 async function boot(){
   const app = document.getElementById('app');
-  let buildInfo = { buildLabel:'Build v5.8.0' };
+  let buildInfo = { buildLabel:'Vale Futebol Manager' };
   try { buildInfo = await (await fetch('build/build-info.json', {cache:'no-store'})).json(); } catch(err) { console.warn('[VFM] build-info fallback', err); }
   const loadedAssetMap = await loadAssetMap();
   await loadVisualLibrary();
@@ -98,7 +98,7 @@ async function boot(){
   applyMobileUxFinalShell();
   applyNavigationExperienceShell();
   load();
-  runRuntimeAudit(getState(), {phase:'v8.2.0 professional beta final qa boot', betaProfessional: validateBetaProfessionalSystem(buildBetaProfessionalSnapshot(getState(), MANAGER_MENU_GROUPS_V550)), assetIntegrity: validateAssetIntegritySystem(buildAssetIntegritySnapshot(getState())), betaQa: validateBetaQaSystem(buildBetaQaSnapshot(getState(), MANAGER_MENU_GROUPS_V550)), financeV790: validateFinanceV790System(buildFinanceSnapshot(getState())), staff: validateStaffSystem(buildStaffSnapshot(getState())), weeklyTraining: validateWeeklyTrainingSystem(buildWeeklyTrainingSnapshot(getState())), scouting: validateScoutingSystem(buildScoutingSnapshot(getState())), saveSlotsV2: validateSaveSlotsV2System(buildSaveSlotsV2Snapshot(getState())), liveCalendar: validateLiveCalendarSystem(buildLiveCalendarSnapshot(getState())), stadiumClimate: validateStadiumClimateSystem(buildStadiumClimateSnapshot(getState())), realAudioPack: validateRealAudioPackSystem(buildRealAudioPackSnapshot(getState())), soundAmbience: validateSoundAmbienceSystem(buildSoundAmbienceSnapshot(getState())), matchSimulation90: validateMatchSimulation90System(buildMatchSimulation90Snapshot(getState())), moraleCrisis: validateMoraleCrisisSystem(buildMoraleCrisisSnapshot(getState())), contractRenewal: validateContractRenewalSystem(buildContractRenewalSnapshot(getState())), agentMarket: validateAgentMarketSystem(buildAgentMarketSnapshot(getState())), boardEmotional: validateBoardEmotionalSystem(buildBoardEmotionalSnapshot(getState())), objectivesRetention: validateObjectivesRetentionSystem(buildObjectivesRetentionSnapshot(getState())), squadAI: validateSquadAiSystem(buildSquadAiSnapshot(getState())), matchdayPremium: validateMatchdayPremiumSystem(buildMatchdayPremiumSnapshot(getState())), liveWorld: validateLiveWorldSystem(buildLiveWorldSnapshot(getState())), introCinematic: validateIntroCinematicSystem(buildIntroCinematicSnapshot(getState())), releaseCandidate: validateReleaseCandidateSystem(buildReleaseCandidateSnapshot(getState())), balanceGeneral: validateBalanceGeneralSystem(getState()), guidedTutorial: validateGuidedTutorialSystem(getState()), managerProgression: validateManagerProgressionSystem(getState()), managerJobMarket: validateManagerJobMarketSystem(getState()), pressConference: validatePressConferenceSystem(getState()), careerLoop: validateCareerLoopV592(getState()), rosterLock2026: validateRosterLock2026(getState()), rosterLockSnapshot: buildRosterLock2026Snapshot(getState()), dataPack2026: validateDataPack2026System(getState()), dataPackSnapshot: buildDataPack2026Snapshot(getState()), matchFlow: validateMatchFlowV570(buildMatchExperienceSnapshot(getState())), ux: runtimeSafetySnapshot(getState()), aaa: buildUiAaaSnapshot(getState()), mobile: buildMobileExperienceSnapshot(), mobileCertification: validateMobileCertificationV598(buildMobileCertificationSnapshot()), mobileUxFinal: validateMobileUxFinalV599(buildMobileUxFinalSnapshot()), navigation: validateNavigationSystem({currentRoute:getState().route}), menuHierarchy: validateMenuHierarchy({primaryActions:PRIMARY_ACTIONS_V550, menuGroups:MANAGER_MENU_GROUPS_V550}), touchTargets: validateTouchTargets(), lobby: validateLobbyCompactSystem({primaryActions:PRIMARY_ACTIONS_V550, menuGroups:MANAGER_MENU_GROUPS_V550})});
+  runRuntimeAudit(getState(), {phase:'public-player-ui-boot', betaProfessional: validateBetaProfessionalSystem(buildBetaProfessionalSnapshot(getState(), MANAGER_MENU_GROUPS_V550)), assetIntegrity: validateAssetIntegritySystem(buildAssetIntegritySnapshot(getState())), betaQa: validateBetaQaSystem(buildBetaQaSnapshot(getState(), MANAGER_MENU_GROUPS_V550)), financeV790: validateFinanceV790System(buildFinanceSnapshot(getState())), staff: validateStaffSystem(buildStaffSnapshot(getState())), weeklyTraining: validateWeeklyTrainingSystem(buildWeeklyTrainingSnapshot(getState())), scouting: validateScoutingSystem(buildScoutingSnapshot(getState())), saveSlotsV2: validateSaveSlotsV2System(buildSaveSlotsV2Snapshot(getState())), liveCalendar: validateLiveCalendarSystem(buildLiveCalendarSnapshot(getState())), stadiumClimate: validateStadiumClimateSystem(buildStadiumClimateSnapshot(getState())), realAudioPack: validateRealAudioPackSystem(buildRealAudioPackSnapshot(getState())), soundAmbience: validateSoundAmbienceSystem(buildSoundAmbienceSnapshot(getState())), matchSimulation90: validateMatchSimulation90System(buildMatchSimulation90Snapshot(getState())), moraleCrisis: validateMoraleCrisisSystem(buildMoraleCrisisSnapshot(getState())), contractRenewal: validateContractRenewalSystem(buildContractRenewalSnapshot(getState())), agentMarket: validateAgentMarketSystem(buildAgentMarketSnapshot(getState())), boardEmotional: validateBoardEmotionalSystem(buildBoardEmotionalSnapshot(getState())), objectivesRetention: validateObjectivesRetentionSystem(buildObjectivesRetentionSnapshot(getState())), squadAI: validateSquadAiSystem(buildSquadAiSnapshot(getState())), matchdayPremium: validateMatchdayPremiumSystem(buildMatchdayPremiumSnapshot(getState())), liveWorld: validateLiveWorldSystem(buildLiveWorldSnapshot(getState())), introCinematic: validateIntroCinematicSystem(buildIntroCinematicSnapshot(getState())), releaseCandidate: validateReleaseCandidateSystem(buildReleaseCandidateSnapshot(getState())), balanceGeneral: validateBalanceGeneralSystem(getState()), guidedTutorial: validateGuidedTutorialSystem(getState()), managerProgression: validateManagerProgressionSystem(getState()), managerJobMarket: validateManagerJobMarketSystem(getState()), pressConference: validatePressConferenceSystem(getState()), careerLoop: validateCareerLoopV592(getState()), rosterLock2026: validateRosterLock2026(getState()), rosterLockSnapshot: buildRosterLock2026Snapshot(getState()), dataPack2026: validateDataPack2026System(getState()), dataPackSnapshot: buildDataPack2026Snapshot(getState()), matchFlow: validateMatchFlowV570(buildMatchExperienceSnapshot(getState())), ux: runtimeSafetySnapshot(getState()), aaa: buildUiAaaSnapshot(getState()), mobile: buildMobileExperienceSnapshot(), mobileCertification: validateMobileCertificationV598(buildMobileCertificationSnapshot()), mobileUxFinal: validateMobileUxFinalV599(buildMobileUxFinalSnapshot()), navigation: validateNavigationSystem({currentRoute:getState().route}), menuHierarchy: validateMenuHierarchy({primaryActions:PRIMARY_ACTIONS_V550, menuGroups:MANAGER_MENU_GROUPS_V550}), touchTargets: validateTouchTargets(), lobby: validateLobbyCompactSystem({primaryActions:PRIMARY_ACTIONS_V550, menuGroups:MANAGER_MENU_GROUPS_V550})});
   validateCommercialState(getState());
   initRouter(app, buildInfo);
   register('cover', cover);
@@ -114,10 +114,10 @@ async function boot(){
     seasonCenter:['Temporada','Tabela viva, rodada completa, acesso, queda e vagas continentais'],
     copaDoBrasil:['Copa do Brasil','Mata-mata, agregado, pênaltis, premiação e vaga na Libertadores'],
     financeCenter:['Finanças Profundas','Patrocínios, folha, bilheteria, premiações, bônus e risco de crise'],
-    polishCenter:['UI AAA','Polimento visual, responsividade, performance e prontidão comercial'],
-    mobileAudit:['Auditoria Mobile','Fluxo real, smoke test de rotas, pós-jogo, save e estabilidade'],
+    polishCenter:['Visual do jogo','Polimento visual, responsividade e performance'],
+    mobileAudit:['Suporte mobile','Leitura em celular, botões, rolagem e estabilidade'],
     data2026:['Dados 2026','Divisões, elencos, avatares de jogadores e manutenção segura'],
-    database2026:['Banco Maio/2026','Elencos, atributos, contratos, valores, fotos e auditoria pesada'],
+    database2026:['Banco de elencos','Elencos, atributos, contratos, valores e fotos'],
     worldCompetitions:['Mundial/Intercontinental','Libertadores, Sul-Americana, rota mundial, finanças e reputação global'],
     worldComplete:['Mundo Completo','Ligas internacionais, competições europeias, calendário global, ranking mundial e mercado global'],
     championship:['Campeonato','Competições e agenda anual'],
@@ -141,7 +141,7 @@ async function boot(){
     squad:['Elenco','Jogadores, forma, moral e contratos'],
     settings:['Configurações','Preferências e segurança'],
     aiBalance:['Balanceamento geral','Dificuldade, reputação, XP, economia, propostas e estabilidade da carreira'],
-    releaseCandidate:['Beta Pública','Checklist público, matriz mobile, fluxo de teste e prontidão v6.0.0'],
+    releaseCandidate:['Primeiros passos','Checklist de entrada, mobile e fluxo inicial'],
     careerIntro:['Jornada Inicial','Abertura cinematográfica, arco emocional, onboarding guiado e primeira partida'],
     liveWorld:['Lobby Vivo','Jornal esportivo, bastidores, manchetes, torcida e mundo em movimento'],
     matchdayPremium:['Matchday Premium','Dia de jogo premium, pré-jogo, transmissão, banco e pós-jogo emocional'],
@@ -156,21 +156,20 @@ async function boot(){
     realAudioPack:['Efeitos Reais','Pacote opcional MP3/WAV/OGG, manifest de áudio e fallback seguro'],
     stadiumClimate:['Clima e Gramado','Clima, estádio, gramado, horário, pressão e impacto tático dinâmico'],
     flowSaveHotfix:['Fluxo Inicial','Capa limpa, central de slots, sair da carreira e menu organizado'],
-    saveSlotsV2:['Slots de Carreira','Save Slots 2.0, troca de carreira, apagar, renomear, sair e fluxo definitivo'],
+    saveSlotsV2:['Carreiras salvas','Trocar, apagar, renomear, continuar e sair da carreira'],
     saveCenter:['Central de Save','Autosave, backups, exportação, importação e proteção de carreira'],
-    assetChecklist:['Assets & Cache','Integridade visual, avatares v810, cache anti-Vercel e fallbacks reais'],
-    betaQaCenter:['QA Final do Beta','Roteiro de homologação PC/celular, No-Go, primeira sessão e rotas críticas v8.2'],
+    assetChecklist:['Verificação visual','Avatares, imagens e fallback visual seguro'],
+    betaQaCenter:['Teste rápido','Primeira sessão, celular, partida e carreira'],
     rosterUpdate:['Atualização de Elenco','Importar, exportar e validar elencos por JSON'],
     visualLibrary:['Biblioteca Visual','Fundos dinâmicos, logos, países, ligas e extras integrados'],
-    dataPack2026:['Data Pack 2026','Schema oficial, bloqueio anti-genérico, caminhos e plano de elencos 20/05/2026'],
-    rosterLock2026:['Roster Lock','Auditoria total, quality gate e travamento dos elencos 20/05/2026'],
+    dataPack2026:['Base 2026','Elencos, caminhos de fotos e plano de atualização'],
+    rosterLock2026:['Controle de elenco','Verificação total e travamento dos elencos'],
     careerTutorial:['Tutorial guiado','Missões iniciais, recompensas, reputação e guia premium do modo carreira'],
     managerProgression:['Evolução do treinador','XP, nível, licença, especialidades e conquistas do manager']
   };
   Object.entries(modules).forEach(([route,[title,sub]]) => register(route, (state)=> moduleScreen(route,title,sub,state)));
   await runBootSafety({ state:getState(), routes:['cover','mainMenu','newGame','teamSelect','confirmCareer','lobby','managerMenu','match','pressConference', ...Object.keys(modules)], assetMap:loadedAssetMap, buildInfo });
   render();
-  setInterval(()=>{ document.querySelectorAll('#buildBadge,.build-badge').forEach(el=>{ if(!el.textContent.trim()) el.textContent = buildInfo.buildLabel; }); }, 500);
   setInterval(()=>{ const s=getState(); if(s.route==='match' && s.match?.autoPlay && !s.match?.finalized){ const step = Math.max(5, Math.min(25, Number(s.match.speed || 1) * 5)); advanceMatch(step); render(); } }, 2200);
 }
 window.addEventListener('error', event => {

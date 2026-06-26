@@ -1,0 +1,22 @@
+{
+  "version": "v8.3.0",
+  "phase": "Fase 66 — Interface Pública Limpa para Jogadores",
+  "js_files_total": 224,
+  "relative_imports_missing": [],
+  "index_references_total": 44,
+  "index_references_missing": [],
+  "asset_map_unique_paths": 739,
+  "asset_map_missing": [],
+  "asset_map_missing_count": 0,
+  "avatars_v810_count": 12,
+  "avatars_v810_unique_hashes": 12,
+  "public_ui_checks": {
+    "common_has_build_badge_element": false,
+    "lobby_has_beta_qa_ribbon": false,
+    "index_uses_v830": true,
+    "build_label_player_friendly": true,
+    "manifest_player_friendly": true
+  },
+  "forbidden_hits_in_public_entry_files": [],
+  "pass": true
+}

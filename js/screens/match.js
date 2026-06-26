@@ -98,7 +98,7 @@ export function match(state){
   const importantHtml = importantEvents.length ? importantEvents.map(e=>`<div class="important-event-card-v570 ${e.type}"><strong>${e.minute}' ${eventIcon(e.type)} ${e.title}</strong><small>${e.text}</small></div>`).join('') : '<div class="important-event-card-v570"><strong>▶ Partida iniciada</strong><small>O assistente destacará gols, VAR, pênaltis, cartões, lesões e defesas importantes aqui.</small></div>';
   const quickSubOne = buildSubOptions(players, state, isOver).split('</button>').slice(0,2).map(x=>x && x.includes('<button') ? `${x}</button>` : '').join('');
   const matchHeader = `${home.stadium || 'Estádio'} · ${stats.ctx.weather} · Árbitro ${stats.ctx.refereeTone} · ${stats.ctx.attendance.toLocaleString('pt-BR')} torcedores`;
-  return screenWrap('match', `${topbar('Partida ao vivo','Matchday Premium v7.0 · 90 minutos, pressão, leitura tática e drama final','lobby')}
+  return screenWrap('match', `${topbar('Partida ao vivo','90 minutos, pressão, leitura tática e drama final','lobby')}
     <section class="match-v140 match-v300 match-v570-shell match-v630-premium-shell">
       <div class="match-v630-live-ribbon">${renderMatchdayPremiumStrip(state)}</div>
       <div class="match-v700-sim-ribbon">${renderMatchSimulation90Strip(state)}</div>
