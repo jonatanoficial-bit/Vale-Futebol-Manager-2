@@ -14,6 +14,7 @@ export {
   sponsorLogo,
   icon,
   safeImg,
+  avatarPhoto,
   cacheImage,
   assetExists,
   preloadCriticalAssets,

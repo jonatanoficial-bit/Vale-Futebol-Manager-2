@@ -8,6 +8,7 @@ function mergeMap(map={}){
   return {
     fallbacks:{...DEFAULT_FALLBACKS, ...(map.fallbacks || {})},
     backgrounds:{...(map.backgrounds || {})},
+    avatars:{...(map.avatars || {})},
     countries:{...(map.countries || {})},
     competitions:{...(map.competitions || {})},
     leagues:{...(map.leagues || {})},
@@ -72,6 +73,12 @@ export function competitionLogo(id='brasileirao_a'){
 export function leagueLogo(id='brasileirao_serie_a'){
   const key = String(id || '').replace(/-/g,'_');
   return resolveAsset(map().leagues?.[id] || map().leagues?.[key], 'league');
+}
+
+
+export function avatarPhoto(id='manager-01'){
+  const key = String(id || 'manager-01').replace(/^assets\/avatars\//,'').replace(/\.png$/,'');
+  return resolveAsset(map().avatars?.[key] || `assets/avatars/${key}.png`, 'avatar');
 }
 
 export function playerPhoto(pathOrId='', clubId='santos'){

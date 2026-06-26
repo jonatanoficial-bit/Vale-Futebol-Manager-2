@@ -4,10 +4,10 @@ import { countries, gameModes } from '../data/gameData.js';
 import { esc } from '../utils/dom.js';
 
 export function newGame(state){
-  const selectedAvatar = state.ui?.selectedAvatar || state.manager.avatar || 'assets/avatars/manager-01.png';
+  const selectedAvatar = state.ui?.selectedAvatar || state.manager.avatar || 'assets/avatars/manager-v801-01.png';
   const selectedCountry = state.ui?.selectedCountry || state.manager.country || 'br';
   const selectedMode = state.ui?.selectedMode || state.manager.mode || 'career';
-  const av=[1,2,3,4,5,6,7,8,9,10,11,12].map(i=>`assets/avatars/manager-${String(i).padStart(2,'0')}.png`);
+  const av=[1,2,3,4,5,6,7,8,9,10,11,12].map(i=>`assets/avatars/manager-v801-${String(i).padStart(2,'0')}.png`);
   return screenWrap('newGame', `
     ${topbar('Novo Game','Crie seu manager','mainMenu',{resources:false})}
     <section class="career-create stack">

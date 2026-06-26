@@ -51,15 +51,24 @@ function cleanLeagueStateForNewCareer(career={}, clubId='santos'){
   };
 }
 
+
+const DEFAULT_MANAGER_AVATAR_V801 = 'assets/avatars/manager-v801-01.png';
+function normalizeManagerAvatarPath(src=''){
+  const value = String(src || '').trim() || DEFAULT_MANAGER_AVATAR_V801;
+  const match = value.match(/^assets\/avatars\/manager-(\d{2})\.png$/);
+  if(match) return `assets/avatars/manager-v801-${match[1]}.png`;
+  return value;
+}
+
 export const defaultState = () => ({
   route:'cover',
-  manager:{ name:'Joao Victor', country:'br', avatar:'assets/avatars/manager-01.png', reputation:82, mode:'career' },
+  manager:{ name:'Joao Victor', country:'br', avatar:DEFAULT_MANAGER_AVATAR_V801, reputation:82, mode:'career' },
   clubId:'santos', season:2026, month:'Maio', money:92.5, coins:250, notifications:6, boardTrust:76, fanMood:82, jobSecurity:'Seguro',
   match:{ id:'2026-05-24-santos-palmeiras', date:'2026-05-24', competitionId:'brasileirao-a', competition:'Brasileirão Série A 2026', stage:'Rodada atual', minute:1, home:'santos', away:'palmeiras', homeGoals:0, awayGoals:0, speed:1, autoPlay:false, finalized:false, postMatchReady:false, substitutions:[], maxSubs:5, decision:'balanced', tacticalBoost:0, usedSubPlayers:[], postMatchReport:null, nextMatchQueued:null, reportViewed:false },
   career:{ currentDate:'2026-05-19', matchday:1, completedMatches:[], lastResult:null, promotionRelegation:{serieARelegation:4,serieBPromotion:4,libertadoresTop:5,sulamericanaRange:[6,12],serieBRelegation:4}, integrationLog:['Carreira migrada para v5.1.0 com save profissional, múltiplos slots, backups automáticos e recuperação de carreira.'], jobOffers:[], offerHistory:[], jobMarket:null, nationalTeamJob:null, dualCareer:{enabled:false, club:true, nationalTeam:null}, callUpSelection:defaultCallUpSelection(), internationalCalendar:buildNationalCalendar(2026, 'brasil'), managerProfile:null, activeContract:null, contractHistory:[], titleHistory:[], sackRiskLog:[], managerTimeline:[], unlockedMilestones:[], boardRelationship:76, fanRelationship:82, dressingRoomTrust:69, mediaPressure:54, worldCompetitionCycle:{libertadores:true,sulamericana:true,clubWorldCupCycle:4,worldCupCycle:4,lastUpdated:'v4.3.0'}, financeReport:{profile:'balanced', lastMonthlyCycle:null, crisisLog:[], boardWarnings:[], sponsorReview:'v3.5.0'}, tutorial:{seen:false, step:1, completed:false}, missions:[], completedSeasons:0, seasonHistory:[], lifetimeEarnings:0, reputationHistory:[], activeStory:['Bem-vindo ao modo carreira: jogue partidas, cumpra missões, aumente renda e reputação sem limite de temporadas.'], pressHistory:[], pressConference:null, managerProgression:null },
   gameplay:{ difficulty:'realistic', aiVersion:'v5.4.0', realism:88, variance:18, balanceLog:[] },
   stability:{ autosave:true, lastBackup:null, backupCount:0, lastExport:null, lastImport:null, safeModeEvents:0, health:'Excelente', auditVersion:SAVE_MANAGER_VERSION, saveManagerVersion:SAVE_MANAGER_VERSION, saveIntegrity:'ok', commercialAudit:'v3.7.0-ok', fullscreenMobile:true, overflowGuard:true, rosterSafeMode:true, matchEngineSafeMode:true, matchEngineVersion:'v4.7.0', matchStressTest:'passed-100', trainingEngineVersion:TRAINING_ENGINE_VERSION, trainingStressTest:'passed-4-weeks', transferEngineVersion:TRANSFER_ENGINE_VERSION, transferIntegrity:'pending' },
-  save:{ version:SAVE_MANAGER_VERSION, schema:800, activeSlot:'principal', slotLabel:'Carreira principal', careerStarted:false, migratedFrom:null, lastMigrationAt:null, exportCount:0, importCount:0, autosaveCheckpoints:[] },
+  save:{ version:SAVE_MANAGER_VERSION, schema:801, activeSlot:'principal', slotLabel:'Carreira principal', careerStarted:false, migratedFrom:null, lastMigrationAt:null, exportCount:0, importCount:0, autosaveCheckpoints:[] },
   roster:clubRosterPackage('santos'),
   finance:ensureFinanceState({profile:'balanced', cash:92.5, crisisLog:[], boardWarnings:[], sponsorReview:FINANCE_VERSION}, {clubId:'santos', money:92.5}),
   training:ensureTrainingState(),
@@ -67,7 +76,7 @@ export const defaultState = () => ({
   scouting:normalizeScoutingState({}, {clubId:'santos'}),
   staff:ensureStaffState({}, {clubId:'santos'}),
   transfer:ensureTransferLedger({ budget:42.8, wageRoom:2.4, negotiationLog:[], activeNegotiations:[], acceptedDeals:[], rejectedDeals:[], outgoingDeals:[], renewals:[], loanDeals:[], incomingOffers:[], aiDeals:[], agentEvents:[], smartReports:[], windowOpen:true, boardApproval:82, marketDay:1, intelligenceVersion:'v3.7.0' }),
-  ui:{ selectedAvatar:'assets/avatars/manager-01.png', selectedMode:'career', selectedCountry:'br', selectedClub:'santos', teamCountryFilter:'all', teamLeagueFilter:'all', teamSort:'level', standingsCompetition:'brasileirao-a', selectedFormation:'433-possession', tacticalProfile:'possession', trainingTheme:'possession', transferFilter:'all', squadView:'best', captainId:'neymar', penaltyTakerId:'neymar', freeKickTakerId:'neymar', cornerTakerId:'gabriel-menino' }
+  ui:{ selectedAvatar:DEFAULT_MANAGER_AVATAR_V801, selectedMode:'career', selectedCountry:'br', selectedClub:'santos', teamCountryFilter:'all', teamLeagueFilter:'all', teamSort:'level', standingsCompetition:'brasileirao-a', selectedFormation:'433-possession', tacticalProfile:'possession', trainingTheme:'possession', transferFilter:'all', squadView:'best', captainId:'neymar', penaltyTakerId:'neymar', freeKickTakerId:'neymar', cornerTakerId:'gabriel-menino' }
 });
 let state = defaultState();
 function sanitizeManager(manager={}){
@@ -75,7 +84,7 @@ function sanitizeManager(manager={}){
   return {
     name: cleanName,
     country: String(manager.country || 'br'),
-    avatar: String(manager.avatar || 'assets/avatars/manager-01.png'),
+    avatar: normalizeManagerAvatarPath(manager.avatar || DEFAULT_MANAGER_AVATAR_V801),
     reputation: Number(manager.reputation || 82),
     mode: String(manager.mode || 'career')
   };
@@ -120,7 +129,7 @@ function normalize(next){
   merged.stability.saveManagerVersion = SAVE_MANAGER_VERSION;
   merged.save = {...base.save, ...(next?.save || {})};
   merged.save.version = SAVE_MANAGER_VERSION;
-  merged.save.schema = 800;
+  merged.save.schema = 801;
   merged.save.activeSlot = String(merged.save.activeSlot || 'principal').slice(0,32);
   merged.save.exportCount = Math.max(0, Number(merged.save.exportCount || 0));
   merged.save.importCount = Math.max(0, Number(merged.save.importCount || 0));
@@ -171,7 +180,7 @@ function normalize(next){
   merged.transfer.marketDay = Math.max(1, Number(merged.transfer.marketDay || 1));
   merged.match.minute = Math.max(1, Math.min(90, Number(merged.match.minute || 1)));
   if(typeof merged.match.finalized !== 'boolean') merged.match.finalized = merged.match.minute >= 90 && merged.career.completedMatches.some(m=>m.id===merged.match.id);
-  if(!merged.ui.selectedAvatar) merged.ui.selectedAvatar = merged.manager.avatar;
+  merged.ui.selectedAvatar = normalizeManagerAvatarPath(merged.ui.selectedAvatar || merged.manager.avatar);
   if(!merged.ui.selectedCountry) merged.ui.selectedCountry = merged.manager.country;
   if(!merged.ui.selectedMode) merged.ui.selectedMode = merged.manager.mode;
   if(!merged.ui.selectedClub) merged.ui.selectedClub = merged.clubId || 'santos';
@@ -254,7 +263,7 @@ export function startCareer(){
     finance: ensureFinanceState({cash:Number(chosenTeam?.budget || state.money || 40), profile:'balanced', ledger:[`Fase 62: financeiro profundo iniciado para ${chosenTeam?.name || chosenClub}.`]}, {clubId:chosenClub, ui:{selectedClub:chosenClub}, money:Number(chosenTeam?.budget || state.money || 40)}),
     scouting: normalizeScoutingState({observerLog:[`Fase 59: scout profissional iniciado para ${chosenTeam?.name || chosenClub}.`]}, {clubId:chosenClub, ui:{selectedClub:chosenClub}}),
     staff: ensureStaffState({staffLog:[`Fase 61: comissão técnica viva iniciada para ${chosenTeam?.name || chosenClub}.`]}, {clubId:chosenClub, ui:{selectedClub:chosenClub}}),
-    save:{...(state.save||{}), version:SAVE_MANAGER_VERSION, schema:800, activeSlot:state.save?.activeSlot || 'principal', slotLabel:state.save?.slotLabel || slotLabel(state.save?.activeSlot || 'principal'), careerStarted:true}
+    save:{...(state.save||{}), version:SAVE_MANAGER_VERSION, schema:801, activeSlot:state.save?.activeSlot || 'principal', slotLabel:state.save?.slotLabel || slotLabel(state.save?.activeSlot || 'principal'), careerStarted:true}
   });
   persist();
 }
@@ -356,7 +365,7 @@ export function finishMatch(){
     fanMood: Math.max(0, Math.min(100, Number(state.fanMood || 82) + (already ? 0 : fanDelta))),
     notifications: Number(state.notifications || 0) + (already ? 0 : 1),
     gameplay:{...state.gameplay, balanceLog},
-    stability:{...(state.stability||{}), health:'Pós-jogo salvo com segurança', auditVersion:'v8.0.0', financeVersion:FINANCE_VERSION}
+    stability:{...(state.stability||{}), health:'Pós-jogo salvo com segurança', auditVersion:'v8.0.1-avatar-hotfix', financeVersion:FINANCE_VERSION}
   });
   logIntegration(`Resultado integrado: ${result.competition} ${result.stage} terminou ${result.summary}. Relatório pós-jogo preservado antes do retorno ao lobby.`);
   persist();
@@ -1307,9 +1316,9 @@ export function createNewCareerSlot(slot='career-2'){
     const base = defaultState();
     state = normalize({
       ...base,
-      manager:{...base.manager, name:'Manager Vale', country:'br', avatar:'assets/avatars/manager-01.png', mode:'career', reputation:50},
+      manager:{...base.manager, name:'Manager Vale', country:'br', avatar:DEFAULT_MANAGER_AVATAR_V801, mode:'career', reputation:50},
       clubId:'santos',
-      ui:{...base.ui, selectedAvatar:'assets/avatars/manager-01.png', selectedCountry:'br', selectedMode:'career', selectedClub:'santos'},
+      ui:{...base.ui, selectedAvatar:DEFAULT_MANAGER_AVATAR_V801, selectedCountry:'br', selectedMode:'career', selectedClub:'santos'},
       career:{...base.career, completedMatches:[], lastResult:null, matchday:1, currentDate:'2026-04-13', integrationLog:[`Novo slot ${safeSlot} criado na Fase 57: dados antigos isolados até confirmação da carreira.`]},
       save:{...base.save, activeSlot:safeSlot, slotLabel:slotLabel(safeSlot), careerStarted:false, createdAt:new Date().toISOString()},
       route:'newGame'

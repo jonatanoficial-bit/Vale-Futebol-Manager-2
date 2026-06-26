@@ -1,3 +1,13 @@
+# PROJECT STATUS — v8.0.1 / Fase 63.1
+
+Hotfix aplicado após homologação visual: os avatares do fluxo **Criar Manager** agora são 12 assets reais/distintos e versionados para evitar cache.
+
+Status: **pronto para novo deploy no Vercel/GitHub**.
+
+Relatório técnico: `PHASE_63_1_AVATAR_HOTFIX_REPORT.md`.
+
+---
+
 # PROJECT STATUS — v8.0.0 / Fase 63
 
 Gerado em: **2026-06-25 15:58:00 BRT**

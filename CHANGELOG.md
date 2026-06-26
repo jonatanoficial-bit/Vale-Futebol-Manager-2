@@ -1,3 +1,14 @@
+# v8.0.1 — Fase 63.1: Hotfix Beta Profissional / Avatares reais
+
+- Corrigido problema visual em que os 12 avatares do fluxo Criar Manager apareciam como o mesmo placeholder.
+- Gerados 12 PNGs distintos em `assets/avatars/manager-v801-01.png` até `manager-v801-12.png`.
+- Substituídos também os caminhos antigos `manager-01.png` até `manager-12.png` para compatibilidade.
+- Adicionada migração automática de saves antigos para os caminhos versionados.
+- Atualizado `asset-map.json`, build-info, manifest PWA e relatório da Fase 63.1.
+- Preservados os sistemas v8.0.0 Beta Profissional.
+
+---
+
 # v8.0.0 — Fase 63: Beta Profissional / Consolidação Geral
 
 - Auditoria geral dos sistemas críticos para divulgação beta.

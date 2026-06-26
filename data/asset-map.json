@@ -1461,7 +1461,8 @@
     "naming": "lowercase, sem acentos, hifen ou underline conforme nomes existentes do pacote",
     "mergedClubLogos": 218,
     "visualLibrary": "data/asset-library.json",
-    "updatedAt": "2026-05-19T16:30:00Z"
+    "updatedAt": "2026-05-19T16:30:00Z",
+    "avatarHotfix": "v8.0.1 — 12 avatares versionados manager-v801-01..12 adicionados para evitar cache e placeholders."
   },
   "icons": {
     "home": "assets/icons/home.png",
@@ -1523,6 +1524,20 @@
   "rosters": {
     "santos2026": "data/rosters/2026/santos.json"
   },
-  "version": "v2.6.1",
-  "updatedAt": "2026-05-19T16:30:00Z"
+  "version": "v8.0.1-avatar-hotfix",
+  "updatedAt": "2026-06-26 10:58:00 BRT",
+  "avatars": {
+    "manager-01": "assets/avatars/manager-v801-01.png",
+    "manager-02": "assets/avatars/manager-v801-02.png",
+    "manager-03": "assets/avatars/manager-v801-03.png",
+    "manager-04": "assets/avatars/manager-v801-04.png",
+    "manager-05": "assets/avatars/manager-v801-05.png",
+    "manager-06": "assets/avatars/manager-v801-06.png",
+    "manager-07": "assets/avatars/manager-v801-07.png",
+    "manager-08": "assets/avatars/manager-v801-08.png",
+    "manager-09": "assets/avatars/manager-v801-09.png",
+    "manager-10": "assets/avatars/manager-v801-10.png",
+    "manager-11": "assets/avatars/manager-v801-11.png",
+    "manager-12": "assets/avatars/manager-v801-12.png"
+  }
 }

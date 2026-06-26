@@ -1,50 +1,50 @@
-# TEST REPORT — v8.0.0 / Fase 63
+# TEST REPORT — v8.0.1 / Fase 63.1
 
-Data: **2026-06-25 15:58:00 BRT**
+## Hotfix auditado
+Correção dos assets de avatar na tela **Novo Game / Crie seu Manager**.
 
-## Resultado
+## Testes executados
 
-Status: **APROVADO PARA HOMOLOGAÇÃO MANUAL**
-
-## Auditoria automatizada executada
+### 1. Sintaxe JavaScript / MJS
+Comando:
 
 ```bash
-find js core tools -name '*.js' -o -name '*.mjs' | sort | xargs -I{} node --check {}
+find js core tools -type f \( -name '*.js' -o -name '*.mjs' \) -print0 | xargs -0 -n1 node --check
 ```
 
-Resultado: **221 arquivos JavaScript/core/tools verificados sem erro de sintaxe.**
+Resultado: **OK**.
 
-## Auditoria Beta Profissional
+### 2. Smoke test Beta Profissional
+Comando:
 
 ```bash
 node tools/audit_beta_professional_v800.mjs
 ```
 
-Resultado: **OK**
+Resultado: **OK**.
 
-- Score Beta: **98/100**.
-- Rotas renderizadas: **22**.
+Resumo:
+- Rotas testadas: **22**.
 - Falhas de rota: **0**.
-- Duplicatas visuais removidas do menu: **5**.
-- Schema principal: **800**.
+- Score beta: **98**.
+- Duplicatas de menu ocultas: **5**.
 
-## Gates críticos
+Relatório JSON: `AUDIT_BETA_PROFESSIONAL_V801.json`.
 
-- Save Slots 2.0: OK.
-- Calendário Vivo: OK.
-- Scout Profissional: OK.
-- Treino Semanal: OK.
-- Staff Vivo: OK.
-- Finanças Profundas: OK.
-- Fluxo de carreira: OK.
-- Partida/pós-jogo: OK em smoke render.
-- Mobile/menu: OK em auditoria estrutural.
+### 3. Auditoria de avatares
+Resultado: **OK**.
 
-## Homologação manual obrigatória
+Resumo:
+- Referências `manager-v801` encontradas no HTML do Novo Game: **12**.
+- Arquivos versionados existentes: **12**.
+- Hashes únicos entre os 12 avatares: **12**.
+- Avatar padrão migrado: `assets/avatars/manager-v801-01.png`.
 
-- Abrir no PC e no celular.
-- Confirmar que o jogo começa na capa/central de save, sem cair direto no lobby.
-- Criar, carregar, renomear e apagar slots.
-- Testar partida completa.
-- Testar calendário, scout, treino, staff e finanças.
-- Conferir rolagem e botões no mobile.
+Relatório JSON: `AUDIT_AVATARS_V801.json`.
+Preview visual: `docs/avatar-contact-v801.png`.
+
+### 4. ZIP
+O pacote final foi testado com `unzip -t` após compactação.
+
+## Observação
+A correção usa arquivos versionados para reduzir risco de cache no navegador/Vercel. Após deploy, se o navegador ainda mostrar a versão antiga, fazer reload forçado uma vez.

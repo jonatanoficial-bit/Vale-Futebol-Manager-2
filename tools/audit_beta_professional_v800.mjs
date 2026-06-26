@@ -48,9 +48,9 @@ const systemChecks = {
 const failedRoutes = routeResults.filter(r=>!r.ok);
 const failedSystems = Object.entries(systemChecks).filter(([,v])=>!v.ok);
 const result = {
-  version:'v8.0.0',
-  phase:'Fase 63 — Beta Profissional / Consolidação Geral',
-  generatedAt:'2026-06-25 15:58:00 BRT',
+  version:'v8.0.1',
+  phase:'Fase 63.1 — Hotfix Beta Profissional / Avatares',
+  generatedAt:'2026-06-26 10:58:00 BRT',
   status: failedRoutes.length || failedSystems.length ? 'ERROR' : 'OK',
   betaScore: betaSnapshot.overallScore,
   duplicateRoutesRemoved: betaSnapshot.duplicateRoutesRemoved,

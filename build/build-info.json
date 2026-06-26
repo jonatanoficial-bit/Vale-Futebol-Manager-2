@@ -1,27 +1,24 @@
 {
-  "version": "v8.0.0",
-  "buildLabel": "Build v8.0.0 | 2026-06-25 15:58:00 BRT | Fase 63 Beta Profissional / Consolidação Geral",
-  "phase": "Fase 63 — Beta Profissional / Consolidação Geral",
+  "version": "v8.0.1",
+  "buildLabel": "Build v8.0.1 | 2026-06-26 10:58:00 BRT | Hotfix Beta Profissional — Avatares reais nos slots de criação",
+  "phase": "Fase 63.1 — Hotfix Beta Profissional / Assets de Avatares",
   "dataPack": "2026.05.20",
-  "status": "professional-beta-consolidated",
-  "generatedAt": "2026-06-25 15:58:00 BRT",
+  "status": "professional-beta-avatar-hotfix",
+  "generatedAt": "2026-06-26 10:58:00 BRT",
   "mandatoryFlow": "cover -> mainMenu/save slots -> newGame/teamSelect/confirmCareer or lobby",
   "playableSlots": [
     "principal",
     "career-2",
     "career-3"
   ],
-  "schema": 800,
+  "schema": 801,
   "majorSystems": [
-    "Auditoria geral v8.0.0 com quality gates profissionais",
-    "Menus consolidados com deduplicação visual de atalhos avançados",
-    "Centro Beta Profissional com status dos sistemas críticos",
-    "Fluxo de carreira por 3 slots preservado sem auto-start confuso",
-    "Calendário vivo, viagens e fadiga preservados",
-    "Scout profissional preservado",
-    "Treino semanal realista preservado",
-    "Staff e comissão técnica viva preservados",
-    "Financeiro profundo, patrocínio e bilheteria preservados",
-    "Smoke tests estáticos e lógicos preparados para homologação manual"
+    "Hotfix visual corrigindo os 12 avatares do fluxo Criar Manager",
+    "Arquivos antigos manager-01..12 substituídos por PNGs distintos",
+    "Novos arquivos versionados manager-v801-01..12 para evitar cache do navegador/Vercel",
+    "Migração automática de saves antigos para caminhos manager-v801 quando aplicável",
+    "Save Slots 2.0 preservado",
+    "Calendário vivo, scout, treino, staff e finanças preservados",
+    "Auditoria de assets e JavaScript executada após o hotfix"
   ]
 }
