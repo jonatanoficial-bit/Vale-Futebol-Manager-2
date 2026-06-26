@@ -1,0 +1,56 @@
+{
+  "build": "v8.2.0",
+  "phase": "Fase 65 — QA Final do Beta Profissional e Homologação de Primeira Sessão",
+  "generatedAt": "2026-06-26 11:13:18 BRT",
+  "schema": 820,
+  "base": "v8.1.0 Fase 64",
+  "files": {
+    "index.html": {
+      "size": 3417,
+      "sha256": "fde50389be62a15d59d244f3d4b11d521f40ca13db0ce1b9111a7461d809e4cb"
+    },
+    "build/build-info.json": {
+      "size": 966,
+      "sha256": "1668ac747e7e127f1c80020ed0a223ff25b6c8b86838f2677eadefc29d2cb6f3"
+    },
+    "manifest.webmanifest": {
+      "size": 375,
+      "sha256": "6ab78cdd45b01c43f42c988a794431fa1d9640049e6815de58f4c084fd30141c"
+    },
+    "js/app.js": {
+      "size": 17947,
+      "sha256": "b19046e401de853ff970df9e9f29b9b5681343c0a798d58618e43d7d8dd2a8c3"
+    },
+    "js/data/betaQaData.js": {
+      "size": 3685,
+      "sha256": "068125aee425ef60c03d0bd552975652b68aa28804acaf38a995d1c373b2a583"
+    },
+    "js/systems/betaQaEngine.js": {
+      "size": 7097,
+      "sha256": "ac576f146068baf149bdf12353f373b8c7504851433855b8f509af3ecd913ea8"
+    },
+    "core/safety/beta-qa-validator.js": {
+      "size": 1342,
+      "sha256": "47fdb4ba7d49eb18dcab84547c844898bfa97eef58a25f8c146fe1ca1f4d2127"
+    },
+    "css/beta-qa-v820.css": {
+      "size": 3243,
+      "sha256": "3a2b372ee36136ba8d4d32624efa7e536ea0fe69f21f9f3db50e774c8cf13a4b"
+    },
+    "data/asset-map.json": {
+      "size": 63010,
+      "sha256": "a8d46507a768508bb3258ba5d5274bace9bca38e2560a607dc08649a69c93d2e"
+    }
+  },
+  "auditSummary": {
+    "jsChecked": 226,
+    "indexReferences": 44,
+    "indexMissing": 0,
+    "importsMissing": 0,
+    "assetMapUniquePaths": 737,
+    "assetMapMissing": 0,
+    "avatarsV810Found": 12,
+    "avatarsV810UniqueHashes": 12,
+    "betaQaStatus": "ok"
+  }
+}

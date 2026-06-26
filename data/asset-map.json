@@ -1525,7 +1525,7 @@
   "rosters": {
     "santos2026": "data/rosters/2026/santos.json"
   },
-  "version": "v8.1.0-asset-integrity",
+  "version": "v8.2.0-beta-final-qa",
   "updatedAt": "2026-06-26 11:18:00 BRT",
   "avatars": {
     "manager-01": "assets/avatars/manager-v810-01.png",
@@ -1564,5 +1564,11 @@
     "manager-v810-11": "assets/avatars/manager-v810-11.png",
     "manager-v801-12": "assets/avatars/manager-v810-12.png",
     "manager-v810-12": "assets/avatars/manager-v810-12.png"
+  },
+  "qa": {
+    "phase": "Fase 65",
+    "panel": "betaQaCenter",
+    "cacheBuster": "820-beta-final-qa",
+    "criticalAvatarPattern": "manager-v810-XX.png"
   }
 }

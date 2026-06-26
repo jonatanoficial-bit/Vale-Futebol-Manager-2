@@ -1,0 +1,140 @@
+{
+  "version": "v8.2.0",
+  "phase": "Fase 65 — QA Final do Beta Profissional",
+  "indexReferences": 44,
+  "indexMissing": [],
+  "jsFilesChecked": 226,
+  "importMissing": [],
+  "assetMapUniquePaths": 737,
+  "assetMapMissingCount": 0,
+  "assetMapMissing": [],
+  "avatarsV810Found": 12,
+  "avatarsV810UniqueHashes": 12,
+  "betaQa": {
+    "snap": {
+      "version": "v8.2.0",
+      "schema": 820,
+      "generatedAt": "2026-06-26 11:13:18 BRT",
+      "routeRows": [
+        {
+          "route": "cover",
+          "label": "Capa",
+          "step": "abrir jogo sem pular para lobby",
+          "ok": true
+        },
+        {
+          "route": "mainMenu",
+          "label": "Central inicial",
+          "step": "continuar/criar/gerenciar 3 slots",
+          "ok": true
+        },
+        {
+          "route": "newGame",
+          "label": "Novo Game",
+          "step": "avatar, nome, país e modo",
+          "ok": true
+        },
+        {
+          "route": "teamSelect",
+          "label": "Escolha do clube",
+          "step": "filtros, escudos e seleção",
+          "ok": true
+        },
+        {
+          "route": "confirmCareer",
+          "label": "Confirmação",
+          "step": "manager + clube + iniciar carreira",
+          "ok": true
+        },
+        {
+          "route": "lobby",
+          "label": "Lobby",
+          "step": "resumo, próximo jogo, ribbons e menu limpo",
+          "ok": true
+        },
+        {
+          "route": "calendar",
+          "label": "Calendário Vivo",
+          "step": "viagem, carga, fadiga e recuperação",
+          "ok": true
+        },
+        {
+          "route": "training",
+          "label": "Treino Semanal",
+          "step": "presets e sessão individual",
+          "ok": true
+        },
+        {
+          "route": "academyScouting",
+          "label": "Scout",
+          "step": "relatório, região e lista de desejos",
+          "ok": true
+        },
+        {
+          "route": "staff",
+          "label": "Staff Vivo",
+          "step": "contratar e mudar foco",
+          "ok": true
+        },
+        {
+          "route": "financeCenter",
+          "label": "Finanças",
+          "step": "patrocínio, bilheteria e risco",
+          "ok": true
+        },
+        {
+          "route": "match",
+          "label": "Partida",
+          "step": "pré-jogo, simulação e pós-jogo",
+          "ok": true
+        },
+        {
+          "route": "saveSlotsV2",
+          "label": "Slots",
+          "step": "renomear, apagar e trocar carreira",
+          "ok": true
+        },
+        {
+          "route": "assetChecklist",
+          "label": "Assets",
+          "step": "avatares e placeholders sem 404",
+          "ok": true
+        },
+        {
+          "route": "betaProfessional",
+          "label": "Beta Profissional",
+          "step": "quality gate geral",
+          "ok": true
+        },
+        {
+          "route": "betaQaCenter",
+          "label": "QA Final",
+          "step": "roteiro de homologação final",
+          "ok": true
+        }
+      ],
+      "routesOk": 16,
+      "totalCriticalRoutes": 16,
+      "score": 100,
+      "deviceProfiles": 5,
+      "firstSessionSteps": 10,
+      "noGoItems": 7,
+      "hasAssetGate": true,
+      "hasSaveGate": true,
+      "hasMatchGate": true,
+      "hasMobileGate": true,
+      "careerStarted": true,
+      "activeSlot": "principal",
+      "currentRoute": "cover",
+      "status": "ok"
+    },
+    "validation": {
+      "ok": true,
+      "status": "ok",
+      "errors": [],
+      "warnings": [],
+      "phase": "v8.2.0-beta-final-qa-validator",
+      "checkedAt": "runtime"
+    }
+  }
+}

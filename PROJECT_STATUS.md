@@ -1,24 +1,26 @@
-# PROJECT STATUS — v8.1.0 / Fase 64
+# PROJECT STATUS — v8.2.0 / Fase 65
 
-Build completo do **Vale Futebol Manager v8.1.0 Beta Profissional** pronto para novo deploy.
-
-## Foco da fase
-
-Asset Integrity, Cache Buster e Homologação Visual Pós-Beta.
+Build completo do **Vale Futebol Manager v8.2.0 Beta Profissional** pronto para novo deploy.
 
 ## Status
 
-**OK para upload GitHub/Vercel.**
+**Aprovado em auditoria automatizada.**
 
-## Auditoria
+## Foco desta fase
 
-- JavaScript/core/tools: 223 arquivos com `node --check`, sem erro.
-- `index.html`: 43 referências, 0 ausentes.
-- `asset-map.json`: 739 referências únicas, 0 ausentes.
-- Avatares v810: 12 arquivos, 12 hashes únicos.
-- Placeholders físicos criados: 162 arquivos para paths futuros.
-- ZIP testado antes da entrega.
+QA final, primeira sessão, homologação mobile e lista No-Go para divulgação.
 
-## Relatório principal
+## Sistemas preservados
 
-`PHASE_64_ASSET_INTEGRITY_REPORT.md`
+- Save Slots 2.0.
+- Calendário Vivo.
+- Scout Profissional.
+- Treino Semanal.
+- Staff Vivo.
+- Finanças Profundas.
+- Beta Profissional.
+- Asset Integrity e avatares v810.
+
+## Próximo passo recomendado
+
+Subir no GitHub/Vercel e executar o roteiro manual dentro da rota `betaQaCenter` no PC e no celular.

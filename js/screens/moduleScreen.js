@@ -80,6 +80,7 @@ import { renderLiveCalendarCenter, renderLiveCalendarStrip } from '../systems/li
 import { renderScoutingCenter, renderScoutingRibbon } from '../systems/scoutingEngine.js';
 import { renderBetaProfessionalCenter } from '../systems/betaProfessionalEngine.js';
 import { renderAssetIntegrityCenter } from '../systems/assetIntegrityEngine.js';
+import { renderBetaQaCenter } from '../systems/betaQaEngine.js';
 export function moduleScreen(route,title,subtitle,state){
   const extra = content(route, state);
   return screenWrap(route, `${topbar(title,subtitle,'lobby')}${clubHeader(state)}${extra}`, true);
@@ -142,6 +143,7 @@ function content(route,state={}){
   if(route==='visualLibrary') return visualLibraryScreen(state);
   if(route==='rosterUpdate') return rosterUpdateScreen(state, squadPlayers, squadSummary, rosterMeta);
   if(route==='assetChecklist') return renderAssetIntegrityCenter(state);
+  if(route==='betaQaCenter') return renderBetaQaCenter(state, (typeof window !== 'undefined' && window.__VFM_MANAGER_MENU_GROUPS__) || []);
   if(route==='saveSlotsV2') return renderSaveSlotsV2Center(state);
   if(route==='saveCenter') return saveCenterScreen(state);
   if(route==='aiBalance') return renderBalanceGeneralCenter(state);

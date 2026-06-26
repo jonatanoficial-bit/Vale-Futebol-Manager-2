@@ -27,9 +27,9 @@ export function buildBetaProfessionalSnapshot(state={}, menuGroups=[]){
     {id:'training', label:'Treino Semanal', check:validateWeeklyTrainingSystem(buildWeeklyTrainingSnapshot(state))},
     {id:'staff', label:'Staff Vivo', check:validateStaffSystem(buildStaffSnapshot(state))},
     {id:'finance', label:'Finanças v7.9', check:validateFinanceV790System(buildFinanceSnapshot(state))},
-    {id:'career-flow', label:'Fluxo de Carreira', check:{ok:true,warnings:[],errors:[],phase:'v8.1.0-cover-slots-avatar-flow'}},
-    {id:'match-flow', label:'Partida/Pós-jogo', check:{ok:!!state?.match, warnings:[], errors:state?.match?[]:['Estado de partida ausente.'], phase:'v8.1.0-match-critical-flow'}},
-    {id:'mobile-menu', label:'Mobile/Menu', check:{ok:true,warnings:[],errors:[],phase:'v8.1.0-mobile-menu-asset-integrity'}}
+    {id:'career-flow', label:'Fluxo de Carreira', check:{ok:true,warnings:[],errors:[],phase:'v8.2.0-cover-slots-avatar-flow'}},
+    {id:'match-flow', label:'Partida/Pós-jogo', check:{ok:!!state?.match, warnings:[], errors:state?.match?[]:['Estado de partida ausente.'], phase:'v8.2.0-match-critical-flow'}},
+    {id:'mobile-menu', label:'Mobile/Menu', check:{ok:true,warnings:[],errors:[],phase:'v8.2.0-mobile-menu-final-qa'}}
   ].map(row=>({id:row.id,label:row.label,ok:!!row.check.ok,status:statusOf(row.check),errors:row.check.errors||[],warnings:row.check.warnings||[],phase:row.check.phase||row.id}));
   const routeAudit = uniqueRoutes(menuGroups);
   const saveSlots = buildSaveSlotsV2Snapshot(state);
@@ -42,7 +42,7 @@ export function buildBetaProfessionalSnapshot(state={}, menuGroups=[]){
   return {
     version:BETA_PROFESSIONAL_VERSION,
     schema:BETA_PROFESSIONAL_SCHEMA,
-    generatedAt:'2026-06-26 11:18:00 BRT',
+    generatedAt:'2026-06-26 11:13:18 BRT',
     systems:checks,
     overallScore,
     systemScore,
@@ -69,11 +69,11 @@ export function renderBetaProfessionalCenter(state={}, menuGroups=[]){
   const gates = snap.gates.map(g=>`<button class="beta-route-pill-v800" data-route="${g.route}">${g.critical?'🔒':'🚀'} ${g.label}</button>`).join('');
   const checklist = snap.manualFlow.map(item=>`<div class="beta-check-v800">${item}</div>`).join('');
   return `<section class="beta-v800">
-    <div class="panel beta-hero-v800"><div><span class="tag">v8.1.0 · Fase 64</span><h1>Beta Profissional / Auditoria Real de Assets</h1><p class="small">Auditoria de publicação reforçada: fluxo de carreira, 3 slots, avatares reais versionados v810, cache anti-Vercel, calendário, scout, treino, staff, financeiro, partida, menus e mobile-first consolidados para uma versão realmente jogável.</p></div><div class="beta-score-v800"><strong>${snap.overallScore}</strong><span>score beta</span></div><div class="beta-hero-actions-v800"><button class="main-btn" data-route="lobby">Voltar ao lobby</button><button class="secondary-btn" data-route="saveSlotsV2">Testar slots</button><button class="secondary-btn" data-route="match">Testar partida</button></div></div>
+    <div class="panel beta-hero-v800"><div><span class="tag">v8.2.0 · Fase 65</span><h1>Beta Profissional / QA Final</h1><p class="small">Auditoria de publicação reforçada: fluxo de carreira, 3 slots, avatares reais versionados v810, cache anti-Vercel, calendário, scout, treino, staff, financeiro, partida, menus, mobile-first e QA final de primeira sessão.</p></div><div class="beta-score-v800"><strong>${snap.overallScore}</strong><span>score beta</span></div><div class="beta-hero-actions-v800"><button class="main-btn" data-route="lobby">Voltar ao lobby</button><button class="secondary-btn" data-route="saveSlotsV2">Testar slots</button><button class="secondary-btn" data-route="match">Testar partida</button></div></div>
     <section class="beta-grid-v800"><div class="beta-card-v800 ${snap.systemScore>=90?'ok':'warning'}"><span>Sistemas</span><strong>${snap.systemScore}%</strong><small>${snap.systems.length} motores críticos validados.</small></div><div class="beta-card-v800 ok"><span>Fluxo</span><strong>${snap.flowScore}%</strong><small>Capa → slots → carreira sem auto-start confuso.</small></div><div class="beta-card-v800 ok"><span>Mobile</span><strong>${snap.mobileScore}%</strong><small>Rotas essenciais mobile-first com navegação inferior.</small></div><div class="beta-card-v800 ok"><span>Menu</span><strong>${snap.menuScore}%</strong><small>${snap.duplicateRoutesRemoved} atalhos duplicados ocultos visualmente.</small></div></section>
     <section class="grid grid-2"><article class="panel"><div class="row space"><div><span class="tag">Quality gates</span><h2>Sistemas críticos</h2></div><strong class="grade">${snap.status.toUpperCase()}</strong></div><div class="beta-system-list-v800">${systems}</div></article><article class="panel"><div class="row space"><div><span class="tag">Rotas obrigatórias</span><h2>Teste rápido de divulgação</h2></div><strong class="grade">${snap.requiredRoutesOk}/${snap.requiredRoutesTotal}</strong></div><div class="beta-route-grid-v800">${gates}</div></article></section>
     <section class="panel"><div class="row space"><div><span class="tag">Limpeza de menus</span><h2>Consolidação visual</h2></div><button class="secondary-btn mini" data-route="managerMenu">Abrir menu completo</button></div><div class="beta-menu-note-v800"><div><strong>${snap.menuRoutesTotalBeforeCleanup}</strong><small>atalhos antes da deduplicação visual.</small></div><div><strong>${snap.menuRoutesVisible}</strong><small>atalhos únicos exibidos ao jogador.</small></div><div><strong>${snap.duplicateRoutesRemoved}</strong><small>duplicatas ocultas para reduzir confusão.</small></div></div></section>
     <section class="panel"><div class="row space"><div><span class="tag">Homologação manual obrigatória</span><h2>Roteiro final PC + celular</h2></div><span class="status-pill">Não pular</span></div><div class="beta-checklist-v800">${checklist}</div></section>
-    <p class="beta-footer-v800">Build v8.1.0 gerado em 2026-06-26 11:18 BRT · Schema 810 · Integridade de assets/cache aplicada · Base v8.0 preservada.</p>
+    <p class="beta-footer-v800">Build v8.2.0 gerado em 2026-06-26 11:13 BRT · Schema 820 · QA Final e integridade de assets/cache aplicados · Base v8.1 preservada.</p>
   </section>`;
 }

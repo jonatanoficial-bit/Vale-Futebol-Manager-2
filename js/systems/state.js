@@ -70,7 +70,7 @@ export const defaultState = () => ({
   career:{ currentDate:'2026-05-19', matchday:1, completedMatches:[], lastResult:null, promotionRelegation:{serieARelegation:4,serieBPromotion:4,libertadoresTop:5,sulamericanaRange:[6,12],serieBRelegation:4}, integrationLog:['Carreira migrada para v5.1.0 com save profissional, múltiplos slots, backups automáticos e recuperação de carreira.'], jobOffers:[], offerHistory:[], jobMarket:null, nationalTeamJob:null, dualCareer:{enabled:false, club:true, nationalTeam:null}, callUpSelection:defaultCallUpSelection(), internationalCalendar:buildNationalCalendar(2026, 'brasil'), managerProfile:null, activeContract:null, contractHistory:[], titleHistory:[], sackRiskLog:[], managerTimeline:[], unlockedMilestones:[], boardRelationship:76, fanRelationship:82, dressingRoomTrust:69, mediaPressure:54, worldCompetitionCycle:{libertadores:true,sulamericana:true,clubWorldCupCycle:4,worldCupCycle:4,lastUpdated:'v4.3.0'}, financeReport:{profile:'balanced', lastMonthlyCycle:null, crisisLog:[], boardWarnings:[], sponsorReview:'v3.5.0'}, tutorial:{seen:false, step:1, completed:false}, missions:[], completedSeasons:0, seasonHistory:[], lifetimeEarnings:0, reputationHistory:[], activeStory:['Bem-vindo ao modo carreira: jogue partidas, cumpra missões, aumente renda e reputação sem limite de temporadas.'], pressHistory:[], pressConference:null, managerProgression:null },
   gameplay:{ difficulty:'realistic', aiVersion:'v5.4.0', realism:88, variance:18, balanceLog:[] },
   stability:{ autosave:true, lastBackup:null, backupCount:0, lastExport:null, lastImport:null, safeModeEvents:0, health:'Excelente', auditVersion:SAVE_MANAGER_VERSION, saveManagerVersion:SAVE_MANAGER_VERSION, saveIntegrity:'ok', commercialAudit:'v3.7.0-ok', fullscreenMobile:true, overflowGuard:true, rosterSafeMode:true, matchEngineSafeMode:true, matchEngineVersion:'v4.7.0', matchStressTest:'passed-100', trainingEngineVersion:TRAINING_ENGINE_VERSION, trainingStressTest:'passed-4-weeks', transferEngineVersion:TRANSFER_ENGINE_VERSION, transferIntegrity:'pending' },
-  save:{ version:SAVE_MANAGER_VERSION, schema:810, activeSlot:'principal', slotLabel:'Carreira principal', careerStarted:false, migratedFrom:null, lastMigrationAt:null, exportCount:0, importCount:0, autosaveCheckpoints:[] },
+  save:{ version:SAVE_MANAGER_VERSION, schema:820, activeSlot:'principal', slotLabel:'Carreira principal', careerStarted:false, migratedFrom:null, lastMigrationAt:null, exportCount:0, importCount:0, autosaveCheckpoints:[] },
   roster:clubRosterPackage('santos'),
   finance:ensureFinanceState({profile:'balanced', cash:92.5, crisisLog:[], boardWarnings:[], sponsorReview:FINANCE_VERSION}, {clubId:'santos', money:92.5}),
   training:ensureTrainingState(),
@@ -132,7 +132,7 @@ function normalize(next){
   merged.stability.saveManagerVersion = SAVE_MANAGER_VERSION;
   merged.save = {...base.save, ...(next?.save || {})};
   merged.save.version = SAVE_MANAGER_VERSION;
-  merged.save.schema = 810;
+  merged.save.schema = 820;
   merged.save.activeSlot = String(merged.save.activeSlot || 'principal').slice(0,32);
   merged.save.exportCount = Math.max(0, Number(merged.save.exportCount || 0));
   merged.save.importCount = Math.max(0, Number(merged.save.importCount || 0));
@@ -266,7 +266,7 @@ export function startCareer(){
     finance: ensureFinanceState({cash:Number(chosenTeam?.budget || state.money || 40), profile:'balanced', ledger:[`Fase 62: financeiro profundo iniciado para ${chosenTeam?.name || chosenClub}.`]}, {clubId:chosenClub, ui:{selectedClub:chosenClub}, money:Number(chosenTeam?.budget || state.money || 40)}),
     scouting: normalizeScoutingState({observerLog:[`Fase 59: scout profissional iniciado para ${chosenTeam?.name || chosenClub}.`]}, {clubId:chosenClub, ui:{selectedClub:chosenClub}}),
     staff: ensureStaffState({staffLog:[`Fase 61: comissão técnica viva iniciada para ${chosenTeam?.name || chosenClub}.`]}, {clubId:chosenClub, ui:{selectedClub:chosenClub}}),
-    save:{...(state.save||{}), version:SAVE_MANAGER_VERSION, schema:810, activeSlot:state.save?.activeSlot || 'principal', slotLabel:state.save?.slotLabel || slotLabel(state.save?.activeSlot || 'principal'), careerStarted:true}
+    save:{...(state.save||{}), version:SAVE_MANAGER_VERSION, schema:820, activeSlot:state.save?.activeSlot || 'principal', slotLabel:state.save?.slotLabel || slotLabel(state.save?.activeSlot || 'principal'), careerStarted:true}
   });
   persist();
 }
@@ -368,7 +368,7 @@ export function finishMatch(){
     fanMood: Math.max(0, Math.min(100, Number(state.fanMood || 82) + (already ? 0 : fanDelta))),
     notifications: Number(state.notifications || 0) + (already ? 0 : 1),
     gameplay:{...state.gameplay, balanceLog},
-    stability:{...(state.stability||{}), health:'Pós-jogo salvo com segurança', auditVersion:'v8.1.0-asset-integrity', financeVersion:FINANCE_VERSION}
+    stability:{...(state.stability||{}), health:'Pós-jogo salvo com segurança', auditVersion:'v8.2.0-beta-final-qa', financeVersion:FINANCE_VERSION}
   });
   logIntegration(`Resultado integrado: ${result.competition} ${result.stage} terminou ${result.summary}. Relatório pós-jogo preservado antes do retorno ao lobby.`);
   persist();

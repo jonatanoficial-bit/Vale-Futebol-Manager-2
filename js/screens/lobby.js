@@ -7,6 +7,7 @@ import { renderLiveCalendarStrip } from '../systems/liveCalendarEngine.js';
 import { renderScoutingRibbon } from '../systems/scoutingEngine.js';
 import { renderStaffRibbon } from '../systems/staffEngine.js';
 import { renderFinanceRibbon } from '../systems/financeEngine.js';
+import { renderBetaQaRibbon } from '../systems/betaQaEngine.js';
 
 export const PRIMARY_ACTIONS_V550 = [
   ['match','Jogar partida','⚽','Entrar no próximo compromisso oficial'],
@@ -72,7 +73,9 @@ export const MANAGER_MENU_GROUPS_V550 = [
   ['Sistema e desenvolvimento', [
     ['careerIntro','Jornada Inicial','🎬','Abertura cinematográfica e primeira sessão guiada','v6.1'],
     ['betaProfessional','Beta Profissional','🚀','Auditoria v8.1, assets, menus, gates de publicação e roteiro final','v8.1'],
+    ['betaQaCenter','QA Final do Beta','✅','Primeira sessão, matriz mobile, No-Go e rotas críticas para divulgação','v8.2'],
     ['releaseCandidate','Beta Pública','🚀','Checklist público, mobile real e fluxo de teste','v6.0'],
+    ['mobileAudit','Auditoria Mobile','📱','Teste de rotas, rolagem, botões e estabilidade no celular','v8.2'],
     ['saveSlotsV2','Slots de Carreira','💾','Continuar, criar, trocar, renomear e apagar carreiras','v7.4'],
     ['saveCenter','Save Técnico','🛡️','Backups, exportar/importar e recuperação','v5.1'],
     ['polishCenter','UI AAA','✨','Visual, responsividade e performance','v5.0'],
@@ -80,6 +83,7 @@ export const MANAGER_MENU_GROUPS_V550 = [
     ['database2026','Banco Maio/2026','🧾','Atributos, contratos e auditoria de dados','Novo'],
     ['dataPack2026','Data Pack 2026','🔒','Schema oficial, bloqueio anti-genérico e plano 20/05/2026','v5.8'],
     ['visualLibrary','Biblioteca Visual','🖼️','Fundos, logos, países e extras','Assets'],
+    ['assetChecklist','Assets & Cache','🧩','Avatares v810, cache Vercel, asset-map e fallbacks reais','v8.1'],
     ['soundAmbience','Sons e Torcida','🔊','Ambiência, apito, torcida e acessibilidade sonora','v7.1'],
     ['realAudioPack','Efeitos Reais','🎧','MP3/WAV opcionais, manifest de assets e fallback WebAudio','v7.2'],
     ['stadiumClimate','Clima e Gramado','🌦️','Clima offline, gramado dinâmico e pressão do estádio','v7.3'],
@@ -155,6 +159,7 @@ export function lobby(state){
       ${renderScoutingRibbon(state)}
       ${renderStaffRibbon(state)}
       ${renderFinanceRibbon(state)}
+      ${renderBetaQaRibbon(state)}
 
       <section class="quick-actions-v550" aria-label="Ações principais">
         ${PRIMARY_ACTIONS_V550.map(([route,title,icon,desc])=>`<button class="card quick-action-v550" data-route="${route}"><span>${icon}</span><strong>${title}</strong><em>${desc}</em></button>`).join('')}

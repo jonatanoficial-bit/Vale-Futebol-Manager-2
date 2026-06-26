@@ -1,7 +1,7 @@
 export function validateBetaProfessionalSystem(snapshot={}){
   const errors = [];
   const warnings = [];
-  if(!['v8.0.0','v8.0.1','v8.1.0'].includes(snapshot.version)) errors.push('Versão Beta Profissional divergente de v8.x.');
+  if(!['v8.0.0','v8.0.1','v8.1.0','v8.2.0'].includes(snapshot.version)) errors.push('Versão Beta Profissional divergente de v8.x.');
   if(Number(snapshot.schema || 0) < 800) errors.push('Schema Beta Profissional inferior a 800.');
   if(Number(snapshot.overallScore || 0) < 90) errors.push('Score geral abaixo de 90 para divulgar beta.');
   if(!Array.isArray(snapshot.systems) || snapshot.systems.length < 8) errors.push('Poucos sistemas críticos auditados.');
@@ -11,5 +11,5 @@ export function validateBetaProfessionalSystem(snapshot={}){
   if(Number(snapshot.requiredRoutesOk || 0) < Number(snapshot.requiredRoutesTotal || 1)) errors.push('Nem todas as rotas obrigatórias estão registradas no gate beta.');
   if(!snapshot.mobileReady) errors.push('Gate mobile-first não aprovado.');
   if(!snapshot.saveSlotsLocked) errors.push('Gate de 3 slots oficiais não aprovado.');
-  return { ok:errors.length===0, status:errors.length?'error':warnings.length?'warning':'ok', errors, warnings, phase:'v8.1.0-beta-professional-asset-integrity', checkedAt:'runtime' };
+  return { ok:errors.length===0, status:errors.length?'error':warnings.length?'warning':'ok', errors, warnings, phase:'v8.2.0-beta-professional-final-qa', checkedAt:'runtime' };
 }

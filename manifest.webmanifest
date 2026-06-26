@@ -1,11 +1,11 @@
 {
-  "name": "Vale Futebol Manager v8.1.0 Beta Profissional",
-  "short_name": "VFM v8.1.0",
+  "name": "Vale Futebol Manager v8.2.0 Beta Profissional",
+  "short_name": "VFM v8.2.0",
   "start_url": "./index.html",
   "display": "fullscreen",
   "orientation": "any",
   "background_color": "#020407",
   "theme_color": "#05070a",
-  "description": "Vale Futebol Manager — Fase 64 Beta Profissional / Integridade de assets e cache anti-Vercel",
+  "description": "Vale Futebol Manager — Fase 65 QA Final do Beta Profissional / primeira sessão e homologação mobile",
   "icons": []
 }
