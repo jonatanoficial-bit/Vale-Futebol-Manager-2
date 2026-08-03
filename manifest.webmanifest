@@ -1,11 +1,29 @@
 {
+  "id": "./",
   "name": "Vale Futebol Manager",
-  "short_name": "VFM",
-  "start_url": "./index.html",
-  "display": "fullscreen",
-  "orientation": "any",
-  "background_color": "#020407",
-  "theme_color": "#05070a",
-  "description": "Vale Futebol Manager — simulador de carreira de treinador com fluxo limpo para jogadores.",
-  "icons": []
+  "short_name": "Vale Futebol",
+  "description": "Construa sua carreira e leve seu clube ao topo.",
+  "lang": "pt-BR",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "orientation": "landscape",
+  "background_color": "#07111f",
+  "theme_color": "#07111f",
+  "categories": ["games", "sports"],
+  "icons": [
+    {
+      "src": "./assets/icons/app-icon-v9.png",
+      "sizes": "1254x1254",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icons/app-icon-v9.png",
+      "sizes": "1254x1254",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
 }

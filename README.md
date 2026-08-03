@@ -1,59 +1,32 @@
-# Vale Futebol Manager: Gold Edition
+# Vale Futebol Manager
 
-Build inicial v0.1.0 do simulador manager de futebol mobile-first.
+Simulador de gestão de futebol em versão estática, mobile-first e orientada para uso horizontal. A aplicação funciona em navegador moderno, pode ser instalada como PWA e não exige backend.
 
-## Como publicar
-1. Descompacte o ZIP.
-2. Envie todos os arquivos para um repositório GitHub.
-3. No Vercel, importe o repositório como projeto estático.
-4. Não há backend obrigatório e não há dependências externas.
+## Executar
 
-## Build atual
-Consulte `build/build-info.json`.
+1. Abra um terminal na pasta do projeto.
+2. Inicie um servidor HTTP local, por exemplo: python -m http.server 8080
+3. Acesse http://localhost:8080
 
-## Regras do projeto
-- Toda atualização deve ser entregue como ZIP completo.
-- Toda build deve ter versão, data e hora visíveis dentro do jogo.
-- O jogo deve continuar funcionando mesmo sem imagens reais.
-- Assets reais podem ser adicionados depois nas pastas previstas, sem alterar código.
+Não abra o index.html diretamente pelo sistema de arquivos, pois os dados de elenco e o PWA dependem de HTTP.
 
-## Estado desta build
-- Estrutura base completa.
-- Navegação inicial.
-- Telas principais com rotas seguras.
-- Sistema de assets com fallback.
-- Placeholders criados.
-- Save local protegido.
-- Auditoria automatizada incluída.
+## Sistemas
 
-## Build v1.0.0 - Formação, tática e instruções avançadas
+- três espaços de carreira;
+- criação de treinador e escolha de clube;
+- elencos 2026 recebidos no projeto;
+- escalação, formação e instruções táticas;
+- treinamento semanal;
+- calendário e resultados;
+- mercado com contratações;
+- orçamento, folha e histórico financeiro;
+- partida simulada com pausa e velocidades;
+- autosave, backup, importação e exportação;
+- PWA offline e preferência por orientação horizontal;
+- aviso de rotação com preservação do estado.
 
-Inclui tela de formação premium, mesa tática mobile-first, seleção de esquema, banco de reservas, painel de entrosamento, instruções avançadas, perfis de jogo, bolas paradas e save migrável da v0.9.0. O sistema mantém fallback visual para todos os jogadores e assets.
+## Compatibilidade
 
-### Build v1.6.0
-Adiciona a partida simulada premium com mesa tática 2D, eventos por minuto, estatísticas ao vivo, narração, momentum, substituições preparadas e controles de avanço/finalização.
+O layout prioriza celulares em paisagem e se adapta a tablets, notebooks e desktops. Em celular vertical, uma tela de orientação bloqueia interações e pausa a partida sem recarregar a aplicação.
 
-
-### Build v1.6.0
-Integração entre partida, calendário, classificação e save local. A partida agora grava resultado, atualiza histórico da carreira, exibe último resultado no lobby, marca jogo concluído no calendário e recalcula a tabela com segurança.
-
-
-### Build v1.7.0
-Esta build adiciona substituições funcionais e decisões táticas durante a partida. O jogo continua preparado para receber assets reais futuramente sem alteração de código, usando fallbacks automáticos quando imagens ainda não existirem.
-
-
-### Build v1.9.0
-Mercado interativo com propostas, compras, vendas, renovações, orçamento vivo e proteção anti-quebra.
-
-
-## v2.8.0 - Transferencias Funcionais Profundas
-- Mercado funcional com compra, venda, emprestimo, propostas recebidas, renovacoes e IA de clubes.
-- Orçamento e folha vivos com bloqueio anti-quebra.
-- Diário de mercado persistente no save local.
-
-
-## v3.4.0 - Polimento premium AAA
-- Central Polimento AAA adicionada ao lobby.
-- Auditoria visual e tecnica interna.
-- Responsividade mobile fullscreen refinada.
-- Performance e fallbacks revisados para GitHub/Vercel.
+Versão 9.0.1 · Build VFM-9.0.1-20260803-1701

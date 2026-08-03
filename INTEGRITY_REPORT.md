@@ -1,18 +1,13 @@
-# Relatório de Integridade — Vale Futebol Manager v7.4.0 Fase 57
+# Relatório de integridade
 
-Gerado em: 2026-06-24 15:37:35 BRT
+- Ponto de entrada presente: sim
+- JavaScript principal presente: sim
+- CSS principal presente: sim
+- Manifesto PWA válido: sim
+- Service worker com cache versionado: sim
+- 82 arquivos JSON válidos: sim
+- Caminhos principais relativos: sim
+- Documentação técnica separada: sim
+- Build: VFM-9.0.1-20260803-1701
 
-## Resultado
-APROVADO.
-
-## Checks
-- JS syntax: OK em 206 arquivos.
-- Save Slots 2.0: OK com 3 slots jogáveis oficiais.
-- Fluxo inicial: OK, sem auto-start no lobby.
-- Build badge: OK, data/hora visível nas telas iniciais e mobile.
-- Rotas públicas sem carreira: capa, central, criação, confirmação, configuração e save técnico.
-- Rotas de carreira: protegidas quando não há carreira iniciada.
-- ZIP completo: pronto para empacotamento.
-
-## Observação
-Os backups manuais continuam disponíveis na central técnica e não contam como slots jogáveis.
+Os hashes finais estão em SHA256SUMS.txt.

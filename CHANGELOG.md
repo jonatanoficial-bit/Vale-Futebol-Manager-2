@@ -1,3 +1,27 @@
+# 9.0.1 — 2026-08-03
+
+- Adicionado ícone autoral em alta resolução ao aplicativo e ao manifesto PWA.
+- Corrigida a escalação automática para sempre selecionar onze atletas e preservar um atacante.
+- Corrigido o botão de retorno no modal de saída da partida para retomar o relógio.
+- Fortalecido o carregamento dos elencos com busca nas Séries A, B e na base legada.
+- Eliminadas duplicidades do próprio elenco no mercado após recarregar a carreira.
+- Protegido o save existente durante a substituição de um espaço ocupado.
+- Adicionados fallbacks separados para fotos de jogadores, avatares e escudos.
+- Adicionada tolerância a navegadores que bloqueiam o armazenamento local.
+
+# 9.0.0 — 2026-07-31
+
+- Reconstrução do ponto de entrada e do núcleo jogável, ausentes no pacote recebido.
+- Nova interface comercial mobile-first para orientação horizontal.
+- Implementação de capa, três espaços de carreira, criação de treinador e escolha de clube.
+- Integração dos elencos 2026, escalação, tática, treino, calendário, mercado e finanças.
+- Implementação de partida simulada com relógio, pausa, velocidades e registro do resultado.
+- Salvamento versionado com validação, backup, migração defensiva, importação e exportação.
+- Overlay profissional de rotação com pausa e retomada segura.
+- Manifesto PWA, service worker, cache offline, safe areas e caminhos relativos.
+- Responsividade validada de 568×320 a 1920×1080.
+- Documentação técnica e avaliação do produto separadas da interface pública.
+
 # v8.3.0 — Fase 66: Interface Pública Limpa para Jogadores
 
 - Removeu rodapé técnico de build das telas do jogador.

@@ -1,4 +1,6 @@
-Vale Futebol Manager v8.1.0 — Fase 64
-Schema 810
-Gerado em 2026-06-26 11:18:00 BRT
-Relatório: PHASE_64_ASSET_INTEGRITY_REPORT.md
+Vale Futebol Manager 9.0.1
+Build VFM-9.0.1-20260803-1701
+Schema 900
+Produção · Mobile horizontal · PWA offline
+Gerado em 03/08/2026 17:01:28 BRT
+Relatórios: AUDITORIA-TECNICA.md, TESTES-REALIZADOS.md, AVALIACAO-DO-PROJETO.md

@@ -1,32 +1,19 @@
-# Project Status — Vale Futebol Manager v8.3.0
+# Estado do projeto
 
-Status: interface pública limpa para jogadores.
+Vale Futebol Manager 9.0.1 está executável e jogável em navegador moderno.
 
-A base v8.2.0 foi preservada e recebeu polimento de linguagem/UX para remover informações técnicas da experiência normal. O jogador vê carreira, clube, treino, scout, staff, finanças e partida; relatórios de fase/auditoria continuam apenas como arquivos técnicos do ZIP.
+## Aprovado
 
-# PROJECT STATUS — v8.2.0 / Fase 65
+- entrada e carregamento;
+- nova carreira e três espaços;
+- salvamento, backup e reabertura;
+- elenco, tática, treino, agenda, mercado e finanças;
+- partida, pausa, resultado e progressão;
+- celular horizontal de 568×320 a 960×432;
+- tablet e desktop até 1920×1080;
+- aviso de orientação e pausa segura;
+- PWA e reabertura offline.
 
-Build completo do **Vale Futebol Manager v8.2.0 Beta Profissional** pronto para novo deploy.
+## Uso recomendado
 
-## Status
-
-**Aprovado em auditoria automatizada.**
-
-## Foco desta fase
-
-QA final, primeira sessão, homologação mobile e lista No-Go para divulgação.
-
-## Sistemas preservados
-
-- Save Slots 2.0.
-- Calendário Vivo.
-- Scout Profissional.
-- Treino Semanal.
-- Staff Vivo.
-- Finanças Profundas.
-- Beta Profissional.
-- Asset Integrity e avatares v810.
-
-## Próximo passo recomendado
-
-Subir no GitHub/Vercel e executar o roteiro manual dentro da rota `betaQaCenter` no PC e no celular.
+Apresentação, demonstração e testes fechados. Para publicação comercial ou loja, siga as limitações e requisitos descritos em AVALIACAO-DO-PROJETO.md e PREPARACAO-PARA-APK.md.
