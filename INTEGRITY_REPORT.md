@@ -1,13 +1,15 @@
-# Relatório de integridade
+# Relatório de integridade — V11
 
-- Ponto de entrada presente: sim
-- JavaScript principal presente: sim
-- CSS principal presente: sim
-- Manifesto PWA válido: sim
-- Service worker com cache versionado: sim
-- 82 arquivos JSON válidos: sim
-- Caminhos principais relativos: sim
-- Documentação técnica separada: sim
-- Build: VFM-9.0.1-20260803-1701
+- ponto de entrada V11 presente: sim;
+- JavaScript e service worker com sintaxe válida: sim;
+- manifesto PWA válido e horizontal: sim;
+- 833 IDs de clubes únicos: sim;
+- todos os 625 elencos comandáveis com pelo menos 11 jogadores: sim;
+- 211 seleções e 135 pools comandáveis: sim;
+- 50 ligas com status de regra: sim;
+- arquivos de escudo referenciados existentes: sim;
+- 16 rostos de treinador disponíveis: sim;
+- relatório automatizado: `QA-WORLD-V11.json`;
+- build: `VFM-WORLD-11.0.0-20260804`.
 
-Os hashes finais estão em SHA256SUMS.txt.
+O status é `approved-with-disclosures` porque 195 clubes de simulação usam escudo genérico e parte das regras mundiais permanece aproximada.

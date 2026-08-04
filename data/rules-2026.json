@@ -1,0 +1,829 @@
+{
+  "version": "11.0.0",
+  "snapshot": "2026-08-04",
+  "warning": "Regras marcadas como aproximacao nao reproduzem integralmente medias, splits ou playoffs.",
+  "leagues": {
+    "algeria-ligue-1": {
+      "league": "Ligue 1",
+      "country": "Argélia",
+      "continental": {
+        "caf-champions-league": [
+          1,
+          4
+        ]
+      },
+      "relegation": 2,
+      "teams": 10,
+      "format": "double-round-robin",
+      "verification": "aproximacao-documentada-do-motor"
+    },
+    "egypt-premier": {
+      "league": "Egyptian Premier League",
+      "country": "Egito",
+      "continental": {
+        "caf-champions-league": [
+          1,
+          4
+        ]
+      },
+      "relegation": 2,
+      "teams": 12,
+      "format": "double-round-robin",
+      "verification": "aproximacao-documentada-do-motor"
+    },
+    "botola": {
+      "league": "Botola Pro",
+      "country": "Marrocos",
+      "continental": {
+        "caf-champions-league": [
+          1,
+          4
+        ]
+      },
+      "relegation": 2,
+      "teams": 12,
+      "format": "double-round-robin",
+      "verification": "aproximacao-documentada-do-motor"
+    },
+    "tunisia-ligue-1": {
+      "league": "Ligue Professionnelle 1",
+      "country": "Tunísia",
+      "continental": {
+        "caf-champions-league": [
+          1,
+          4
+        ]
+      },
+      "relegation": 2,
+      "teams": 10,
+      "format": "double-round-robin",
+      "verification": "aproximacao-documentada-do-motor"
+    },
+    "sa-premiership": {
+      "league": "South African Premiership",
+      "country": "África do Sul",
+      "continental": {
+        "caf-champions-league": [
+          1,
+          4
+        ]
+      },
+      "relegation": 2,
+      "teams": 12,
+      "format": "double-round-robin",
+      "verification": "aproximacao-documentada-do-motor"
+    },
+    "saudi-pro": {
+      "league": "Saudi Pro League",
+      "country": "Arábia Saudita",
+      "teams": 18,
+      "format": "double-round-robin",
+      "relegation": 3,
+      "continental": {
+        "afc-champions-league": [
+          1,
+          3
+        ]
+      },
+      "verification": "formato-domestico-verificado"
+    },
+    "a-league": {
+      "league": "A-League Men",
+      "country": "Australia",
+      "teams": 12,
+      "format": "double-round-robin",
+      "promotion": 0,
+      "relegation": 0,
+      "continental": {
+        "afc-champions-league": [
+          1,
+          4
+        ]
+      },
+      "verification": "competition-format-review-required"
+    },
+    "qatar-stars": {
+      "league": "Qatar Stars League",
+      "country": "Catar",
+      "continental": {
+        "afc-champions-league": [
+          1,
+          4
+        ]
+      },
+      "relegation": 2,
+      "teams": 8,
+      "format": "double-round-robin",
+      "verification": "aproximacao-documentada-do-motor"
+    },
+    "k-league-1": {
+      "league": "K League 1",
+      "country": "Coreia do Sul",
+      "teams": 12,
+      "format": "triple-round-split",
+      "relegation": 1,
+      "relegationPlayoff": [
+        10,
+        11
+      ],
+      "continental": {
+        "afc-champions-league": [
+          1,
+          3
+        ]
+      },
+      "verification": "split-e-playoffs-aproximados"
+    },
+    "uae-pro": {
+      "league": "UAE Pro League",
+      "country": "Emirados Árabes Unidos",
+      "continental": {
+        "afc-champions-league": [
+          1,
+          4
+        ]
+      },
+      "relegation": 2,
+      "teams": 8,
+      "format": "double-round-robin",
+      "verification": "aproximacao-documentada-do-motor"
+    },
+    "j1-league": {
+      "league": "J1 League",
+      "country": "Japão",
+      "teams": 20,
+      "format": "double-round-robin",
+      "relegation": 3,
+      "continental": {
+        "afc-champions-league": [
+          1,
+          3
+        ]
+      },
+      "verification": "formato-domestico-verificado"
+    },
+    "bundesliga": {
+      "league": "Bundesliga",
+      "country": "Alemanha",
+      "teams": 18,
+      "format": "double-round-robin",
+      "relegation": 2,
+      "relegationPlayoff": [
+        16,
+        16
+      ],
+      "continental": {
+        "champions-league": [
+          1,
+          4
+        ],
+        "europa-league": [
+          5,
+          6
+        ],
+        "conference-league": [
+          7,
+          7
+        ]
+      },
+      "verification": "formato-domestico-verificado-vagas-uefa-dinamicas",
+      "source": "https://www.uefa.com/news-media/news/02a4-2060ea59fbc5-4be94b1fbe5a-1000--access-list-track-which-sides-will-play-in-the-2026-27-uef/"
+    },
+    "belgian-pro": {
+      "league": "Belgian Pro League",
+      "country": "Bélgica",
+      "continental": {
+        "champions-league": [
+          1,
+          4
+        ]
+      },
+      "relegation": 2,
+      "teams": 16,
+      "format": "double-round-robin",
+      "verification": "aproximacao-documentada-do-motor"
+    },
+    "croatia-hnl": {
+      "league": "Croatian Football League",
+      "country": "Croacia",
+      "teams": 10,
+      "format": "double-round-robin",
+      "promotion": 0,
+      "relegation": 2,
+      "continental": {
+        "champions-league": [
+          1,
+          4
+        ]
+      },
+      "verification": "competition-format-review-required"
+    },
+    "denmark-superliga": {
+      "league": "Danish Superliga",
+      "country": "Dinamarca",
+      "teams": 12,
+      "format": "double-round-robin",
+      "promotion": 0,
+      "relegation": 2,
+      "continental": {
+        "champions-league": [
+          1,
+          4
+        ]
+      },
+      "verification": "competition-format-review-required"
+    },
+    "scottish-premiership": {
+      "league": "Scottish Premiership",
+      "country": "Escócia",
+      "continental": {
+        "champions-league": [
+          1,
+          4
+        ]
+      },
+      "relegation": 2,
+      "teams": 12,
+      "format": "double-round-robin",
+      "verification": "aproximacao-documentada-do-motor"
+    },
+    "laliga": {
+      "league": "LaLiga",
+      "country": "Espanha",
+      "teams": 20,
+      "format": "double-round-robin",
+      "relegation": 3,
+      "continental": {
+        "champions-league": [
+          1,
+          4
+        ],
+        "europa-league": [
+          5,
+          6
+        ],
+        "conference-league": [
+          7,
+          7
+        ]
+      },
+      "verification": "formato-domestico-verificado-vagas-uefa-dinamicas",
+      "source": "https://www.uefa.com/news-media/news/02a4-2060ea59fbc5-4be94b1fbe5a-1000--access-list-track-which-sides-will-play-in-the-2026-27-uef/"
+    },
+    "ligue-1": {
+      "league": "Ligue 1",
+      "country": "França",
+      "teams": 18,
+      "format": "double-round-robin",
+      "relegation": 2,
+      "relegationPlayoff": [
+        16,
+        16
+      ],
+      "continental": {
+        "champions-league": [
+          1,
+          3
+        ],
+        "europa-league": [
+          4,
+          5
+        ],
+        "conference-league": [
+          6,
+          6
+        ]
+      },
+      "verification": "formato-domestico-verificado-vagas-uefa-dinamicas",
+      "source": "https://www.uefa.com/news-media/news/02a4-2060ea59fbc5-4be94b1fbe5a-1000--access-list-track-which-sides-will-play-in-the-2026-27-uef/"
+    },
+    "super-league-greece": {
+      "league": "Super League Greece",
+      "country": "Grécia",
+      "continental": {
+        "champions-league": [
+          1,
+          4
+        ]
+      },
+      "relegation": 2,
+      "teams": 14,
+      "format": "double-round-robin",
+      "verification": "aproximacao-documentada-do-motor"
+    },
+    "premier-league": {
+      "league": "Premier League",
+      "country": "Inglaterra",
+      "teams": 20,
+      "format": "double-round-robin",
+      "relegation": 3,
+      "continental": {
+        "champions-league": [
+          1,
+          4
+        ],
+        "europa-league": [
+          5,
+          6
+        ],
+        "conference-league": [
+          7,
+          7
+        ]
+      },
+      "verification": "formato-domestico-verificado-vagas-uefa-dinamicas",
+      "source": "https://www.uefa.com/news-media/news/02a4-2060ea59fbc5-4be94b1fbe5a-1000--access-list-track-which-sides-will-play-in-the-2026-27-uef/"
+    },
+    "serie-a-italia": {
+      "league": "Serie A",
+      "country": "Itália",
+      "teams": 20,
+      "format": "double-round-robin",
+      "relegation": 3,
+      "continental": {
+        "champions-league": [
+          1,
+          4
+        ],
+        "europa-league": [
+          5,
+          6
+        ],
+        "conference-league": [
+          7,
+          7
+        ]
+      },
+      "verification": "formato-domestico-verificado-vagas-uefa-dinamicas",
+      "source": "https://www.uefa.com/news-media/news/02a4-2060ea59fbc5-4be94b1fbe5a-1000--access-list-track-which-sides-will-play-in-the-2026-27-uef/"
+    },
+    "norway-eliteserien": {
+      "league": "Eliteserien",
+      "country": "Noruega",
+      "teams": 16,
+      "format": "double-round-robin",
+      "promotion": 0,
+      "relegation": 2,
+      "continental": {
+        "champions-league": [
+          1,
+          4
+        ]
+      },
+      "verification": "competition-format-review-required"
+    },
+    "eredivisie": {
+      "league": "Eredivisie",
+      "country": "Países Baixos",
+      "teams": 18,
+      "format": "double-round-robin",
+      "relegation": 2,
+      "relegationPlayoff": [
+        16,
+        16
+      ],
+      "continental": {
+        "champions-league": [
+          1,
+          2
+        ],
+        "europa-league": [
+          3,
+          4
+        ],
+        "conference-league": [
+          5,
+          5
+        ]
+      },
+      "verification": "formato-domestico-verificado-playoffs-aproximados",
+      "source": "https://www.uefa.com/news-media/news/02a4-2060ea59fbc5-4be94b1fbe5a-1000--access-list-track-which-sides-will-play-in-the-2026-27-uef/"
+    },
+    "poland-ekstraklasa": {
+      "league": "Ekstraklasa",
+      "country": "Polonia",
+      "teams": 18,
+      "format": "double-round-robin",
+      "promotion": 0,
+      "relegation": 3,
+      "continental": {
+        "champions-league": [
+          1,
+          4
+        ]
+      },
+      "verification": "competition-format-review-required"
+    },
+    "liga-portugal": {
+      "league": "Liga Portugal",
+      "country": "Portugal",
+      "teams": 18,
+      "format": "double-round-robin",
+      "relegation": 2,
+      "relegationPlayoff": [
+        16,
+        16
+      ],
+      "continental": {
+        "champions-league": [
+          1,
+          2
+        ],
+        "europa-league": [
+          3,
+          4
+        ],
+        "conference-league": [
+          5,
+          5
+        ]
+      },
+      "verification": "formato-domestico-verificado-vagas-uefa-dinamicas",
+      "source": "https://www.uefa.com/news-media/news/02a4-2060ea59fbc5-4be94b1fbe5a-1000--access-list-track-which-sides-will-play-in-the-2026-27-uef/"
+    },
+    "romania-liga-1": {
+      "league": "Liga I",
+      "country": "Romenia",
+      "teams": 16,
+      "format": "double-round-robin",
+      "promotion": 0,
+      "relegation": 2,
+      "continental": {
+        "champions-league": [
+          1,
+          4
+        ]
+      },
+      "verification": "competition-format-review-required"
+    },
+    "russia-premier": {
+      "league": "Russian Premier League",
+      "country": "Russia",
+      "teams": 16,
+      "format": "double-round-robin",
+      "promotion": 0,
+      "relegation": 2,
+      "continental": {
+        "champions-league": [
+          1,
+          4
+        ]
+      },
+      "verification": "competition-format-review-required"
+    },
+    "serbia-superliga": {
+      "league": "Serbian SuperLiga",
+      "country": "Servia",
+      "teams": 16,
+      "format": "double-round-robin",
+      "promotion": 0,
+      "relegation": 2,
+      "continental": {
+        "champions-league": [
+          1,
+          4
+        ]
+      },
+      "verification": "competition-format-review-required"
+    },
+    "sweden-allsvenskan": {
+      "league": "Allsvenskan",
+      "country": "Suecia",
+      "teams": 16,
+      "format": "double-round-robin",
+      "promotion": 0,
+      "relegation": 2,
+      "continental": {
+        "champions-league": [
+          1,
+          4
+        ]
+      },
+      "verification": "competition-format-review-required"
+    },
+    "swiss-super-league": {
+      "league": "Swiss Super League",
+      "country": "Suica",
+      "teams": 12,
+      "format": "double-round-robin",
+      "promotion": 0,
+      "relegation": 2,
+      "continental": {
+        "champions-league": [
+          1,
+          4
+        ]
+      },
+      "verification": "competition-format-review-required"
+    },
+    "czech-first": {
+      "league": "Czech First League",
+      "country": "Tchequia",
+      "teams": 16,
+      "format": "double-round-robin",
+      "promotion": 0,
+      "relegation": 2,
+      "continental": {
+        "champions-league": [
+          1,
+          4
+        ]
+      },
+      "verification": "competition-format-review-required"
+    },
+    "super-lig": {
+      "league": "Süper Lig",
+      "country": "Turquia",
+      "continental": {
+        "champions-league": [
+          1,
+          4
+        ]
+      },
+      "relegation": 2,
+      "teams": 18,
+      "format": "double-round-robin",
+      "verification": "aproximacao-documentada-do-motor"
+    },
+    "ukraine-premier": {
+      "league": "Ukrainian Premier League",
+      "country": "Ucrania",
+      "teams": 16,
+      "format": "double-round-robin",
+      "promotion": 0,
+      "relegation": 2,
+      "continental": {
+        "champions-league": [
+          1,
+          4
+        ]
+      },
+      "verification": "competition-format-review-required"
+    },
+    "austrian-bundesliga": {
+      "league": "Austrian Bundesliga",
+      "country": "Áustria",
+      "continental": {
+        "champions-league": [
+          1,
+          4
+        ]
+      },
+      "relegation": 2,
+      "teams": 12,
+      "format": "double-round-robin",
+      "verification": "aproximacao-documentada-do-motor"
+    },
+    "canadian-premier": {
+      "league": "Canadian Premier League",
+      "country": "Canadá",
+      "continental": {
+        "concacaf-champions-cup": [
+          1,
+          4
+        ]
+      },
+      "relegation": 0,
+      "teams": 8,
+      "format": "double-round-robin",
+      "verification": "aproximacao-documentada-do-motor"
+    },
+    "costa-rica-primera": {
+      "league": "Primera División",
+      "country": "Costa Rica",
+      "continental": {
+        "concacaf-champions-cup": [
+          1,
+          4
+        ]
+      },
+      "relegation": 2,
+      "teams": 8,
+      "format": "double-round-robin",
+      "verification": "aproximacao-documentada-do-motor"
+    },
+    "mls": {
+      "league": "Major League Soccer",
+      "country": "Estados Unidos",
+      "teams": 30,
+      "format": "conferences-playoffs",
+      "relegation": 0,
+      "continental": {
+        "concacaf-champions-cup": [
+          1,
+          4
+        ]
+      },
+      "verification": "conferencias-e-playoffs-aproximados"
+    },
+    "liga-mx": {
+      "league": "Liga MX",
+      "country": "México",
+      "teams": 18,
+      "format": "apertura-clausura-play-in",
+      "relegation": 0,
+      "continental": {
+        "concacaf-champions-cup": [
+          1,
+          3
+        ]
+      },
+      "verification": "torneios-curtos-e-play-in-aproximados"
+    },
+    "nz-national": {
+      "league": "New Zealand National League",
+      "country": "Nova Zelândia",
+      "continental": {
+        "ofc-champions-league": [
+          1,
+          4
+        ]
+      },
+      "relegation": 0,
+      "teams": 8,
+      "format": "double-round-robin",
+      "verification": "aproximacao-documentada-do-motor"
+    },
+    "argentina-primera": {
+      "league": "Liga Profesional",
+      "country": "Argentina",
+      "teams": 30,
+      "format": "apertura-clausura-groups",
+      "relegation": 2,
+      "continental": {
+        "libertadores": [
+          1,
+          6
+        ],
+        "sulamericana": [
+          7,
+          12
+        ]
+      },
+      "verification": "formato-2026-aproximado-no-motor",
+      "source": "https://cdn.conmebol.com/wp-content/uploads/2025/12/CL-2026-Manual-de-Clubes-POR.pdf"
+    },
+    "bolivia-primera": {
+      "league": "División Profesional",
+      "country": "Bolívia",
+      "continental": {
+        "libertadores": [
+          1,
+          4
+        ]
+      },
+      "relegation": 2,
+      "teams": 12,
+      "format": "double-round-robin",
+      "verification": "aproximacao-documentada-do-motor"
+    },
+    "brasileirao-a": {
+      "league": "Brasileirão Série A",
+      "country": "Brasil",
+      "teams": 20,
+      "format": "double-round-robin",
+      "relegation": 4,
+      "relegatesTo": "brasileirao-b",
+      "continental": {
+        "libertadores": [
+          1,
+          5
+        ],
+        "sulamericana": [
+          6,
+          12
+        ]
+      },
+      "qualificationNotes": [
+        "1o ao 4o: Libertadores fase de grupos",
+        "5o: fase preliminar da Libertadores",
+        "seis melhores nao classificados a Libertadores: Sul-Americana",
+        "vagas de campeoes e Copa do Brasil tem precedencia e geram cascata"
+      ],
+      "verification": "oficial-2026-com-cascata",
+      "source": "https://stcbfsiteprdimgbrs.blob.core.windows.net/img-site/cdn/REC_Brasileiro_SA_rie_A_2026_v15_12_2025_final_02692c1077.pdf"
+    },
+    "brasileirao-b": {
+      "league": "Brasileirão Série B",
+      "country": "Brasil",
+      "teams": 20,
+      "format": "double-round-robin",
+      "promotionDirect": 2,
+      "promotionPlayoff": [
+        3,
+        6
+      ],
+      "relegation": 4,
+      "promotesTo": "brasileirao-a",
+      "qualificationNotes": [
+        "1o e 2o sobem diretamente",
+        "3o x 6o e 4o x 5o disputam dois acessos"
+      ],
+      "verification": "oficial-2026",
+      "source": "https://www.cbf.com.br/futebol-brasileiro/noticias/undefined/sao-paulo-x-ceara/cbf-divulga-documentos-tecnicos-do-brasileirao-da-serie-b-de-2026"
+    },
+    "chile-primera": {
+      "league": "Primera División",
+      "country": "Chile",
+      "continental": {
+        "libertadores": [
+          1,
+          4
+        ]
+      },
+      "relegation": 2,
+      "teams": 11,
+      "format": "double-round-robin",
+      "verification": "aproximacao-documentada-do-motor"
+    },
+    "colombia-primera-a": {
+      "league": "Categoría Primera A",
+      "country": "Colômbia",
+      "teams": 20,
+      "format": "apertura-finalizacion-quadrangular",
+      "relegation": 2,
+      "continental": {
+        "libertadores": [
+          1,
+          4
+        ],
+        "sulamericana": [
+          5,
+          8
+        ]
+      },
+      "verification": "quadrangulares-e-promedio-aproximados",
+      "source": "https://cdn.conmebol.com/wp-content/uploads/2025/12/CL-2026-Manual-de-Clubes-POR.pdf"
+    },
+    "ecuador-serie-a": {
+      "league": "LigaPro Serie A",
+      "country": "Equador",
+      "continental": {
+        "libertadores": [
+          1,
+          4
+        ]
+      },
+      "relegation": 2,
+      "teams": 12,
+      "format": "double-round-robin",
+      "verification": "aproximacao-documentada-do-motor"
+    },
+    "paraguay-primera": {
+      "league": "Primera División",
+      "country": "Paraguai",
+      "continental": {
+        "libertadores": [
+          1,
+          4
+        ]
+      },
+      "relegation": 2,
+      "teams": 12,
+      "format": "double-round-robin",
+      "verification": "aproximacao-documentada-do-motor"
+    },
+    "peru-liga-1": {
+      "league": "Liga 1",
+      "country": "Peru",
+      "continental": {
+        "libertadores": [
+          1,
+          4
+        ]
+      },
+      "relegation": 2,
+      "teams": 18,
+      "format": "double-round-robin",
+      "verification": "aproximacao-documentada-do-motor"
+    },
+    "uruguay-primera": {
+      "league": "Primera División",
+      "country": "Uruguai",
+      "continental": {
+        "libertadores": [
+          1,
+          4
+        ]
+      },
+      "relegation": 2,
+      "teams": 13,
+      "format": "double-round-robin",
+      "verification": "aproximacao-documentada-do-motor"
+    },
+    "venezuela-primera": {
+      "league": "Liga FUTVE",
+      "country": "Venezuela",
+      "continental": {
+        "libertadores": [
+          1,
+          4
+        ]
+      },
+      "relegation": 2,
+      "teams": 12,
+      "format": "double-round-robin",
+      "verification": "aproximacao-documentada-do-motor"
+    }
+  }
+}

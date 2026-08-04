@@ -1,0 +1,17 @@
+{
+  "imported": 548,
+  "matchedExisting": 237,
+  "added": 311,
+  "downloadedBadges": 0,
+  "meanMatchScore": 0.908,
+  "playableClubs": 633,
+  "simulationClubs": 841,
+  "clubPlayers": 20678,
+  "leagues": 50,
+  "finalNormalizedClubs": 833,
+  "finalPlayableClubs": 625,
+  "finalClubPlayers": 20458,
+  "removedLegacyBrazilAliases": 8,
+  "brazilSerieAClubs": 20,
+  "brazilSerieBClubs": 20
+}

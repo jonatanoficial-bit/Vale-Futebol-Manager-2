@@ -1,3 +1,18 @@
+# 11.0.0 — World Edition — 2026-08-04
+
+- Importados 548 clubes de uma fotografia CC0 atualizada, com elencos e metadados profissionais.
+- Ampliado o mundo final para 833 clubes, 625 comandáveis, 20.458 jogadores, 50 ligas e 49 países.
+- Criados pools profissionais para 87 seleções adicionais: 135 comandáveis e 211 simuladas.
+- Adicionados 16 rostos fotorealistas fictícios e diversos para o treinador.
+- Implementadas instruções táticas avançadas, instalações, negociação contratual, XP, licenças, prêmios e propostas de emprego.
+- Implementado encerramento de temporada com acesso, rebaixamento, vagas continentais e histórico.
+- Corrigida a Série A de 2026, removendo quatro rebaixados e quatro aliases legados duplicados; Série A e B agora têm 20 clubes únicos.
+- Mundial de Clubes passou a exigir conquista continental na carreira, sem convite inicial por rating.
+- Reduzida a camada azul que escondia as artes e aplicados fundos cinematográficos específicos por tela.
+- Validado o campo 2D com 22 jogadores e bola, desktop 1366×768 e celular horizontal 844×390.
+- Atualizado o service worker para buscar JSON primeiro na rede e evitar catálogos obsoletos em novas versões.
+- Documentadas as 195 referências genéricas de escudo e as regras ainda aproximadas, sem alegar cobertura licenciada inexistente.
+
 # 10.0.0 — World Edition — 2026-08-04
 
 - Expandido o mundo para 530 clubes reais em 38 ligas e nas seis confederações.

@@ -1,0 +1,64 @@
+{
+  "status": "approved-with-disclosures",
+  "version": "11.0.0",
+  "simulationClubs": 833,
+  "playableClubs": 625,
+  "clubPlayers": 20458,
+  "fifaAssociations": 211,
+  "commandableNationalTeams": 135,
+  "officialNationalSquads": 48,
+  "nationalPlayers": 3842,
+  "leagues": 50,
+  "realBadgeReferences": 638,
+  "genericBadgeReferences": 195,
+  "uniqueBadgeFilesReferenced": 639,
+  "managerFaces": 16,
+  "clubsByConfederation": {
+    "AFC": 86,
+    "CAF": 56,
+    "CONCACAF": 69,
+    "CONMEBOL": 195,
+    "OFC": 8,
+    "UEFA": 419
+  },
+  "nationalTeamsByConfederation": {
+    "AFC": 46,
+    "CAF": 54,
+    "CONCACAF": 35,
+    "CONMEBOL": 10,
+    "OFC": 11,
+    "UEFA": 55
+  },
+  "ruleVerification": {
+    "aproximacao-documentada-do-motor": 22,
+    "competition-format-review-required": 12,
+    "conferencias-e-playoffs-aproximados": 1,
+    "formato-2026-aproximado-no-motor": 1,
+    "formato-domestico-verificado": 2,
+    "formato-domestico-verificado-playoffs-aproximados": 1,
+    "formato-domestico-verificado-vagas-uefa-dinamicas": 6,
+    "oficial-2026": 1,
+    "oficial-2026-com-cascata": 1,
+    "quadrangulares-e-promedio-aproximados": 1,
+    "split-e-playoffs-aproximados": 1,
+    "torneios-curtos-e-play-in-aproximados": 1
+  },
+  "disclosures": [
+    "195 clubes de simulação ainda usam escudo genérico; não são anunciados como escudos reais.",
+    "GER e potencial são índices próprios do VFM, não ratings oficiais FIFA/EA/FM.",
+    "Regras marcadas como aproximação não reproduzem integralmente splits, médias e playoffs."
+  ],
+  "checks": [
+    "catalog integrity",
+    "unique club IDs",
+    "club and national roster paths",
+    "six-confederation coverage",
+    "league rule status",
+    "manifest landscape orientation",
+    "index references",
+    "service-worker shell references",
+    "manager face atlas",
+    "world cup qualification gate",
+    "rating disclosure"
+  ]
+}

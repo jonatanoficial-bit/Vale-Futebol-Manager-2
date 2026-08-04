@@ -1,0 +1,69 @@
+/* V11 cinematic layer: preserve supplied artwork instead of covering it in blue. */
+:root { --panel:rgba(7,13,20,.76); --panel-soft:rgba(13,20,29,.68); --ink:#05080d; --ink-2:#0a1018; }
+.cover-screen { background-image:linear-gradient(90deg,rgba(2,5,9,.82) 0%,rgba(2,5,9,.48) 48%,rgba(2,5,9,.18) 100%),url('../assets/backgrounds/bg-main-menu.jpg'); background-position:center; background-size:cover; }
+.cover-copy { background:linear-gradient(145deg,rgba(3,7,12,.78),rgba(3,7,12,.36)); border:1px solid rgba(243,209,139,.18); box-shadow:0 30px 100px rgba(0,0,0,.48); backdrop-filter:blur(4px); }
+.world-select-screen { background:linear-gradient(90deg,rgba(2,6,10,.72),rgba(2,6,10,.38)),url('../assets/backgrounds/bg-team-select.jpg') center/cover; }
+.world-club-card { background:rgba(8,14,21,.78); backdrop-filter:blur(7px); }
+.world-topbar,.world-nav { background:rgba(4,8,13,.9); backdrop-filter:blur(12px); }
+.game-content { background-color:#05080d; background-image:linear-gradient(90deg,rgba(3,7,11,.62),rgba(3,7,11,.36),rgba(3,7,11,.62)),url('../assets/backgrounds/bg-lobby.jpg'); background-position:center; background-size:cover; background-attachment:fixed; }
+.world-screen-dashboard { background-image:linear-gradient(90deg,rgba(3,7,11,.58),rgba(3,7,11,.28),rgba(3,7,11,.58)),url('../assets/backgrounds/bg-lobby.jpg'); }
+.world-screen-squad { background-image:linear-gradient(90deg,rgba(3,7,11,.67),rgba(3,7,11,.4)),url('../assets/backgrounds/bg-squad.jpg'); }
+.world-screen-tactics { background-image:linear-gradient(90deg,rgba(3,7,11,.58),rgba(3,7,11,.34)),url('../assets/backgrounds/bg-formation.jpg'); }
+.world-screen-competitions { background-image:linear-gradient(90deg,rgba(3,7,11,.65),rgba(3,7,11,.36)),url('../assets/backgrounds/bg-championship.jpg'); }
+.world-screen-calendar { background-image:linear-gradient(90deg,rgba(3,7,11,.64),rgba(3,7,11,.38)),url('../assets/backgrounds/bg-full-calendar.jpg'); }
+.world-screen-match-center { background-image:linear-gradient(90deg,rgba(3,7,11,.58),rgba(3,7,11,.32)),url('../assets/backgrounds/bg-main-menu.jpg'); }
+.world-screen-training { background-image:linear-gradient(90deg,rgba(3,7,11,.62),rgba(3,7,11,.36)),url('../assets/backgrounds/extras/extra-31-175541.jpg'); }
+.world-screen-market { background-image:linear-gradient(90deg,rgba(3,7,11,.64),rgba(3,7,11,.38)),url('../assets/backgrounds/bg-transfers.jpg'); }
+.world-screen-club { background-image:linear-gradient(90deg,rgba(3,7,11,.62),rgba(3,7,11,.34)),url('../assets/backgrounds/bg-club.jpg'); }
+.world-screen-inbox { background-image:linear-gradient(90deg,rgba(3,7,11,.64),rgba(3,7,11,.38)),url('../assets/backgrounds/bg-messages.jpg'); }
+.world-screen-national { background-image:linear-gradient(90deg,rgba(3,7,11,.62),rgba(3,7,11,.34)),url('../assets/backgrounds/bg-championship.jpg'); }
+.world-screen-settings { background-image:linear-gradient(90deg,rgba(3,7,11,.68),rgba(3,7,11,.42)),url('../assets/backgrounds/bg-settings.jpg'); }
+.panel,.calendar-card,.national-offer,.training-card,.competition-card,.fixture-card,.market-card,.table-wrap { background-color:rgba(6,11,17,.77); backdrop-filter:blur(9px) saturate(1.05); box-shadow:0 18px 48px rgba(0,0,0,.25); }
+
+/* Photoreal manager atlas: one optimized image, sixteen independently selectable faces. */
+.avatar-world-list { grid-template-columns:repeat(4,minmax(92px,1fr)); }
+.avatar-btn.photoreal { aspect-ratio:auto; min-height:132px; display:grid; grid-template-rows:minmax(0,1fr) auto; gap:5px; padding:5px; border-radius:15px; background:rgba(3,7,11,.76); }
+.avatar-btn.photoreal small { overflow:hidden; color:#c8d0da; font-size:.56rem; line-height:1.1; text-overflow:ellipsis; white-space:nowrap; }
+.avatar-sprite { display:block; width:100%; aspect-ratio:1; border-radius:11px; background-image:url('../assets/avatars/manager-photoreal-atlas-v11.png'); background-repeat:no-repeat; background-size:400% 400%; }
+.avatar-sprite-1{background-position:0 0}.avatar-sprite-2{background-position:33.333% 0}.avatar-sprite-3{background-position:66.667% 0}.avatar-sprite-4{background-position:100% 0}
+.avatar-sprite-5{background-position:0 33.333%}.avatar-sprite-6{background-position:33.333% 33.333%}.avatar-sprite-7{background-position:66.667% 33.333%}.avatar-sprite-8{background-position:100% 33.333%}
+.avatar-sprite-9{background-position:0 66.667%}.avatar-sprite-10{background-position:33.333% 66.667%}.avatar-sprite-11{background-position:66.667% 66.667%}.avatar-sprite-12{background-position:100% 66.667%}
+.avatar-sprite-13{background-position:0 100%}.avatar-sprite-14{background-position:33.333% 100%}.avatar-sprite-15{background-position:66.667% 100%}.avatar-sprite-16{background-position:100% 100%}
+.manager-face-small { width:34px; height:34px; flex:0 0 auto; margin-left:3px; border:1px solid rgba(243,209,139,.45); border-radius:50%; }
+.job-offers { grid-column:1/-1; }
+.job-offers .staff-row>span { display:grid; gap:2px; min-width:0; }
+.job-offers .staff-row small { color:var(--muted); }
+.job-club-badge { width:34px; height:34px; object-fit:contain; }
+
+.tactics-layout { display:grid; grid-template-columns:minmax(360px,1.35fr) minmax(270px,.65fr); gap:10px; }
+.tactics-controls { display:grid; align-content:start; gap:9px; }
+.tactics-controls>label { display:grid; grid-template-columns:1fr auto; gap:5px; color:var(--muted); font-size:.66rem; }
+.tactics-controls>label input { grid-column:1/3; width:100%; accent-color:var(--gold); }
+.tactics-select-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+.tactics-select-grid .field { margin:0; }
+.facility-summary { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-bottom:10px; }
+.facility-summary span { padding:9px; border:1px solid rgba(255,255,255,.09); border-radius:12px; background:rgba(5,10,16,.74); color:var(--muted); font-size:.64rem; }
+.facility-summary strong { display:block; color:var(--gold-bright); }
+
+@media (min-width:1500px) {
+  .world-game { grid-template-columns:110px minmax(0,1fr); }
+  .game-content { padding:clamp(16px,2vw,28px); }
+  .dashboard-world-grid { max-width:1500px; margin:auto; }
+  .world-club-grid { grid-template-columns:repeat(5,minmax(220px,1fr)); }
+}
+@media (orientation:landscape) and (max-height:500px) {
+  .game-content { background-attachment:scroll; }
+  .avatar-world-list { grid-template-columns:repeat(8,minmax(66px,1fr)); }
+  .avatar-btn.photoreal { min-height:82px; padding:3px; }
+  .avatar-btn.photoreal small { display:none; }
+  .manager-world-body { grid-template-columns:minmax(0,1.5fr) minmax(240px,.5fr); }
+  .tactics-layout { grid-template-columns:minmax(330px,1.25fr) minmax(260px,.75fr); }
+  .formation-pitch { min-height:330px; }
+  .facility-summary { grid-template-columns:repeat(3,1fr); }
+}
+@media (max-width:760px) and (orientation:landscape) {
+  .world-game { grid-template-columns:92px minmax(0,1fr); }
+  .top-metrics span:nth-child(2),.top-metrics span:nth-child(3) { display:none; }
+  .tactics-select-grid { grid-template-columns:1fr 1fr; }
+  .panel { border-radius:12px; }
+}

@@ -1,6 +1,6 @@
-Vale Futebol Manager 9.0.1
-Build VFM-9.0.1-20260803-1701
-Schema 900
-Produção · Mobile horizontal · PWA offline
-Gerado em 03/08/2026 17:01:28 BRT
-Relatórios: AUDITORIA-TECNICA.md, TESTES-REALIZADOS.md, AVALIACAO-DO-PROJETO.md
+Vale Futebol Manager — World Edition 11.0.0
+Build VFM-WORLD-11.0.0-20260804
+Schema 1100
+Produção · Mobile horizontal · Desktop · PWA offline
+Catálogo: 833 clubes · 625 comandáveis · 20.458 jogadores · 211 seleções
+Relatórios atuais: QA-WORLD-V11.json, AUDITORIA-WORLD-V11.md, TESTES-REALIZADOS.md, LIMITES-DE-FIDELIDADE-V11.md

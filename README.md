@@ -1,47 +1,44 @@
-# Vale Futebol Manager — World Edition
+# Vale Futebol Manager — World Edition 11
 
-Manager de futebol estático, mobile-first horizontal e instalável como PWA. A versão 10.0.0 reconstrói o jogo em torno de um mundo conectado de clubes, seleções e competições.
+Manager internacional de futebol, mobile-first horizontal e instalável como PWA. A versão 11 amplia a base mundial, adiciona rostos fotográficos para o treinador, aprofunda a carreira e mostra os 22 jogadores no campo 2D.
 
-## Base mundial
+## Conteúdo desta versão
 
-- 530 clubes reais na simulação, em 38 ligas de 37 países;
-- 149 clubes comandáveis com elenco nominal completo e 2.902 jogadores;
-- 211 associações FIFA nas seis confederações;
-- 48 seleções comandáveis com as convocatórias oficiais da Copa do Mundo de 2026 e 1.248 jogadores;
-- 36 avatares de treinador;
-- clubes das principais ligas de CONMEBOL, UEFA, CONCACAF, AFC, CAF e OFC para alimentar torneios continentais e o Mundial de Clubes.
+- 833 clubes nas seis confederações e em 50 ligas de 49 países;
+- 625 clubes comandáveis em 38 países, todos com elenco nominal de ao menos 11 atletas;
+- 20.458 jogadores de clubes;
+- 211 associações nacionais na simulação e 135 seleções comandáveis;
+- 48 listas oficiais da Copa do Mundo de 2026 preservadas e 87 pools adicionais de profissionais;
+- 3.842 jogadores nas seleções comandáveis;
+- 16 rostos fotorealistas fictícios de homens e mulheres, com diversidade de idade e etnia;
+- 638 clubes com referência de escudo real e 195 clubes de simulação ainda identificados honestamente com escudo genérico.
 
-Clubes sem elenco verificável participam pela IA. Eles não recebem jogadores fictícios. Todas as 211 seleções disputam a simulação das eliminatórias; as 48 com convocação nominal oficial podem ser comandadas.
+## Competições e carreira
 
-## Competições e regras
-
-- Brasileirão Série A e Série B;
-- ligas e copas nacionais;
-- Copa do Brasil;
-- CONMEBOL Libertadores e Sul-Americana;
-- UEFA Champions League e Europa League;
-- CONCACAF Champions Cup;
-- AFC Champions League Elite;
-- CAF Champions League;
-- OFC Champions League;
-- Mundial de Clubes;
-- eliminatórias continentais, Copa América, Euro, Copa Ouro, Copa da Ásia, Copa Africana de Nações, Copa das Nações da OFC e Copa do Mundo.
-
-As tabelas exibem zonas de classificação, promoção e rebaixamento. A entrada nas competições continentais usa as faixas de vagas definidas pela liga; a Copa do Mundo só é liberada quando a seleção atinge o critério de classificação nas eliminatórias.
+- Brasileirão Série A e Série B com 20 clubes cada;
+- regra oficial de 2026 da Série B: dois acessos diretos e play-offs entre 3º–6º por duas vagas;
+- quatro rebaixados e acesso/rebaixamento efetivo entre as Séries A e B;
+- faixas de Libertadores e Sul-Americana com cascata documentada no Brasil;
+- ligas e copas nacionais, Libertadores, Sul-Americana, Champions League, Europa League, torneios continentais de CONCACAF/AFC/CAF/OFC e Mundial de Clubes;
+- Mundial de Clubes só criado após conquista continental na carreira, nunca apenas pelo rating inicial;
+- eliminatórias, copas continentais de seleções e Copa do Mundo condicionada à classificação;
+- XP, nível, licenças, premiações, reputação, propostas de clubes e carreira simultânea em clube e seleção.
 
 ## Gestão e partida
 
-- três espaços de carreira com migração e persistência;
-- carreira simultânea em clube e seleção;
-- escalação de onze titulares, formações e instruções táticas;
-- treino semanal, físico e moral;
-- mercado internacional apenas com atletas nominais existentes na base;
-- orçamento, receitas, folha, comissão técnica e livro financeiro;
-- e-mail de diretoria, competições e seleções;
-- calendário integrado de liga, copas e torneios internacionais;
-- campo 2D com 22 jogadores, bola, formação, placar, narração e estatísticas;
-- pausa automática ao girar ou ocultar a aplicação;
-- funcionamento offline após o primeiro carregamento.
+- escalação, quatro formações e instruções de mentalidade, construção, marcação, transição, pressão, ritmo, largura e linha defensiva;
+- treino semanal, evolução de jovens, condição física e moral;
+- instalações de treino, base, medicina e observação, com cinco níveis;
+- mercado internacional com taxa, comissão, salário, duração contratual, orçamento e limite de elenco;
+- e-mail, diretoria, finanças, comissão técnica, calendário e histórico de temporada;
+- campo 2D com 22 jogadores identificados, bola, posicionamento conforme formação, narração e estatísticas;
+- três espaços de carreira, migração do save da versão 10 e funcionamento offline depois do primeiro carregamento.
+
+## Fidelidade e licenças
+
+Os nomes, posições, datas, nacionalidades, contratos e valores importados usam uma fotografia de dados disponível em 04/08/2026. O GER e o potencial são estimativas próprias do VFM e não são ratings oficiais da FIFA, EA Sports ou Football Manager.
+
+Nem todas as regras especiais (médias, splits e play-offs) estão reproduzidas integralmente. Cada liga possui um status de verificação em `data/rules-2026.json`. Escudos e marcas pertencem aos seus titulares; distribuição comercial requer licenças. Consulte `FONTES-E-LICENCAS-V11.md` e `LIMITES-DE-FIDELIDADE-V11.md`.
 
 ## Executar
 
@@ -49,19 +46,14 @@ As tabelas exibem zonas de classificação, promoção e rebaixamento. A entrada
 2. Inicie um servidor HTTP, por exemplo: `python -m http.server 8080`.
 3. Acesse `http://localhost:8080`.
 
-Não abra `index.html` diretamente pelo sistema de arquivos: elencos, módulos e service worker dependem de HTTP.
-
-## Dados e ratings
-
-As associações e os 48 elencos internacionais vêm de publicações oficiais da FIFA. Os dados de clubes reaproveitam e normalizam o pacote original recebido. O campo `overall` é um índice proprietário de simulação do VFM e não representa nota oficial da FIFA, EA Sports ou Football Manager.
-
-Consulte [FONTES-E-METODOLOGIA-2026.md](FONTES-E-METODOLOGIA-2026.md) para datas de corte, fontes e limitações.
+Não abra `index.html` diretamente pelo sistema de arquivos; os elencos e o modo offline dependem de HTTP.
 
 ## Compatibilidade validada
 
-- celular horizontal: 568×320;
-- celular vertical: 390×844 com bloqueio de orientação e aplicação inerte;
-- desktop: 1280×720;
-- PWA offline com carregamento e recuperação do save.
+- desktop: 1366×768;
+- celular horizontal: 844×390, sem overflow global;
+- celular vertical: 390×844, com bloqueio e pedido de rotação;
+- Chromium integrado, sem erros ou avisos no console;
+- sintaxe JavaScript e integridade de catálogo aprovadas em `QA-WORLD-V11.json`.
 
-Versão 10.0.0 · World Edition · 2026-08-04
+Versão 11.0.0 · World Edition · 2026-08-04

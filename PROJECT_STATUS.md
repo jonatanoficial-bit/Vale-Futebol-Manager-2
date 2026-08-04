@@ -1,19 +1,19 @@
 # Estado do projeto
 
-Vale Futebol Manager 9.0.1 está executável e jogável em navegador moderno.
+Vale Futebol Manager World Edition 11.0.0 está executável e jogável em navegador moderno.
 
-## Aprovado
+## Aprovado nesta compilação
 
-- entrada e carregamento;
-- nova carreira e três espaços;
-- salvamento, backup e reabertura;
-- elenco, tática, treino, agenda, mercado e finanças;
-- partida, pausa, resultado e progressão;
-- celular horizontal de 568×320 a 960×432;
-- tablet e desktop até 1920×1080;
-- aviso de orientação e pausa segura;
-- PWA e reabertura offline.
+- nova carreira em 625 clubes e três espaços de save;
+- 211 seleções simuladas e 135 comandáveis por reputação;
+- elenco, tática avançada, treino, instalações, mercado, finanças e e-mail;
+- temporada, acesso/rebaixamento Brasil A/B, vagas continentais e Mundial por título continental;
+- campo 2D com 22 jogadores, bola, formação e estatísticas;
+- rostos fotorealistas fictícios de homens e mulheres;
+- celular horizontal 844×390 e desktop 1366×768 sem overflow global;
+- bloqueio no retrato e cache PWA versionado;
+- catálogo, caminhos e sintaxe aprovados em `QA-WORLD-V11.json`.
 
 ## Uso recomendado
 
-Apresentação, demonstração e testes fechados. Para publicação comercial ou loja, siga as limitações e requisitos descritos em AVALIACAO-DO-PROJETO.md e PREPARACAO-PARA-APK.md.
+Demonstração e testes fechados. Antes de publicação comercial ou loja, obtenha licenças de escudos e marcas e revise os limites registrados em `LIMITES-DE-FIDELIDADE-V11.md`.

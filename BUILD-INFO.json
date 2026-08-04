@@ -1,8 +1,8 @@
 {
-  "product": "Vale Futebol Manager",
-  "version": "9.0.1",
-  "build": "VFM-9.0.1-20260803-1701",
-  "schema": 900,
-  "generatedAt": "2026-08-03T17:01:28-03:00",
+  "product": "Vale Futebol Manager — World Edition",
+  "version": "11.0.0",
+  "build": "VFM-WORLD-11.0.0-20260804",
+  "schema": 1100,
+  "generatedAt": "2026-08-04T00:00:00-03:00",
   "mode": "production"
 }
