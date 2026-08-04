@@ -1,8 +1,8 @@
 {
-  "product": "Vale Futebol Manager — World Edition",
-  "version": "11.0.0",
-  "build": "VFM-WORLD-11.0.0-20260804",
-  "schema": 1100,
+  "product": "Vale Futebol Manager — Ultimate World",
+  "version": "16.0.0",
+  "build": "VFM-ULTIMATE-16.0.0-20260804",
+  "schema": 1600,
   "generatedAt": "2026-08-04T00:00:00-03:00",
   "mode": "production"
 }

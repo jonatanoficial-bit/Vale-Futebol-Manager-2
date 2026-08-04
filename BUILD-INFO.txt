@@ -1,25 +1,24 @@
-Vale Futebol Manager — World Edition
-Version: 11.0.0
+Vale Futebol Manager — Ultimate World
+Version: 16.0.0
 Build date: 2026-08-04
-Schema: 1100
+Schema: 1600
 
 Catalog:
-- 833 simulation clubs
-- 625 playable clubs
+- 833 simulation clubs / 625 playable clubs
 - 20,458 club players
 - 50 leagues / 49 countries
-- 211 FIFA associations
-- 135 commandable national teams
-- 48 official World Cup squads
-- 3,842 national-team players
-- 638 real crest references / 195 documented generic references
+- 211 national teams / 135 commandable
+- 48 official World Cup squads / 3,842 national players
+- 211 local national flag identities
+- 638 real club crest references / 195 documented generic references
 - 16 photoreal fictional manager faces
 
 Entry point: index.html
-Application: js/app-v11.js
+Application: js/app-v16.js
+Premium styles: css/ultimate-v16.css
 World catalog: data/world-catalog-2026.json
 Rules catalog: data/rules-2026.json
-QA report: QA-WORLD-V11.json
+QA report: QA-WORLD-V16.json
 
 Disclosure:
-VFM overall and potential are proprietary simulation estimates. They are not official FIFA, EA Sports or Football Manager ratings. Club crests and trademarks require permission from their rights holders for commercial distribution.
+VFM overall and potential are proprietary simulation estimates. They are not official FIFA, EA Sports or Football Manager ratings. Club crests, competition identities and trademarks require permission from their rights holders for commercial distribution.

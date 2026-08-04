@@ -1,6 +1,6 @@
-const CACHE = 'vale-futebol-world-v11.0.0-20260804-release';
+const CACHE = 'vale-futebol-ultimate-v16.0.0-20260804-release';
 const SHELL = [
-  './', './index.html', './offline.html', './css/app.css?v=11.0.0-20260804', './css/world-edition.css?v=11.0.0-20260804', './css/world-edition-v11.css?v=11.0.0-20260804-release', './js/app-v11.js?v=11.0.0-20260804-release',
+  './', './index.html', './offline.html', './css/app.css?v=11.0.0-20260804', './css/world-edition.css?v=11.0.0-20260804', './css/world-edition-v11.css?v=11.0.0-20260804-release', './css/ultimate-v16.css?v=16.0.0-20260804-release', './js/app-v16.js?v=16.0.0-20260804-release',
   './manifest.webmanifest', './assets/icons/app-icon-v9.png', './assets/placeholders/player-generic.png', './assets/placeholders/club-generic.png',
   './assets/backgrounds/bg-cover.jpg', './assets/backgrounds/bg-lobby.jpg',
   './assets/backgrounds/bg-match.jpg', './assets/backgrounds/bg-team-select.jpg', './data/world-catalog-2026.json'

@@ -29,7 +29,7 @@ nationals = catalog["nationalTeams"]
 associations = fifa["associations"]
 stats = catalog["stats"]
 
-require(catalog["version"] == "11.0.0", "Versão do catálogo divergente")
+require(catalog["version"] == "16.0.0", "Versão do catálogo divergente")
 require(len(associations) == len(nationals) == stats["nationalTeams"] == 211, "O mundo precisa conter 211 associações")
 require(len({team["code"] for team in associations}) == 211, "Códigos FIFA duplicados")
 require(len({team["code"] for team in nationals}) == 211, "Códigos de seleções duplicados")
@@ -68,6 +68,8 @@ require(len(clubs) - generic_badges == stats["realBadgeFiles"], "Contagem de ref
 
 national_players = 0
 for team in nationals:
+    badge = team.get("badge", "")
+    require(badge.startswith("assets/national/flags/") and (ROOT / badge).is_file(), f"Identidade nacional local ausente: {team['name']}")
     roster_path = team.get("rosterPath")
     if not roster_path:
         continue
@@ -94,19 +96,20 @@ require(manifest.get("orientation") == "landscape", "Manifesto precisa exigir or
 html = (ROOT / "index.html").read_text(encoding="utf-8")
 for ref in re.findall(r'(?:href|src)="\./([^"?#]+)', html):
     require((ROOT / ref).exists(), f"Referência ausente no index: {ref}")
-require("app-v11.js" in html and "world-edition-v11.css" in html, "Entrypoints V11 ausentes")
+require("app-v16.js" in html and "ultimate-v16.css" in html, "Entrypoints V16 ausentes")
 
 sw = (ROOT / "sw.js").read_text(encoding="utf-8")
-require("world-v11.0.0" in sw, "Cache do service worker não é V11")
+require("ultimate-v16.0.0" in sw, "Cache do service worker não é V16")
 for ref in re.findall(r"'\./([^'?]+)(?:\?[^']*)?'", sw):
     if ref:
         require((ROOT / ref).exists(), f"Referência ausente no service worker: {ref}")
 
 avatar_atlas = ROOT / "assets/avatars/manager-photoreal-atlas-v11.png"
 require(avatar_atlas.is_file() and avatar_atlas.stat().st_size > 500_000, "Atlas fotográfico dos treinadores ausente ou inválido")
-app_js = (ROOT / "js/app-v11.js").read_text(encoding="utf-8")
+app_js = (ROOT / "js/app-v16.js").read_text(encoding="utf-8")
 require(len(set(re.findall(r"avatar-sprite-(\d+)", (ROOT / "css/world-edition-v11.css").read_text(encoding="utf-8")))) == 16, "Sprites de avatar incompletos")
-require("buildWorldFixtures(session.selectedClub" not in app_js, "Mundial não pode ser concedido por rating na primeira temporada")
+for marker in ["liveTacticsPanel", "yearCalendar", "simulateWorldWeek", "showPostMatchInterview", "renderFacilitiesCampus", "generateSponsorOffers"]:
+    require(marker in app_js, f"Módulo V16 ausente: {marker}")
 
 verification_counts = Counter(league.get("rules", {}).get("verification") for league in leagues)
 report = {
@@ -124,6 +127,7 @@ report = {
     "genericBadgeReferences": generic_badges,
     "uniqueBadgeFilesReferenced": len(badge_paths),
     "managerFaces": stats["managerAvatars"],
+    "nationalIdentityFlags": stats.get("nationalIdentityFlags", 0),
     "clubsByConfederation": dict(sorted(Counter(club["confederation"] for club in clubs).items())),
     "nationalTeamsByConfederation": dict(sorted(Counter(team["confederation"] for team in nationals).items())),
     "ruleVerification": dict(sorted(verification_counts.items())),
@@ -135,9 +139,9 @@ report = {
     "checks": [
         "catalog integrity", "unique club IDs", "club and national roster paths", "six-confederation coverage",
         "league rule status", "manifest landscape orientation", "index references", "service-worker shell references",
-        "manager face atlas", "world cup qualification gate", "rating disclosure",
+        "manager face atlas", "national identity flags", "live match tactics", "annual calendar", "global simulation", "rating disclosure",
     ],
 }
 
-(ROOT / "QA-WORLD-V11.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+(ROOT / "QA-WORLD-V16.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 print(json.dumps(report, ensure_ascii=False))

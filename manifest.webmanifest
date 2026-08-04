@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "Vale Futebol Manager — World Edition",
-  "short_name": "VFM World",
-  "description": "Manager mundial de clubes e seleções com partidas 2D.",
+  "name": "Vale Futebol Manager — Ultimate World",
+  "short_name": "VFM Ultimate",
+  "description": "Carreira mundial de clubes e seleções com gestão completa e partidas táticas 2D.",
   "lang": "pt-BR",
   "start_url": "./",
   "scope": "./",

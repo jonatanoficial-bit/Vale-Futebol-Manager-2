@@ -1,3 +1,15 @@
+# 16.0.0 — Ultimate World — 2026-08-04
+
+- Ampliado o manager internacional para 833 clubes, 625 comandáveis, 20.458 jogadores, 50 ligas e 49 países.
+- Integradas 211 seleções, 135 comandáveis, com eliminatórias continentais, copas continentais e Copa do Mundo.
+- Adicionado calendário mensal, semanal e anual com filtros, sorteios e atualização dinâmica das fases.
+- Implementado editor tático por arrastar ou tocar, banco com 12 atletas e até cinco substituições durante a partida.
+- Expandido o motor 2D para 22 jogadores, bola, xG, finalizações, cartões, desgaste, desconfortos e reação tática adversária.
+- Adicionados patrocínios, instalações, academia, treino individual, entrevistas pós-jogo e negociações detalhadas de transferências.
+- Adicionadas 211 identidades nacionais locais e substituído o escudo do Atlético Mineiro pelo arquivo publicado no site oficial do clube.
+- Atualizados PWA, cache, migração de salvamento, documentação, licenças e auditoria automatizada para o schema 1600.
+- Mantidas divulgações explícitas sobre 195 escudos genéricos e formatos complexos de competição ainda aproximados.
+
 # 11.0.0 — World Edition — 2026-08-04
 
 - Importados 548 clubes de uma fotografia CC0 atualizada, com elencos e metadados profissionais.
@@ -111,3 +123,14 @@
 - `asset-map.json`: 737 caminhos únicos, 0 ausentes.
 - Avatares v810: 12 encontrados, 12 hashes únicos.
 - QA Final v8.2: validator OK.
+# 16.0.0 — Ultimate World (2026-08-04)
+
+- calendário anual, semanal e mensal com sorteios dinâmicos;
+- simulação paralela de 50 ligas e líderes mundiais;
+- mata-matas com progressão, eliminação e pênaltis;
+- tática por arrastar/toque e substituições ao vivo;
+- campo 2D com 22 jogadores, xG, cartões e desgaste;
+- negociações avançadas, empréstimos, academia e treino individual;
+- campus visual de instalações, patrocínios e coletiva pós-jogo;
+- 211 identidades nacionais locais e escudo oficial do Atlético em alta resolução;
+- interface mobile horizontal certificada em 844×390.

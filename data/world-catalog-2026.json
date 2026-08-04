@@ -1,5 +1,5 @@
 {
-  "version": "11.0.0",
+  "version": "16.0.0",
   "season": 2026,
   "generatedFrom": "VFM original pack + transfermarkt-datasets CC0 snapshot 2026-08-04",
   "leagues": [
@@ -17291,11 +17291,13 @@
       "worldCupSlots": 8,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/afg.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 62
+      "rating": 62,
+      "visualIdentity": "national-flag",
+      "flagIso2": "af"
     },
     {
       "id": "alb",
@@ -17307,13 +17309,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/alb.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/alb.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 70,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "al"
     },
     {
       "id": "alg",
@@ -17325,11 +17329,13 @@
       "worldCupSlots": 9,
       "rosterPath": "data/rosters/2026/fifa-world-cup/alg.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/alg.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 70
+      "rating": 70,
+      "visualIdentity": "national-flag",
+      "flagIso2": "dz"
     },
     {
       "id": "asa",
@@ -17341,11 +17347,13 @@
       "worldCupSlots": 1,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/asa.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 57
+      "rating": 57,
+      "visualIdentity": "national-flag",
+      "flagIso2": "as"
     },
     {
       "id": "and",
@@ -17357,13 +17365,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/and.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/and.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 60,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "ad"
     },
     {
       "id": "ang",
@@ -17375,13 +17385,15 @@
       "worldCupSlots": 9,
       "rosterPath": "data/national-rosters/cc0-2026/ang.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/ang.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 68,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "ao"
     },
     {
       "id": "aia",
@@ -17393,11 +17405,13 @@
       "worldCupSlots": 6,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/aia.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 61
+      "rating": 61,
+      "visualIdentity": "national-flag",
+      "flagIso2": "ai"
     },
     {
       "id": "atg",
@@ -17409,11 +17423,13 @@
       "worldCupSlots": 6,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/atg.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 61
+      "rating": 61,
+      "visualIdentity": "national-flag",
+      "flagIso2": "ag"
     },
     {
       "id": "arg",
@@ -17425,11 +17441,13 @@
       "worldCupSlots": 6,
       "rosterPath": "data/rosters/2026/fifa-world-cup/arg.json",
       "players": 26,
-      "badge": "assets/countries/ar.png",
+      "badge": "assets/national/flags/arg.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 79
+      "rating": 79,
+      "visualIdentity": "national-flag",
+      "flagIso2": "ar"
     },
     {
       "id": "arm",
@@ -17441,13 +17459,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/arm.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/arm.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 65,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "am"
     },
     {
       "id": "aru",
@@ -17459,11 +17479,13 @@
       "worldCupSlots": 6,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/aru.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 61
+      "rating": 61,
+      "visualIdentity": "national-flag",
+      "flagIso2": "aw"
     },
     {
       "id": "aus",
@@ -17475,11 +17497,13 @@
       "worldCupSlots": 8,
       "rosterPath": "data/rosters/2026/fifa-world-cup/aus.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/aus.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 68
+      "rating": 68,
+      "visualIdentity": "national-flag",
+      "flagIso2": "au"
     },
     {
       "id": "aut",
@@ -17491,11 +17515,13 @@
       "worldCupSlots": 16,
       "rosterPath": "data/rosters/2026/fifa-world-cup/aut.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/aut.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 75
+      "rating": 75,
+      "visualIdentity": "national-flag",
+      "flagIso2": "at"
     },
     {
       "id": "aze",
@@ -17507,13 +17533,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/aze.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/aze.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 64,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "az"
     },
     {
       "id": "bah",
@@ -17525,11 +17553,13 @@
       "worldCupSlots": 6,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/bah.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 61
+      "rating": 61,
+      "visualIdentity": "national-flag",
+      "flagIso2": "bs"
     },
     {
       "id": "bhr",
@@ -17541,11 +17571,13 @@
       "worldCupSlots": 8,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/bhr.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 62
+      "rating": 62,
+      "visualIdentity": "national-flag",
+      "flagIso2": "bh"
     },
     {
       "id": "ban",
@@ -17557,13 +17589,15 @@
       "worldCupSlots": 8,
       "rosterPath": "data/national-rosters/cc0-2026/ban.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/ban.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 60,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "bd"
     },
     {
       "id": "brb",
@@ -17575,11 +17609,13 @@
       "worldCupSlots": 6,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/brb.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 61
+      "rating": 61,
+      "visualIdentity": "national-flag",
+      "flagIso2": "bb"
     },
     {
       "id": "blr",
@@ -17591,13 +17627,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/blr.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/blr.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 64,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "by"
     },
     {
       "id": "bel",
@@ -17609,11 +17647,13 @@
       "worldCupSlots": 16,
       "rosterPath": "data/rosters/2026/fifa-world-cup/bel.json",
       "players": 26,
-      "badge": "assets/countries/be.png",
+      "badge": "assets/national/flags/bel.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 75
+      "rating": 75,
+      "visualIdentity": "national-flag",
+      "flagIso2": "be"
     },
     {
       "id": "blz",
@@ -17625,13 +17665,15 @@
       "worldCupSlots": 6,
       "rosterPath": "data/national-rosters/cc0-2026/blz.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/blz.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 59,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "bz"
     },
     {
       "id": "ben",
@@ -17643,11 +17685,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/ben.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "bj"
     },
     {
       "id": "ber",
@@ -17659,11 +17703,13 @@
       "worldCupSlots": 6,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/ber.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 61
+      "rating": 61,
+      "visualIdentity": "national-flag",
+      "flagIso2": "bm"
     },
     {
       "id": "bhu",
@@ -17675,13 +17721,15 @@
       "worldCupSlots": 8,
       "rosterPath": "data/national-rosters/cc0-2026/bhu.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/bhu.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 59,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "bt"
     },
     {
       "id": "bol",
@@ -17693,13 +17741,15 @@
       "worldCupSlots": 6,
       "rosterPath": "data/national-rosters/cc0-2026/bol.json",
       "players": 30,
-      "badge": "assets/countries/bo.png",
+      "badge": "assets/national/flags/bol.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 64,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "bo"
     },
     {
       "id": "bih",
@@ -17711,11 +17761,13 @@
       "worldCupSlots": 16,
       "rosterPath": "data/rosters/2026/fifa-world-cup/bih.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/bih.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 74
+      "rating": 74,
+      "visualIdentity": "national-flag",
+      "flagIso2": "ba"
     },
     {
       "id": "bot",
@@ -17727,11 +17779,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/bot.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "bw"
     },
     {
       "id": "bra",
@@ -17743,11 +17797,13 @@
       "worldCupSlots": 6,
       "rosterPath": "data/rosters/2026/fifa-world-cup/bra.json",
       "players": 26,
-      "badge": "assets/countries/br.png",
+      "badge": "assets/national/flags/bra.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 77
+      "rating": 77,
+      "visualIdentity": "national-flag",
+      "flagIso2": "br"
     },
     {
       "id": "vgb",
@@ -17759,11 +17815,13 @@
       "worldCupSlots": 6,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/vgb.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 61
+      "rating": 61,
+      "visualIdentity": "national-flag",
+      "flagIso2": "vg"
     },
     {
       "id": "bru",
@@ -17775,13 +17833,15 @@
       "worldCupSlots": 8,
       "rosterPath": "data/national-rosters/cc0-2026/bru.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/bru.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 59,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "bn"
     },
     {
       "id": "bul",
@@ -17793,13 +17853,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/bul.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/bul.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 67,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "bg"
     },
     {
       "id": "bfa",
@@ -17811,13 +17873,15 @@
       "worldCupSlots": 9,
       "rosterPath": "data/national-rosters/cc0-2026/bfa.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/bfa.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 68,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "bf"
     },
     {
       "id": "bdi",
@@ -17829,11 +17893,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/bdi.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "bi"
     },
     {
       "id": "cpv",
@@ -17845,11 +17911,13 @@
       "worldCupSlots": 9,
       "rosterPath": "data/rosters/2026/fifa-world-cup/cpv.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/cpv.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 70
+      "rating": 70,
+      "visualIdentity": "national-flag",
+      "flagIso2": "cv"
     },
     {
       "id": "cam",
@@ -17861,13 +17929,15 @@
       "worldCupSlots": 8,
       "rosterPath": "data/national-rosters/cc0-2026/cam.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/cam.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 58,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "kh"
     },
     {
       "id": "cmr",
@@ -17879,13 +17949,15 @@
       "worldCupSlots": 9,
       "rosterPath": "data/national-rosters/cc0-2026/cmr.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/cmr.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 73,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "cm"
     },
     {
       "id": "can",
@@ -17897,11 +17969,13 @@
       "worldCupSlots": 6,
       "rosterPath": "data/rosters/2026/fifa-world-cup/can.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/can.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 69
+      "rating": 69,
+      "visualIdentity": "national-flag",
+      "flagIso2": "ca"
     },
     {
       "id": "cay",
@@ -17913,11 +17987,13 @@
       "worldCupSlots": 6,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/cay.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 61
+      "rating": 61,
+      "visualIdentity": "national-flag",
+      "flagIso2": "ky"
     },
     {
       "id": "cta",
@@ -17929,11 +18005,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/cta.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "cf"
     },
     {
       "id": "cha",
@@ -17945,11 +18023,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/cha.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "td"
     },
     {
       "id": "chi",
@@ -17961,13 +18041,15 @@
       "worldCupSlots": 6,
       "rosterPath": "data/national-rosters/cc0-2026/chi.json",
       "players": 30,
-      "badge": "assets/countries/cl.png",
+      "badge": "assets/national/flags/chi.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 69,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "cl"
     },
     {
       "id": "chn",
@@ -17979,13 +18061,15 @@
       "worldCupSlots": 8,
       "rosterPath": "data/national-rosters/cc0-2026/chn.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/chn.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 63,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "cn"
     },
     {
       "id": "tpe",
@@ -17997,13 +18081,15 @@
       "worldCupSlots": 8,
       "rosterPath": "data/national-rosters/cc0-2026/tpe.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/tpe.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 58,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "tw"
     },
     {
       "id": "col",
@@ -18015,11 +18101,13 @@
       "worldCupSlots": 6,
       "rosterPath": "data/rosters/2026/fifa-world-cup/col.json",
       "players": 26,
-      "badge": "assets/countries/co.png",
+      "badge": "assets/national/flags/col.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 78
+      "rating": 78,
+      "visualIdentity": "national-flag",
+      "flagIso2": "co"
     },
     {
       "id": "com",
@@ -18031,13 +18119,15 @@
       "worldCupSlots": 9,
       "rosterPath": "data/national-rosters/cc0-2026/com.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/com.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 64,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "km"
     },
     {
       "id": "cgo",
@@ -18049,13 +18139,15 @@
       "worldCupSlots": 9,
       "rosterPath": "data/national-rosters/cc0-2026/cgo.json",
       "players": 17,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/cgo.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 62,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "cg"
     },
     {
       "id": "cod",
@@ -18067,11 +18159,13 @@
       "worldCupSlots": 9,
       "rosterPath": "data/rosters/2026/fifa-world-cup/cod.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/cod.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 70
+      "rating": 70,
+      "visualIdentity": "national-flag",
+      "flagIso2": "cd"
     },
     {
       "id": "cok",
@@ -18083,11 +18177,13 @@
       "worldCupSlots": 1,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/cok.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 57
+      "rating": 57,
+      "visualIdentity": "national-flag",
+      "flagIso2": "ck"
     },
     {
       "id": "crc",
@@ -18099,13 +18195,15 @@
       "worldCupSlots": 6,
       "rosterPath": "data/national-rosters/cc0-2026/crc.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/crc.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 66,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "cr"
     },
     {
       "id": "cro",
@@ -18117,11 +18215,13 @@
       "worldCupSlots": 16,
       "rosterPath": "data/rosters/2026/fifa-world-cup/cro.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/cro.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 76
+      "rating": 76,
+      "visualIdentity": "national-flag",
+      "flagIso2": "hr"
     },
     {
       "id": "cub",
@@ -18133,11 +18233,13 @@
       "worldCupSlots": 6,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/cub.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 61
+      "rating": 61,
+      "visualIdentity": "national-flag",
+      "flagIso2": "cu"
     },
     {
       "id": "cuw",
@@ -18149,11 +18251,13 @@
       "worldCupSlots": 6,
       "rosterPath": "data/rosters/2026/fifa-world-cup/cuw.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/cuw.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 67
+      "rating": 67,
+      "visualIdentity": "national-flag",
+      "flagIso2": "cw"
     },
     {
       "id": "cyp",
@@ -18165,13 +18269,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/cyp.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/cyp.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 64,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "cy"
     },
     {
       "id": "cze",
@@ -18183,11 +18289,13 @@
       "worldCupSlots": 16,
       "rosterPath": "data/rosters/2026/fifa-world-cup/cze.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/cze.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 75
+      "rating": 75,
+      "visualIdentity": "national-flag",
+      "flagIso2": "cz"
     },
     {
       "id": "civ",
@@ -18199,11 +18307,13 @@
       "worldCupSlots": 9,
       "rosterPath": "data/rosters/2026/fifa-world-cup/civ.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/civ.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 70
+      "rating": 70,
+      "visualIdentity": "national-flag",
+      "flagIso2": "ci"
     },
     {
       "id": "prk",
@@ -18215,11 +18325,13 @@
       "worldCupSlots": 8,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/prk.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 62
+      "rating": 62,
+      "visualIdentity": "national-flag",
+      "flagIso2": "kp"
     },
     {
       "id": "den",
@@ -18231,13 +18343,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/den.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/den.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 76,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "dk"
     },
     {
       "id": "dji",
@@ -18249,11 +18363,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/dji.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "dj"
     },
     {
       "id": "dma",
@@ -18265,11 +18381,13 @@
       "worldCupSlots": 6,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/dma.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 61
+      "rating": 61,
+      "visualIdentity": "national-flag",
+      "flagIso2": "dm"
     },
     {
       "id": "dom",
@@ -18281,13 +18399,15 @@
       "worldCupSlots": 6,
       "rosterPath": "data/national-rosters/cc0-2026/dom.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/dom.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 62,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "do"
     },
     {
       "id": "ecu",
@@ -18299,11 +18419,13 @@
       "worldCupSlots": 6,
       "rosterPath": "data/rosters/2026/fifa-world-cup/ecu.json",
       "players": 26,
-      "badge": "assets/countries/ec.png",
+      "badge": "assets/national/flags/ecu.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 77
+      "rating": 77,
+      "visualIdentity": "national-flag",
+      "flagIso2": "ec"
     },
     {
       "id": "egy",
@@ -18315,11 +18437,13 @@
       "worldCupSlots": 9,
       "rosterPath": "data/rosters/2026/fifa-world-cup/egy.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/egy.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 69
+      "rating": 69,
+      "visualIdentity": "national-flag",
+      "flagIso2": "eg"
     },
     {
       "id": "slv",
@@ -18331,13 +18455,15 @@
       "worldCupSlots": 6,
       "rosterPath": "data/national-rosters/cc0-2026/slv.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/slv.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 62,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "sv"
     },
     {
       "id": "eng",
@@ -18349,11 +18475,13 @@
       "worldCupSlots": 16,
       "rosterPath": "data/rosters/2026/fifa-world-cup/eng.json",
       "players": 26,
-      "badge": "assets/countries/gb.png",
+      "badge": "assets/national/flags/eng.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 75
+      "rating": 75,
+      "visualIdentity": "national-flag",
+      "flagIso2": "gb-eng"
     },
     {
       "id": "eqg",
@@ -18365,11 +18493,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/eqg.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "gq"
     },
     {
       "id": "eri",
@@ -18381,11 +18511,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/eri.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "er"
     },
     {
       "id": "est",
@@ -18397,13 +18529,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/est.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/est.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 63,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "ee"
     },
     {
       "id": "swz",
@@ -18415,11 +18549,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/swz.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "sz"
     },
     {
       "id": "eth",
@@ -18431,13 +18567,15 @@
       "worldCupSlots": 9,
       "rosterPath": "data/national-rosters/cc0-2026/eth.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/eth.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 59,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "et"
     },
     {
       "id": "fro",
@@ -18449,13 +18587,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/fro.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/fro.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 61,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "fo"
     },
     {
       "id": "fij",
@@ -18467,13 +18607,15 @@
       "worldCupSlots": 1,
       "rosterPath": "data/national-rosters/cc0-2026/fij.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/fij.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 58,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "fj"
     },
     {
       "id": "fin",
@@ -18485,13 +18627,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/fin.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/fin.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 67,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "fi"
     },
     {
       "id": "fra",
@@ -18503,11 +18647,13 @@
       "worldCupSlots": 16,
       "rosterPath": "data/rosters/2026/fifa-world-cup/fra.json",
       "players": 26,
-      "badge": "assets/countries/fr.png",
+      "badge": "assets/national/flags/fra.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 75
+      "rating": 75,
+      "visualIdentity": "national-flag",
+      "flagIso2": "fr"
     },
     {
       "id": "gab",
@@ -18519,11 +18665,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/gab.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "ga"
     },
     {
       "id": "geo",
@@ -18535,13 +18683,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/geo.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/geo.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 70,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "ge"
     },
     {
       "id": "ger",
@@ -18553,11 +18703,13 @@
       "worldCupSlots": 16,
       "rosterPath": "data/rosters/2026/fifa-world-cup/ger.json",
       "players": 26,
-      "badge": "assets/countries/de.png",
+      "badge": "assets/national/flags/ger.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 74
+      "rating": 74,
+      "visualIdentity": "national-flag",
+      "flagIso2": "de"
     },
     {
       "id": "gha",
@@ -18569,11 +18721,13 @@
       "worldCupSlots": 9,
       "rosterPath": "data/rosters/2026/fifa-world-cup/gha.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/gha.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 68
+      "rating": 68,
+      "visualIdentity": "national-flag",
+      "flagIso2": "gh"
     },
     {
       "id": "gib",
@@ -18585,13 +18739,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/gib.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/gib.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 58,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "gi"
     },
     {
       "id": "gre",
@@ -18603,13 +18759,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/gre.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/gre.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 74,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "gr"
     },
     {
       "id": "grn",
@@ -18621,11 +18779,13 @@
       "worldCupSlots": 6,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/grn.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 61
+      "rating": 61,
+      "visualIdentity": "national-flag",
+      "flagIso2": "gd"
     },
     {
       "id": "gum",
@@ -18637,11 +18797,13 @@
       "worldCupSlots": 8,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/gum.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 62
+      "rating": 62,
+      "visualIdentity": "national-flag",
+      "flagIso2": "gu"
     },
     {
       "id": "gua",
@@ -18653,13 +18815,15 @@
       "worldCupSlots": 6,
       "rosterPath": "data/national-rosters/cc0-2026/gua.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/gua.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 62,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "gt"
     },
     {
       "id": "gui",
@@ -18671,13 +18835,15 @@
       "worldCupSlots": 9,
       "rosterPath": "data/national-rosters/cc0-2026/gui.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/gui.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 68,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "gn"
     },
     {
       "id": "gnb",
@@ -18689,13 +18855,15 @@
       "worldCupSlots": 9,
       "rosterPath": "data/national-rosters/cc0-2026/gnb.json",
       "players": 27,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/gnb.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 66,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "gw"
     },
     {
       "id": "guy",
@@ -18707,11 +18875,13 @@
       "worldCupSlots": 6,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/guy.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 61
+      "rating": 61,
+      "visualIdentity": "national-flag",
+      "flagIso2": "gy"
     },
     {
       "id": "hai",
@@ -18723,11 +18893,13 @@
       "worldCupSlots": 6,
       "rosterPath": "data/rosters/2026/fifa-world-cup/hai.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/hai.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 67
+      "rating": 67,
+      "visualIdentity": "national-flag",
+      "flagIso2": "ht"
     },
     {
       "id": "hon",
@@ -18739,13 +18911,15 @@
       "worldCupSlots": 6,
       "rosterPath": "data/national-rosters/cc0-2026/hon.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/hon.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 64,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "hn"
     },
     {
       "id": "hkg",
@@ -18757,11 +18931,13 @@
       "worldCupSlots": 8,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/hkg.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 62
+      "rating": 62,
+      "visualIdentity": "national-flag",
+      "flagIso2": "hk"
     },
     {
       "id": "hun",
@@ -18773,13 +18949,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/hun.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/hun.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 70,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "hu"
     },
     {
       "id": "irn",
@@ -18791,11 +18969,13 @@
       "worldCupSlots": 8,
       "rosterPath": "data/rosters/2026/fifa-world-cup/irn.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/irn.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 69
+      "rating": 69,
+      "visualIdentity": "national-flag",
+      "flagIso2": "ir"
     },
     {
       "id": "isl",
@@ -18807,13 +18987,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/isl.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/isl.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 69,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "is"
     },
     {
       "id": "ind",
@@ -18825,13 +19007,15 @@
       "worldCupSlots": 8,
       "rosterPath": "data/national-rosters/cc0-2026/ind.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/ind.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 60,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "in"
     },
     {
       "id": "idn",
@@ -18843,13 +19027,15 @@
       "worldCupSlots": 8,
       "rosterPath": "data/national-rosters/cc0-2026/idn.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/idn.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 65,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "id"
     },
     {
       "id": "irq",
@@ -18861,11 +19047,13 @@
       "worldCupSlots": 8,
       "rosterPath": "data/rosters/2026/fifa-world-cup/irq.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/irq.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 69
+      "rating": 69,
+      "visualIdentity": "national-flag",
+      "flagIso2": "iq"
     },
     {
       "id": "isr",
@@ -18877,13 +19065,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/isr.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/isr.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 70,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "il"
     },
     {
       "id": "ita",
@@ -18895,13 +19085,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/ita.json",
       "players": 30,
-      "badge": "assets/countries/it.png",
+      "badge": "assets/national/flags/ita.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 78,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "it"
     },
     {
       "id": "jam",
@@ -18913,13 +19105,15 @@
       "worldCupSlots": 6,
       "rosterPath": "data/national-rosters/cc0-2026/jam.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/jam.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 67,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "jm"
     },
     {
       "id": "jpn",
@@ -18931,11 +19125,13 @@
       "worldCupSlots": 8,
       "rosterPath": "data/rosters/2026/fifa-world-cup/jpn.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/jpn.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 69
+      "rating": 69,
+      "visualIdentity": "national-flag",
+      "flagIso2": "jp"
     },
     {
       "id": "jor",
@@ -18947,11 +19143,13 @@
       "worldCupSlots": 8,
       "rosterPath": "data/rosters/2026/fifa-world-cup/jor.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/jor.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 70
+      "rating": 70,
+      "visualIdentity": "national-flag",
+      "flagIso2": "jo"
     },
     {
       "id": "kaz",
@@ -18963,13 +19161,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/kaz.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/kaz.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 64,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "kz"
     },
     {
       "id": "ken",
@@ -18981,11 +19181,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/ken.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "ke"
     },
     {
       "id": "kor",
@@ -18997,11 +19199,13 @@
       "worldCupSlots": 8,
       "rosterPath": "data/rosters/2026/fifa-world-cup/kor.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/kor.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 69
+      "rating": 69,
+      "visualIdentity": "national-flag",
+      "flagIso2": "kr"
     },
     {
       "id": "kos",
@@ -19013,13 +19217,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/kos.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/kos.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 70,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "xk"
     },
     {
       "id": "kuw",
@@ -19031,11 +19237,13 @@
       "worldCupSlots": 8,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/kuw.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 62
+      "rating": 62,
+      "visualIdentity": "national-flag",
+      "flagIso2": "kw"
     },
     {
       "id": "kgz",
@@ -19047,11 +19255,13 @@
       "worldCupSlots": 8,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/kgz.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 62
+      "rating": 62,
+      "visualIdentity": "national-flag",
+      "flagIso2": "kg"
     },
     {
       "id": "lao",
@@ -19063,13 +19273,15 @@
       "worldCupSlots": 8,
       "rosterPath": "data/national-rosters/cc0-2026/lao.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/lao.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 57,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "la"
     },
     {
       "id": "lva",
@@ -19081,13 +19293,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/lva.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/lva.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 63,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "lv"
     },
     {
       "id": "lbn",
@@ -19099,13 +19313,15 @@
       "worldCupSlots": 8,
       "rosterPath": "data/national-rosters/cc0-2026/lbn.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/lbn.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 60,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "lb"
     },
     {
       "id": "les",
@@ -19117,11 +19333,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/les.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "ls"
     },
     {
       "id": "lbr",
@@ -19133,11 +19351,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/lbr.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "lr"
     },
     {
       "id": "lby",
@@ -19149,13 +19369,15 @@
       "worldCupSlots": 9,
       "rosterPath": "data/national-rosters/cc0-2026/lby.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/lby.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 61,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "ly"
     },
     {
       "id": "lie",
@@ -19167,11 +19389,13 @@
       "worldCupSlots": 16,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/lie.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 68
+      "rating": 68,
+      "visualIdentity": "national-flag",
+      "flagIso2": "li"
     },
     {
       "id": "ltu",
@@ -19183,13 +19407,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/ltu.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/ltu.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 64,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "lt"
     },
     {
       "id": "lux",
@@ -19201,13 +19427,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/lux.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/lux.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 64,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "lu"
     },
     {
       "id": "mac",
@@ -19219,11 +19447,13 @@
       "worldCupSlots": 8,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/mac.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 62
+      "rating": 62,
+      "visualIdentity": "national-flag",
+      "flagIso2": "mo"
     },
     {
       "id": "mad",
@@ -19235,11 +19465,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/mad.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "mg"
     },
     {
       "id": "mwi",
@@ -19251,11 +19483,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/mwi.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "mw"
     },
     {
       "id": "mas",
@@ -19267,13 +19501,15 @@
       "worldCupSlots": 8,
       "rosterPath": "data/national-rosters/cc0-2026/mas.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/mas.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 62,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "my"
     },
     {
       "id": "mdv",
@@ -19285,13 +19521,15 @@
       "worldCupSlots": 8,
       "rosterPath": "data/national-rosters/cc0-2026/mdv.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/mdv.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 58,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "mv"
     },
     {
       "id": "mli",
@@ -19303,13 +19541,15 @@
       "worldCupSlots": 9,
       "rosterPath": "data/national-rosters/cc0-2026/mli.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/mli.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 72,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "ml"
     },
     {
       "id": "mlt",
@@ -19321,13 +19561,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/mlt.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/mlt.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 63,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "mt"
     },
     {
       "id": "mtn",
@@ -19339,11 +19581,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/mtn.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "mr"
     },
     {
       "id": "mri",
@@ -19355,11 +19599,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/mri.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "mu"
     },
     {
       "id": "mex",
@@ -19371,11 +19617,13 @@
       "worldCupSlots": 6,
       "rosterPath": "data/rosters/2026/fifa-world-cup/mex.json",
       "players": 26,
-      "badge": "assets/countries/mx.png",
+      "badge": "assets/national/flags/mex.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 69
+      "rating": 69,
+      "visualIdentity": "national-flag",
+      "flagIso2": "mx"
     },
     {
       "id": "mda",
@@ -19387,13 +19635,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/mda.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/mda.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 63,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "md"
     },
     {
       "id": "mng",
@@ -19405,11 +19655,13 @@
       "worldCupSlots": 8,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/mng.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 62
+      "rating": 62,
+      "visualIdentity": "national-flag",
+      "flagIso2": "mn"
     },
     {
       "id": "mne",
@@ -19421,13 +19673,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/mne.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/mne.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 68,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "me"
     },
     {
       "id": "msr",
@@ -19439,11 +19693,13 @@
       "worldCupSlots": 6,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/msr.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 61
+      "rating": 61,
+      "visualIdentity": "national-flag",
+      "flagIso2": "ms"
     },
     {
       "id": "mar",
@@ -19455,11 +19711,13 @@
       "worldCupSlots": 9,
       "rosterPath": "data/rosters/2026/fifa-world-cup/mar.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/mar.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 69
+      "rating": 69,
+      "visualIdentity": "national-flag",
+      "flagIso2": "ma"
     },
     {
       "id": "moz",
@@ -19471,11 +19729,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/moz.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "mz"
     },
     {
       "id": "mya",
@@ -19487,13 +19747,15 @@
       "worldCupSlots": 8,
       "rosterPath": "data/national-rosters/cc0-2026/mya.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/mya.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 59,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "mm"
     },
     {
       "id": "nam",
@@ -19505,11 +19767,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/nam.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "na"
     },
     {
       "id": "nep",
@@ -19521,11 +19785,13 @@
       "worldCupSlots": 8,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/nep.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 62
+      "rating": 62,
+      "visualIdentity": "national-flag",
+      "flagIso2": "np"
     },
     {
       "id": "ned",
@@ -19537,11 +19803,13 @@
       "worldCupSlots": 16,
       "rosterPath": "data/rosters/2026/fifa-world-cup/ned.json",
       "players": 26,
-      "badge": "assets/countries/nl.png",
+      "badge": "assets/national/flags/ned.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 76
+      "rating": 76,
+      "visualIdentity": "national-flag",
+      "flagIso2": "nl"
     },
     {
       "id": "ncl",
@@ -19553,11 +19821,13 @@
       "worldCupSlots": 1,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/ncl.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 57
+      "rating": 57,
+      "visualIdentity": "national-flag",
+      "flagIso2": "nc"
     },
     {
       "id": "nzl",
@@ -19569,11 +19839,13 @@
       "worldCupSlots": 1,
       "rosterPath": "data/rosters/2026/fifa-world-cup/nzl.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/nzl.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 64
+      "rating": 64,
+      "visualIdentity": "national-flag",
+      "flagIso2": "nz"
     },
     {
       "id": "nca",
@@ -19585,13 +19857,15 @@
       "worldCupSlots": 6,
       "rosterPath": "data/national-rosters/cc0-2026/nca.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/nca.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 59,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "ni"
     },
     {
       "id": "nig",
@@ -19603,11 +19877,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/nig.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "ne"
     },
     {
       "id": "nga",
@@ -19619,13 +19895,15 @@
       "worldCupSlots": 9,
       "rosterPath": "data/national-rosters/cc0-2026/nga.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/nga.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 75,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "ng"
     },
     {
       "id": "mkd",
@@ -19637,13 +19915,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/mkd.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/mkd.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 66,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "mk"
     },
     {
       "id": "nir",
@@ -19655,13 +19935,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/nir.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/nir.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 69,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "gb-nir"
     },
     {
       "id": "nor",
@@ -19673,11 +19955,13 @@
       "worldCupSlots": 16,
       "rosterPath": "data/rosters/2026/fifa-world-cup/nor.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/nor.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 76
+      "rating": 76,
+      "visualIdentity": "national-flag",
+      "flagIso2": "no"
     },
     {
       "id": "oma",
@@ -19689,13 +19973,15 @@
       "worldCupSlots": 8,
       "rosterPath": "data/national-rosters/cc0-2026/oma.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/oma.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 61,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "om"
     },
     {
       "id": "pak",
@@ -19707,11 +19993,13 @@
       "worldCupSlots": 8,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/pak.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 62
+      "rating": 62,
+      "visualIdentity": "national-flag",
+      "flagIso2": "pk"
     },
     {
       "id": "ple",
@@ -19723,11 +20011,13 @@
       "worldCupSlots": 8,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/ple.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 62
+      "rating": 62,
+      "visualIdentity": "national-flag",
+      "flagIso2": "ps"
     },
     {
       "id": "pan",
@@ -19739,11 +20029,13 @@
       "worldCupSlots": 6,
       "rosterPath": "data/rosters/2026/fifa-world-cup/pan.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/pan.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 70
+      "rating": 70,
+      "visualIdentity": "national-flag",
+      "flagIso2": "pa"
     },
     {
       "id": "png",
@@ -19755,11 +20047,13 @@
       "worldCupSlots": 1,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/png.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 57
+      "rating": 57,
+      "visualIdentity": "national-flag",
+      "flagIso2": "pg"
     },
     {
       "id": "par",
@@ -19771,11 +20065,13 @@
       "worldCupSlots": 6,
       "rosterPath": "data/rosters/2026/fifa-world-cup/par.json",
       "players": 26,
-      "badge": "assets/countries/py.png",
+      "badge": "assets/national/flags/par.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 76
+      "rating": 76,
+      "visualIdentity": "national-flag",
+      "flagIso2": "py"
     },
     {
       "id": "per",
@@ -19787,13 +20083,15 @@
       "worldCupSlots": 6,
       "rosterPath": "data/national-rosters/cc0-2026/per.json",
       "players": 30,
-      "badge": "assets/countries/pe.png",
+      "badge": "assets/national/flags/per.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 66,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "pe"
     },
     {
       "id": "phi",
@@ -19805,13 +20103,15 @@
       "worldCupSlots": 8,
       "rosterPath": "data/national-rosters/cc0-2026/phi.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/phi.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 60,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "ph"
     },
     {
       "id": "pol",
@@ -19823,13 +20123,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/pol.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/pol.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 73,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "pl"
     },
     {
       "id": "por",
@@ -19841,11 +20143,13 @@
       "worldCupSlots": 16,
       "rosterPath": "data/rosters/2026/fifa-world-cup/por.json",
       "players": 26,
-      "badge": "assets/countries/pt.png",
+      "badge": "assets/national/flags/por.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 77
+      "rating": 77,
+      "visualIdentity": "national-flag",
+      "flagIso2": "pt"
     },
     {
       "id": "pur",
@@ -19857,13 +20161,15 @@
       "worldCupSlots": 6,
       "rosterPath": "data/national-rosters/cc0-2026/pur.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/pur.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 58,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "pr"
     },
     {
       "id": "qat",
@@ -19875,11 +20181,13 @@
       "worldCupSlots": 8,
       "rosterPath": "data/rosters/2026/fifa-world-cup/qat.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/qat.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 70
+      "rating": 70,
+      "visualIdentity": "national-flag",
+      "flagIso2": "qa"
     },
     {
       "id": "irl",
@@ -19891,11 +20199,13 @@
       "worldCupSlots": 16,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/irl.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 68
+      "rating": 68,
+      "visualIdentity": "national-flag",
+      "flagIso2": "ie"
     },
     {
       "id": "rou",
@@ -19907,13 +20217,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/rou.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/rou.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 70,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "ro"
     },
     {
       "id": "rus",
@@ -19925,13 +20237,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/rus.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/rus.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 73,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "ru"
     },
     {
       "id": "rwa",
@@ -19943,11 +20257,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/rwa.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "rw"
     },
     {
       "id": "sam",
@@ -19959,11 +20275,13 @@
       "worldCupSlots": 1,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/sam.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 57
+      "rating": 57,
+      "visualIdentity": "national-flag",
+      "flagIso2": "ws"
     },
     {
       "id": "smr",
@@ -19975,13 +20293,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/smr.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/smr.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 57,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "sm"
     },
     {
       "id": "ksa",
@@ -19993,11 +20313,13 @@
       "worldCupSlots": 8,
       "rosterPath": "data/rosters/2026/fifa-world-cup/ksa.json",
       "players": 26,
-      "badge": "assets/countries/sa.png",
+      "badge": "assets/national/flags/ksa.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 69
+      "rating": 69,
+      "visualIdentity": "national-flag",
+      "flagIso2": "sa"
     },
     {
       "id": "sco",
@@ -20009,11 +20331,13 @@
       "worldCupSlots": 16,
       "rosterPath": "data/rosters/2026/fifa-world-cup/sco.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/sco.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 75
+      "rating": 75,
+      "visualIdentity": "national-flag",
+      "flagIso2": "gb-sct"
     },
     {
       "id": "sen",
@@ -20025,11 +20349,13 @@
       "worldCupSlots": 9,
       "rosterPath": "data/rosters/2026/fifa-world-cup/sen.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/sen.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 70
+      "rating": 70,
+      "visualIdentity": "national-flag",
+      "flagIso2": "sn"
     },
     {
       "id": "srb",
@@ -20041,13 +20367,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/srb.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/srb.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 75,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "rs"
     },
     {
       "id": "sey",
@@ -20059,11 +20387,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/sey.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "sc"
     },
     {
       "id": "sle",
@@ -20075,11 +20405,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/sle.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "sl"
     },
     {
       "id": "sgp",
@@ -20091,13 +20423,15 @@
       "worldCupSlots": 8,
       "rosterPath": "data/national-rosters/cc0-2026/sgp.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/sgp.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 60,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "sg"
     },
     {
       "id": "svk",
@@ -20109,13 +20443,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/svk.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/svk.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 70,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "sk"
     },
     {
       "id": "svn",
@@ -20127,13 +20463,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/svn.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/svn.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 70,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "si"
     },
     {
       "id": "sol",
@@ -20145,11 +20483,13 @@
       "worldCupSlots": 1,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/sol.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 57
+      "rating": 57,
+      "visualIdentity": "national-flag",
+      "flagIso2": "sb"
     },
     {
       "id": "som",
@@ -20161,11 +20501,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/som.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "so"
     },
     {
       "id": "rsa",
@@ -20177,11 +20519,13 @@
       "worldCupSlots": 9,
       "rosterPath": "data/rosters/2026/fifa-world-cup/rsa.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/rsa.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 68
+      "rating": 68,
+      "visualIdentity": "national-flag",
+      "flagIso2": "za"
     },
     {
       "id": "ssd",
@@ -20193,11 +20537,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/ssd.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "ss"
     },
     {
       "id": "esp",
@@ -20209,11 +20555,13 @@
       "worldCupSlots": 16,
       "rosterPath": "data/rosters/2026/fifa-world-cup/esp.json",
       "players": 26,
-      "badge": "assets/countries/es.png",
+      "badge": "assets/national/flags/esp.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 76
+      "rating": 76,
+      "visualIdentity": "national-flag",
+      "flagIso2": "es"
     },
     {
       "id": "sri",
@@ -20225,13 +20573,15 @@
       "worldCupSlots": 8,
       "rosterPath": "data/national-rosters/cc0-2026/sri.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/sri.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 59,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "lk"
     },
     {
       "id": "skn",
@@ -20243,11 +20593,13 @@
       "worldCupSlots": 6,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/skn.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 61
+      "rating": 61,
+      "visualIdentity": "national-flag",
+      "flagIso2": "kn"
     },
     {
       "id": "lca",
@@ -20259,11 +20611,13 @@
       "worldCupSlots": 6,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/lca.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 61
+      "rating": 61,
+      "visualIdentity": "national-flag",
+      "flagIso2": "lc"
     },
     {
       "id": "vin",
@@ -20275,11 +20629,13 @@
       "worldCupSlots": 6,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/vin.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 61
+      "rating": 61,
+      "visualIdentity": "national-flag",
+      "flagIso2": "vc"
     },
     {
       "id": "sdn",
@@ -20291,11 +20647,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/sdn.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "sd"
     },
     {
       "id": "sur",
@@ -20307,13 +20665,15 @@
       "worldCupSlots": 6,
       "rosterPath": "data/national-rosters/cc0-2026/sur.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/sur.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 66,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "sr"
     },
     {
       "id": "swe",
@@ -20325,11 +20685,13 @@
       "worldCupSlots": 16,
       "rosterPath": "data/rosters/2026/fifa-world-cup/swe.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/swe.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 74
+      "rating": 74,
+      "visualIdentity": "national-flag",
+      "flagIso2": "se"
     },
     {
       "id": "sui",
@@ -20341,11 +20703,13 @@
       "worldCupSlots": 16,
       "rosterPath": "data/rosters/2026/fifa-world-cup/sui.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/sui.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 76
+      "rating": 76,
+      "visualIdentity": "national-flag",
+      "flagIso2": "ch"
     },
     {
       "id": "syr",
@@ -20357,11 +20721,13 @@
       "worldCupSlots": 8,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/syr.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 62
+      "rating": 62,
+      "visualIdentity": "national-flag",
+      "flagIso2": "sy"
     },
     {
       "id": "stp",
@@ -20373,11 +20739,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/stp.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "st"
     },
     {
       "id": "tah",
@@ -20389,11 +20757,13 @@
       "worldCupSlots": 1,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/tah.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 57
+      "rating": 57,
+      "visualIdentity": "national-flag",
+      "flagIso2": "pf"
     },
     {
       "id": "tjk",
@@ -20405,13 +20775,15 @@
       "worldCupSlots": 8,
       "rosterPath": "data/national-rosters/cc0-2026/tjk.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/tjk.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 62,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "tj"
     },
     {
       "id": "tan",
@@ -20423,11 +20795,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/tan.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "tz"
     },
     {
       "id": "tha",
@@ -20439,13 +20813,15 @@
       "worldCupSlots": 8,
       "rosterPath": "data/national-rosters/cc0-2026/tha.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/tha.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 63,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "th"
     },
     {
       "id": "gam",
@@ -20457,13 +20833,15 @@
       "worldCupSlots": 9,
       "rosterPath": "data/national-rosters/cc0-2026/gam.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/gam.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 67,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "gm"
     },
     {
       "id": "tls",
@@ -20475,13 +20853,15 @@
       "worldCupSlots": 8,
       "rosterPath": "data/national-rosters/cc0-2026/tls.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/tls.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 59,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "tl"
     },
     {
       "id": "tog",
@@ -20493,11 +20873,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/tog.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "tg"
     },
     {
       "id": "tga",
@@ -20509,11 +20891,13 @@
       "worldCupSlots": 1,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/tga.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 57
+      "rating": 57,
+      "visualIdentity": "national-flag",
+      "flagIso2": "to"
     },
     {
       "id": "tri",
@@ -20525,11 +20909,13 @@
       "worldCupSlots": 6,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/tri.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 61
+      "rating": 61,
+      "visualIdentity": "national-flag",
+      "flagIso2": "tt"
     },
     {
       "id": "tun",
@@ -20541,11 +20927,13 @@
       "worldCupSlots": 9,
       "rosterPath": "data/rosters/2026/fifa-world-cup/tun.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/tun.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 68
+      "rating": 68,
+      "visualIdentity": "national-flag",
+      "flagIso2": "tn"
     },
     {
       "id": "tkm",
@@ -20557,11 +20945,13 @@
       "worldCupSlots": 8,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/tkm.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 62
+      "rating": 62,
+      "visualIdentity": "national-flag",
+      "flagIso2": "tm"
     },
     {
       "id": "tca",
@@ -20573,11 +20963,13 @@
       "worldCupSlots": 6,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/tca.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 61
+      "rating": 61,
+      "visualIdentity": "national-flag",
+      "flagIso2": "tc"
     },
     {
       "id": "tur",
@@ -20589,11 +20981,13 @@
       "worldCupSlots": 16,
       "rosterPath": "data/rosters/2026/fifa-world-cup/tur.json",
       "players": 26,
-      "badge": "assets/countries/tr.png",
+      "badge": "assets/national/flags/tur.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 76
+      "rating": 76,
+      "visualIdentity": "national-flag",
+      "flagIso2": "tr"
     },
     {
       "id": "vir",
@@ -20605,11 +20999,13 @@
       "worldCupSlots": 6,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/vir.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 61
+      "rating": 61,
+      "visualIdentity": "national-flag",
+      "flagIso2": "vi"
     },
     {
       "id": "usa",
@@ -20621,11 +21017,13 @@
       "worldCupSlots": 6,
       "rosterPath": "data/rosters/2026/fifa-world-cup/usa.json",
       "players": 26,
-      "badge": "assets/countries/us.png",
+      "badge": "assets/national/flags/usa.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 70
+      "rating": 70,
+      "visualIdentity": "national-flag",
+      "flagIso2": "us"
     },
     {
       "id": "uga",
@@ -20637,13 +21035,15 @@
       "worldCupSlots": 9,
       "rosterPath": "data/national-rosters/cc0-2026/uga.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/uga.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 62,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "ug"
     },
     {
       "id": "ukr",
@@ -20655,13 +21055,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/ukr.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/ukr.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 74,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "ua"
     },
     {
       "id": "uae",
@@ -20673,13 +21075,15 @@
       "worldCupSlots": 8,
       "rosterPath": "data/national-rosters/cc0-2026/uae.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/uae.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 66,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "ae"
     },
     {
       "id": "uru",
@@ -20691,11 +21095,13 @@
       "worldCupSlots": 6,
       "rosterPath": "data/rosters/2026/fifa-world-cup/uru.json",
       "players": 26,
-      "badge": "assets/countries/uy.png",
+      "badge": "assets/national/flags/uru.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 78
+      "rating": 78,
+      "visualIdentity": "national-flag",
+      "flagIso2": "uy"
     },
     {
       "id": "uzb",
@@ -20707,11 +21113,13 @@
       "worldCupSlots": 8,
       "rosterPath": "data/rosters/2026/fifa-world-cup/uzb.json",
       "players": 26,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/uzb.svg",
       "source": "FIFA World Cup 2026 Squad Lists",
       "sourceDate": "2026-07-19",
       "officialSquad": true,
-      "rating": 69
+      "rating": 69,
+      "visualIdentity": "national-flag",
+      "flagIso2": "uz"
     },
     {
       "id": "van",
@@ -20723,11 +21131,13 @@
       "worldCupSlots": 1,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/van.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 57
+      "rating": 57,
+      "visualIdentity": "national-flag",
+      "flagIso2": "vu"
     },
     {
       "id": "ven",
@@ -20739,13 +21149,15 @@
       "worldCupSlots": 6,
       "rosterPath": "data/national-rosters/cc0-2026/ven.json",
       "players": 30,
-      "badge": "assets/countries/ve.png",
+      "badge": "assets/national/flags/ven.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 70,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "ve"
     },
     {
       "id": "vie",
@@ -20757,13 +21169,15 @@
       "worldCupSlots": 8,
       "rosterPath": "data/national-rosters/cc0-2026/vie.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/vie.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 61,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "vn"
     },
     {
       "id": "wal",
@@ -20775,13 +21189,15 @@
       "worldCupSlots": 16,
       "rosterPath": "data/national-rosters/cc0-2026/wal.json",
       "players": 30,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/wal.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
       "rating": 72,
       "commandable": true,
-      "dataStatus": "current-professional-player-pool"
+      "dataStatus": "current-professional-player-pool",
+      "visualIdentity": "national-flag",
+      "flagIso2": "gb-wls"
     },
     {
       "id": "yem",
@@ -20793,11 +21209,13 @@
       "worldCupSlots": 8,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/yem.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 62
+      "rating": 62,
+      "visualIdentity": "national-flag",
+      "flagIso2": "ye"
     },
     {
       "id": "zam",
@@ -20809,11 +21227,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/zam.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "zm"
     },
     {
       "id": "zim",
@@ -20825,11 +21245,13 @@
       "worldCupSlots": 9,
       "rosterPath": null,
       "players": 0,
-      "badge": "assets/placeholders/club-generic.png",
+      "badge": "assets/national/flags/zim.svg",
       "source": "FIFA Member Associations",
       "sourceDate": "2026-08-03",
       "officialSquad": false,
-      "rating": 63
+      "rating": 63,
+      "visualIdentity": "national-flag",
+      "flagIso2": "zw"
     }
   ],
   "competitions": [
@@ -20944,6 +21366,7 @@
     "realDataImportedClubs": 548,
     "realBadgeFiles": 638,
     "dataSnapshot": "2026-08-04",
-    "commandableNationalTeams": 135
+    "commandableNationalTeams": 135,
+    "nationalIdentityFlags": 211
   }
 }
