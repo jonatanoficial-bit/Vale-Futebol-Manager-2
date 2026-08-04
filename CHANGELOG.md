@@ -1,3 +1,18 @@
+# 10.0.0 — World Edition — 2026-08-04
+
+- Expandido o mundo para 530 clubes reais em 38 ligas e nas seis confederações.
+- Integradas as 211 associações FIFA às eliminatórias continentais.
+- Importadas 48 convocatórias oficiais da Copa do Mundo de 2026, com 1.248 jogadores.
+- Mantidos 149 clubes comandáveis e 2.902 jogadores nominais do pacote original.
+- Criada seleção mundial de clubes por continente, país, liga e busca.
+- Adicionada carreira simultânea em clube e seleção, condicionada à reputação.
+- Adicionadas Libertadores, Sul-Americana, Champions League, Europa League, CONCACAF Champions Cup, AFC/CAF/OFC Champions League e Mundial de Clubes.
+- Implementadas vagas continentais por faixa da liga, promoção/rebaixamento exibidos e classificação internacional por pontos.
+- Criado campo 2D com 22 jogadores, bola, formações, narração e estatísticas.
+- Corrigido o layout da partida em 568×320 sem overflow global.
+- Validado salvamento, recarga, progressão de tabela e funcionamento offline.
+- Documentadas fontes, datas de corte e a natureza proprietária do overall VFM.
+
 # 9.0.1 — 2026-08-03
 
 - Adicionado ícone autoral em alta resolução ao aplicativo e ao manifesto PWA.

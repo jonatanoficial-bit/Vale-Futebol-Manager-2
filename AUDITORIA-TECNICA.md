@@ -82,3 +82,6 @@ Sem ponto de entrada, a versão recebida não podia ser iniciada por servidor HT
 ## Resultado
 
 A versão 9.0.1 é executável, jogável e apresentável em navegador. O produto passou por testes automatizados e interação real no navegador. A publicação em loja ainda depende de validação em aparelhos físicos, revisão jurídica de marcas e dados, política de privacidade e empacotamento Android.
+# Documento histórico da versão 9
+
+Para a auditoria atual da World Edition 10.0.0, consulte `AUDITORIA-WORLD-V10.md`. O conteúdo abaixo foi preservado apenas como histórico do build anterior.

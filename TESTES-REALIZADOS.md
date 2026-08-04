@@ -1,104 +1,79 @@
-# Testes realizados
+# Testes realizados — World Edition 10.0.0
 
 ## Ambiente
 
-- data: 31/07/2026;
+- datas: 03 e 04/08/2026;
 - navegador: navegador integrado baseado em Chromium;
 - servidor: HTTP local;
-- execução: interface real, cliques, formulários, armazenamento e service worker;
 - aparelhos físicos: não utilizados.
 
-## Validações estáticas
+## Integridade estática
 
-- sintaxe de js/app.js e sw.js validada com node --check;
-- 82 arquivos JSON analisados, nenhum inválido;
-- manifest.webmanifest analisado como JSON válido;
-- busca por caminhos locais, localhost embutido, credenciais e linguagem interna na interface pública;
-- referências principais de imagens e dados verificadas;
-- ZIP original preservado e manifesto SHA-256 gerado antes das alterações.
+- `js/app-v10.js`: sintaxe aprovada;
+- `sw.js`: sintaxe aprovada;
+- `manifest.webmanifest`: JSON válido e orientação `landscape`;
+- 530 clubes ligados a ligas válidas;
+- 149 caminhos de elencos comandáveis verificados;
+- todos os elencos comandáveis possuem ao menos onze atletas nominais;
+- 2.902 jogadores de clubes validados;
+- 211 códigos de associações FIFA únicos;
+- 48 elencos internacionais com exatamente 26 jogadores cada;
+- 1.248 jogadores internacionais validados;
+- seis confederações cobertas por clubes e seleções;
+- referências do `index.html` e shell do service worker existentes;
+- relatório automatizado: `QA-WORLD-V10.json` com status `approved`.
 
-## Fluxo funcional executado
+## Fluxo funcional
 
-1. abertura da capa;
-2. abertura dos três espaços de carreira;
-3. escolha do espaço 1;
-4. seleção do Flamengo;
-5. preenchimento do nome do treinador;
-6. criação da carreira e carregamento de 27 jogadores;
-7. reabertura da página e carregamento do save;
-8. elenco com 27 linhas e 11 titulares;
-9. troca da formação para 4-4-2;
-10. aplicação de treino de recuperação;
-11. agenda com 14 jogos;
-12. mercado com 18 oportunidades;
-13. contratação de Marcos Antônio;
-14. atualização do orçamento e do livro financeiro;
-15. partida completa até 90 minutos;
-16. vitória por 2 a 1, avanço para semana 2 e três pontos;
-17. reabertura offline e recuperação da carreira.
+1. abertura da capa e confirmação das contagens mundiais;
+2. abertura dos três espaços de save;
+3. escolha do Flamengo entre 149 clubes comandáveis;
+4. criação do treinador e carregamento do elenco;
+5. painel, agenda, competições e carreira internacional;
+6. filtro das 48 seleções com elenco oficial;
+7. filtro “Todas as 211”, com exatamente 211 cartões e 163 seleções de IA;
+8. entrada no campo com exatamente 22 jogadores, 11 de cada lado, e uma bola;
+9. partida completa em 6× até 90 minutos;
+10. empate Flamengo 1×1 Palmeiras;
+11. atualização para um jogo e um ponto;
+12. atualização simultânea da tabela dos 20 clubes;
+13. avanço da data para 12/04/2026 e do próximo adversário para Corinthians;
+14. receita de partida registrada no saldo;
+15. salvamento manual confirmado por mensagem;
+16. recarga da página e recuperação de data, jogo, ponto e próximo adversário.
 
-## Mobile horizontal
+## Responsividade
 
-Resoluções verificadas:
+### 568×320
 
-- 568×320;
-- 640×360;
-- 667×375;
-- 740×360;
-- 780×360;
-- 812×375;
-- 844×390;
-- 852×393;
-- 896×414;
-- 915×412;
-- 932×430;
-- 960×432.
+- documento e tela principal permaneceram em 568 px, sem overflow global;
+- placar, campo, estatísticas e controles ficaram dentro da viewport;
+- 22 jogadores permaneceram visíveis;
+- botões de saída, início e velocidades ficaram acessíveis;
+- overlay de retrato permaneceu oculto.
 
-Em todas, o documento permaneceu sem overflow global, o aviso de retrato ficou oculto em paisagem e os oito atalhos mantiveram área de 44×44 px ou maior. Conteúdo mais alto usa scroll interno.
+### 1280×720
 
-## Rotação
+- narração, campo e estatísticas apareceram em três colunas;
+- nenhuma rolagem global horizontal ou vertical;
+- nomes, formação e marcadores permaneceram legíveis.
 
-Com uma partida em execução a 6×:
+### 390×844
 
-- aos 19 minutos, a viewport foi alterada para 390×844;
-- o overlay apareceu, a aplicação recebeu inert e o relógio permaneceu em 19 por mais de 1,7 segundo;
-- ao retornar para 844×390, o overlay desapareceu e o relógio avançou para 31;
-- não houve recarga, perda de placar ou timer duplicado.
-
-## Tablet e desktop
-
-Resoluções verificadas:
-
-- 1024×600;
-- 1024×768;
-- 1280×720;
-- 1366×768;
-- 1440×900;
-- 1600×900;
-- 1920×1080.
-
-O desktop exibiu menu completo, três colunas no painel quando havia espaço e nenhum overflow global. Mouse, teclado, Escape, Espaço, foco e botões foram exercitados pela automação e pela navegação semântica.
+- overlay de rotação exibido;
+- aplicação recebeu `inert`;
+- interação com o jogo ficou bloqueada até retornar à horizontal.
 
 ## Offline e PWA
 
-Após o primeiro carregamento:
+1. jogo carregado uma vez com servidor ativo;
+2. servidor HTTP encerrado;
+3. página recarregada sem servidor;
+4. capa, scripts, estilos e catálogo abriram pelo cache;
+5. espaço 1 apareceu disponível para continuar;
+6. carreira offline carregou com 12/04/2026, um jogo e um ponto;
+7. nenhum erro ou aviso foi registrado no console.
 
-- o servidor HTTP foi encerrado;
-- a página foi recarregada;
-- capa, scripts e estilos abriram pelo cache;
-- o espaço 1 foi carregado offline;
-- semana 2 e três pontos foram preservados;
-- não houve erro ou aviso no console.
+## Limitações da homologação
 
-## Limitações dos testes
-
-Não foram usados Android, iPhone ou tablet físicos. Teclado virtual, notch real, consumo de bateria, áudio em hardware e instalação pela loja precisam de homologação posterior. Não há pacote de áudio utilizável no ZIP, portanto áudio não foi declarado como aprovado.
-
-## Regressão final — 03/08/2026
-
-- manifesto e ícone autoral de 1254×1254 verificados;
-- carregamento de elencos validado nas rotas das Séries A e B, com fallback legado;
-- escalação automática validada com onze titulares e atacante de referência;
-- retomada da partida pelo modal de saída validada;
-- proteção de espaço ocupado, fallbacks visuais e deduplicação do mercado revisados;
-- sintaxe, arquivos JSON, referências do shell PWA e cache offline revalidados.
+Não foram usados aparelhos Android, iPhone ou tablets físicos. Instalação pela tela inicial, notch real, teclado virtual, consumo de bateria e desempenho em hardware básico devem ser homologados posteriormente. A simulação não substitui verificação jurídica de licenças de marcas, escudos, fotos ou bases de dados para distribuição comercial.

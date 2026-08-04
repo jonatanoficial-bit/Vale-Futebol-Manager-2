@@ -1,9 +1,9 @@
-const CACHE = 'vale-futebol-v9.0.1-20260803-1701';
+const CACHE = 'vale-futebol-world-v10.0.0-20260804-final';
 const SHELL = [
-  './', './index.html', './offline.html', './css/app.css?v=9.0.1-20260803-1701', './js/app.js?v=9.0.1-20260803-1701',
+  './', './index.html', './offline.html', './css/app.css?v=10.0.0-20260804-final', './css/world-edition.css?v=10.0.0-20260804-final', './js/app-v10.js?v=10.0.0-20260804-final',
   './manifest.webmanifest', './assets/icons/app-icon-v9.png', './assets/placeholders/player-generic.png', './assets/placeholders/club-generic.png',
   './assets/backgrounds/bg-cover.jpg', './assets/backgrounds/bg-lobby.jpg',
-  './assets/backgrounds/bg-match.jpg', './data/brazilian-leagues-2026.json'
+  './assets/backgrounds/bg-match.jpg', './assets/backgrounds/bg-team-select.jpg', './data/world-catalog-2026.json'
 ];
 
 self.addEventListener('install', event => {

@@ -1,0 +1,37 @@
+{
+  "status": "approved",
+  "version": "10.0.0",
+  "simulationClubs": 530,
+  "playableClubs": 149,
+  "clubPlayers": 2902,
+  "fifaAssociations": 211,
+  "officialNationalSquads": 48,
+  "nationalPlayers": 1248,
+  "leagues": 38,
+  "clubsByConfederation": {
+    "AFC": 58,
+    "CAF": 56,
+    "CONCACAF": 50,
+    "CONMEBOL": 174,
+    "OFC": 8,
+    "UEFA": 184
+  },
+  "associationsByConfederation": {
+    "AFC": 46,
+    "CAF": 54,
+    "CONCACAF": 35,
+    "CONMEBOL": 10,
+    "OFC": 11,
+    "UEFA": 55
+  },
+  "checks": [
+    "catalog integrity",
+    "club roster paths",
+    "official squad paths",
+    "six-confederation coverage",
+    "manifest landscape orientation",
+    "index references",
+    "service-worker shell references",
+    "rating disclosure"
+  ]
+}
