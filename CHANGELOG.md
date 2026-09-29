@@ -1,3 +1,14 @@
+# 16.1.0 — Fase 1 Mobile — 2026-09-29
+
+- Reduzida a navegação principal de doze para cinco áreas: Início, Elenco, Tática, Jogar e Mais.
+- Reunidos competições, agenda, treino, mercado, clube, mensagens, seleção e ajustes em uma central organizada.
+- Adicionado painel Hoje com até três decisões prioritárias e ações contextuais.
+- Adicionado guia inicial de cinco passos para novos jogadores.
+- Liberada a interface em retrato e paisagem, com menu inferior, áreas de toque maiores e partida 2D adaptativa.
+- Adicionados backup local antes de cada gravação, aviso real de falha e importação de carreira pela interface.
+- Implementado processamento das parcelas futuras de transferências e encerramento automático de empréstimos.
+- Tornada a ficha do jogador acessível diretamente pela lista do elenco.
+
 # 16.0.0 — Ultimate World — 2026-08-04
 
 - Ampliado o manager internacional para 833 clubes, 625 comandáveis, 20.458 jogadores, 50 ligas e 49 países.

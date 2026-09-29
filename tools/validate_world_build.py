@@ -91,7 +91,7 @@ league_ids = {league["id"] for league in leagues}
 require(len(league_ids) == len(leagues) == len(rules_doc["leagues"]), "Ligas ou regras divergentes")
 require(all(club["leagueId"] in league_ids for club in clubs), "Clube aponta para liga inexistente")
 require(all(league.get("rules", {}).get("verification") for league in leagues), "Liga sem status de verificação")
-require(manifest.get("orientation") == "landscape", "Manifesto precisa exigir orientação horizontal")
+require(manifest.get("orientation") == "any", "Manifesto precisa permitir retrato e paisagem")
 
 html = (ROOT / "index.html").read_text(encoding="utf-8")
 for ref in re.findall(r'(?:href|src)="\./([^"?#]+)', html):
@@ -99,7 +99,7 @@ for ref in re.findall(r'(?:href|src)="\./([^"?#]+)', html):
 require("app-v16.js" in html and "ultimate-v16.css" in html, "Entrypoints V16 ausentes")
 
 sw = (ROOT / "sw.js").read_text(encoding="utf-8")
-require("ultimate-v16.0.0" in sw, "Cache do service worker não é V16")
+require("ultimate-v16.1.0-phase1" in sw, "Cache do service worker não corresponde à Fase 1")
 for ref in re.findall(r"'\./([^'?]+)(?:\?[^']*)?'", sw):
     if ref:
         require((ROOT / ref).exists(), f"Referência ausente no service worker: {ref}")
@@ -138,7 +138,7 @@ report = {
     ],
     "checks": [
         "catalog integrity", "unique club IDs", "club and national roster paths", "six-confederation coverage",
-        "league rule status", "manifest landscape orientation", "index references", "service-worker shell references",
+        "league rule status", "manifest adaptive orientation", "index references", "service-worker shell references",
         "manager face atlas", "national identity flags", "live match tactics", "annual calendar", "global simulation", "rating disclosure",
     ],
 }

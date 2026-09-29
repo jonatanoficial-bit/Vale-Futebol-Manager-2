@@ -387,8 +387,8 @@ h1, h2, h3, p { margin-top: 0; }
 }
 
 @media (orientation: portrait) and (max-width: 1024px) {
-  .orientation-gate { display: grid; }
-  .app-shell { visibility: hidden; }
+  .orientation-gate { display: none; }
+  .app-shell { visibility: visible; }
 }
 
 @media (prefers-reduced-motion: reduce) {

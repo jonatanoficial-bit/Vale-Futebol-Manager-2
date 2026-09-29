@@ -7,14 +7,14 @@ A aplicação usa HTML, CSS e JavaScript nativos. Não há etapa de compilação
 ### Entrada
 
 - index.html: metadados, shell, splash e overlay de orientação;
-- js/app.js: estado, fluxo, renderização, persistência e sistemas de jogo;
-- css/app.css: layout mobile-first horizontal, componentes e breakpoints;
-- manifest.webmanifest: instalação PWA e preferência landscape;
+- js/app-v16.js: estado, fluxo, renderização, persistência e sistemas ativos do jogo;
+- css/app.css, css/world-edition.css, css/world-edition-v11.css e css/ultimate-v16.css: componentes e camadas responsivas;
+- manifest.webmanifest: instalação PWA em retrato ou paisagem;
 - sw.js: cache do shell, atualização e fallback offline.
 
 ## Estado e salvamento
 
-O armazenamento usa localStorage sob a chave vale-futebol-manager-v9. O schema atual é 900. Cada gravação preserva a versão anterior na chave vale-futebol-manager-v9-backup.
+O armazenamento usa localStorage sob a chave vale-futebol-manager-v16. O schema atual é 1600. Antes de gravar, a versão anterior é preservada na chave vale-futebol-manager-v16-backup. Falhas de gravação são exibidas ao jogador e impedem a saída silenciosa da carreira.
 
 O carregador:
 
@@ -25,18 +25,18 @@ O carregador:
 - recompõe propriedades ausentes;
 - procura chaves legadas conhecidas quando o store atual está vazio.
 
-Há três espaços independentes. Decisões importantes acionam autosave. A tela de ajustes permite exportar e importar JSON.
+Há três espaços independentes. Decisões importantes acionam autosave. A tela de ajustes permite exportar e importar JSON validado.
 
 ## Sistemas jogáveis
 
 - criação de carreira e perfil;
-- seleção entre clubes da Série A 2026;
+- seleção entre 625 clubes comandáveis;
 - carregamento do elenco correspondente;
 - escalação de até onze titulares;
-- três formações e três mentalidades;
+- quatro formações e três mentalidades;
 - pressão e ritmo ajustáveis;
 - quatro planos de treino;
-- quatorze rodadas de calendário;
+- calendário anual de clubes e seleções;
 - mercado carregado a partir de elencos adversários;
 - contratação, saldo e livro financeiro;
 - simulação de partida com força, posse, finalizações, gols e narração;
@@ -44,15 +44,9 @@ Há três espaços independentes. Decisões importantes acionam autosave. A tela
 
 ## Orientação e ciclo de vida
 
-O CSS exibe o overlay em retrato até 1024 px. O JavaScript usa matchMedia, resize e visibilitychange. Quando o bloqueio aparece:
+A interface funciona em retrato e paisagem. Até 900 px, as cinco áreas principais aparecem em uma barra inferior; em telas maiores, a mesma navegação ocupa a lateral. A partida reorganiza campo, estatísticas e controles em retrato.
 
-- a aplicação recebe inert;
-- o timer da partida é cancelado;
-- o minuto e o placar são preservados;
-- o estado não é recriado;
-- ao retornar para paisagem, a partida retoma apenas se estava em execução.
-
-pagehide salva a carreira. O código impede mais de um intervalo de partida simultâneo.
+Ao ocultar o aplicativo durante uma partida, o relógio é pausado sem perder minuto ou placar e retomado ao retornar. pagehide salva a carreira. O código impede mais de um intervalo de partida simultâneo.
 
 ## Execução
 

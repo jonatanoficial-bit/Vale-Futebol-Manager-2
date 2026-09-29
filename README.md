@@ -1,6 +1,15 @@
-# Vale Futebol Manager — Ultimate World 16
+# Vale Futebol Manager — Ultimate World 16.1
 
-Manager internacional mobile-first horizontal, jogável no computador e instalável como PWA. A V16 transforma a World Edition em uma carreira mundial mais profunda, com calendário anual, simulação paralela de ligas, gestão comercial, academia, negociações e alterações táticas durante partidas 2D com 22 jogadores.
+Manager internacional mobile-first para retrato e paisagem, jogável no computador e instalável como PWA. A V16.1 organiza a carreira em cinco áreas principais, orienta o primeiro acesso e preserva a profundidade mundial da V16 com calendário anual, simulação paralela de ligas, gestão comercial, academia, negociações e partidas 2D com 22 jogadores.
+
+## Fase 1 mobile
+
+- menu principal com Início, Elenco, Tática, Jogar e Mais;
+- painel Hoje com até três decisões prioritárias;
+- guia de primeira carreira em cinco passos;
+- interface adaptativa em retrato e paisagem;
+- backup, importação e confirmação confiável de salvamento;
+- processamento de parcelas e encerramento de empréstimos.
 
 ## Banco mundial
 
