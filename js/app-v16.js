@@ -1,4 +1,4 @@
-const VERSION = '16.1.0-phase1';
+const VERSION = '16.2.0-phase2';
 const SCHEMA = 1600;
 const STORE_KEY = 'vale-futebol-manager-v16';
 const BACKUP_KEY = 'vale-futebol-manager-v16-backup';
@@ -18,7 +18,7 @@ const session = {
   squadSearch: '', positionFilter: 'TODOS', market: [], marketLoading: false,
   match: null, matchTimer: null, matchWasRunningBeforeGate: false, modalReturnFocus: null,
   calendarView:'month', calendarDate:new Date(2026,3,1), calendarFilter:'all', dragPlayerId:null, dragSlot:null,
-  onboardingStep:0
+  onboardingStep:0, playerMedia:new Map(), matchEventFilter:'all'
 };
 
 const FORMATIONS = {
@@ -112,6 +112,8 @@ function migrateCareer(career) {
   career.worldState = career.worldState || null;
   career.individualTraining = career.individualTraining || {};
   career.transferObligations = Array.isArray(career.transferObligations) ? career.transferObligations : [];
+  career.boardObjectives = Array.isArray(career.boardObjectives) && career.boardObjectives.length ? career.boardObjectives : createBoardObjectives(career);
+  career.weeklyDecisions = career.weeklyDecisions || { training:false, squad:false, tactics:false };
   career.youthIntakeSeason = Number(career.youthIntakeSeason || 0);
   career.youthPlayers = Array.isArray(career.youthPlayers) ? career.youthPlayers.map(normalizePlayer) : [];
   career.tacticalPositions = Array.isArray(career.tacticalPositions) && career.tacticalPositions.length===11 ? career.tacticalPositions : null;
@@ -126,6 +128,27 @@ function managerLicense(reputation) {
   if(reputation>=64)return 'Licença Continental B';
   if(reputation>=52)return 'Licença Continental C';
   return 'Licença Nacional';
+}
+
+function createBoardObjectives(career) {
+  const season=Number(career?.season||2026),rating=Number(career?.club?.rating||70);
+  return [
+    {id:'league-points',label:'Somar pontos na liga',target:rating>=80?45:rating>=70?36:28,progress:Number(career?.stats?.points||0),unit:'pts',reward:4,status:'active'},
+    {id:'develop-player',label:'Desenvolver atletas sub-23',target:8,progress:0,unit:'sessões',reward:3,status:'active'},
+    {id:'financial-control',label:'Manter o caixa positivo',target:1,progress:Number(career?.budget||0)>0?1:0,unit:'meta',reward:3,status:'active',season}
+  ];
+}
+
+function updateBoardObjectives(career) {
+  (career.boardObjectives||[]).forEach(objective=>{
+    if(objective.id==='league-points')objective.progress=Math.min(objective.target,career.stats.points);
+    if(objective.id==='financial-control')objective.progress=career.budget>=0?1:0;
+    const completed=objective.progress>=objective.target;
+    if(completed&&objective.status!=='complete'){
+      objective.status='complete';career.board=clamp(career.board+objective.reward,1,100);
+      career.messages.push({id:'objective-'+objective.id+'-'+Date.now(),from:'Diretoria',subject:'Objetivo concluído: '+objective.label,body:'A diretoria reconheceu o resultado. Confiança aumentada em '+objective.reward+' pontos.',date:new Date().toISOString(),read:false,priority:'normal'});
+    }
+  });
 }
 
 function persist(showToast = false) {
@@ -160,6 +183,14 @@ function imageFallback(event, kind = 'club') {
   img.src = kind === 'player' ? './assets/placeholders/player-generic.png' : kind === 'avatar' ? './assets/avatars/manager-01.png' : './assets/placeholders/club-generic.png';
 }
 window.__vfmFallback = imageFallback;
+window.__vfmPortraitFallback = event => {
+  const img=event.target,portrait=img?.closest('.player-portrait');
+  if(!portrait||img?.dataset.genericFallback)return;
+  img.dataset.genericFallback='1';
+  img.src='./assets/players/generic/player-generic-128.webp';
+  img.alt='Foto genérica provisória';
+  portrait.classList.remove('licensed');portrait.classList.add('generic');
+};
 
 async function fetchJson(path) {
   const response = await fetch('./' + String(path).replace(/^\.\//,''));
@@ -176,7 +207,8 @@ function normalizePlayer(player, index = 0) {
     overall, potential:clamp(player.potential || player.overall || 60, 1, 99),
     age:clamp(player.age || 24, 15, 50), salary:Number(player.salary) || 35, value:Number(player.marketValue ?? player.value) || 1,
     fitness:clamp(player.fitness ?? 88, 1, 100), morale:clamp(player.morale ?? 74, 1, 100),
-    photo:player.photo || '', clubName:player.clubName || '', contractUntil:player.contractUntil || '2027-12-31',
+    photo:player.photo || '', photoLicense:player.photoLicense || '', photoCredit:player.photoCredit || '', clubName:player.clubName || '', contractUntil:player.contractUntil || '2027-12-31',
+    nationality:player.nationality || '', foot:player.foot || '', height:Number(player.height)||0, dataSource:player.dataSource || '',
     attributes:player.attributes||{pace:variance(1),stamina:variance(3),strength:variance(5),passing:variance(7),technique:variance(9),vision:variance(11),finishing:variance(13),tackling:variance(15),positioning:variance(2),decisions:variance(4),teamwork:variance(6),leadership:variance(8)},
     personality:player.personality||['Profissional','Ambicioso','Determinado','Equilibrado','Leal'][seed%5],
     injuryRisk:clamp(player.injuryRisk??(5+seed%16),1,35), form:clamp(player.form??70,1,100), knowledge:clamp(player.knowledge??45,1,100),
@@ -187,8 +219,29 @@ function normalizePlayer(player, index = 0) {
 function stableNumber(value='') { let hash=2166136261;for(let i=0;i<value.length;i++){hash^=value.charCodeAt(i);hash=Math.imul(hash,16777619);}return hash>>>0; }
 function average(values){return values.length?values.reduce((sum,value)=>sum+Number(value||0),0)/values.length:0;}
 
-function playerPhoto(player) {
-  return player?.photo ? './' + String(player.photo).replace(/^\.\//,'') : './assets/placeholders/player-generic.png';
+function licensedPlayerMedia(player) { return session.playerMedia.get(String(player?.id||'')) || null; }
+function playerPhoto(player,size='small') {
+  const media=licensedPlayerMedia(player);
+  if(!media)return '';
+  if(media.commonsTitle){
+    const filename=String(media.commonsTitle).replace(/^File:/,'');
+    return 'https://commons.wikimedia.org/wiki/Special:Redirect/file/'+encodeURIComponent(filename)+'?width='+(size==='small'?128:320);
+  }
+  return size==='small'?(media.src96||media.src||''):(media.src||'');
+}
+function initials(name='Jogador') { return name.trim().split(/\s+/).slice(0,2).map(part=>part[0]||'').join('').toUpperCase()||'JF'; }
+function playerPortrait(player,size='small') {
+  const src=playerPhoto(player,size);
+  return src?'<span class="player-portrait '+size+' licensed"><img src="'+escapeHtml(src)+'" alt="Fotografia real de '+escapeHtml(player.name)+'" loading="lazy" referrerpolicy="no-referrer" onerror="__vfmPortraitFallback(event)"></span>':'<span class="player-portrait '+size+' generic"><img src="./assets/players/generic/'+(size==='small'?'player-generic-128.webp':'player-generic.webp')+'" alt="Foto genérica provisória de '+escapeHtml(player?.name||'jogador')+'" loading="lazy"></span>';
+}
+
+async function loadPlayerMediaManifest() {
+  try{
+    const manifest=await fetchJson('data/player-media-manifest.json');
+    const records=(manifest.players||[]).filter(item=>item.id&&(item.commonsTitle||/^https:\/\//.test(item.src||''))&&item.license?.commercialUse===true);
+    session.playerMedia=new Map(records.map(item=>[String(item.id),item]));
+    Object.entries(manifest.aliases||{}).forEach(([alias,target])=>{const media=session.playerMedia.get(String(target));if(media)session.playerMedia.set(String(alias),media);});
+  }catch{session.playerMedia=new Map();}
 }
 
 function pickLineup(roster) {
@@ -314,7 +367,8 @@ function slotModal(mode) {
 function worldDatabaseModal() {
   const stats = session.catalog.stats;
   const countries = new Set(session.catalog.leagues.map(l=>l.country)).size;
-  showModal('Base mundial 2026', '<div class="world-stats"><div><strong>' + stats.playableClubs + '</strong><span>clubes comandáveis</span></div><div><strong>' + stats.simulationClubs + '</strong><span>clubes no mundo</span></div><div><strong>' + stats.clubPlayers.toLocaleString('pt-BR') + '</strong><span>jogadores de clubes</span></div><div><strong>' + stats.nationalTeams + '</strong><span>associações FIFA</span></div><div><strong>' + stats.commandableNationalTeams + '</strong><span>seleções comandáveis</span></div><div><strong>' + stats.nationalPlayers.toLocaleString('pt-BR') + '</strong><span>jogadores de seleções</span></div><div><strong>' + countries + '</strong><span>países com liga</span></div><div><strong>16</strong><span>faces fotorealistas</span></div></div><p class="muted">As 211 seleções participam da simulação. Há 48 listas oficiais da Copa de 2026 e pools profissionais atuais para outras seleções; GER e potencial são índices próprios do VFM.</p>');
+  const realPhotoPlayers = session.playerMedia.size;
+  showModal('Base mundial 2026', '<div class="world-stats"><div><strong>' + stats.playableClubs + '</strong><span>clubes comandáveis</span></div><div><strong>' + stats.simulationClubs + '</strong><span>clubes no mundo</span></div><div><strong>' + stats.clubPlayers.toLocaleString('pt-BR') + '</strong><span>jogadores de clubes</span></div><div><strong>' + stats.nationalTeams + '</strong><span>associações FIFA</span></div><div><strong>' + stats.commandableNationalTeams + '</strong><span>seleções comandáveis</span></div><div><strong>' + stats.nationalPlayers.toLocaleString('pt-BR') + '</strong><span>jogadores de seleções</span></div><div><strong>' + countries + '</strong><span>países com liga</span></div><div><strong>' + realPhotoPlayers.toLocaleString('pt-BR') + '</strong><span>jogadores com foto real</span></div></div><p class="muted">As 211 seleções participam da simulação. Há 48 listas oficiais da Copa de 2026 e pools profissionais atuais para outras seleções; GER e potencial são índices próprios do VFM.</p>');
 }
 
 function renderClubSelect() {
@@ -450,8 +504,9 @@ async function createCareer() {
       roster,lineupIds:pickLineup(roster).map(p=>p.id),tactics:{formation:'4-3-3',mentality:'Equilibrada',pressure:58,tempo:55,width:55,defensiveLine:52,passing:'Misto',marking:'Zona',transition:'Equilibrada'},
       stats:{played:0,wins:0,draws:0,losses:0,gf:0,ga:0,points:0},participants,table:initialTable(participants),fixtures,
       ledger:[{date:new Date().toISOString(),label:'Orçamento da temporada',amount:budget,type:'income'}],messages:initialMessages(session.selectedClub),
-      staff:{assistant:68,fitnessCoach:66,scout:64,medical:65},facilities:{training:2,youth:2,medical:2,scouting:2,stadium:2,commercial:2},transferPolicy:{wageBudget:Math.round(budget*.18),maxSquad:35,foreignLimit:null},transferObligations:[],seasonHistory:[],jobOffers:[],lastTrainingWeek:0,national:null,seasonSummary:null,sponsor:null,sponsorOffers:generateSponsorOffers(session.selectedClub,{commercial:2}),mediaHistory:[],worldNews:[],worldState:createWorldState(2026),tacticalPositions:(FORMATIONS['4-3-3']).map(point=>[...point]),individualTraining:{},youthIntakeSeason:0,youthPlayers:[]
+      staff:{assistant:68,fitnessCoach:66,scout:64,medical:65},facilities:{training:2,youth:2,medical:2,scouting:2,stadium:2,commercial:2},transferPolicy:{wageBudget:Math.round(budget*.18),maxSquad:35,foreignLimit:null},transferObligations:[],weeklyDecisions:{training:false,squad:false,tactics:false},seasonHistory:[],jobOffers:[],lastTrainingWeek:0,national:null,seasonSummary:null,sponsor:null,sponsorOffers:generateSponsorOffers(session.selectedClub,{commercial:2}),mediaHistory:[],worldNews:[],worldState:createWorldState(2026),tacticalPositions:(FORMATIONS['4-3-3']).map(point=>[...point]),individualTraining:{},youthIntakeSeason:0,youthPlayers:[]
     };
+    session.career.boardObjectives=createBoardObjectives(session.career);
     persist(); toast('Contrato assinado. O mundo do futebol está ativo.','success'); navigate('dashboard');startOnboarding();
   } catch (error) {
     if (button) { button.disabled=false; button.textContent='Assinar contrato'; }
@@ -477,6 +532,11 @@ function confederationClubLabel(confederation) {
   return {UEFA:'Champions League e Europa League',CONMEBOL:'Libertadores e Sul-Americana',CONCACAF:'CONCACAF Champions Cup',AFC:'AFC Champions League Elite',CAF:'CAF Champions League',OFC:'OFC Champions League'}[confederation]||'Competições continentais';
 }
 
+function renderWeeklyLoop(c){
+  const stages=[['Decisões',c.messages.some(message=>!message.read)?'pending':'done'],['Treino',c.lastTrainingWeek===c.week?'done':'current'],['Preparação',c.lineupIds.length===11?'done':'pending'],['Partida',nextFixture()?'current':'done']];
+  return '<section class="weekly-loop panel"><header><p class="eyebrow">SEMANA '+c.week+'</p><strong>Decida, prepare, jogue e veja as consequências</strong></header><div>'+stages.map(([label,status],index)=>'<span class="'+status+'"><i>'+(status==='done'?'✓':index+1)+'</i><b>'+label+'</b></span>').join('')+'</div></section>';
+}
+
 function renderDashboard() {
   const c=session.career, next=nextFixture(), recent=c.fixtures.filter(f=>f.played).slice(-5).reverse();
   const unread=c.messages.filter(m=>!m.read).length;
@@ -488,7 +548,7 @@ function renderDashboard() {
   if(c.lastTrainingWeek!==c.week)tasks.push(['training','Planeje o treino','O elenco ainda não treinou nesta semana.','Escolher treino']);
   const today=tasks.slice(0,3).map(([screen,title,detail,action],index)=>'<article class="today-task"><span>'+String(index+1).padStart(2,'0')+'</span><div><strong>'+title+'</strong><small>'+detail+'</small></div><button class="btn btn-small '+(index===0?'btn-primary':'')+'" data-action="navigate" data-screen="'+screen+'">'+action+'</button></article>').join('');
   return sectionHead('Central do treinador','Todas as decisões do clube e da seleção em um só lugar.','<span class="tag">Nível '+c.manager.level+'</span>') +
-    '<section class="today-panel panel"><header><div><p class="eyebrow">HOJE</p><h2>Suas próximas decisões</h2></div><small>Mostramos apenas o que precisa de atenção agora.</small></header><div class="today-list">'+(today||'<article class="today-clear"><strong>Tudo em dia</strong><span>Você pode avançar pelo calendário quando estiver pronto.</span></article>')+'</div></section>'+
+    renderWeeklyLoop(c)+'<section class="today-panel panel"><header><div><p class="eyebrow">HOJE</p><h2>Suas próximas decisões</h2></div><small>Mostramos apenas o que precisa de atenção agora.</small></header><div class="today-list">'+(today||'<article class="today-clear"><strong>Tudo em dia</strong><span>Você pode avançar pelo calendário quando estiver pronto.</span></article>')+'</div></section>'+
     '<div class="dashboard-world-grid"><article class="hero-fixture panel">'+(next?'<div><span class="competition-pill">'+escapeHtml(next.competitionName)+'</span><h2>Próximo jogo</h2><div class="versus-row"><div><img src="./'+escapeHtml(c.club.badge)+'" alt="" onerror="__vfmFallback(event)"><strong>'+escapeHtml(c.club.name)+'</strong></div><b>VS</b><div><img src="./'+escapeHtml(next.opponent.badge)+'" alt="" onerror="__vfmFallback(event)"><strong>'+escapeHtml(next.opponent.name)+'</strong></div></div><p>'+formatDate(next.date)+' · '+(next.home?'Casa':'Fora')+'</p><button class="btn btn-primary" data-action="open-next-match">Preparar partida</button></div>':'<div class="empty-state"><strong>Calendário concluído</strong>'+(leagueFinished?'<button class="btn btn-primary" data-action="advance-season">Encerrar temporada e aplicar regras</button>':'<span>Ainda há jogos de liga pendentes.</span>')+'</div>')+'</article>' +
     '<article class="panel"><h2>Desempenho</h2><div class="world-metric-grid"><div><span>Jogos</span><strong>'+c.stats.played+'</strong></div><div><span>Pontos</span><strong>'+c.stats.points+'</strong></div><div><span>Saldo</span><strong>'+(c.stats.gf-c.stats.ga)+'</strong></div><div><span>Diretoria</span><strong>'+c.board+'%</strong></div></div><div class="form-strip">'+(recent.length?recent.map(f=>'<span class="'+resultClass(f)+'">'+resultLetter(f)+'</span>').join(''):'<small>A temporada começa no próximo jogo.</small>')+'</div></article>' +
     '<article class="panel"><h2>Caixa de entrada</h2><p class="big-number">'+unread+'</p><p>mensagens aguardando leitura</p><button class="btn" data-action="navigate" data-screen="inbox">Abrir e-mail</button></article>' +
@@ -499,11 +559,18 @@ function renderDashboard() {
 function resultClass(f) { const own=f.home?f.score?.home:f.score?.away, opp=f.home?f.score?.away:f.score?.home;if(own===opp&&f.score?.penalties){const ownPens=f.home?f.score.penalties.home:f.score.penalties.away,oppPens=f.home?f.score.penalties.away:f.score.penalties.home;return ownPens>oppPens?'win':'loss';}return own>opp?'win':own<opp?'loss':'draw'; }
 function resultLetter(f) { return resultClass(f)==='win'?'V':resultClass(f)==='loss'?'D':'E'; }
 
+function squadSector(pos){if(pos==='GOL')return 'Goleiros';if(['ZAG','LD','LE'].includes(pos))return 'Defesa';if(['VOL','MC','MEI'].includes(pos))return 'Meio';return 'Ataque';}
+function renderSquadPlanner(c){
+  const sectors=['Goleiros','Defesa','Meio','Ataque'].map(label=>{const list=c.roster.filter(player=>squadSector(player.pos)===label),avg=Math.round(average(list.map(player=>player.overall))),young=list.filter(player=>player.age<=23).length,minimum={Goleiros:2,Defesa:7,Meio:6,Ataque:5}[label],status=list.length<minimum?'Reforçar':avg<65?'Evoluir':'Coberto';return '<article class="planner-sector '+(status==='Reforçar'?'needs-attention':'')+'"><span>'+label+'</span><strong>'+list.length+' jogadores · GER '+avg+'</strong><small>'+young+' sub-23 · '+status+'</small></article>';}).join('');
+  const now=new Date(c.date),limit=new Date(addDays(now,365)),expiring=c.roster.filter(player=>new Date(player.contractUntil)<=limit).length,prospects=c.roster.filter(player=>player.age<=23&&player.potential-player.overall>=4).length,wages=c.roster.reduce((sum,player)=>sum+Number(player.salary||0)*1000,0);
+  return '<section class="squad-planner panel"><header><div><p class="eyebrow">PLANEJADOR</p><h2>Mapa do elenco</h2></div><div class="planner-alerts"><span>'+expiring+' contratos em 12 meses</span><span>'+prospects+' jovens com margem</span><span>'+money(wages)+'/mês</span></div></header><div class="planner-sectors">'+sectors+'</div></section>';
+}
+
 function renderSquad() {
   const c=session.career, filtered=c.roster.filter(p=>(session.positionFilter==='TODOS'||p.pos===session.positionFilter)&&(!session.squadSearch||p.name.toLowerCase().includes(session.squadSearch.toLowerCase()))).sort((a,b)=>b.overall-a.overall);
   const positions=['TODOS',...new Set(c.roster.map(p=>p.pos))];
-  const rows=filtered.map(p=>'<tr><td><button class="player-cell player-cell-button" data-action="player-report" data-player="'+escapeHtml(p.id)+'"><img src="'+escapeHtml(playerPhoto(p))+'" alt="" loading="lazy" onerror="__vfmFallback(event,\'player\')"><span><strong>'+escapeHtml(p.name)+'</strong><small>'+escapeHtml(p.role)+'</small></span></button></td><td><span class="pos-tag">'+escapeHtml(p.pos)+'</span></td><td><strong>'+p.overall+'</strong></td><td>'+p.age+'</td><td>'+p.fitness+'%</td><td>'+p.morale+'%</td><td>'+money(p.value*1000000)+'</td><td><button class="btn btn-small '+(c.lineupIds.includes(p.id)?'btn-primary':'')+'" data-action="toggle-lineup" data-player="'+escapeHtml(p.id)+'">'+(c.lineupIds.includes(p.id)?'Titular':'Escalar')+'</button></td></tr>').join('');
-  return sectionHead('Elenco','Jogadores nominais, atributos 2026, contratos, forma e moral.','<span class="tag">'+c.lineupIds.length+'/11 titulares</span>')+'<div class="toolbar"><input data-action="squad-search" aria-label="Buscar jogador" placeholder="Buscar jogador" value="'+escapeHtml(session.squadSearch)+'"><select data-action="position-filter" aria-label="Filtrar posição">'+positions.map(p=>'<option '+(p===session.positionFilter?'selected':'')+'>'+p+'</option>').join('')+'</select><button class="btn" data-action="best-lineup">Melhor equipe</button></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Jogador</th><th>Pos.</th><th>GER</th><th>Idade</th><th>Físico</th><th>Moral</th><th>Valor</th><th>Escalação</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+  const rows=filtered.map(p=>'<tr><td><button class="player-cell player-cell-button" data-action="player-report" data-player="'+escapeHtml(p.id)+'">'+playerPortrait(p,'small')+'<span><strong>'+escapeHtml(p.name)+'</strong><small>'+escapeHtml(p.role)+'</small></span></button></td><td><span class="pos-tag">'+escapeHtml(p.pos)+'</span></td><td><strong>'+p.overall+'</strong></td><td>'+p.age+'</td><td>'+p.fitness+'%</td><td>'+p.morale+'%</td><td>'+money(p.value*1000000)+'</td><td><button class="btn btn-small '+(c.lineupIds.includes(p.id)?'btn-primary':'')+'" data-action="toggle-lineup" data-player="'+escapeHtml(p.id)+'">'+(c.lineupIds.includes(p.id)?'Titular':'Escalar')+'</button></td></tr>').join('');
+  return sectionHead('Elenco','Jogadores nominais, atributos 2026, contratos, forma e moral.','<span class="tag">'+c.lineupIds.length+'/11 titulares</span>')+renderSquadPlanner(c)+'<div class="toolbar"><input data-action="squad-search" aria-label="Buscar jogador" placeholder="Buscar jogador" value="'+escapeHtml(session.squadSearch)+'"><select data-action="position-filter" aria-label="Filtrar posição">'+positions.map(p=>'<option '+(p===session.positionFilter?'selected':'')+'>'+p+'</option>').join('')+'</select><button class="btn" data-action="best-lineup">Melhor equipe</button></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Jogador</th><th>Pos.</th><th>GER</th><th>Idade</th><th>Físico</th><th>Moral</th><th>Valor</th><th>Escalação</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
 }
 
 function activeTacticalPositions(){const c=session.career,base=FORMATIONS[c.tactics.formation]||FORMATIONS['4-3-3'];if(!c.tacticalPositions||c.tacticalPositions.length!==11)c.tacticalPositions=base.map(point=>[...point]);return c.tacticalPositions;}
@@ -527,9 +594,20 @@ function swapTacticalPlayers(sourceId,targetId){
 
 function moveTacticalPlayer(slot,x,y){const positions=activeTacticalPositions();if(slot<0||slot>=positions.length)return;positions[slot]=[clamp(x,7,93),clamp(y,8,92)];persist();renderGame(renderTactics());}
 
+function tacticalImpact(t){
+  const attack=clamp(Math.round(50+(t.mentality==='Ofensiva'?18:t.mentality==='Defensiva'?-14:0)+(t.tempo-55)*.18+(t.width-55)*.12),20,90);
+  const control=clamp(Math.round(52+(t.passing==='Curto'?14:t.passing==='Direto'?-8:2)+(t.pressure-55)*.1),20,90);
+  const defense=clamp(Math.round(58+(t.mentality==='Defensiva'?16:t.mentality==='Ofensiva'?-10:0)-(t.defensiveLine-52)*.16+(t.marking==='Zona'?5:t.marking==='Individual'?-2:2)),20,90);
+  const intensity=clamp(Math.round((t.pressure+t.tempo)/2),20,90),risk=clamp(Math.round(20+intensity*.55+(t.defensiveLine-52)*.25),20,85);
+  const summary=attack>=70?'Cria mais chances, mas deixa espaço nas transições.':defense>=72?'Protege a área e reduz o ritmo ofensivo.':control>=68?'Valoriza posse e decisões pacientes.':'Plano equilibrado para adaptar durante o jogo.';
+  return {attack,control,defense,intensity,risk,summary};
+}
+
+function renderTacticalImpact(t){const impact=tacticalImpact(t);return '<section class="tactical-impact"><header><div><p class="eyebrow">EFEITO ESPERADO</p><h3>'+escapeHtml(impact.summary)+'</h3></div><span class="risk-chip">Desgaste '+impact.risk+'%</span></header><div>'+[['Ataque',impact.attack],['Controle',impact.control],['Defesa',impact.defense],['Intensidade',impact.intensity]].map(([label,value])=>'<label><span>'+label+'</span><b>'+value+'</b><i><em style="width:'+value+'%"></em></i></label>').join('')+'</div><p>Os valores respondem imediatamente às instruções e entram no cálculo das chances durante a partida.</p></section>';}
+
 function renderTactics() {
   const c=session.career,t=c.tactics;
-  return sectionHead('Tática e escalação','Arraste com dedo ou mouse, defina funções e prepare mudanças para a partida.','<span class="tag">'+c.lineupIds.length+'/11 titulares</span>')+'<div class="tactics-layout"><article class="panel tactical-board">'+formationPreview(c.roster,c.lineupIds,t.formation)+'</article><article class="panel tactics-controls"><div class="tactics-phase-tabs"><button class="active">Com bola</button><button>Sem bola</button><button>Bolas paradas</button></div><div class="tactics-select-grid"><div class="field"><label>Formação</label><select data-action="formation-select">'+options(Object.keys(FORMATIONS),t.formation)+'</select></div><div class="field"><label>Mentalidade</label><select data-action="mentality-select">'+options(['Defensiva','Equilibrada','Ofensiva'],t.mentality)+'</select></div><div class="field"><label>Construção</label><select data-action="passing-select">'+options(['Curto','Misto','Direto'],t.passing)+'</select></div><div class="field"><label>Marcação</label><select data-action="marking-select">'+options(['Zona','Individual','Híbrida'],t.marking)+'</select></div><div class="field"><label>Transição</label><select data-action="transition-select">'+options(['Reagrupar','Equilibrada','Contra-atacar'],t.transition)+'</select></div></div><label>Pressão <output>'+t.pressure+'</output><input type="range" min="20" max="90" value="'+t.pressure+'" data-action="pressure-range"></label><label>Ritmo <output>'+t.tempo+'</output><input type="range" min="20" max="90" value="'+t.tempo+'" data-action="tempo-range"></label><label>Largura <output>'+t.width+'</output><input type="range" min="25" max="85" value="'+t.width+'" data-action="width-range"></label><label>Linha defensiva <output>'+t.defensiveLine+'</output><input type="range" min="20" max="85" value="'+t.defensiveLine+'" data-action="line-range"></label><button class="btn" data-action="reset-tactical-shape">Restaurar posições</button><p class="muted">Toque em um atleta e depois em outro também funciona como alternativa ao arrastar.</p></article></div>';
+  return sectionHead('Tática e escalação','Arraste com dedo ou mouse, defina funções e prepare mudanças para a partida.','<span class="tag">'+c.lineupIds.length+'/11 titulares</span>')+'<div class="tactics-layout"><article class="panel tactical-board">'+formationPreview(c.roster,c.lineupIds,t.formation)+'</article><article class="panel tactics-controls">'+renderTacticalImpact(t)+'<div class="tactics-phase-tabs"><button class="active">Com bola</button><button>Sem bola</button><button>Bolas paradas</button></div><div class="tactics-select-grid"><div class="field"><label>Formação</label><select data-action="formation-select">'+options(Object.keys(FORMATIONS),t.formation)+'</select></div><div class="field"><label>Mentalidade</label><select data-action="mentality-select">'+options(['Defensiva','Equilibrada','Ofensiva'],t.mentality)+'</select></div><div class="field"><label>Construção</label><select data-action="passing-select">'+options(['Curto','Misto','Direto'],t.passing)+'</select></div><div class="field"><label>Marcação</label><select data-action="marking-select">'+options(['Zona','Individual','Híbrida'],t.marking)+'</select></div><div class="field"><label>Transição</label><select data-action="transition-select">'+options(['Reagrupar','Equilibrada','Contra-atacar'],t.transition)+'</select></div></div><label>Pressão <output>'+t.pressure+'</output><input type="range" min="20" max="90" value="'+t.pressure+'" data-action="pressure-range"></label><label>Ritmo <output>'+t.tempo+'</output><input type="range" min="20" max="90" value="'+t.tempo+'" data-action="tempo-range"></label><label>Largura <output>'+t.width+'</output><input type="range" min="25" max="85" value="'+t.width+'" data-action="width-range"></label><label>Linha defensiva <output>'+t.defensiveLine+'</output><input type="range" min="20" max="85" value="'+t.defensiveLine+'" data-action="line-range"></label><button class="btn" data-action="reset-tactical-shape">Restaurar posições</button><p class="muted">Toque em um atleta e depois em outro também funciona como alternativa ao arrastar.</p></article></div>';
 }
 
 function zoneFor(row,index,total,rules) {
@@ -579,8 +657,8 @@ function renderCalendar() {
 function openCalendarDay(key){const items=allCareerEvents().filter(event=>dateKey(event.date)===key);const date=new Date(key+'T12:00:00');showModal(new Intl.DateTimeFormat('pt-BR',{dateStyle:'full'}).format(date),items.length?'<div class="day-event-list">'+items.map(event=>'<article><img src="./'+escapeHtml(event.opponent.badge)+'" alt=""><div><strong>'+escapeHtml(event.competitionName)+'</strong><span>'+escapeHtml(event.opponent.name)+' · '+(event.stage||'Rodada '+event.round)+'</span><small>'+(event.drawStatus==='provisional'?'Adversário e horário sujeitos ao sorteio':event.home?'Em casa':'Fora de casa')+'</small></div></article>').join('')+'</div>':'<p>Dia livre para recuperação, treino, scouting e compromissos administrativos.</p>');}
 
 function renderMatchCenter() {
-  const next=nextFixture();
-  return sectionHead('Centro de partida','Prepare escalação, formação e estratégia antes do apito inicial.')+(next?'<div class="match-prep"><article class="panel match-poster" style="background-image:linear-gradient(rgba(5,12,22,.82),rgba(5,12,22,.94)),url(\'./'+escapeHtml(next.opponent.stadium||'assets/placeholders/stadium-generic.jpg')+'\')"><span class="competition-pill">'+escapeHtml(next.competitionName)+'</span><div class="versus-row large"><div><img src="./'+escapeHtml(session.career.club.badge)+'" alt="" onerror="__vfmFallback(event)"><strong>'+escapeHtml(session.career.club.name)+'</strong></div><b>VS</b><div><img src="./'+escapeHtml(next.opponent.badge)+'" alt="" onerror="__vfmFallback(event)"><strong>'+escapeHtml(next.opponent.name)+'</strong></div></div><p>'+formatDate(next.date)+' · '+(next.home?'Em casa':'Fora de casa')+'</p><button class="btn btn-primary" data-action="start-match">Entrar em campo</button></article><article class="panel"><h2>Plano de jogo</h2><p><strong>'+session.career.tactics.formation+'</strong> · '+escapeHtml(session.career.tactics.mentality)+'</p><p>Pressão '+session.career.tactics.pressure+' · Ritmo '+session.career.tactics.tempo+'</p><p>'+session.career.lineupIds.length+' titulares confirmados.</p><button class="btn" data-action="navigate" data-screen="tactics">Ajustar tática</button></article></div>':'<div class="panel empty-state"><strong>Temporada concluída</strong><span>Consulte o resumo e avance para a próxima época.</span></div>');
+  const next=nextFixture(),candidate=String(next?.opponent?.stadium||''),stadium=/\.(?:avif|webp|png|jpe?g)$/i.test(candidate)?candidate:'assets/placeholders/stadium-generic.jpg';
+  return sectionHead('Centro de partida','Prepare escalação, formação e estratégia antes do apito inicial.')+(next?'<div class="match-prep"><article class="panel match-poster" style="background-image:linear-gradient(rgba(5,12,22,.82),rgba(5,12,22,.94)),url(\'./'+escapeHtml(stadium)+'\')"><span class="competition-pill">'+escapeHtml(next.competitionName)+'</span><div class="versus-row large"><div><img src="./'+escapeHtml(session.career.club.badge)+'" alt="" onerror="__vfmFallback(event)"><strong>'+escapeHtml(session.career.club.name)+'</strong></div><b>VS</b><div><img src="./'+escapeHtml(next.opponent.badge)+'" alt="" onerror="__vfmFallback(event)"><strong>'+escapeHtml(next.opponent.name)+'</strong></div></div><p>'+formatDate(next.date)+' · '+(next.home?'Em casa':'Fora de casa')+'</p><button class="btn btn-primary" data-action="start-match">Entrar em campo</button></article><article class="panel"><h2>Plano de jogo</h2><p><strong>'+session.career.tactics.formation+'</strong> · '+escapeHtml(session.career.tactics.mentality)+'</p><p>Pressão '+session.career.tactics.pressure+' · Ritmo '+session.career.tactics.tempo+'</p><p>'+session.career.lineupIds.length+' titulares confirmados.</p><button class="btn" data-action="navigate" data-screen="tactics">Ajustar tática</button></article></div>':'<div class="panel empty-state"><strong>Temporada concluída</strong><span>Consulte o resumo e avance para a próxima época.</span></div>');
 }
 
 function renderTraining() {
@@ -602,8 +680,9 @@ async function loadMarket() {
 }
 
 function renderMarket() {
-  const cards=session.market.map(p=>'<article class="market-card"><div class="market-player"><img src="'+escapeHtml(playerPhoto(p))+'" alt="" onerror="__vfmFallback(event,\'player\')"><div><strong>'+escapeHtml(p.name)+'</strong><small>'+escapeHtml(p.pos)+' · '+p.age+' anos · '+escapeHtml(p.sourceClub||'')+'</small><em>'+escapeHtml(p.personality)+'</em></div></div><div class="market-value"><span>GER <strong>'+p.overall+'</strong></span><span>'+money(p.value*1000000)+'</span><small>Conhecimento '+p.knowledge+'%</small></div><div class="market-actions"><button class="btn btn-small" data-action="player-report" data-player="'+escapeHtml(p.id)+'">Relatório</button><button class="btn btn-small" data-action="loan-player" data-player="'+escapeHtml(p.id)+'">Empréstimo</button><button class="btn btn-primary btn-small" data-action="buy-player" data-player="'+escapeHtml(p.id)+'">Negociar</button></div></article>').join('');
-  return sectionHead('Mercado internacional','Atletas nominais da base 2026, filtrados por desempenho e valor.','<span class="tag">'+money(session.career.budget)+'</span>')+'<div class="market-grid">'+(session.marketLoading?'<div class="panel">Carregando rede mundial…</div>':cards||'<div class="panel">Nenhuma oportunidade disponível.</div>')+'</div>';
+  const c=session.career,payroll=c.roster.reduce((sum,p)=>sum+Number(p.salary||0)*1000,0),future=(c.transferObligations||[]).reduce((sum,item)=>sum+Number(item.remainingBalance||0),0);
+  const cards=session.market.map(p=>'<article class="market-card"><div class="market-player">'+playerPortrait(p,'medium')+'<div><strong>'+escapeHtml(p.name)+'</strong><small>'+escapeHtml(p.pos)+' · '+p.age+' anos · '+escapeHtml(p.sourceClub||'')+'</small><em>'+escapeHtml(p.personality)+'</em></div></div><div class="market-value"><span>GER <strong>'+p.overall+'</strong></span><span>'+money(p.value*1000000)+'</span><small>Conhecimento '+p.knowledge+'%</small></div><div class="market-actions"><button class="btn btn-small" data-action="player-report" data-player="'+escapeHtml(p.id)+'">Relatório</button><button class="btn btn-small" data-action="loan-player" data-player="'+escapeHtml(p.id)+'">Empréstimo</button><button class="btn btn-primary btn-small" data-action="buy-player" data-player="'+escapeHtml(p.id)+'">Negociar</button></div></article>').join('');
+  return sectionHead('Mercado internacional','Atletas nominais da base 2026, filtrados por desempenho e valor.','<span class="tag">'+money(c.budget)+'</span>')+'<div class="market-budget-strip"><span>Caixa <strong>'+money(c.budget)+'</strong></span><span>Folha <strong>'+money(payroll)+' / '+money(c.transferPolicy.wageBudget)+'</strong></span><span>Parcelas futuras <strong>'+money(future)+'</strong></span><span>Vagas <strong>'+c.roster.length+' / '+c.transferPolicy.maxSquad+'</strong></span></div><div class="market-grid">'+(session.marketLoading?'<div class="panel">Carregando rede mundial…</div>':cards||'<div class="panel">Nenhuma oportunidade disponível.</div>')+'</div>';
 }
 
 function renderFacilitiesCampus(c){const buildings=[['stadium','Estádio','Arena'],['training','Treinamento','CT'],['youth','Academia','Base'],['medical','Medicina','DM'],['scouting','Scouting','Scout'],['commercial','Comercial','Sede']];return '<section class="club-campus panel"><header><div><p class="eyebrow">CAMPUS DO CLUBE</p><h2>Instalações interativas</h2></div><small>Toque em um prédio para evoluir</small></header><div class="campus-scene"><div class="campus-road"></div>'+buildings.map(([id,name,label],index)=>'<button class="campus-building building-'+id+' level-'+c.facilities[id]+'" data-action="upgrade-facility" data-facility="'+id+'" style="--building-index:'+index+'"><span>'+label+'</span><strong>'+name+'</strong><small>Nível '+c.facilities[id]+'/5</small></button>').join('')+'</div></section>';}
@@ -615,7 +694,7 @@ function renderClub() {
   const ledger=c.ledger.slice().reverse().map(item=>'<tr><td>'+formatDate(item.date)+'</td><td>'+escapeHtml(item.label)+'</td><td class="'+(item.amount>=0?'positive':'negative')+'">'+(item.amount>=0?'+':'')+money(item.amount)+'</td></tr>').join('');
   const facilityNames={training:'Centro de treinamento',youth:'Academia de base',medical:'Departamento médico',scouting:'Rede de observação',stadium:'Estádio e matchday',commercial:'Centro comercial'};
   const offers=c.jobOffers.length?'<article class="panel job-offers"><h2>Propostas de trabalho</h2><p class="muted">Ofertas liberadas pela reputação conquistada na última temporada.</p>'+c.jobOffers.map(club=>'<div class="staff-row"><span><strong>'+escapeHtml(club.name)+'</strong><small>'+escapeHtml(club.leagueName)+' · GER VFM '+club.rating+'</small></span><img class="job-club-badge" src="./'+escapeHtml(club.badge)+'" alt="" onerror="__vfmFallback(event)"><button class="btn btn-small btn-primary" data-action="accept-club-job" data-club="'+escapeHtml(club.id)+'">Aceitar</button></div>').join('')+'</article>':'';
-  return sectionHead('Gestão total do clube','Finanças, diretoria, instalações, patrocínio e carreira executiva.')+'<div class="world-metric-grid club-metrics"><div><span>Saldo</span><strong>'+money(c.budget)+'</strong></div><div><span>Folha mensal</span><strong>'+money(payroll)+'</strong></div><div><span>Valor do elenco</span><strong>'+money(value)+'</strong></div><div><span>Diretoria</span><strong>'+c.board+'%</strong></div></div>'+renderFacilitiesCampus(c)+renderSponsorPanel(c)+'<div class="club-admin-grid"><article class="panel"><h2>Comissão técnica</h2>'+Object.entries(c.staff).map(([id,rating])=>'<div class="staff-row"><span>'+({assistant:'Auxiliar',fitnessCoach:'Preparador físico',scout:'Chefe de scout',medical:'Departamento médico'})[id]+'</span><strong>'+rating+'</strong><button class="btn btn-small" data-action="upgrade-staff" data-staff="'+id+'">Melhorar</button></div>').join('')+'</article><article class="panel"><h2>Instalações e obras</h2>'+Object.entries(c.facilities).map(([id,level])=>'<div class="staff-row"><span>'+facilityNames[id]+'</span><strong>Nível '+level+'/5</strong><button class="btn btn-small" data-action="upgrade-facility" data-facility="'+id+'" '+(level>=5?'disabled':'')+'>Evoluir</button></div>').join('')+'</article><article class="panel"><h2>Carreira do treinador</h2><p><strong>Nível '+c.manager.level+'</strong> · '+escapeHtml(c.manager.license)+'</p><p>'+c.manager.xp+' XP · '+c.manager.awards.length+' prêmio(s)</p><ul class="objective-list">'+c.manager.awards.slice(-4).map(a=>'<li>'+escapeHtml(a)+'</li>').join('')+'</ul></article><article class="panel"><h2>Objetivos da diretoria</h2><ul class="objective-list"><li>Metade superior da '+escapeHtml(c.club.leagueName)+'</li><li>Quartas de final da copa nacional</li><li>Manter folha salarial sustentável</li><li>Desenvolver a reputação do treinador</li></ul></article>'+offers+'</div><div class="table-wrap"><table class="data-table"><thead><tr><th>Data</th><th>Movimentação</th><th>Valor</th></tr></thead><tbody>'+ledger+'</tbody></table></div>';
+  return sectionHead('Gestão total do clube','Finanças, diretoria, instalações, patrocínio e carreira executiva.')+'<div class="world-metric-grid club-metrics"><div><span>Saldo</span><strong>'+money(c.budget)+'</strong></div><div><span>Folha mensal</span><strong>'+money(payroll)+'</strong></div><div><span>Valor do elenco</span><strong>'+money(value)+'</strong></div><div><span>Diretoria</span><strong>'+c.board+'%</strong></div></div>'+renderFacilitiesCampus(c)+renderSponsorPanel(c)+'<div class="club-admin-grid"><article class="panel"><h2>Comissão técnica</h2>'+Object.entries(c.staff).map(([id,rating])=>'<div class="staff-row"><span>'+({assistant:'Auxiliar',fitnessCoach:'Preparador físico',scout:'Chefe de scout',medical:'Departamento médico'})[id]+'</span><strong>'+rating+'</strong><button class="btn btn-small" data-action="upgrade-staff" data-staff="'+id+'">Melhorar</button></div>').join('')+'</article><article class="panel"><h2>Instalações e obras</h2>'+Object.entries(c.facilities).map(([id,level])=>'<div class="staff-row"><span>'+facilityNames[id]+'</span><strong>Nível '+level+'/5</strong><button class="btn btn-small" data-action="upgrade-facility" data-facility="'+id+'" '+(level>=5?'disabled':'')+'>Evoluir</button></div>').join('')+'</article><article class="panel"><h2>Carreira do treinador</h2><p><strong>Nível '+c.manager.level+'</strong> · '+escapeHtml(c.manager.license)+'</p><p>'+c.manager.xp+' XP · '+c.manager.awards.length+' prêmio(s)</p><ul class="objective-list">'+c.manager.awards.slice(-4).map(a=>'<li>'+escapeHtml(a)+'</li>').join('')+'</ul></article><article class="panel"><h2>Objetivos da diretoria</h2><div class="board-objectives">'+c.boardObjectives.map(objective=>'<div class="board-objective '+objective.status+'"><span><strong>'+escapeHtml(objective.label)+'</strong><small>'+Math.min(objective.progress,objective.target)+' / '+objective.target+' '+escapeHtml(objective.unit)+'</small></span><i><em style="width:'+clamp(objective.progress/objective.target*100,0,100)+'%"></em></i><b>'+(objective.status==='complete'?'✓':'+'+objective.reward)+'</b></div>').join('')+'</div></article>'+offers+'</div><div class="table-wrap"><table class="data-table"><thead><tr><th>Data</th><th>Movimentação</th><th>Valor</th></tr></thead><tbody>'+ledger+'</tbody></table></div>';
 }
 
 function renderInbox() {
@@ -712,7 +791,8 @@ async function startMatch(source='club') {
   if(fixture.opponent.rosterPath){try{opponentRoster=(await fetchJson(fixture.opponent.rosterPath)).players.map(normalizePlayer);}catch{}}
   const ownRoster=national?national.roster:c.roster, ownIds=national?national.lineupIds:c.lineupIds;
   const ownLineup=lineupFor(ownRoster,ownIds),ownBench=ownRoster.filter(player=>!ownIds.includes(player.id)&&!player.suspended&&!player.injuredUntil).sort((a,b)=>b.overall-a.overall).slice(0,12);
-  session.match={source,fixture,minute:0,homeGoals:0,awayGoals:0,possessionHome:50,shotsHome:0,shotsAway:0,shotsOnTargetHome:0,shotsOnTargetAway:0,xgHome:0,xgAway:0,cardsHome:0,cardsAway:0,speed:1,running:false,finished:false,tacticalOpen:false,tacticalWasRunning:false,liveSelectedPlayer:null,substitutionsUsed:0,maxSubstitutions:5,substitutionHistory:[],substitutedOut:[],events:[{minute:0,text:'As equipes estão posicionadas. O árbitro autoriza o início.'}],ownLineup,ownBench,opponentLineup:opponentRoster.length?pickLineup(opponentRoster):[],ownTactics:{...c.tactics},tacticalPositions:(c.tacticalPositions||FORMATIONS[c.tactics.formation]||FORMATIONS['4-3-3']).map(point=>[...point]),ball:{x:50,y:50},attacking:'home'};
+  session.match={source,fixture,minute:0,homeGoals:0,awayGoals:0,possessionHome:50,shotsHome:0,shotsAway:0,shotsOnTargetHome:0,shotsOnTargetAway:0,xgHome:0,xgAway:0,cardsHome:0,cardsAway:0,speed:1,running:false,finished:false,tacticalOpen:false,tacticalWasRunning:false,liveSelectedPlayer:null,substitutionsUsed:0,maxSubstitutions:5,substitutionHistory:[],substitutedOut:[],randomState:stableNumber(fixture.id+':'+c.season+':'+c.club.id),momentum:50,opponentPlan:'Equilibrado',coachInsight:'O jogo começa equilibrado. Observe posse, desgaste e qualidade das chances.',events:[{minute:0,type:'tactical',text:'As equipes estão posicionadas. O árbitro autoriza o início.'}],ownLineup,ownBench,opponentLineup:opponentRoster.length?pickLineup(opponentRoster):[],ownTactics:{...c.tactics},tacticalPositions:(c.tacticalPositions||FORMATIONS[c.tactics.formation]||FORMATIONS['4-3-3']).map(point=>[...point]),ball:{x:50,y:50},attacking:'home'};
+  session.matchEventFilter='all';
   session.screen='match';history.pushState({screen:'match'},'','#/match');renderMatch();
 }
 
@@ -741,18 +821,30 @@ function liveTacticsPanel(){const m=session.match;if(!m?.tacticalOpen)return '';
 
 function selectLivePlayer(playerId){const m=session.match;if(!m)return;if(m.liveSelectedPlayer&&m.liveSelectedPlayer!==playerId){const first=m.liveSelectedPlayer;m.liveSelectedPlayer=null;makeLiveSwap(first,playerId);}else{m.liveSelectedPlayer=playerId;renderMatch();}}
 
-function makeLiveSwap(firstId,secondId){const m=session.match;if(!m)return;const firstStarter=m.ownLineup.findIndex(player=>player.id===firstId),secondStarter=m.ownLineup.findIndex(player=>player.id===secondId),firstBench=m.ownBench.findIndex(player=>player.id===firstId),secondBench=m.ownBench.findIndex(player=>player.id===secondId);if(firstStarter>=0&&secondStarter>=0){[m.ownLineup[firstStarter],m.ownLineup[secondStarter]]=[m.ownLineup[secondStarter],m.ownLineup[firstStarter]];m.events.push({minute:m.minute,text:'A equipe reorganiza funções e posicionamento.'});renderMatch();return;}const starterIndex=firstStarter>=0?firstStarter:secondStarter,benchIndex=firstBench>=0?firstBench:secondBench;if(starterIndex<0||benchIndex<0)return;if(m.substitutionsUsed>=m.maxSubstitutions)return toast('Limite de substituições atingido.','error');const outgoing=m.ownLineup[starterIndex],incoming=m.ownBench[benchIndex];m.ownLineup[starterIndex]=incoming;m.ownBench.splice(benchIndex,1);m.substitutedOut.push(outgoing);m.substitutionsUsed++;m.substitutionHistory.push({minute:m.minute,out:outgoing.name,in:incoming.name});m.events.push({minute:m.minute,text:'SUBSTITUIÇÃO: sai '+outgoing.name+', entra '+incoming.name+'.'});renderMatch();toast(incoming.name+' entrou no lugar de '+outgoing.name+'.','success');}
+function makeLiveSwap(firstId,secondId){const m=session.match;if(!m)return;const firstStarter=m.ownLineup.findIndex(player=>player.id===firstId),secondStarter=m.ownLineup.findIndex(player=>player.id===secondId),firstBench=m.ownBench.findIndex(player=>player.id===firstId),secondBench=m.ownBench.findIndex(player=>player.id===secondId);if(firstStarter>=0&&secondStarter>=0){[m.ownLineup[firstStarter],m.ownLineup[secondStarter]]=[m.ownLineup[secondStarter],m.ownLineup[firstStarter]];m.events.push({minute:m.minute,type:'tactical',text:'A equipe reorganiza funções e posicionamento.'});renderMatch();return;}const starterIndex=firstStarter>=0?firstStarter:secondStarter,benchIndex=firstBench>=0?firstBench:secondBench;if(starterIndex<0||benchIndex<0)return;if(m.substitutionsUsed>=m.maxSubstitutions)return toast('Limite de substituições atingido.','error');const outgoing=m.ownLineup[starterIndex],incoming=m.ownBench[benchIndex];m.ownLineup[starterIndex]=incoming;m.ownBench.splice(benchIndex,1);m.substitutedOut.push(outgoing);m.substitutionsUsed++;m.substitutionHistory.push({minute:m.minute,out:outgoing.name,in:incoming.name});m.events.push({minute:m.minute,type:'tactical',text:'SUBSTITUIÇÃO: sai '+outgoing.name+', entra '+incoming.name+'.'});renderMatch();toast(incoming.name+' entrou no lugar de '+outgoing.name+'.','success');}
 
 function bindMatchControls(){
   const root=app.querySelector('.world-match');if(!root)return;
-  const directActions=new Set(['toggle-match','match-speed','finish-match','open-live-tactics','close-live-tactics','live-player-select','live-preset','exit-match']);
+  const directActions=new Set(['toggle-match','match-speed','finish-match','open-live-tactics','close-live-tactics','live-player-select','live-preset','match-event-filter','exit-match']);
   root.querySelectorAll('[data-action]').forEach(target=>{if(!directActions.has(target.dataset.action))return;target.onclick=event=>{event.stopPropagation();handleAction(target.dataset.action,target);};});
+}
+
+function matchInsight(m){
+  const ownHome=teamOnHome(),ownXg=ownHome?m.xgHome:m.xgAway,oppXg=ownHome?m.xgAway:m.xgHome,fitness=Math.round(average(m.ownLineup.map(player=>player.fitness)));
+  if(fitness<68)return 'O time perdeu intensidade. Faça substituições ou reduza pressão e ritmo.';
+  if(oppXg-ownXg>.45)return 'O adversário cria chances melhores. Proteja a entrada da área ou recue a linha.';
+  if(ownXg-oppXg>.45)return 'Seu plano está criando as melhores oportunidades. Mantenha a estrutura.';
+  if(m.minute>60&&m.opponentPlan==='Ofensivo')return 'O adversário avançou as linhas. Há espaço para contra-atacar.';
+  if((ownHome&&m.possessionHome>58)||(!ownHome&&m.possessionHome<42))return 'Você controla a posse, mas precisa transformar domínio em finalizações.';
+  return 'Partida equilibrada. Ritmo, pressão e desgaste explicam a variação das chances.';
 }
 
 function renderMatch() {
   const m=session.match,teams=matchTeams();
-  const commentary=m.events.slice().reverse().slice(0,9).map(e=>'<li><strong>'+e.minute+'’</strong><span>'+escapeHtml(e.text)+'</span></li>').join('');
-  app.innerHTML='<main class="screen match-screen world-match" onclick="window.__vfmMatchAction(event)"><header class="match-scoreboard"><div><img src="./'+escapeHtml(teams.home.badge)+'" alt="" onerror="__vfmFallback(event)"><strong>'+escapeHtml(teams.home.name)+'</strong></div><span class="score">'+m.homeGoals+' · '+m.awayGoals+'</span><span class="clock">'+m.minute+'’</span><div><strong>'+escapeHtml(teams.away.name)+'</strong><img src="./'+escapeHtml(teams.away.badge)+'" alt="" onerror="__vfmFallback(event)"></div></header><section class="match-world-layout"><aside class="match-side"><h2>Narração</h2><ul class="commentary-list">'+commentary+'</ul></aside><div class="visual-pitch" aria-label="Campo com vinte e dois jogadores"><div class="pitch-markings"></div>'+pitchPlayers()+'<div class="match-ball" style="left:'+m.ball.x+'%;top:'+m.ball.y+'%"></div></div><aside class="match-side"><h2>Estatísticas</h2><div class="stat-row"><strong>'+m.possessionHome+'%</strong><span>Posse</span><strong>'+(100-m.possessionHome)+'%</strong></div><div class="stat-row"><strong>'+m.shotsHome+'</strong><span>Finalizações</span><strong>'+m.shotsAway+'</strong></div><div class="stat-row"><strong>'+m.xgHome.toFixed(1)+'</strong><span>xG</span><strong>'+m.xgAway.toFixed(1)+'</strong></div><div class="tactic-live"><span>Formação</span><strong>'+escapeHtml(m.ownTactics.formation)+'</strong><span>Mentalidade</span><strong>'+escapeHtml(m.ownTactics.mentality)+'</strong><span>Substituições</span><strong>'+m.substitutionsUsed+'/'+m.maxSubstitutions+'</strong></div></aside></section><footer class="match-controls"><button class="btn" data-action="exit-match">Sair</button>'+(m.finished?'<button class="btn btn-primary" data-action="finish-match">Entrevista pós-jogo</button>':'<button class="btn" data-action="open-live-tactics">Tática e substituições</button><button class="btn btn-primary" data-action="toggle-match">'+(m.running?'Pausar':'Começar')+'</button><button class="btn '+(m.speed===1?'active':'')+'" data-action="match-speed" data-speed="1">1×</button><button class="btn '+(m.speed===3?'active':'')+'" data-action="match-speed" data-speed="3">3×</button><button class="btn '+(m.speed===6?'active':'')+'" data-action="match-speed" data-speed="6">6×</button>')+'</footer>'+liveTacticsPanel()+'</main>';bindMatchControls();
+  const visibleEvents=m.events.filter(event=>session.matchEventFilter==='all'||event.type===session.matchEventFilter),commentary=visibleEvents.slice().reverse().slice(0,12).map(e=>'<li class="event-'+escapeHtml(e.type||'info')+'"><strong>'+e.minute+'’</strong><span>'+escapeHtml(e.text)+'</span></li>').join('');
+  const ownHome=teamOnHome(),fitness=Math.round(average(m.ownLineup.map(player=>player.fitness))),momentum=ownHome?m.momentum:100-m.momentum;m.coachInsight=matchInsight(m);
+  const filters=[['all','Todos'],['goal','Gols'],['chance','Chances'],['tactical','Tática']].map(([id,label])=>'<button class="'+(session.matchEventFilter===id?'active':'')+'" data-action="match-event-filter" data-filter="'+id+'">'+label+'</button>').join('');
+  app.innerHTML='<main class="screen match-screen world-match" onclick="window.__vfmMatchAction(event)"><header class="match-scoreboard"><div><img src="./'+escapeHtml(teams.home.badge)+'" alt="" onerror="__vfmFallback(event)"><strong>'+escapeHtml(teams.home.name)+'</strong></div><span class="score">'+m.homeGoals+' · '+m.awayGoals+'</span><span class="clock">'+m.minute+'’</span><div><strong>'+escapeHtml(teams.away.name)+'</strong><img src="./'+escapeHtml(teams.away.badge)+'" alt="" onerror="__vfmFallback(event)"></div></header><section class="match-world-layout"><aside class="match-side commentary-panel"><h2>Momentos-chave</h2><div class="event-filters">'+filters+'</div><ul class="commentary-list">'+(commentary||'<li><span>Nenhum evento neste filtro.</span></li>')+'</ul></aside><div class="visual-pitch" aria-label="Campo com vinte e dois jogadores"><div class="pitch-markings"></div><div class="pressure-map"><i style="opacity:'+(m.possessionHome/100)+'"></i><b style="opacity:'+((100-m.possessionHome)/100)+'"></b></div>'+pitchPlayers()+'<div class="match-ball" style="left:'+m.ball.x+'%;top:'+m.ball.y+'%"></div><div class="momentum-meter"><span>Pressão do seu time</span><i><em style="width:'+momentum+'%"></em></i><b>'+Math.round(momentum)+'%</b></div></div><aside class="match-side stats-panel"><h2>Leitura da partida</h2><div class="coach-insight"><span>Auxiliar</span><p>'+escapeHtml(m.coachInsight)+'</p></div><div class="stat-row"><strong>'+m.possessionHome+'%</strong><span>Posse</span><strong>'+(100-m.possessionHome)+'%</strong></div><div class="stat-row"><strong>'+m.shotsHome+' ('+m.shotsOnTargetHome+')</strong><span>Finalizações (alvo)</span><strong>'+m.shotsAway+' ('+m.shotsOnTargetAway+')</strong></div><div class="stat-row"><strong>'+m.xgHome.toFixed(1)+'</strong><span>xG</span><strong>'+m.xgAway.toFixed(1)+'</strong></div><div class="stat-row"><strong>'+fitness+'%</strong><span>Físico do seu time</span><strong>'+escapeHtml(m.opponentPlan)+'</strong></div><div class="tactic-live"><span>Formação</span><strong>'+escapeHtml(m.ownTactics.formation)+'</strong><span>Mentalidade</span><strong>'+escapeHtml(m.ownTactics.mentality)+'</strong><span>Substituições</span><strong>'+m.substitutionsUsed+'/'+m.maxSubstitutions+'</strong></div></aside></section><footer class="match-controls"><button class="btn" data-action="exit-match">Sair</button>'+(m.finished?'<button class="btn btn-primary" data-action="finish-match">Entrevista pós-jogo</button>':'<button class="btn" data-action="open-live-tactics">Tática e substituições</button><button class="btn btn-primary" data-action="toggle-match">'+(m.running?'Pausar':'Começar')+'</button><button class="btn '+(m.speed===1?'active':'')+'" data-action="match-speed" data-speed="1">1×</button><button class="btn '+(m.speed===3?'active':'')+'" data-action="match-speed" data-speed="3">3×</button><button class="btn '+(m.speed===6?'active':'')+'" data-action="match-speed" data-speed="6">6×</button>')+'</footer>'+liveTacticsPanel()+'</main>';bindMatchControls();
 }
 
 function startMatchTimer() {
@@ -764,35 +856,39 @@ function startMatchTimer() {
 
 function stopMatchTimer() { if(session.matchTimer){clearInterval(session.matchTimer);session.matchTimer=null;} if(session.match)session.match.running=false; }
 
+function matchRandom(m){m.randomState=(Math.imul(m.randomState||1,1664525)+1013904223)>>>0;return m.randomState/4294967296;}
+
 function tickMatch() {
   const m=session.match;if(!m||!m.running||m.finished)return;
   m.minute=Math.min(90,m.minute+m.speed);
-  const t=m.ownTactics;
-  const tacticBias=(t.mentality==='Ofensiva'?5:t.mentality==='Defensiva'?-3:0)+(t.passing==='Curto'?2:t.passing==='Direto'?-1:0)+(t.width-55)/15;
+  const t=m.ownTactics,impact=tacticalImpact(t);
+  const tacticBias=(impact.attack+impact.control+impact.defense-150)/12+(t.transition==='Contra-atacar'&&m.opponentPlan==='Ofensivo'?4:0);
   const ownQuality=average(m.ownLineup.map(player=>player.overall*(.82+player.fitness/500))),opponentQuality=average(m.opponentLineup.map(player=>player.overall))||m.fixture.opponent.rating;
-  const qualityBias=(ownQuality-opponentQuality)/3,bias=tacticBias+qualityBias+(teamOnHome()?3:-3);
-  m.possessionHome=clamp(Math.round(50+(teamOnHome()?bias:-bias)+Math.sin(m.minute/8)*5),34,66);
-  const homeAttack=Math.random()<(m.possessionHome/100);
+  const opponentBias=m.opponentPlan==='Ofensivo'?4:m.opponentPlan==='Conservador'?-2:0,qualityBias=(ownQuality-opponentQuality)/3,ownBias=tacticBias+qualityBias-opponentBias,bias=teamOnHome()?ownBias+3:-ownBias+3;
+  m.possessionHome=clamp(Math.round(50+bias+Math.sin(m.minute/8)*4),32,68);
+  m.momentum=clamp(m.momentum*.72+m.possessionHome*.28,20,80);
+  const homeAttack=matchRandom(m)<(m.possessionHome/100);
   m.attacking=homeAttack?'home':'away';
-  const coords=FORMATIONS[session.career.tactics.formation]||FORMATIONS['4-3-3'];
-  const idx=Math.floor(Math.random()*coords.length),point=coords[idx];
+  const coords=FORMATIONS[m.ownTactics.formation]||FORMATIONS['4-3-3'];
+  const idx=Math.floor(matchRandom(m)*coords.length),point=coords[idx];
   m.ball={x:homeAttack?point[0]:100-point[0],y:homeAttack?point[1]:100-point[1]};
-  if(m.minute>0&&(m.minute%6<=m.speed-1||Math.random()<.09)){
+  if(m.minute>0&&(m.minute%6<=m.speed-1||matchRandom(m)<.09)){
     if(homeAttack)m.shotsHome++;else m.shotsAway++;
     const teams=matchTeams(),team=homeAttack?teams.home:teams.away;
     const creation=(t.tempo-55)/500+(t.transition==='Contra-atacar'?.018:t.transition==='Reagrupar'?-.012:0)+(t.pressure-55)/800;
     const defensiveRisk=(t.defensiveLine-52)/900+(t.marking==='Individual'?.008:t.marking==='Híbrida'?.004:0);
     const managedAttack=homeAttack===teamOnHome();
-    const shotXg=clamp(.06+Math.random()*.24+(managedAttack?(ownQuality-opponentQuality)/500:0)+creation,.03,.55);if(homeAttack)m.xgHome+=shotXg;else m.xgAway+=shotXg;
-    const onTarget=Math.random()<clamp(.36+shotXg,.3,.78);if(onTarget){if(homeAttack)m.shotsOnTargetHome++;else m.shotsOnTargetAway++;}
-    const goal=onTarget&&Math.random()<clamp(shotXg+(managedAttack?creation:defensiveRisk),.05,.48);
-    if(goal){if(homeAttack)m.homeGoals++;else m.awayGoals++;const scorer=managedAttack?m.ownLineup[Math.floor(Math.random()*m.ownLineup.length)]:null;m.events.push({minute:m.minute,text:'GOL! '+team.name+' conclui a jogada'+(scorer?' com '+scorer.name:'')+'.'});}
-    else m.events.push({minute:m.minute,text:team.name+': '+(onTarget?'finalização defendida pelo goleiro.':'chute para fora após movimentação entre as linhas.')});
-  } else if(m.minute%9<=m.speed-1) m.events.push({minute:m.minute,text:'As equipes ajustam as linhas e disputam espaço no meio-campo.'});
-  if(m.minute>8&&Math.random()<.012*m.speed){const homeCard=Math.random()<.5;if(homeCard)m.cardsHome++;else m.cardsAway++;m.events.push({minute:m.minute,text:'Cartão amarelo após uma disputa forte no meio-campo.'});}
-  if(m.minute>12&&m.minute<82&&Math.random()<.004*m.speed&&m.ownLineup.length){const player=m.ownLineup[Math.floor(Math.random()*m.ownLineup.length)];player.fitness=clamp(player.fitness-18,1,100);m.events.push({minute:m.minute,text:'ATENÇÃO: '+player.name+' sente desconforto e pode precisar ser substituído.'});}
-  if(m.minute>=60&&!m.opponentChanged){m.opponentChanged=true;m.events.push({minute:m.minute,text:m.fixture.opponent.name+' faz alterações táticas e renova o ataque.'});}
-  if(m.minute>=90){m.finished=true;m.running=false;clearInterval(session.matchTimer);session.matchTimer=null;m.events.push({minute:90,text:'Fim de jogo.'});}
+    const shotXg=clamp(.06+matchRandom(m)*.24+(managedAttack?(ownQuality-opponentQuality)/500+creation:opponentBias/300+defensiveRisk),.03,.55);if(homeAttack)m.xgHome+=shotXg;else m.xgAway+=shotXg;
+    const onTarget=matchRandom(m)<clamp(.36+shotXg,.3,.78);if(onTarget){if(homeAttack)m.shotsOnTargetHome++;else m.shotsOnTargetAway++;}
+    const goal=onTarget&&matchRandom(m)<clamp(shotXg+(managedAttack?creation:defensiveRisk),.05,.48);
+    if(goal){if(homeAttack)m.homeGoals++;else m.awayGoals++;const scorer=managedAttack?m.ownLineup[Math.floor(matchRandom(m)*m.ownLineup.length)]:null;m.events.push({minute:m.minute,type:'goal',text:'GOL! '+team.name+' conclui a jogada'+(scorer?' com '+scorer.name:'')+'.'});}
+    else m.events.push({minute:m.minute,type:'chance',text:team.name+': '+(onTarget?'finalização defendida pelo goleiro.':'chute para fora após movimentação entre as linhas.')});
+  } else if(m.minute%9<=m.speed-1) m.events.push({minute:m.minute,type:'tactical',text:'As equipes ajustam as linhas e disputam espaço no meio-campo.'});
+  if(m.minute%5<=m.speed-1){const fatigue=.18+impact.intensity/220;m.ownLineup.forEach(player=>player.fitness=clamp(player.fitness-fatigue,1,100));}
+  if(m.minute>8&&matchRandom(m)<.012*m.speed){const homeCard=matchRandom(m)<.5;if(homeCard)m.cardsHome++;else m.cardsAway++;m.events.push({minute:m.minute,type:'discipline',text:'Cartão amarelo após uma disputa forte no meio-campo.'});}
+  if(m.minute>12&&m.minute<82&&matchRandom(m)<.004*m.speed&&m.ownLineup.length){const player=m.ownLineup[Math.floor(matchRandom(m)*m.ownLineup.length)];player.fitness=clamp(player.fitness-18,1,100);m.events.push({minute:m.minute,type:'injury',text:'ATENÇÃO: '+player.name+' sente desconforto e pode precisar ser substituído.'});}
+  if(m.minute>=55&&!m.opponentChanged){const opponentGoals=teamOnHome()?m.awayGoals:m.homeGoals,ownGoals=teamOnHome()?m.homeGoals:m.awayGoals;m.opponentChanged=true;m.opponentPlan=opponentGoals<ownGoals?'Ofensivo':opponentGoals>ownGoals?'Conservador':'Pressão alta';m.events.push({minute:m.minute,type:'tactical',text:m.fixture.opponent.name+' reage ao placar e muda para um plano '+m.opponentPlan.toLowerCase()+'.'});}
+  if(m.minute>=90){m.finished=true;m.running=false;clearInterval(session.matchTimer);session.matchTimer=null;m.events.push({minute:90,type:'tactical',text:'Fim de jogo.'});}
   renderMatch();
 }
 
@@ -845,7 +941,7 @@ function finishMatch() {
       c.messages.push({id:'qualification-'+Date.now(),from:'FIFA',subject:n.qualified?'Classificação para a Copa do Mundo':'Fim das Eliminatórias',body:n.qualified?'A seleção garantiu vaga na Copa do Mundo de 2026.':'A campanha terminou abaixo da linha de classificação para a Copa do Mundo.',date:new Date().toISOString(),read:false,priority:'high'});
     }
   }
-  c.manager.level=1+Math.floor(c.manager.xp/500);processCareerDeadlines(c);simulateWorldWeek();c.tactics={...m.ownTactics};persist();showPostMatchInterview(ownGoals,oppGoals);
+  c.manager.level=1+Math.floor(c.manager.xp/500);c.weeklyDecisions={training:false,squad:false,tactics:false};processCareerDeadlines(c);updateBoardObjectives(c);simulateWorldWeek();c.tactics={...m.ownTactics};persist();showPostMatchInterview(ownGoals,oppGoals);
 }
 
 function showPostMatchInterview(ownGoals,oppGoals){const result=ownGoals>oppGoals?'vitória':ownGoals<oppGoals?'derrota':'empate',m=session.match;showModal('Entrevista pós-jogo','<div class="press-room"><p class="eyebrow">COLETIVA · '+m.fixture.competitionName+'</p><h3>“Como você avalia a '+result+' e as decisões tomadas durante a partida?”</h3><p>Suas palavras afetam elenco, diretoria, torcida e reputação.</p><div class="press-summary"><span>Placar <strong>'+ownGoals+'–'+oppGoals+'</strong></span><span>xG <strong>'+m.xgHome.toFixed(1)+'–'+m.xgAway.toFixed(1)+'</strong></span><span>Alterações <strong>'+m.substitutionsUsed+'</strong></span></div></div>','<button class="btn" data-action="post-interview" data-tone="calm">Valorizar o coletivo</button><button class="btn" data-action="post-interview" data-tone="demanding">Cobrar evolução</button><button class="btn btn-primary" data-action="post-interview" data-tone="protective">Proteger os jogadores</button>');}
@@ -913,7 +1009,7 @@ function applyTraining(plan) {
   const c=session.career;if(c.lastTrainingWeek===c.week)return;
   const effects={recovery:[8,2],tactical:[2,3],intensity:[-8,4],finishing:[-3,4],setpieces:[-2,3]},[fitness,morale]=effects[plan]||[0,0];
   const developmentChance=.015+c.facilities.training*.008;
-  c.fitness=clamp(c.fitness+fitness+c.facilities.medical,20,100);c.morale=clamp(c.morale+morale,20,100);c.roster.forEach(p=>{p.fitness=clamp(p.fitness+fitness+c.facilities.medical,20,100);p.morale=clamp(p.morale+morale,20,100);const focus=c.individualTraining[p.id]||'Equilibrado',attribute={Físico:'stamina',Técnica:'technique',Passe:'passing',Finalização:'finishing',Defesa:'tackling'}[focus];if(attribute&&Math.random()<developmentChance*2)p.attributes[attribute]=clamp(p.attributes[attribute]+1,1,99);if(p.age<=24&&p.overall<p.potential&&Math.random()<developmentChance)p.overall++;});c.lastTrainingWeek=c.week;persist();renderGame(renderTraining());toast('Microciclo aplicado; instalações e planos individuais influenciaram a evolução.','success');
+  c.fitness=clamp(c.fitness+fitness+c.facilities.medical,20,100);c.morale=clamp(c.morale+morale,20,100);c.roster.forEach(p=>{p.fitness=clamp(p.fitness+fitness+c.facilities.medical,20,100);p.morale=clamp(p.morale+morale,20,100);const focus=c.individualTraining[p.id]||'Equilibrado',attribute={Físico:'stamina',Técnica:'technique',Passe:'passing',Finalização:'finishing',Defesa:'tackling'}[focus];if(attribute&&Math.random()<developmentChance*2)p.attributes[attribute]=clamp(p.attributes[attribute]+1,1,99);if(p.age<=24&&p.overall<p.potential&&Math.random()<developmentChance)p.overall++;});c.lastTrainingWeek=c.week;c.weeklyDecisions.training=true;const development=c.boardObjectives.find(item=>item.id==='develop-player');if(development)development.progress=Math.min(development.target,development.progress+c.roster.filter(player=>player.age<=23).length);updateBoardObjectives(c);persist();renderGame(renderTraining());toast('Microciclo aplicado; instalações e planos individuais influenciaram a evolução.','success');
 }
 
 function createYouthIntake(){const c=session.career;if(c.youthIntakeSeason===c.season)return;const first=['Lucas','Gabriel','Matheus','Rafael','João','Pedro','Caio','Davi','Thiago','Bruno'],last=['Silva','Santos','Oliveira','Costa','Souza','Lima','Alves','Rocha','Mendes','Pereira'],positions=['GOL','ZAG','LD','LE','VOL','MC','MEI','PD','PE','ATA'],count=4+c.facilities.youth;c.youthPlayers=Array.from({length:count},(_,index)=>{const seed=stableNumber(c.club.id+':'+c.season+':'+index),overall=clamp(45+c.facilities.youth*3+seed%9,40,72),potential=clamp(overall+8+seed%18,overall,92);return normalizePlayer({id:'youth-'+c.season+'-'+seed,name:first[seed%first.length]+' '+last[(seed>>3)%last.length],pos:positions[(seed>>5)%positions.length],role:'Revelação da academia',overall,potential,age:15+seed%3,salary:2,value:.08,fitness:94,morale:82,personality:['Determinado','Profissional','Ambicioso'][seed%3]},index);});c.youthIntakeSeason=c.season;c.messages.push({id:'youth-'+Date.now(),from:'Diretor da academia',subject:'Nova geração avaliada',body:count+' jovens foram incorporados à academia. A qualidade reflete o nível atual das instalações.',date:new Date().toISOString(),read:false,priority:'high'});unlockAchievement('academy-class','Olheiro de talentos','Avalie sua primeira geração anual da academia.');persist();renderGame(renderTraining());toast('Nova geração da academia disponível.','success');}
@@ -959,11 +1055,20 @@ function confirmTransfer(target) {
   session.career.budget-=initial;session.career.roster.push({...p,salary:Math.round(salary/1000),contractUntil:(session.career.season+years)+'-06-30',releaseClause,transferFee:fee});session.career.ledger.push({date:new Date().toISOString(),label:'Transferência · '+p.name+' · parcela 1/'+installments+' + luvas e comissão',amount:-initial,type:'expense',remainingInstallments:installments-1,totalFee:fee});if(installments>1){session.career.transferObligations.push({id:'transfer-'+Date.now(),playerId:p.id,playerName:p.name,remainingBalance:Math.max(0,fee-firstInstallment),installmentAmount,nextDue:addDays(session.career.date,30),remainingInstallments:installments-1});}session.career.messages.push({id:'transfer-'+Date.now(),from:'Diretor de futebol',subject:'Contratação concluída: '+p.name,body:'Contrato de '+years+' temporadas. Salário: '+money(salary)+'. Taxa: '+money(fee)+' em '+installments+' parcela(s).',date:new Date().toISOString(),read:false,priority:'normal'});session.market=session.market.filter(item=>item.id!==id);unlockAchievement('first-signing','Primeira contratação','Conclua uma negociação internacional de transferência.');closeModal();persist();renderGame(renderMarket());toast(p.name+' assinou por '+years+' temporadas.','success');
 }
 
-function playerReport(id){const p=session.market.find(item=>item.id===id)||session.career.roster.find(item=>item.id===id);if(!p)return;const attrs=Object.entries(p.attributes||{}).map(([key,value])=>'<div><span>'+escapeHtml(({pace:'Velocidade',stamina:'Resistência',strength:'Força',passing:'Passe',technique:'Técnica',vision:'Visão',finishing:'Finalização',tackling:'Desarme',positioning:'Posicionamento',decisions:'Decisões',teamwork:'Trabalho em equipe',leadership:'Liderança'})[key]||key)+'</span><strong>'+value+'</strong></div>').join('');showModal('Relatório · '+p.name,'<div class="player-report"><header><img src="'+escapeHtml(playerPhoto(p))+'" alt=""><div><h3>'+escapeHtml(p.name)+'</h3><p>'+p.pos+' · '+p.age+' anos · '+escapeHtml(p.personality)+'</p><strong>GER '+p.overall+' · POT '+p.potential+'</strong></div></header><div class="attribute-grid">'+attrs+'</div><p>Risco de lesão: '+p.injuryRisk+'% · Conhecimento do scout: '+p.knowledge+'% · Contrato: '+escapeHtml(p.contractUntil)+'</p></div>');}
+function playerReport(id){
+  const p=session.market.find(item=>item.id===id)||session.career.roster.find(item=>item.id===id);if(!p)return;
+  const attrs=Object.entries(p.attributes||{}).map(([key,value])=>'<div><span>'+escapeHtml(({pace:'Velocidade',stamina:'Resistência',strength:'Força',passing:'Passe',technique:'Técnica',vision:'Visão',finishing:'Finalização',tackling:'Desarme',positioning:'Posicionamento',decisions:'Decisões',teamwork:'Trabalho em equipe',leadership:'Liderança'})[key]||key)+'</span><strong>'+value+'</strong></div>').join('');
+  const media=licensedPlayerMedia(p),identity=media?'Foto real do Wikimedia Commons · '+escapeHtml(media.license.name)+' · '+escapeHtml(media.credit||'crédito no manifesto'):'Foto genérica provisória criada para o VFM; este jogador ainda não possui correspondência real verificada.';
+  const details=[p.nationality,p.foot?('Pé '+p.foot):'',p.height?(p.height+' cm'):''].filter(Boolean).map(escapeHtml).join(' · ');
+  const actions=p.onLoan&&p.purchaseOption?'<button class="btn" data-action="close-modal">Fechar</button><button class="btn btn-primary" data-action="exercise-purchase-option" data-player="'+escapeHtml(p.id)+'">Comprar por '+money(p.purchaseOption)+'</button>':'<button class="btn btn-primary" data-action="close-modal">Fechar</button>';
+  showModal('Relatório · '+p.name,'<div class="player-report"><header>'+playerPortrait(p,'large')+'<div><h3>'+escapeHtml(p.name)+'</h3><p>'+p.pos+' · '+p.age+' anos · '+escapeHtml(p.personality)+'</p><strong>GER '+p.overall+' · POT '+p.potential+'</strong><small>'+details+'</small></div></header><div class="identity-source">'+identity+'</div><div class="attribute-grid">'+attrs+'</div><p>Risco de lesão: '+p.injuryRisk+'% · Conhecimento do scout: '+p.knowledge+'% · Contrato: '+escapeHtml(p.contractUntil)+'</p></div>',actions);
+}
 
 function loanPlayer(id){const p=session.market.find(item=>item.id===id);if(!p)return;const fee=Math.max(100000,Math.round(p.value*1000000*.06)),wage=Math.max(10000,p.salary*1000);showModal('Empréstimo · '+p.name,'<p>Proposta de empréstimo até o fim da temporada, com taxa de <strong>'+money(fee)+'</strong> e 70% dos salários.</p><p>Uma opção de compra de '+money(p.value*1000000)+' será registrada.</p>','<button class="btn" data-action="close-modal">Cancelar</button><button class="btn btn-primary" data-action="confirm-loan" data-player="'+p.id+'" data-fee="'+fee+'" data-wage="'+wage+'">Enviar proposta</button>');}
 
 function confirmLoan(target){const p=session.market.find(item=>item.id===target.dataset.player),fee=Number(target.dataset.fee),wage=Number(target.dataset.wage);if(!p)return;if(session.career.budget<fee)return toast('Orçamento insuficiente.','error');session.career.budget-=fee;session.career.roster.push({...p,onLoan:true,loanUntil:session.career.season+'-12-31',salary:Math.round(wage*.7/1000),purchaseOption:p.value*1000000});session.career.ledger.push({date:new Date().toISOString(),label:'Empréstimo · '+p.name,amount:-fee,type:'expense'});session.market=session.market.filter(item=>item.id!==p.id);closeModal();persist();renderGame(renderMarket());toast('Empréstimo concluído.','success');}
+
+function exercisePurchaseOption(id){const c=session.career,p=c.roster.find(player=>player.id===id&&player.onLoan),cost=Number(p?.purchaseOption||0);if(!p||!cost)return;if(c.budget<cost)return toast('Saldo insuficiente para exercer a opção.','error');c.budget-=cost;p.onLoan=false;p.loanUntil=null;p.purchaseOption=0;p.contractUntil=(c.season+4)+'-12-31';c.ledger.push({date:new Date().toISOString(),label:'Opção de compra · '+p.name,amount:-cost,type:'expense'});c.messages.push({id:'loan-buy-'+Date.now(),from:'Diretor de futebol',subject:'Opção de compra exercida: '+p.name,body:'O atleta agora pertence em definitivo ao clube. Valor pago: '+money(cost)+'.',date:new Date().toISOString(),read:false,priority:'normal'});closeModal();persist();renderGame(renderSquad());toast(p.name+' foi contratado em definitivo.','success');}
 
 function exportSave() {
   const blob=new Blob([JSON.stringify(session.career,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='vale-futebol-manager-save-'+session.slot+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
@@ -1015,11 +1120,12 @@ function handleAction(action,target) {
   else if(action==='start-national-match')startMatch('national');
   else if(action==='toggle-match'){session.match.running?stopMatchTimer():startMatchTimer();renderMatch();}
   else if(action==='match-speed'){session.match.speed=Number(target.dataset.speed);if(!session.match.running)startMatchTimer();renderMatch();}
+  else if(action==='match-event-filter'){session.matchEventFilter=target.dataset.filter||'all';renderMatch();}
   else if(action==='finish-match')finishMatch();
   else if(action==='open-live-tactics'){session.match.tacticalWasRunning=session.match.running;stopMatchTimer();session.match.tacticalOpen=true;renderMatch();}
   else if(action==='close-live-tactics'){const resume=session.match.tacticalWasRunning;session.match.tacticalOpen=false;session.match.liveSelectedPlayer=null;session.career.tactics={...session.match.ownTactics};persist();if(resume)startMatchTimer();renderMatch();}
   else if(action==='live-player-select')selectLivePlayer(target.dataset.livePlayer);
-  else if(action==='live-preset'){const preset=target.dataset.preset,t=session.match.ownTactics;if(preset==='protect'){t.mentality='Defensiva';t.tempo=35;t.pressure=42;}else if(preset==='attack'){t.mentality='Ofensiva';t.tempo=78;t.pressure=82;}else{t.mentality='Equilibrada';t.transition='Contra-atacar';t.tempo=68;t.pressure=55;}session.match.events.push({minute:session.match.minute,text:'O treinador altera o plano: '+target.textContent+'.'});renderMatch();}
+  else if(action==='live-preset'){const preset=target.dataset.preset,t=session.match.ownTactics;if(preset==='protect'){t.mentality='Defensiva';t.tempo=35;t.pressure=42;}else if(preset==='attack'){t.mentality='Ofensiva';t.tempo=78;t.pressure=82;}else{t.mentality='Equilibrada';t.transition='Contra-atacar';t.tempo=68;t.pressure=55;}session.match.events.push({minute:session.match.minute,type:'tactical',text:'O treinador altera o plano: '+target.textContent+'.'});renderMatch();}
   else if(action==='post-interview')completePostMatchInterview(target.dataset.tone);
   else if(action==='exit-match'){const wasRunning=session.match.running;stopMatchTimer();session.matchWasRunningBeforeGate=wasRunning;showModal('Sair da partida?','<p>O jogo será interrompido sem registrar resultado.</p>','<button class="btn" data-action="resume-match-modal">Continuar partida</button><button class="btn btn-danger" data-action="abandon-match">Abandonar</button>');}
   else if(action==='resume-match-modal'){closeModal();if(session.matchWasRunningBeforeGate)startMatchTimer();renderMatch();}
@@ -1035,6 +1141,7 @@ function handleAction(action,target) {
   else if(action==='player-report')playerReport(target.dataset.player);
   else if(action==='loan-player')loanPlayer(target.dataset.player);
   else if(action==='confirm-loan')confirmLoan(target);
+  else if(action==='exercise-purchase-option')exercisePurchaseOption(target.dataset.player);
   else if(action==='open-mail')openMail(target.dataset.mail);
   else if(action==='accept-national')acceptNationalJob(target.dataset.team);
   else if(action==='accept-club-job')acceptClubJob(target.dataset.club);
@@ -1108,7 +1215,7 @@ window.addEventListener('popstate',()=>{if(session.career)navigate(location.hash
 
 async function boot() {
   try {
-    session.catalog=await fetchJson('data/world-catalog-2026.json');
+    const [catalog]=await Promise.all([fetchJson('data/world-catalog-2026.json'),loadPlayerMediaManifest()]);session.catalog=catalog;
     document.documentElement.classList.toggle('reduce-motion',store.settings.reducedMotion);
     renderCover();handleOrientation();
     if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});

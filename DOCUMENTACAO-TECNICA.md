@@ -10,6 +10,7 @@ A aplicação usa HTML, CSS e JavaScript nativos. Não há etapa de compilação
 - js/app-v16.js: estado, fluxo, renderização, persistência e sistemas ativos do jogo;
 - css/app.css, css/world-edition.css, css/world-edition-v11.css e css/ultimate-v16.css: componentes e camadas responsivas;
 - manifest.webmanifest: instalação PWA em retrato ou paisagem;
+- data/player-media-manifest.json: inventário único de fotografias com licença comercial;
 - sw.js: cache do shell, atualização e fallback offline.
 
 ## Estado e salvamento
@@ -35,12 +36,17 @@ Há três espaços independentes. Decisões importantes acionam autosave. A tela
 - escalação de até onze titulares;
 - quatro formações e três mentalidades;
 - pressão e ritmo ajustáveis;
-- quatro planos de treino;
+- cinco planos de treino;
 - calendário anual de clubes e seleções;
 - mercado carregado a partir de elencos adversários;
 - contratação, saldo e livro financeiro;
-- simulação de partida com força, posse, finalizações, gols e narração;
+- simulação reproduzível por partida com força, tática, posse, pressão, desgaste, reação do adversário, xG, finalizações, gols e momentos-chave;
+- planejador de elenco, impacto visual das táticas e objetivos mensuráveis da diretoria;
 - atualização de pontos, moral, confiança, condição e receita.
+
+## Identidade dos jogadores
+
+O campo `photoRemote` dos elencos nunca é carregado como imagem. `loadPlayerMediaManifest` aceita somente entradas que declarem `commercialUse: true`; jogadores sem mídia aprovada recebem uma identidade determinística baseada no próprio ID. O validador `tools/validate_player_media.py` rejeita duplicidade, jogador desconhecido, URL não segura, dimensão insuficiente, hash inválido ou licença sem referência.
 
 ## Orientação e ciclo de vida
 

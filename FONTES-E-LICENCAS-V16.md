@@ -34,6 +34,12 @@ Escudos e marcas pertencem aos titulares. Publicação comercial exige autoriza�
 
 O atlas `assets/avatars/manager-photoreal-atlas-v11.png` contém 16 personagens fictícios gerados, sem pessoas reais, celebridades, logotipos ou uniformes de clubes. Faces reais de jogadores não fazem parte do pacote.
 
+## Mídia de jogadores na Fase 2
+
+O arquivo `data/player-media-manifest.json` é a única fonte autorizada para fotografias de jogadores. Um registro só é carregado quando declara uso comercial permitido, crédito e referência documental da licença. Os campos `photoRemote` presentes nos dados CC0 não são exibidos nem baixados pelo jogo.
+
+Enquanto não houver lote licenciado, a interface usa identidades visuais determinísticas criadas pelo VFM. O processo técnico e os requisitos de CDN estão documentados em `PLAYER-MEDIA-PIPELINE.md`.
+
 ## Comparação com jogos licenciados
 
 VFM é um projeto independente. A V16 aproxima profundidade de fluxo e apresentação, mas não reivindica paridade integral com Football Manager 26 ou Soccer Manager 2026, que contam com equipes, pesquisa, tecnologia e contratos de licenciamento próprios.

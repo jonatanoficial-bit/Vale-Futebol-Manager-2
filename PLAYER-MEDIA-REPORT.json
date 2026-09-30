@@ -1,0 +1,28 @@
+{
+  "generatedAt": "2026-09-30T13:48:16+00:00",
+  "uniqueRosterPlayers": 23771,
+  "transfermarktRosterPlayers": 19092,
+  "wikidataP18Matches": 7077,
+  "approvedCommonsPhotos": 7019,
+  "exactNameAliases": 1546,
+  "manifestRecords": 7019,
+  "realPhotoPlayerIds": 8565,
+  "genericFallbackPlayers": 15206,
+  "rejected": {
+    "license:Attribution": 24,
+    "license:CC BY 2.5": 2,
+    "license:CC BY-SA 2.5": 1,
+    "license:Copyrighted free use": 1,
+    "license:FAL": 1,
+    "license:GFDL": 2,
+    "license:GFDL 1.2": 8,
+    "license:PDM-owner": 12,
+    "missingCredit": 6,
+    "imageBelow256": 1
+  },
+  "method": {
+    "primary": "exact Transfermarkt ID: roster tm-ID = Wikidata P2446",
+    "alias": "exact normalized name only when it resolves to one tm-ID in all local rosters and that ID has an approved photo",
+    "fallback": "original fictional VFM portrait"
+  }
+}

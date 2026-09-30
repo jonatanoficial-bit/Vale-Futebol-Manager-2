@@ -1,6 +1,16 @@
-# Vale Futebol Manager — Ultimate World 16.1
+# Vale Futebol Manager — Ultimate World 16.2
 
-Manager internacional mobile-first para retrato e paisagem, jogável no computador e instalável como PWA. A V16.1 organiza a carreira em cinco áreas principais, orienta o primeiro acesso e preserva a profundidade mundial da V16 com calendário anual, simulação paralela de ligas, gestão comercial, academia, negociações e partidas 2D com 22 jogadores.
+Manager internacional mobile-first para retrato e paisagem, jogável no computador e instalável como PWA. A V16.2 acrescenta identidade individual, planejamento de elenco, efeitos táticos explicados, objetivos conectados e uma partida 2D com leitura do auxiliar, pressão e reações do adversário.
+
+## Fase 2 premium
+
+- 8.565 IDs de jogadores com fotografia real do Wikimedia Commons, licença e crédito rastreáveis;
+- foto genérica original e identificada como provisória para os demais jogadores;
+- planejador do elenco por setor, idade, contrato, potencial e custo;
+- efeito visual e mensurável de cada instrução tática;
+- momentos-chave, pressão, desgaste, estatísticas e orientação durante a partida;
+- objetivos da diretoria ligados às decisões da carreira;
+- folha, parcelas futuras, empréstimos e opção de compra no mercado.
 
 ## Fase 1 mobile
 
@@ -19,6 +29,7 @@ Manager internacional mobile-first para retrato e paisagem, jogável no computad
 - 211 seleções com identidade visual local e 135 comandáveis;
 - 48 listas oficiais da Copa do Mundo de 2026 e 87 pools nacionais adicionais;
 - 3.842 jogadores em seleções comandáveis;
+- 7.019 fotografias únicas aprovadas no Wikimedia Commons, vinculadas a 8.565 IDs do jogo;
 - 16 rostos fotorealistas fictícios de treinadores, com homens e mulheres de diferentes etnias e idades.
 
 ## Novidades da V16
@@ -46,7 +57,9 @@ O arquivo `data/rules-2026.json` informa o status de cada regulamento. Formatos 
 
 ## Fidelidade e licenças
 
-O GER e o potencial são índices próprios do VFM, não ratings oficiais FIFA, EA Sports ou Football Manager. O pacote possui 638 clubes referenciando arquivos de escudos reais; 195 clubes de simulação ainda usam imagem genérica e não são apresentados como identidade oficial. Marcas, escudos, nomes e competições pertencem aos respectivos titulares, e uma distribuição comercial exige revisão jurídica e licenças.
+O GER e o potencial são índices próprios do VFM, não ratings oficiais FIFA, EA Sports ou Football Manager. O pacote possui 638 clubes referenciando arquivos de escudos reais; 195 clubes de simulação ainda usam imagem genérica e não são apresentados como identidade oficial. As fotos reais de jogadores são ligadas por ID exato entre o elenco e a propriedade P2446 do Wikidata, com arquivo P18 do Wikimedia Commons; aliases antigos só entram quando o nome resolve para uma única pessoa confirmada. O relatório completo está em `PLAYER-MEDIA-REPORT.json`.
+
+Cada registro fotográfico guarda autor, licença, página do arquivo e hash. Jogadores sem correspondência aprovada usam uma foto fictícia original marcada como genérica. Marcas, escudos, nomes e competições pertencem aos respectivos titulares, e uma distribuição comercial exige revisão jurídica e licenças.
 
 As 211 seleções usam bandeiras SVG locais do projeto `flag-icons` (MIT), não escudos de federações. Consulte `FONTES-E-LICENCAS-V16.md` e `QA-WORLD-V16.json`.
 

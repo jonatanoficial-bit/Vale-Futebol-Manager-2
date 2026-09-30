@@ -1,3 +1,15 @@
+# 16.2.0 — Fase 2 Premium — 2026-09-29
+
+- Integradas 7.019 fotografias reais únicas do Wikimedia Commons, com licença e crédito rastreáveis, cobrindo 8.565 IDs de jogadores.
+- Adicionada foto genérica original, identificada como provisória, para jogadores sem correspondência real aprovada.
+- Criada reconstrução auditável via Wikidata P2446/P18 e API de metadados do Wikimedia Commons.
+- Adicionado planejador do elenco por setor, idade, contrato, potencial e folha salarial.
+- Adicionado comparativo visual do impacto das instruções táticas em ataque, controle, defesa, intensidade e desgaste.
+- Reformulado o jogo 2D com momentos-chave, filtros, pressão, físico, finalizações no alvo e orientação do auxiliar.
+- Tornada a simulação reproduzível por partida e adicionadas reações táticas do adversário ao placar.
+- Conectados objetivos da diretoria a pontos, desenvolvimento de jovens e controle financeiro.
+- Ampliado o mercado com visão de folha, parcelas futuras, vagas e opção de compra de empréstimos.
+
 # 16.1.0 — Fase 1 Mobile — 2026-09-29
 
 - Reduzida a navegação principal de doze para cinco áreas: Início, Elenco, Tática, Jogar e Mais.
