@@ -13,6 +13,10 @@ A aplicação usa HTML, CSS e JavaScript nativos. Não há etapa de compilação
 - data/player-media-manifest.json: inventário único de fotografias com licença comercial;
 - sw.js: cache do shell, atualização e fallback offline.
 
+## Sistema de interface da Fase 3
+
+`css/ultimate-v16.css` concentra os tokens de superfície, borda, texto, destaque e estados dos controles. A navegação usa ícones SVG embutidos por `iconSvg` em `js/app-v16.js`, evitando fontes de ícones e requisições externas. Em até 900 px, o menu lateral se transforma em barra inferior; em até 680 px, a lista do elenco assume um formato de cartões sem rolagem horizontal obrigatória.
+
 ## Estado e salvamento
 
 O armazenamento usa localStorage sob a chave vale-futebol-manager-v16. O schema atual é 1600. Antes de gravar, a versão anterior é preservada na chave vale-futebol-manager-v16-backup. Falhas de gravação são exibidas ao jogador e impedem a saída silenciosa da carreira.

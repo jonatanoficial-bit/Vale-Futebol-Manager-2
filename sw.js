@@ -1,6 +1,6 @@
-const CACHE = 'vale-futebol-ultimate-v16.2.0-phase2';
+const CACHE = 'vale-futebol-ultimate-v16.3.0-phase3';
 const SHELL = [
-  './', './index.html', './offline.html', './css/app.css?v=11.0.0-20260804', './css/world-edition.css?v=11.0.0-20260804', './css/world-edition-v11.css?v=11.0.0-20260804-release', './css/ultimate-v16.css?v=16.2.0-phase2', './js/app-v16.js?v=16.2.0-phase2',
+  './', './index.html', './offline.html', './css/app.css?v=11.0.0-20260804', './css/world-edition.css?v=11.0.0-20260804', './css/world-edition-v11.css?v=11.0.0-20260804-release', './css/ultimate-v16.css?v=16.3.0-phase3', './js/app-v16.js?v=16.3.0-phase3',
   './manifest.webmanifest', './assets/icons/app-icon-v9.png', './assets/placeholders/player-generic.png', './assets/placeholders/club-generic.png', './assets/players/generic/player-generic.webp', './assets/players/generic/player-generic-128.webp',
   './assets/backgrounds/bg-cover.jpg', './assets/backgrounds/bg-lobby.jpg',
   './assets/backgrounds/bg-match.jpg', './assets/backgrounds/bg-team-select.jpg', './data/world-catalog-2026.json', './data/player-media-manifest.json'

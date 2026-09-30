@@ -1,6 +1,15 @@
-# Vale Futebol Manager — Ultimate World 16.2
+# Vale Futebol Manager — Ultimate World 16.3
 
-Manager internacional mobile-first para retrato e paisagem, jogável no computador e instalável como PWA. A V16.2 acrescenta identidade individual, planejamento de elenco, efeitos táticos explicados, objetivos conectados e uma partida 2D com leitura do auxiliar, pressão e reações do adversário.
+Manager internacional mobile-first para retrato e paisagem, jogável no computador e instalável como PWA. A V16.3 acrescenta uma interface internacional coesa, com navegação vetorial, botões previsíveis, menus mais claros e leitura otimizada para toque.
+
+## Fase 3 — interface internacional
+
+- navegação lateral clara no computador e barra inferior premium no celular;
+- ícones SVG consistentes, com rótulos sempre visíveis nas áreas principais;
+- botões primários, secundários e destrutivos com hierarquia e feedback de toque;
+- cabeçalho, painéis, formulários, modais e avisos no mesmo sistema visual;
+- elenco convertido em cartões legíveis nas telas pequenas;
+- contraste, foco por teclado, alvos de toque e movimento reduzido revisados.
 
 ## Fase 2 premium
 

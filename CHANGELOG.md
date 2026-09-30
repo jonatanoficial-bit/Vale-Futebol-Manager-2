@@ -1,3 +1,13 @@
+# 16.3.0 — Fase 3 Interface Internacional — 2026-09-30
+
+- Criado um sistema visual único para botões, campos, painéis, modais, avisos e estados de foco.
+- Substituídos símbolos de texto por ícones SVG consistentes na navegação principal e na central Mais.
+- Reformulada a navegação lateral no computador e a barra inferior no celular, com área ativa mais clara.
+- Refinados cabeçalho do clube, métricas da carreira, cartões de menu e hierarquia tipográfica.
+- Convertida a tabela do elenco em cartões de leitura rápida nas telas pequenas.
+- Ampliadas áreas de toque, contraste, feedback de pressão e suporte a movimento reduzido.
+- Reduzida a competição visual dos fundos para priorizar decisões e dados do jogo.
+
 # 16.2.0 — Fase 2 Premium — 2026-09-29
 
 - Integradas 7.019 fotografias reais únicas do Wikimedia Commons, com licença e crédito rastreáveis, cobrindo 8.565 IDs de jogadores.

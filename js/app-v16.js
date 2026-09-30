@@ -1,4 +1,4 @@
-const VERSION = '16.2.0-phase2';
+const VERSION = '16.3.0-phase3';
 const SCHEMA = 1600;
 const STORE_KEY = 'vale-futebol-manager-v16';
 const BACKUP_KEY = 'vale-futebol-manager-v16-backup';
@@ -29,9 +29,30 @@ const FORMATIONS = {
 };
 
 const NAV_ITEMS = [
-  ['dashboard','⌂','Início'], ['squad','♟','Elenco'], ['tactics','⌁','Tática'],
-  ['match-center','▶','Jogar'], ['more','•••','Mais']
+  ['dashboard','home','Início'], ['squad','squad','Elenco'], ['tactics','tactics','Tática'],
+  ['match-center','play','Jogar'], ['more','more','Mais']
 ];
+const ICON_PATHS = {
+  home:'<path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.5V20h13v-9.5M9.5 20v-6h5v6"/>',
+  squad:'<circle cx="9" cy="8" r="3"/><path d="M3.5 19v-1.5A4.5 4.5 0 0 1 8 13h2a4.5 4.5 0 0 1 4.5 4.5V19M15 5.5a3 3 0 0 1 0 5.8M16.5 14a4 4 0 0 1 4 4v1"/>',
+  tactics:'<path d="M4 5h16M4 12h16M4 19h16"/><circle cx="8" cy="5" r="2"/><circle cx="15" cy="12" r="2"/><circle cx="10" cy="19" r="2"/>',
+  play:'<rect x="3" y="4" width="18" height="16" rx="4"/><path d="m10 9 5 3-5 3V9Z"/>',
+  more:'<rect x="4" y="4" width="6" height="6" rx="2"/><rect x="14" y="4" width="6" height="6" rx="2"/><rect x="4" y="14" width="6" height="6" rx="2"/><rect x="14" y="14" width="6" height="6" rx="2"/>',
+  trophy:'<path d="M8 4h8v5a4 4 0 0 1-8 0V4Z"/><path d="M8 6H5v1a4 4 0 0 0 4 4M16 6h3v1a4 4 0 0 1-4 4M12 13v4M8 20h8M9 17h6"/>',
+  calendar:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4M17 3v4M3 10h18M7 14h2M12 14h2M17 14h1M7 18h2M12 18h2"/>',
+  training:'<path d="M4 18 18 4M11 4h7v7"/><path d="M4 7v11h11"/>',
+  market:'<path d="M4 7h14M15 4l3 3-3 3M20 17H6M9 14l-3 3 3 3"/>',
+  club:'<path d="M4 20V8l8-4 8 4v12M8 20v-6h8v6M9 9h.01M15 9h.01"/>',
+  inbox:'<rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/>',
+  national:'<path d="M5 21V4M6 5h11l-2 4 2 4H6"/>',
+  settings:'<circle cx="12" cy="12" r="3"/><path d="M19 13.5v-3l-2-.7-.7-1.7.9-1.9-2.1-2.1-1.9.9-1.7-.7L10.5 2h-3l-.7 2-1.7.7-1.9-.9-2.1 2.1.9 1.9-.7 1.7-2 .7v3l2 .7.7 1.7-.9 1.9 2.1 2.1 1.9-.9 1.7.7.7 2h3l.7-2 1.7-.7 1.9.9 2.1-2.1-.9-1.9.7-1.7 2-.7Z" transform="translate(2.5 0) scale(.8)"/>',
+  save:'<path d="M5 4h12l2 2v14H5V4Z"/><path d="M8 4v6h8V4M8 20v-6h8v6"/>',
+  chevron:'<path d="m9 6 6 6-6 6"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  book:'<path d="M4 5.5A3.5 3.5 0 0 1 7.5 2H12v18H7.5A3.5 3.5 0 0 0 4 23.5v-18ZM20 5.5A3.5 3.5 0 0 0 16.5 2H12v18h4.5a3.5 3.5 0 0 1 3.5 3.5v-18Z"/>',
+  globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>'
+};
+function iconSvg(name, className='ui-icon') { return '<svg class="'+className+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICON_PATHS[name]||ICON_PATHS.more)+'</svg>'; }
 const MORE_SCREENS = new Set(['competitions','calendar','training','market','club','inbox','national','settings','more']);
 const ONBOARDING_STEPS = [
   ['dashboard','Seu dia em uma tela','O painel Hoje mostra somente as decisões importantes. Use o botão principal para seguir a carreira.'],
@@ -320,7 +341,7 @@ function generateSponsorOffers(club,facilities) {
 
 function showModal(title, body, actions = '<button class="btn" data-action="close-modal">Fechar</button>') {
   session.modalReturnFocus = document.activeElement;
-  modalRoot.innerHTML = '<div class="modal-backdrop"><section class="modal" role="dialog" aria-modal="true" aria-label="' + escapeHtml(title) + '"><h2>' + escapeHtml(title) + '</h2><div class="modal-body">' + body + '</div><div class="modal-actions">' + actions + '</div></section></div>';
+  modalRoot.innerHTML = '<div class="modal-backdrop"><section class="modal" role="dialog" aria-modal="true" aria-label="' + escapeHtml(title) + '"><header class="modal-header"><div><span>VALE FUTEBOL MANAGER</span><h2>' + escapeHtml(title) + '</h2></div><button class="modal-close" data-action="close-modal" aria-label="Fechar">×</button></header><div class="modal-body">' + body + '</div><div class="modal-actions">' + actions + '</div></section></div>';
   const focus = modalRoot.querySelector('button,input,select');
   if (focus) focus.focus({ preventScroll:true });
 }
@@ -350,7 +371,7 @@ function renderCover() {
   const canContinue = store.slots.some(Boolean);
   app.innerHTML = '<main class="screen cover-screen"><section class="cover-copy"><p class="eyebrow">Gold World Edition</p>' +
     '<h1 class="cover-title">Vale Futebol <span>Manager</span></h1><p class="cover-lead">Construa uma carreira mundial. Comande clubes e seleções, dispute ligas, copas nacionais e torneios continentais.</p>' +
-    '<div class="cover-actions"><button class="btn btn-primary" data-action="new-career">Nova carreira</button><button class="btn" data-action="load-career" ' + (canContinue?'':'disabled') + '>Continuar</button><button class="btn" data-action="world-database">Base mundial</button><button class="btn" data-action="show-help">Como jogar</button></div>' +
+    '<div class="cover-actions"><button class="btn btn-primary" data-action="new-career">'+iconSvg('plus')+'<span>Nova carreira</span></button><button class="btn" data-action="load-career" ' + (canContinue?'':'disabled') + '>'+iconSvg('play')+'<span>Continuar</span></button><button class="btn" data-action="world-database">'+iconSvg('globe')+'<span>Base mundial</span></button><button class="btn" data-action="show-help">'+iconSvg('book')+'<span>Como jogar</span></button></div>' +
     '<p class="world-counts">' + session.catalog.stats.simulationClubs + ' clubes · ' + session.catalog.stats.clubPlayers.toLocaleString('pt-BR') + ' jogadores de clubes · ' + session.catalog.stats.nationalTeams + ' seleções</p>' +
     '<p class="version-label">Versão ' + VERSION + '</p></section></main>';
 }
@@ -521,8 +542,8 @@ function renderGame(content) {
   const c = session.career;
   const unread = c.messages.filter(m=>!m.read).length;
   const activeNav = MORE_SCREENS.has(session.screen) ? 'more' : session.screen;
-  const nav = NAV_ITEMS.map(([screen,icon,label])=>'<button class="world-nav-btn '+(activeNav===screen?'active':'')+'" data-action="navigate" data-screen="'+screen+'" aria-label="'+label+'"><span>'+icon+'</span><small>'+label+(screen==='more'&&unread?'<b>'+unread+'</b>':'')+'</small></button>').join('');
-  app.innerHTML = '<main class="screen game-screen world-game"><nav class="world-nav" aria-label="Menu principal"><div class="nav-brand">V</div>'+nav+'</nav><section class="game-stage"><header class="world-topbar"><div class="club-identity"><img src="./'+escapeHtml(c.club.badge)+'" alt="" onerror="__vfmFallback(event)"><span><strong>'+escapeHtml(c.club.name)+'</strong><small>'+escapeHtml(c.manager.name)+' · '+escapeHtml(c.club.leagueName)+'</small></span><i class="manager-face-small avatar-sprite avatar-sprite-'+clamp(c.manager.avatar,1,16)+'" aria-label="Retrato do treinador"></i></div><div class="top-metrics"><span>Data <strong>'+formatDate(c.date)+'</strong></span><span>Reputação <strong>'+c.manager.reputation+'</strong></span><span>Licença <strong>'+escapeHtml(c.manager.license)+'</strong></span><span>Saldo <strong>'+money(c.budget)+'</strong></span></div><button class="btn btn-small" data-action="save">Salvar</button></header><div class="game-content world-screen-'+escapeHtml(session.screen)+'">'+content+'</div></section></main>';
+  const nav = NAV_ITEMS.map(([screen,icon,label])=>'<button class="world-nav-btn '+(activeNav===screen?'active':'')+'" data-action="navigate" data-screen="'+screen+'" aria-label="'+label+'" '+(activeNav===screen?'aria-current="page"':'')+'><span>'+iconSvg(icon)+'</span><small>'+label+(screen==='more'&&unread?'<b>'+unread+'</b>':'')+'</small></button>').join('');
+  app.innerHTML = '<main class="screen game-screen world-game"><nav class="world-nav" aria-label="Menu principal"><div class="nav-brand"><strong>V</strong><span>FM</span></div><div class="nav-primary">'+nav+'</div><div class="nav-season"><span>Temporada</span><strong>'+c.season+'</strong></div></nav><section class="game-stage"><header class="world-topbar"><div class="club-identity"><span class="club-badge-shell"><img src="./'+escapeHtml(c.club.badge)+'" alt="" onerror="__vfmFallback(event)"></span><span><strong>'+escapeHtml(c.club.name)+'</strong><small>'+escapeHtml(c.manager.name)+' · '+escapeHtml(c.club.leagueName)+'</small></span><i class="manager-face-small avatar-sprite avatar-sprite-'+clamp(c.manager.avatar,1,16)+'" aria-label="Retrato do treinador"></i></div><div class="top-metrics"><span>Data <strong>'+formatDate(c.date)+'</strong></span><span>Reputação <strong>'+c.manager.reputation+'</strong></span><span>Licença <strong>'+escapeHtml(c.manager.license)+'</strong></span><span>Saldo <strong>'+money(c.budget)+'</strong></span></div><button class="btn btn-small top-save" data-action="save">'+iconSvg('save')+'<span>Salvar</span></button></header><div class="game-content world-screen-'+escapeHtml(session.screen)+'">'+content+'</div></section></main>';
 }
 
 function sectionHead(title,subtitle,extra='') { return '<header class="section-head"><div><p class="eyebrow">Carreira mundial</p><h1>'+escapeHtml(title)+'</h1><p>'+escapeHtml(subtitle)+'</p></div>'+extra+'</header>'; }
@@ -753,17 +774,17 @@ function renderNational() {
 function renderMore() {
   const c=session.career,unread=c.messages.filter(message=>!message.read).length;
   const items=[
-    ['competitions','◆','Competições','Tabelas, fases e líderes mundiais'],
-    ['calendar','▦','Agenda','Semana, mês e temporada'],
-    ['training','↗','Treino','Planos, evolução e academia'],
-    ['market','⇄','Mercado','Contratações e empréstimos'],
-    ['club','▥','Clube','Finanças, estrutura e equipe'],
-    ['inbox','✉','Mensagens',unread?unread+' não '+(unread===1?'lida':'lidas'):'Tudo lido'],
-    ['national','★','Seleção',c.national?c.national.team.name:'Oportunidades internacionais'],
-    ['settings','⚙','Ajustes','Salvar, importar e acessibilidade']
+    ['competitions','trophy','Competições','Tabelas, fases e líderes mundiais'],
+    ['calendar','calendar','Agenda','Semana, mês e temporada'],
+    ['training','training','Treino','Planos, evolução e academia'],
+    ['market','market','Mercado','Contratações e empréstimos'],
+    ['club','club','Clube','Finanças, estrutura e equipe'],
+    ['inbox','inbox','Mensagens',unread?unread+' não '+(unread===1?'lida':'lidas'):'Tudo lido'],
+    ['national','national','Seleção',c.national?c.national.team.name:'Oportunidades internacionais'],
+    ['settings','settings','Ajustes','Salvar, importar e acessibilidade']
   ];
   return sectionHead('Mais','Os recursos menos frequentes ficam organizados em um só lugar.')+
-    '<div class="more-grid">'+items.map(([screen,icon,label,description])=>'<button class="more-card" data-action="navigate" data-screen="'+screen+'"><span>'+icon+'</span><div><strong>'+escapeHtml(label)+'</strong><small>'+escapeHtml(description)+'</small></div><b aria-hidden="true">›</b></button>').join('')+'</div>';
+    '<div class="more-grid">'+items.map(([screen,icon,label,description])=>'<button class="more-card" data-action="navigate" data-screen="'+screen+'"><span>'+iconSvg(icon)+'</span><div><strong>'+escapeHtml(label)+'</strong><small>'+escapeHtml(description)+'</small></div><b aria-hidden="true">'+iconSvg('chevron')+'</b></button>').join('')+'</div>';
 }
 
 function renderSettings() {
