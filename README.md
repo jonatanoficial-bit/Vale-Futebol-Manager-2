@@ -1,6 +1,18 @@
-# Vale Futebol Manager — Ultimate World 16.6
+# Vale Futebol Manager — Ultimate World 16.7
 
-Manager internacional mobile-first para retrato e paisagem, jogável no computador e instalável como PWA. A V16.6 combina o motor determinístico com uma identidade visual esportiva, rostos na gestão tática e comandos reconhecíveis em computador e celular.
+Manager internacional mobile-first para retrato e paisagem, jogável no computador e instalável como PWA. A V16.7 acrescenta desempenho por posição, forma, ritmo, entrosamento, carga, lesões, recuperação e evolução anual ao motor determinístico e à interface esportiva.
+
+## Fase 7 — realismo esportivo e balanceamento
+
+- overall calculado pelos atributos importantes de cada posição, com nota própria para funções alternativas;
+- rendimento do dia influenciado por físico, forma, ritmo, moral, entrosamento, carga e adequação posicional;
+- melhor escalação automática por formação, excluindo lesionados e suspensos;
+- carga e minutagem persistentes, com recuperação entre partidas e impacto de pressão e intensidade;
+- lesões leves, moderadas e graves com diagnóstico, prazo, risco de recorrência e boletim médico;
+- treinos determinísticos ligados ao foco individual, instalações, idade, potencial e risco físico;
+- evolução dos jovens e declínio gradual de veteranos na virada de temporada;
+- telas de elenco, ficha, tática, treino e pós-jogo atualizadas com indicadores de performance;
+- teste do motor de carreira e 2.400 partidas de calibração do motor de jogo.
 
 ## Fase 6 — acabamento visual comercial
 
@@ -122,9 +134,10 @@ Não abra `index.html` diretamente; elencos, dados e funcionamento offline depen
 - 11 rostos no campo tático e 23 rostos no painel de alterações;
 - cinco destinos principais e oito módulos secundários com ícones e cores próprios;
 - substituição por toque e relógio de partida testados;
-- determinismo entre velocidades, adequação posicional, efeito de atributos e diferenças entre plano ofensivo, equilibrado e bloco baixo testados em 2.400 partidas;
+- determinismo entre velocidades, adequação posicional, efeito de atributos, lesões e diferenças entre plano ofensivo, equilibrado e bloco baixo testados em 2.400 partidas;
+- overall por posição, disponibilidade, carga, recuperação, treino, evolução e envelhecimento cobertos por teste automatizado;
 - sintaxe JavaScript aprovada;
 - 833 clubes, 211 seleções e 24.300 registros de jogadores auditados;
 - integridade aprovada com ressalvas documentadas em `QA-WORLD-V16.json`.
 
-Versão 16.6.0 · Ultimate World · 2026-10-01
+Versão 16.7.0 · Ultimate World · 2026-10-01

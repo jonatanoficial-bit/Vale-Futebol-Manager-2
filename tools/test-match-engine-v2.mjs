@@ -34,12 +34,12 @@ advanceMatchEngineV2(shout,12);
 assert.equal(applyManagerShoutV2(shout,'calm'),true);
 
 function batch(tactics,ownRating=74,opponentRating=74,total=400){
-  const totals={goalsFor:0,goalsAgainst:0,xgFor:0,xgAgainst:0,shotsFor:0,fitness:0,cards:0,errors:0};
+  const totals={goalsFor:0,goalsAgainst:0,xgFor:0,xgAgainst:0,shotsFor:0,fitness:0,cards:0,injuries:0,errors:0};
   for(let seed=1;seed<=total;seed++){
     const match=simulateMatchV2(config(seed,tactics,ownRating,opponentRating),seed%3===0?6:seed%2===0?3:1);
     if(match.minute!==90||!Number.isFinite(match.xgHome)||match.possessionHome<20||match.possessionHome>80)totals.errors++;
     totals.goalsFor+=match.homeGoals;totals.goalsAgainst+=match.awayGoals;totals.xgFor+=match.xgHome;totals.xgAgainst+=match.xgAway;totals.shotsFor+=match.shotsHome;
-    totals.fitness+=match.ownLineup.reduce((sum,player)=>sum+player.fitness,0)/match.ownLineup.length;totals.cards+=match.cardsHome+match.cardsAway;
+    totals.fitness+=match.ownLineup.reduce((sum,player)=>sum+player.fitness,0)/match.ownLineup.length;totals.cards+=match.cardsHome+match.cardsAway;totals.injuries+=match.injuryIncidents.length;
   }
   Object.keys(totals).forEach(key=>{if(key!=='errors')totals[key]=Number((totals[key]/total).toFixed(3));});
   return totals;
@@ -72,5 +72,6 @@ assert.ok(lowBlockBatch.xgAgainst<attackBatch.xgAgainst,'Bloco baixo deve conced
 assert.ok(eliteBatch.xgFor>weakBatch.xgFor*.98,'Atributos superiores precisam melhorar a criação ofensiva.');
 assert.ok(eliteBatch.goalsFor>weakBatch.goalsFor,'Atributos superiores precisam gerar mais gols em amostra ampla.');
 assert.ok(correctPositions.xg>wrongPositions.xg,'Jogadores fora de posição precisam reduzir a produção coletiva.');
+assert.ok(balancedBatch.injuries>=.015&&balancedBatch.injuries<=.35,`Incidência de lesões fora da faixa: ${balancedBatch.injuries}`);
 
 console.log(JSON.stringify({engine:MATCH_ENGINE_V2_VERSION,determinism:'ok',samples:2400,balanced:balancedBatch,attack:attackBatch,lowBlock:lowBlockBatch,elite:eliteBatch,weak:weakBatch,positions:{correct:correctPositions,misplaced:wrongPositions}},null,2));

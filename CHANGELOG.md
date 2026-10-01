@@ -1,3 +1,17 @@
+# 16.7.0 — Fase 7 Realismo Esportivo — 2026-10-01
+
+- Criado cálculo de overall por posição a partir dos atributos técnicos, físicos e mentais.
+- Adicionado rendimento atual influenciado por físico, forma, ritmo, moral, entrosamento, carga e adequação à função.
+- Reformulada a escalação automática para respeitar a formação e excluir atletas lesionados ou suspensos.
+- Adicionados carga acumulada, minutagem de 28 dias, minutos na temporada, jogos e titularidades.
+- Implementadas lesões persistentes com gravidade, prazo de recuperação, recorrência e boletim médico.
+- Conectados pressão, ritmo, fadiga, carga e risco individual à ocorrência de lesões na partida.
+- Substituído o treino aleatório por progressão determinística ligada a idade, potencial, foco e nível do CT.
+- Adicionada evolução anual de jovens e declínio gradual dos veteranos.
+- Atualizadas as telas de elenco, treino, ficha e pós-jogo com dados de rendimento e medicina.
+- Mantida compatibilidade automática com carreiras anteriores por migração para o schema 1602.
+- Validados o motor de carreira e 2.400 jogos automatizados, incluindo incidência de lesões por intensidade.
+
 # 16.6.0 — Fase 6 Acabamento Visual Comercial — 2026-10-01
 
 - Adicionados rostos dos jogadores no campo tático, no banco e nas alterações durante a partida.

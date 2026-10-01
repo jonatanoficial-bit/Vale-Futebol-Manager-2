@@ -1,8 +1,8 @@
 {
   "product": "Vale Futebol Manager — Ultimate World",
-  "version": "16.6.0-phase6",
-  "build": "VFM-VISUAL-PREMIUM-PHASE6-16.6.0-20261001",
-  "schema": 1601,
+  "version": "16.7.0-phase7",
+  "build": "VFM-REALISM-PHASE7-16.7.0-20261001",
+  "schema": 1602,
   "generatedAt": "2026-10-01T00:00:00-03:00",
   "mode": "production"
 }

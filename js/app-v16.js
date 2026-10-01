@@ -1,7 +1,8 @@
 import { MATCH_ENGINE_V2_VERSION, createMatchEngineV2, advanceMatchEngineV2, applyMatchSubstitutionV2, applyManagerShoutV2, buildMatchReport } from './systems/matchEngineV2.js';
+import { CAREER_PERFORMANCE_VERSION, hydratePlayerPerformance, effectiveOverall, isPlayerAvailable, selectBestLineup, advanceRosterDays, applyMatchConsequences, applyTrainingWeek, processSeasonAging, rosterHealthSummary } from './systems/careerPerformanceV3.js';
 
-const VERSION = '16.6.0-phase6';
-const SCHEMA = 1601;
+const VERSION = '16.7.0-phase7';
+const SCHEMA = 1602;
 const STORE_KEY = 'vale-futebol-manager-v16';
 const BACKUP_KEY = 'vale-futebol-manager-v16-backup';
 const LEGACY_KEY = 'vale-futebol-manager-v11';
@@ -157,6 +158,10 @@ function migrateCareer(career) {
     career.tacticalPositions = Array.isArray(career.tacticalPositions) && career.tacticalPositions.length===11 ? career.tacticalPositions : null;
   }
   career.roster = Array.isArray(career.roster) ? career.roster.map(normalizePlayer) : [];
+  if(career.national?.roster)career.national.roster=career.national.roster.map(normalizePlayer);
+  const validLineup=new Set(career.roster.filter(isPlayerAvailable).map(player=>player.id));
+  career.lineupIds=Array.isArray(career.lineupIds)?career.lineupIds.filter((id,index,list)=>validLineup.has(id)&&list.indexOf(id)===index).slice(0,11):[];
+  if(career.lineupIds.length<11)career.lineupIds=selectBestLineup(career.roster,career.tactics.formation).map(player=>player.id);
   career.onboardingComplete = career.onboardingComplete !== false;
   return career;
 }
@@ -240,10 +245,10 @@ async function fetchJson(path) {
 function normalizePlayer(player, index = 0) {
   const overall=clamp(player.overall || 60,1,99),seed=stableNumber(String(player.id||player.name||index));
   const variance=(offset,spread=8)=>clamp(overall+((seed>>(offset%16))%(spread*2+1))-spread,1,99);
-  return {
+  return hydratePlayerPerformance({
     id:String(player.id || 'player-' + index), name:String(player.displayName || player.name || 'Jogador'),
     role:String(player.role || player.positionName || player.pos || 'Jogador'), pos:String(player.pos || player.position || 'MC'),
-    overall, potential:clamp(player.potential || player.overall || 60, 1, 99),
+    overall, potential:clamp(Math.max(overall,Number(player.potential || player.overall || 60)), 1, 99),
     age:clamp(player.age || 24, 15, 50), salary:Number(player.salary) || 35, value:Number(player.marketValue ?? player.value) || 1,
     fitness:clamp(player.fitness ?? 88, 1, 100), morale:clamp(player.morale ?? 74, 1, 100),
     photo:player.photo || '', photoLicense:player.photoLicense || '', photoCredit:player.photoCredit || '', clubName:player.clubName || '', contractUntil:player.contractUntil || '2027-12-31',
@@ -251,8 +256,11 @@ function normalizePlayer(player, index = 0) {
     attributes:player.attributes||{pace:variance(1),stamina:variance(3),strength:variance(5),passing:variance(7),technique:variance(9),vision:variance(11),finishing:variance(13),tackling:variance(15),positioning:variance(2),decisions:variance(4),teamwork:variance(6),leadership:variance(8)},
     personality:player.personality||['Profissional','Ambicioso','Determinado','Equilibrado','Leal'][seed%5],
     injuryRisk:clamp(player.injuryRisk??(5+seed%16),1,35), form:clamp(player.form??70,1,100), knowledge:clamp(player.knowledge??45,1,100),
-    suspended:Boolean(player.suspended), injuredUntil:player.injuredUntil||null
-  };
+    suspended:Boolean(player.suspended), injuredUntil:player.injuredUntil||null,
+    sourceOverall:player.sourceOverall, ratingOffset:player.ratingOffset, workload:player.workload, sharpness:player.sharpness, chemistry:player.chemistry,
+    minutesLast28:player.minutesLast28,seasonMinutes:player.seasonMinutes,appearances:player.appearances,starts:player.starts,
+    developmentProgress:player.developmentProgress,injury:player.injury,injuryHistory:player.injuryHistory,recurrenceRisk:player.recurrenceRisk
+  });
 }
 
 function stableNumber(value='') { let hash=2166136261;for(let i=0;i<value.length;i++){hash^=value.charCodeAt(i);hash=Math.imul(hash,16777619);}return hash>>>0; }
@@ -281,6 +289,21 @@ function positionClass(position='') {
   return 'position-att';
 }
 
+function playerStatus(player){
+  if(player.injury?.daysRemaining>0)return {label:player.injury.type+' · '+player.injury.daysRemaining+'d',className:'injured'};
+  if(player.suspended)return {label:'Suspenso',className:'suspended'};
+  if(player.workload>=82)return {label:'Sobrecarga '+Math.round(player.workload)+'%',className:'overloaded'};
+  if(player.fitness<68)return {label:'Físico baixo',className:'warning'};
+  return {label:'Disponível',className:'available'};
+}
+
+function repairCareerLineup(career){
+  const available=new Set(career.roster.filter(isPlayerAvailable).map(player=>player.id));
+  career.lineupIds=(career.lineupIds||[]).filter((id,index,list)=>available.has(id)&&list.indexOf(id)===index).slice(0,11);
+  if(career.lineupIds.length<11)career.lineupIds=selectBestLineup(career.roster,career.tactics.formation).map(player=>player.id);
+  return career.lineupIds;
+}
+
 async function loadPlayerMediaManifest() {
   try{
     const manifest=await fetchJson('data/player-media-manifest.json');
@@ -291,11 +314,7 @@ async function loadPlayerMediaManifest() {
 }
 
 function pickLineup(roster) {
-  const wanted = [['GOL',1],['ZAG',2],['LD',1],['LE',1],['VOL',1],['MC',2],['PD',1],['PE',1],['ATA',1]];
-  const picked = [];
-  wanted.forEach(([pos,count]) => roster.filter(p => p.pos === pos && !picked.includes(p)).sort((a,b)=>b.overall-a.overall).slice(0,count).forEach(p=>picked.push(p)));
-  roster.filter(p=>!picked.includes(p)).sort((a,b)=>b.overall-a.overall).slice(0,11-picked.length).forEach(p=>picked.push(p));
-  return picked.slice(0,11);
+  return selectBestLineup(roster,session.career?.tactics?.formation||'4-3-3');
 }
 
 function clubKey(club) { return club.leagueId + ':' + club.id; }
@@ -617,7 +636,7 @@ function competitionLogo(id,name='',className='competition-logo-image') {
 }
 
 function renderDashboard() {
-  const c=session.career, next=nextFixture(), recent=c.fixtures.filter(f=>f.played).slice(-5).reverse();
+  const c=session.career, next=nextFixture(), recent=c.fixtures.filter(f=>f.played).slice(-5).reverse(),health=rosterHealthSummary(c.roster);
   const unread=c.messages.filter(m=>!m.read).length;
   const leagueFinished=c.fixtures.filter(f=>f.type==='league').length>0&&c.fixtures.filter(f=>f.type==='league').every(f=>f.played);
   const seasonFixtures=c.fixtures.filter(f=>!f.cancelled),seasonPlayed=seasonFixtures.filter(f=>f.played).length,seasonProgress=seasonFixtures.length?Math.round(seasonPlayed/seasonFixtures.length*100):0;
@@ -625,6 +644,7 @@ function renderDashboard() {
   if(c.lineupIds.length<11)tasks.push(['squad','Complete a escalação','Escolha os onze titulares antes da próxima partida.','Definir time']);
   else if(next)tasks.push(['match-center','Prepare o próximo jogo',escapeHtml(next.opponent.name)+' · '+formatDate(next.date),'Preparar']);
   if(unread)tasks.push(['inbox','Leia as mensagens',unread+' '+(unread===1?'mensagem precisa':'mensagens precisam')+' da sua atenção.','Abrir caixa']);
+  if(health.injured.length)tasks.push(['training','Departamento médico',health.injured.length+' atleta(s) em recuperação.','Ver boletim']);
   if(c.lastTrainingWeek!==c.week)tasks.push(['training','Planeje o treino','O elenco ainda não treinou nesta semana.','Escolher treino']);
   const today=tasks.slice(0,3).map(([screen,title,detail,action],index)=>'<article class="today-task"><span>'+String(index+1).padStart(2,'0')+'</span><div><strong>'+title+'</strong><small>'+detail+'</small></div><button class="btn btn-small '+(index===0?'btn-primary':'')+'" data-action="navigate" data-screen="'+screen+'">'+action+'</button></article>').join('');
   const command=next?'<section class="career-command panel"><div class="career-command-copy"><div class="career-command-kicker"><span class="competition-emblem">'+competitionLogo(next.competitionId,next.competitionName)+'</span><span><small>PRÓXIMA DECISÃO</small><strong>'+escapeHtml(next.competitionName)+'</strong></span></div><h2>'+escapeHtml(c.club.name)+' <b>×</b> '+escapeHtml(next.opponent.name)+'</h2><p>'+formatDate(next.date)+' · '+(next.home?'Em casa':'Fora de casa')+' · Semana '+c.week+'</p><button class="btn btn-primary" data-action="open-next-match">Preparar partida</button></div><div class="career-command-opponent"><img src="./'+escapeHtml(next.opponent.badge)+'" alt="Escudo '+escapeHtml(next.opponent.name)+'" onerror="__vfmFallback(event)"><strong>'+escapeHtml(next.opponent.name)+'</strong><small>GER '+next.opponent.rating+'</small></div><div class="career-command-progress"><span><small>Temporada</small><strong>'+seasonProgress+'%</strong></span><i><em style="width:'+seasonProgress+'%"></em></i><div><span><small>Diretoria</small><strong>'+c.board+'%</strong></span><span><small>Elenco</small><strong>'+c.lineupIds.length+'/11</strong></span><span><small>Forma</small><strong>'+(recent.length?recent.map(resultLetter).join(''):'—')+'</strong></span></div></div></section>':'<section class="career-command panel season-complete"><div><small>TEMPORADA</small><h2>Calendário concluído</h2><p>Revise resultados, objetivos e elenco antes de iniciar a próxima época.</p></div>'+(leagueFinished?'<button class="btn btn-primary" data-action="advance-season">Encerrar temporada</button>':'<span>Ainda há jogos de liga pendentes.</span>')+'</section>';
@@ -641,16 +661,16 @@ function resultLetter(f) { return resultClass(f)==='win'?'V':resultClass(f)==='l
 
 function squadSector(pos){if(pos==='GOL')return 'Goleiros';if(['ZAG','LD','LE'].includes(pos))return 'Defesa';if(['VOL','MC','MEI'].includes(pos))return 'Meio';return 'Ataque';}
 function renderSquadPlanner(c){
-  const sectors=['Goleiros','Defesa','Meio','Ataque'].map(label=>{const list=c.roster.filter(player=>squadSector(player.pos)===label),avg=Math.round(average(list.map(player=>player.overall))),young=list.filter(player=>player.age<=23).length,minimum={Goleiros:2,Defesa:7,Meio:6,Ataque:5}[label],status=list.length<minimum?'Reforçar':avg<65?'Evoluir':'Coberto';return '<article class="planner-sector '+(status==='Reforçar'?'needs-attention':'')+'"><span>'+label+'</span><strong>'+list.length+' jogadores · GER '+avg+'</strong><small>'+young+' sub-23 · '+status+'</small></article>';}).join('');
-  const now=new Date(c.date),limit=new Date(addDays(now,365)),expiring=c.roster.filter(player=>new Date(player.contractUntil)<=limit).length,prospects=c.roster.filter(player=>player.age<=23&&player.potential-player.overall>=4).length,wages=c.roster.reduce((sum,player)=>sum+Number(player.salary||0)*1000,0);
-  return '<section class="squad-planner panel"><header><div><p class="eyebrow">PLANEJADOR</p><h2>Mapa do elenco</h2></div><div class="planner-alerts"><span>'+expiring+' contratos em 12 meses</span><span>'+prospects+' jovens com margem</span><span>'+money(wages)+'/mês</span></div></header><div class="planner-sectors">'+sectors+'</div></section>';
+  const sectors=['Goleiros','Defesa','Meio','Ataque'].map(label=>{const list=c.roster.filter(player=>squadSector(player.pos)===label),avg=Math.round(average(list.map(player=>effectiveOverall(player,player.pos)))),young=list.filter(player=>player.age<=23).length,minimum={Goleiros:2,Defesa:7,Meio:6,Ataque:5}[label],available=list.filter(isPlayerAvailable).length,status=available<minimum?'Reforçar':avg<65?'Evoluir':'Coberto';return '<article class="planner-sector '+(status==='Reforçar'?'needs-attention':'')+'"><span>'+label+'</span><strong>'+available+'/'+list.length+' disponíveis · REND '+avg+'</strong><small>'+young+' sub-23 · '+status+'</small></article>';}).join('');
+  const now=new Date(c.date),limit=new Date(addDays(now,365)),expiring=c.roster.filter(player=>new Date(player.contractUntil)<=limit).length,prospects=c.roster.filter(player=>player.age<=23&&player.potential-player.overall>=4).length,health=rosterHealthSummary(c.roster);
+  return '<section class="squad-planner panel"><header><div><p class="eyebrow">PLANEJADOR · MOTOR '+CAREER_PERFORMANCE_VERSION+'</p><h2>Mapa do elenco</h2></div><div class="planner-alerts"><span>'+health.injured.length+' no DM</span><span>'+health.overloaded.length+' sobrecarregados</span><span>'+expiring+' contratos em 12 meses</span><span>'+prospects+' jovens com margem</span></div></header><div class="planner-sectors">'+sectors+'</div></section>';
 }
 
 function renderSquad() {
-  const c=session.career, filtered=c.roster.filter(p=>(session.positionFilter==='TODOS'||p.pos===session.positionFilter)&&(!session.squadSearch||p.name.toLowerCase().includes(session.squadSearch.toLowerCase()))).sort((a,b)=>b.overall-a.overall);
+  const c=session.career, filtered=c.roster.filter(p=>(session.positionFilter==='TODOS'||p.pos===session.positionFilter)&&(!session.squadSearch||p.name.toLowerCase().includes(session.squadSearch.toLowerCase()))).sort((a,b)=>effectiveOverall(b,b.pos)-effectiveOverall(a,a.pos));
   const positions=['TODOS',...new Set(c.roster.map(p=>p.pos))];
-  const rows=filtered.map(p=>'<tr><td><button class="player-cell player-cell-button" data-action="player-report" data-player="'+escapeHtml(p.id)+'">'+playerPortrait(p,'small')+'<span><strong>'+escapeHtml(p.name)+'</strong><small>'+escapeHtml(p.role)+'</small></span></button></td><td><span class="pos-tag">'+escapeHtml(p.pos)+'</span></td><td><strong>'+p.overall+'</strong></td><td>'+p.age+'</td><td>'+p.fitness+'%</td><td>'+p.morale+'%</td><td>'+money(p.value*1000000)+'</td><td><button class="btn btn-small squad-action '+(c.lineupIds.includes(p.id)?'btn-primary':'')+'" data-action="toggle-lineup" data-player="'+escapeHtml(p.id)+'">'+(c.lineupIds.includes(p.id)?'Titular':'Escalar')+'</button></td></tr>').join('');
-  return sectionHead('Elenco','Jogadores nominais, atributos 2026, contratos, forma e moral.','<span class="tag">'+c.lineupIds.length+'/11 titulares</span>')+renderSquadPlanner(c)+'<div class="toolbar"><input data-action="squad-search" aria-label="Buscar jogador" placeholder="Buscar jogador" value="'+escapeHtml(session.squadSearch)+'"><select data-action="position-filter" aria-label="Filtrar posição">'+positions.map(p=>'<option '+(p===session.positionFilter?'selected':'')+'>'+p+'</option>').join('')+'</select><button class="btn action-with-icon squad-action" data-action="best-lineup">'+iconSvg('squad')+'<span>Melhor equipe</span></button></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Jogador</th><th>Pos.</th><th>GER</th><th>Idade</th><th>Físico</th><th>Moral</th><th>Valor</th><th>Escalação</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+  const rows=filtered.map(p=>{const status=playerStatus(p),rend=effectiveOverall(p,p.pos),available=isPlayerAvailable(p);return '<tr class="player-row '+status.className+'"><td><button class="player-cell player-cell-button" data-action="player-report" data-player="'+escapeHtml(p.id)+'">'+playerPortrait(p,'small')+'<span><strong>'+escapeHtml(p.name)+'</strong><small>'+escapeHtml(status.label)+'</small></span></button></td><td><span class="pos-tag">'+escapeHtml(p.pos)+'</span></td><td><span class="rating-cell"><strong>'+p.overall+'</strong><small>Hoje '+rend.toFixed(1)+'</small></span></td><td>'+p.age+'</td><td><span class="condition-cell">'+Math.round(p.fitness)+'%<small>Carga '+Math.round(p.workload)+'</small></span></td><td><span class="condition-cell">'+Math.round(p.form)+'%<small>Moral '+Math.round(p.morale)+'</small></span></td><td>'+money(p.value*1000000)+'</td><td><button class="btn btn-small squad-action '+(c.lineupIds.includes(p.id)?'btn-primary':'')+'" data-action="toggle-lineup" data-player="'+escapeHtml(p.id)+'" '+(available?'':'disabled')+'>'+(c.lineupIds.includes(p.id)?'Titular':available?'Escalar':'Indisponível')+'</button></td></tr>';}).join('');
+  return sectionHead('Elenco','Overall por posição, rendimento atual, carga, forma e disponibilidade médica.','<span class="tag">'+c.lineupIds.length+'/11 titulares</span>')+renderSquadPlanner(c)+'<div class="toolbar"><input data-action="squad-search" aria-label="Buscar jogador" placeholder="Buscar jogador" value="'+escapeHtml(session.squadSearch)+'"><select data-action="position-filter" aria-label="Filtrar posição">'+positions.map(p=>'<option '+(p===session.positionFilter?'selected':'')+'>'+p+'</option>').join('')+'</select><button class="btn action-with-icon squad-action" data-action="best-lineup">'+iconSvg('squad')+'<span>Melhor equipe disponível</span></button></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Jogador</th><th>Pos.</th><th>GER / hoje</th><th>Idade</th><th>Físico / carga</th><th>Forma / moral</th><th>Valor</th><th>Escalação</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
 }
 
 function activeTacticalPositions(){const c=session.career,base=FORMATIONS[c.tactics.formation]||FORMATIONS['4-3-3'];if(!c.tacticalPositions||c.tacticalPositions.length!==11)c.tacticalPositions=base.map(point=>[...point]);return c.tacticalPositions;}
@@ -658,13 +678,13 @@ function formationPreview(roster,lineupIds,formation) {
   const players=lineupIds.map(id=>roster.find(p=>p.id===id)).filter(Boolean).slice(0,11),coords=activeTacticalPositions();
   const zones='<div class="pitch-zones" aria-hidden="true"><span>DEFESA</span><span>MEIO-CAMPO</span><span>ATAQUE</span></div>';
   const pitch='<div class="formation-pitch premium-pitch" data-drop-zone="pitch">'+zones+coords.map(([x,y],i)=>{const player=players[i],tone=positionClass(player?.pos);return '<button class="formation-player draggable-player drop-player '+tone+'" draggable="true" data-player="'+escapeHtml(player?.id||'')+'" data-slot="'+i+'" style="left:'+x+'%;top:'+y+'%" aria-label="'+escapeHtml(player?.name||'Vaga')+'"><span class="formation-face">'+(player?playerPortrait(player,'small'):'<span class="empty-player-face">+</span>')+'<b>'+escapeHtml(player?.pos||'–')+'</b></span><small>'+escapeHtml((player?.name||'Vaga').split(' ').slice(-1)[0])+'</small><em>'+Number(player?.overall||0)+'</em></button>';}).join('')+'<div class="pitch-drag-hint">Arraste para trocar ou reposicionar</div></div>';
-  const bench=roster.filter(player=>!lineupIds.includes(player.id)&&!player.suspended&&!player.injuredUntil).sort((a,b)=>b.overall-a.overall).slice(0,12).map(player=>'<button class="bench-player draggable-player drop-player '+positionClass(player.pos)+'" draggable="true" data-player="'+escapeHtml(player.id)+'">'+playerPortrait(player,'small')+'<span class="pos-tag">'+escapeHtml(player.pos)+'</span><strong>'+escapeHtml(player.name)+'</strong><em>'+player.overall+'</em><small>Físico '+player.fitness+'%</small></button>').join('');
+  const bench=roster.filter(player=>!lineupIds.includes(player.id)&&isPlayerAvailable(player)).sort((a,b)=>effectiveOverall(b,b.pos)-effectiveOverall(a,a.pos)).slice(0,12).map(player=>'<button class="bench-player draggable-player drop-player '+positionClass(player.pos)+'" draggable="true" data-player="'+escapeHtml(player.id)+'">'+playerPortrait(player,'small')+'<span class="pos-tag">'+escapeHtml(player.pos)+'</span><strong>'+escapeHtml(player.name)+'</strong><em>'+effectiveOverall(player,player.pos).toFixed(1)+'</em><small>Físico '+Math.round(player.fitness)+'% · Carga '+Math.round(player.workload)+'</small></button>').join('');
   return pitch+'<section class="tactical-bench"><header><h3>Banco e reservas</h3><small>Arraste um reserva sobre um titular</small></header><div>'+bench+'</div></section>';
 }
 
 function swapTacticalPlayers(sourceId,targetId){
   const c=session.career,source=c.roster.find(player=>player.id===sourceId),target=c.roster.find(player=>player.id===targetId);if(!source||!target||source.id===target.id)return;
-  if(source.injuredUntil||source.suspended)return toast('Este atleta não está disponível.','error');
+  if(!isPlayerAvailable(source))return toast('Este atleta não está disponível.','error');
   const ids=c.lineupIds,sourceIndex=ids.indexOf(source.id),targetIndex=ids.indexOf(target.id);
   if(sourceIndex>=0&&targetIndex>=0){[ids[sourceIndex],ids[targetIndex]]=[ids[targetIndex],ids[sourceIndex]];}
   else if(sourceIndex<0&&targetIndex>=0){ids[targetIndex]=source.id;}
@@ -750,11 +770,12 @@ function renderMatchCenter() {
 }
 
 function renderTraining() {
-  const c=session.career, trained=c.lastTrainingWeek===c.week;
-  const plans=[['recovery','Recuperação','Físico +8 · Moral +2'],['tactical','Tático','Entrosamento e organização'],['intensity','Alta intensidade','GER temporário · Físico -8'],['finishing','Finalização','Ataque e confiança'],['setpieces','Bola parada','Chance extra em jogos equilibrados']];
+  const c=session.career, trained=c.lastTrainingWeek===c.week,health=rosterHealthSummary(c.roster);
+  const plans=[['recovery','Recuperação','Reduz carga e acelera o retorno'],['tactical','Tático','Entrosamento, decisões e organização'],['intensity','Alta intensidade','Evolução física com maior risco'],['finishing','Finalização','Ataque, técnica e confiança'],['setpieces','Bola parada','Posicionamento e execução']];
   const development=c.roster.filter(player=>player.age<=25).sort((a,b)=>b.potential-b.overall-(a.potential-a.overall)).slice(0,10).map(player=>'<div class="development-row"><span><strong>'+escapeHtml(player.name)+'</strong><small>'+player.pos+' · GER '+player.overall+' · POT '+player.potential+'</small></span><select data-action="individual-focus" data-player="'+player.id+'">'+options(['Equilibrado','Físico','Técnica','Passe','Finalização','Defesa'],c.individualTraining[player.id]||'Equilibrado')+'</select><em>'+escapeHtml(player.personality)+'</em></div>').join('');
   const academy=c.youthPlayers.map(player=>'<div class="academy-player"><span class="pos-tag">'+player.pos+'</span><strong>'+escapeHtml(player.name)+'</strong><small>'+player.age+' anos · GER '+player.overall+' · POT '+player.potential+'</small><button class="btn btn-small" data-action="promote-youth" data-player="'+player.id+'">Promover</button></div>').join('');
-  return sectionHead('Centro de performance','Microciclo, desenvolvimento individual, medicina e academia.','<span class="tag">Físico '+c.fitness+'%</span>')+'<div class="facility-summary"><span>Centro de treino <strong>Nível '+c.facilities.training+'</strong></span><span>Base <strong>Nível '+c.facilities.youth+'</strong></span><span>Medicina <strong>Nível '+c.facilities.medical+'</strong></span></div><div class="training-grid">'+plans.map(([id,name,effect])=>'<button class="training-card" data-action="apply-training" data-plan="'+id+'" '+(trained?'disabled':'')+'><span>◎</span><strong>'+name+'</strong><small>'+effect+'</small></button>').join('')+'</div>'+(trained?'<div class="notice success">O treino desta semana já foi aplicado.</div>':'')+'<div class="performance-layout"><article class="panel"><h2>Planos individuais</h2>'+development+'</article><article class="panel"><header class="academy-head"><div><h2>Academia</h2><p>Captação influenciada pela instalação de base.</p></div><button class="btn btn-primary btn-small" data-action="youth-intake" '+(c.youthIntakeSeason===c.season?'disabled':'')+'>Nova geração</button></header><div class="academy-list">'+(academy||'<p class="muted">A avaliação anual da base ainda não foi realizada.</p>')+'</div></article></div>';
+  const bulletin=health.injured.map(player=>'<div class="medical-player"><span>'+playerPortrait(player,'small')+'<strong>'+escapeHtml(player.name)+'</strong></span><em>'+escapeHtml(player.injury.type)+'</em><b>'+player.injury.daysRemaining+' dias</b></div>').join('');
+  return sectionHead('Centro de performance','Microciclo, desenvolvimento individual, carga, medicina e academia.','<span class="tag">Físico '+health.fitness+'%</span>')+'<section class="performance-command panel"><div><span>Disponíveis<strong>'+health.available+'</strong></span><span>No departamento médico<strong>'+health.injured.length+'</strong></span><span>Sobrecarga<strong>'+health.overloaded.length+'</strong></span><span>Entrosamento<strong>'+health.chemistry+'%</strong></span></div>'+(bulletin?'<article><h3>Boletim médico</h3>'+bulletin+'</article>':'<article class="medical-clear"><strong>Elenco sem lesões</strong><small>Controle a carga para manter a disponibilidade.</small></article>')+'</section><div class="facility-summary"><span>Centro de treino <strong>Nível '+c.facilities.training+'</strong></span><span>Base <strong>Nível '+c.facilities.youth+'</strong></span><span>Medicina <strong>Nível '+c.facilities.medical+'</strong></span></div><div class="training-grid">'+plans.map(([id,name,effect])=>'<button class="training-card" data-action="apply-training" data-plan="'+id+'" '+(trained?'disabled':'')+'><span>◎</span><strong>'+name+'</strong><small>'+effect+'</small></button>').join('')+'</div>'+(trained?'<div class="notice success">O treino desta semana já foi aplicado.</div>':'')+'<div class="performance-layout"><article class="panel"><h2>Planos individuais</h2>'+development+'</article><article class="panel"><header class="academy-head"><div><h2>Academia</h2><p>Captação influenciada pela instalação de base.</p></div><button class="btn btn-primary btn-small" data-action="youth-intake" '+(c.youthIntakeSeason===c.season?'disabled':'')+'>Nova geração</button></header><div class="academy-list">'+(academy||'<p class="muted">A avaliação anual da base ainda não foi realizada.</p>')+'</div></article></div>';
 }
 
 async function loadMarket() {
@@ -868,25 +889,34 @@ function navigate(screen,push=true) {
   if(screen==='market')loadMarket();
 }
 
-function lineupFor(roster,ids) { return ids.map(id=>roster.find(p=>p.id===id)).filter(Boolean).slice(0,11); }
+function lineupFor(roster,ids) { return ids.map(id=>roster.find(p=>p.id===id)).filter(player=>player&&isPlayerAvailable(player)).slice(0,11); }
 
 async function startMatch(source='club') {
   const c=session.career;
   const national=source==='national' ? c.national : null;
   const fixture=national ? national.fixtures.find(f=>!f.played&&!f.locked) : nextFixture();
   if(!fixture){toast('Não há partida disponível.','error');return;}
+  if(!national){
+    const elapsed=Math.max(0,Math.floor((new Date(fixture.date)-new Date(c.date))/86400000));
+    const recovery=advanceRosterDays(c.roster,elapsed,{medicalLevel:c.facilities.medical,fitnessCoach:c.staff.fitnessCoach});
+    c.date=fixture.date;repairCareerLineup(c);
+    if(recovery.recovered.length)c.messages.push({id:'medical-clearance-'+Date.now(),from:'Departamento médico',subject:'Atletas liberados',body:recovery.recovered.join(', ')+' '+(recovery.recovered.length===1?'voltou':'voltaram')+' a ficar disponível(is) para a comissão técnica.',date:new Date().toISOString(),read:false,priority:'normal'});
+  }
   let opponentRoster=[];
   if(fixture.opponent.rosterPath){try{opponentRoster=(await fetchJson(fixture.opponent.rosterPath)).players.map(normalizePlayer);}catch{}}
   const ownRoster=national?national.roster:c.roster, ownIds=national?national.lineupIds:c.lineupIds;
-  const ownLineup=lineupFor(ownRoster,ownIds),ownBench=ownRoster.filter(player=>!ownIds.includes(player.id)&&!player.suspended&&!player.injuredUntil).sort((a,b)=>b.overall-a.overall).slice(0,12).map(player=>({...player,attributes:{...(player.attributes||{})}}));
+  let ownLineup=lineupFor(ownRoster,ownIds);
+  if(ownLineup.length<11){ownLineup=selectBestLineup(ownRoster,national?'4-3-3':c.tactics.formation);if(national)national.lineupIds=ownLineup.map(player=>player.id);else c.lineupIds=ownLineup.map(player=>player.id);}
+  if(ownLineup.length<11){toast('Não há onze atletas disponíveis. Revise lesões e suspensões.','error');persist();return;}
+  const selectedIds=new Set(ownLineup.map(player=>player.id)),ownBench=ownRoster.filter(player=>!selectedIds.has(player.id)&&isPlayerAvailable(player)).sort((a,b)=>effectiveOverall(b,b.pos)-effectiveOverall(a,a.pos)).slice(0,12).map(player=>({...player,attributes:{...(player.attributes||{})}}));
   const ownTeam=national?national.team:c.club;
   const engine=createMatchEngineV2({
     seed:stableNumber(fixture.id+':'+c.season+':'+c.club.id),ownHome:Boolean(fixture.home),ownName:ownTeam.name,opponentName:fixture.opponent.name,
-    ownLineup,opponentLineup:opponentRoster.length?pickLineup(opponentRoster):[],opponentRating:fixture.opponent.rating,ownTactics:c.tactics
+    ownLineup,opponentLineup:opponentRoster.length?selectBestLineup(opponentRoster,'4-2-3-1'):[],opponentRating:fixture.opponent.rating,ownTactics:c.tactics
   });
   session.match={source,fixture,...engine,speed:1,running:false,tacticalOpen:false,tacticalWasRunning:false,liveSelectedPlayer:null,substitutionsUsed:0,maxSubstitutions:5,substitutionHistory:[],substitutedOut:[],ownBench,tacticalPositions:(c.tacticalPositions||FORMATIONS[c.tactics.formation]||FORMATIONS['4-3-3']).map(point=>[...point]),coachInsight:'O jogo começa equilibrado. Observe posse, desgaste e qualidade das chances.'};
   session.matchEventFilter='all';
-  session.screen='match';history.pushState({screen:'match'},'','#/match');renderMatch();
+  persist();session.screen='match';history.pushState({screen:'match'},'','#/match');renderMatch();
 }
 
 function teamOnHome() { return session.match.fixture.home; }
@@ -994,9 +1024,10 @@ function finishMatch() {
   c.manager.level=1+Math.floor(c.manager.xp/500);
   c.manager.license=managerLicense(c.manager.reputation);
   if(m.source==='club'){
-    updateTableForMatch(fixture,ownGoals,oppGoals);c.week++;c.date=addDays(fixture.date,1);c.fitness=clamp(c.fitness-5,35,100);c.morale=clamp(c.morale+(ownGoals>oppGoals?4:ownGoals<oppGoals?-3:1),20,100);
-    const usedPlayers=[...m.ownLineup,...(m.substitutedOut||[])];
-    c.roster.forEach(p=>{const used=usedPlayers.find(item=>item.id===p.id);p.fitness=used?clamp(Math.min(p.fitness,used.fitness)-2,35,100):clamp(p.fitness-1,35,100);p.morale=clamp(p.morale+(ownGoals>oppGoals?3:ownGoals<oppGoals?-2:0),20,100);});
+    updateTableForMatch(fixture,ownGoals,oppGoals);c.week++;c.date=addDays(fixture.date,1);
+    const outcome=ownGoals>oppGoals?'win':ownGoals<oppGoals?'loss':'draw',consequences=applyMatchConsequences(c.roster,m,{result:outcome,date:fixture.date,seed:fixture.id+':'+c.season});
+    const health=rosterHealthSummary(c.roster);c.fitness=health.fitness;c.morale=Math.round(average(c.roster.map(player=>player.morale)));repairCareerLineup(c);
+    if(consequences.injuries.length){const diagnosis=consequences.injuries.map(item=>item.name+' · '+item.type+' ('+item.daysRemaining+' dias)').join('; ');c.messages.push({id:'injury-'+Date.now(),from:'Departamento médico',subject:'Boletim médico pós-jogo',body:diagnosis,date:new Date().toISOString(),read:false,priority:'high'});fixture.engineReport.injuries=consequences.injuries;c.matchReports[0].injuries=consequences.injuries;}
     const matchRevenue=fixture.type==='continental'?2400000:fixture.type==='cup'?1200000:850000,stadiumRevenue=Math.round(matchRevenue*(1+(c.facilities.stadium-2)*.12)),sponsorBonus=advanced?Number(c.sponsor?.winBonus||0):0,revenue=stadiumRevenue+sponsorBonus;c.budget+=revenue;c.ledger.push({date:new Date().toISOString(),label:'Receita de jogo'+(sponsorBonus?' e bônus do patrocinador':'')+' · '+fixture.competitionName,amount:revenue,type:'income'});
     if(fixture.type==='cup'){if(advanced){const next=c.fixtures.find(f=>f.type==='cup'&&f.locked&&!f.cancelled);if(next)resolveCupDraw(next);}else cancelRemainingKnockout(fixture);}
     if(fixture.type==='continental'&&fixture.phase==='league'){
@@ -1010,6 +1041,9 @@ function finishMatch() {
   } else {
     const n=c.national,playedQualifiers=n.fixtures.filter(f=>f.competitionId==='world-cup-qualifiers'&&f.played).length;
     const totalQualifiers=n.fixtures.filter(f=>f.competitionId==='world-cup-qualifiers').length;
+    const nationalOutcome=ownGoals>oppGoals?'win':ownGoals<oppGoals?'loss':'draw',nationalConsequences=applyMatchConsequences(n.roster,m,{result:nationalOutcome,date:fixture.date,seed:'national:'+fixture.id+':'+c.season});
+    n.lineupIds=selectBestLineup(n.roster,'4-3-3').map(player=>player.id);
+    if(nationalConsequences.injuries.length)c.messages.push({id:'national-injury-'+Date.now(),from:'Departamento médico da seleção',subject:'Boletim médico pós-jogo',body:nationalConsequences.injuries.map(item=>item.name+' · '+item.type+' ('+item.daysRemaining+' dias)').join('; '),date:new Date().toISOString(),read:false,priority:'high'});
     c.date=addDays(fixture.date,1);
     if(playedQualifiers>=totalQualifiers){
       const pointsPerMatch={CONMEBOL:1.25,UEFA:1.55,CONCACAF:1.4,AFC:1.4,CAF:1.45,OFC:1.35}[n.team.confederation]||1.45;
@@ -1026,8 +1060,9 @@ function showPostMatchInterview(ownGoals,oppGoals){
   const result=ownGoals>oppGoals?'vitória':ownGoals<oppGoals?'derrota':'empate',m=session.match,report=m.postMatchReport||buildMatchReport(m);
   const reasons=(report.signals||[]).map(item=>'<li><strong>'+escapeHtml(item.label)+'</strong><span>'+escapeHtml(item.detail)+'</span></li>').join('');
   const performers=(report.performers||[]).slice(0,3).map(item=>'<div><span>'+escapeHtml(item.name)+'</span><strong>'+Number(item.rating).toFixed(1)+'</strong><small>'+item.goals+' gol · '+item.assists+' assistência</small></div>').join('');
+  const diagnoses=(session.career.matchReports?.[0]?.injuries||[]).map(item=>'<div class="post-match-injury"><strong>'+escapeHtml(item.name)+'</strong><span>'+escapeHtml(item.type)+' · '+item.daysRemaining+' dias</span></div>').join('');
   toastRoot.replaceChildren();
-  showModal('Análise e entrevista pós-jogo','<div class="press-room phase5-report"><p class="eyebrow">MOTOR '+MATCH_ENGINE_V2_VERSION+' · '+escapeHtml(m.fixture.competitionName)+'</p><h3>'+escapeHtml(report.verdict)+'</h3><div class="press-summary"><span>Placar <strong>'+ownGoals+'–'+oppGoals+'</strong></span><span>xG <strong>'+report.ownXg.toFixed(1)+'–'+report.opponentXg.toFixed(1)+'</strong></span><span>Posse <strong>'+report.ownPossession+'%</strong></span><span>Alterações <strong>'+m.substitutionsUsed+'</strong></span></div>'+(reasons?'<div class="post-match-causes"><h4>O que decidiu a partida</h4><ul>'+reasons+'</ul></div>':'')+(performers?'<div class="post-match-ratings"><h4>Destaques</h4>'+performers+'</div>':'')+'<h3>“Como você avalia a '+result+' e as decisões tomadas durante a partida?”</h3><p>Suas palavras afetam elenco, diretoria, torcida e reputação.</p></div>','<button class="btn" data-action="post-interview" data-tone="calm">Valorizar o coletivo</button><button class="btn" data-action="post-interview" data-tone="demanding">Cobrar evolução</button><button class="btn btn-primary" data-action="post-interview" data-tone="protective">Proteger os jogadores</button>');
+  showModal('Análise e entrevista pós-jogo','<div class="press-room phase5-report"><p class="eyebrow">MOTOR '+MATCH_ENGINE_V2_VERSION+' · '+escapeHtml(m.fixture.competitionName)+'</p><h3>'+escapeHtml(report.verdict)+'</h3><div class="press-summary"><span>Placar <strong>'+ownGoals+'–'+oppGoals+'</strong></span><span>xG <strong>'+report.ownXg.toFixed(1)+'–'+report.opponentXg.toFixed(1)+'</strong></span><span>Posse <strong>'+report.ownPossession+'%</strong></span><span>Alterações <strong>'+m.substitutionsUsed+'</strong></span></div>'+(reasons?'<div class="post-match-causes"><h4>O que decidiu a partida</h4><ul>'+reasons+'</ul></div>':'')+(performers?'<div class="post-match-ratings"><h4>Destaques</h4>'+performers+'</div>':'')+(diagnoses?'<div class="post-match-medical"><h4>Boletim médico</h4>'+diagnoses+'</div>':'')+'<h3>“Como você avalia a '+result+' e as decisões tomadas durante a partida?”</h3><p>Suas palavras afetam elenco, diretoria, torcida e reputação.</p></div>','<button class="btn" data-action="post-interview" data-tone="calm">Valorizar o coletivo</button><button class="btn" data-action="post-interview" data-tone="demanding">Cobrar evolução</button><button class="btn btn-primary" data-action="post-interview" data-tone="protective">Proteger os jogadores</button>');
 }
 
 function completePostMatchInterview(tone){const c=session.career,m=session.match;if(!m)return;const effects={calm:[2,1,1],demanding:[-1,2,0],protective:[3,0,1]},[morale,board,reputation]=effects[tone]||[0,0,0];c.morale=clamp(c.morale+morale,1,100);c.board=clamp(c.board+board,1,100);c.manager.reputation=clamp(c.manager.reputation+reputation,1,100);c.roster.forEach(player=>player.morale=clamp(player.morale+morale,1,100));c.mediaHistory.push({date:c.date,competition:m.fixture.competitionName,tone,minute:m.minute,score:m.homeGoals+'-'+m.awayGoals});c.messages.push({id:'press-'+Date.now(),from:'Assessoria de imprensa',subject:'Repercussão da entrevista pós-jogo',body:tone==='protective'?'O elenco aprovou sua postura de proteção.':tone==='demanding'?'A cobrança elevou a pressão por desempenho.':'A mensagem coletiva foi recebida com equilíbrio.',date:new Date().toISOString(),read:false,priority:'normal'});const destination=m.source==='national'?'national':'dashboard';closeModal();session.match=null;persist();navigate(destination);toast('Entrevista publicada e impactos aplicados.','success');}
@@ -1075,6 +1110,9 @@ function advanceSeason() {
   c.manager.xp+=champion?1500:Math.max(250,(table.length-rank+1)*55);
   c.manager.reputation=clamp(c.manager.reputation+(champion?5:rank<=Math.ceil(table.length/4)?2:relegated?-5:0),1,100);
   c.manager.level=1+Math.floor(c.manager.xp/500);c.manager.license=managerLicense(c.manager.reputation);
+  const aging=processSeasonAging(c.roster,{season:c.season,seed:c.club.id+':'+c.season});
+  processSeasonAging(c.youthPlayers||[],{season:c.season,seed:'academy:'+c.club.id+':'+c.season});
+  advanceRosterDays(c.roster,35,{medicalLevel:c.facilities.medical,fitnessCoach:c.staff.fitnessCoach});repairCareerLineup(c);
   const status=promoted?'promoted':relegated?'relegated':'stayed',linked=linkedLeagueFor(league,status);
   if(linked){c.club.leagueId=linked.id;c.club.leagueName=linked.name;c.club.division=linked.division;}
   c.season+=1;c.week=1;c.stats={played:0,wins:0,draws:0,losses:0,gf:0,ga:0,points:0};c.lastTrainingWeek=0;c.worldState=createWorldState(c.season);if(c.sponsor){c.sponsor.years--;if(c.sponsor.years<=0){c.sponsor=null;c.sponsorOffers=generateSponsorOffers(c.club,c.facilities);}else{c.budget+=c.sponsor.annual;c.ledger.push({date:new Date().toISOString(),label:'Patrocínio anual · '+c.sponsor.name,amount:c.sponsor.annual,type:'income'});}}
@@ -1085,15 +1123,17 @@ function advanceSeason() {
   if(continentalChampion)fixtures.push(...buildWorldFixtures(c.club,startDate));
   c.participants=participants;c.table=initialTable(participants);c.fixtures=fixtures.sort((a,b)=>new Date(a.date)-new Date(b.date));c.date=startDate.toISOString();processCareerDeadlines(c);
   c.jobOffers=session.catalog.clubs.filter(club=>club.rosterPath&&club.id!==c.club.id&&club.rating<=Math.round(c.manager.reputation*1.08)).sort((a,b)=>b.rating-a.rating).slice(0,5);
-  c.messages.push({id:'season-'+Date.now(),from:'Diretoria e federação',subject:'Temporada '+c.season+' iniciada',body:'Posição anterior: '+rank+'º. '+(linked?'O clube agora disputará '+newLeague.name+'. ':'')+(continentalId?'Vaga continental confirmada: '+continentalId+'. ':'')+'Premiação: '+money(prize)+'.',date:new Date().toISOString(),read:false,priority:'high'});
+  c.messages.push({id:'season-'+Date.now(),from:'Diretoria e federação',subject:'Temporada '+c.season+' iniciada',body:'Posição anterior: '+rank+'º. '+(linked?'O clube agora disputará '+newLeague.name+'. ':'')+(continentalId?'Vaga continental confirmada: '+continentalId+'. ':'')+'Premiação: '+money(prize)+'. Evolução anual: '+aging.improved.length+' jogador(es) subiram de GER e '+aging.declined.length+' tiveram declínio.',date:new Date().toISOString(),read:false,priority:'high'});
   persist();navigate('dashboard');toast('Nova temporada criada com acesso, rebaixamento e vagas aplicados.','success');
 }
 
 function applyTraining(plan) {
   const c=session.career;if(c.lastTrainingWeek===c.week)return;
-  const effects={recovery:[8,2],tactical:[2,3],intensity:[-8,4],finishing:[-3,4],setpieces:[-2,3]},[fitness,morale]=effects[plan]||[0,0];
-  const developmentChance=.015+c.facilities.training*.008;
-  c.fitness=clamp(c.fitness+fitness+c.facilities.medical,20,100);c.morale=clamp(c.morale+morale,20,100);c.roster.forEach(p=>{p.fitness=clamp(p.fitness+fitness+c.facilities.medical,20,100);p.morale=clamp(p.morale+morale,20,100);const focus=c.individualTraining[p.id]||'Equilibrado',attribute={Físico:'stamina',Técnica:'technique',Passe:'passing',Finalização:'finishing',Defesa:'tackling'}[focus];if(attribute&&Math.random()<developmentChance*2)p.attributes[attribute]=clamp(p.attributes[attribute]+1,1,99);if(p.age<=24&&p.overall<p.potential&&Math.random()<developmentChance)p.overall++;});c.lastTrainingWeek=c.week;c.weeklyDecisions.training=true;const development=c.boardObjectives.find(item=>item.id==='develop-player');if(development)development.progress=Math.min(development.target,development.progress+c.roster.filter(player=>player.age<=23).length);updateBoardObjectives(c);persist();renderGame(renderTraining());toast('Microciclo aplicado; instalações e planos individuais influenciaram a evolução.','success');
+  const outcome=applyTrainingWeek(c.roster,plan,{seed:c.club.id+':'+c.season+':'+c.week,medicalLevel:c.facilities.medical,trainingLevel:c.facilities.training,individualTraining:c.individualTraining,date:c.date});
+  const health=rosterHealthSummary(c.roster);c.fitness=health.fitness;c.morale=Math.round(average(c.roster.map(player=>player.morale)));repairCareerLineup(c);
+  if(outcome.injuries.length)c.messages.push({id:'training-injury-'+Date.now(),from:'Departamento médico',subject:'Ocorrência no treinamento',body:outcome.injuries.map(item=>item.name+' · '+item.type+' ('+item.daysRemaining+' dias)').join('; '),date:new Date().toISOString(),read:false,priority:'high'});
+  if(outcome.improvements.length)c.messages.push({id:'development-'+Date.now(),from:'Centro de performance',subject:'Evolução individual confirmada',body:outcome.improvements.map(item=>item.name+' evoluiu em '+item.attribute).join('; '),date:new Date().toISOString(),read:false,priority:'normal'});
+  c.lastTrainingWeek=c.week;c.weeklyDecisions.training=true;const development=c.boardObjectives.find(item=>item.id==='develop-player');if(development)development.progress=Math.min(development.target,development.progress+c.roster.filter(player=>player.age<=23).length);updateBoardObjectives(c);persist();renderGame(renderTraining());toast('Microciclo aplicado: carga, forma, entrosamento e evolução foram recalculados.'+(outcome.injuries.length?' Houve ocorrência médica.':''),outcome.injuries.length?'error':'success');
 }
 
 function createYouthIntake(){const c=session.career;if(c.youthIntakeSeason===c.season)return;const first=['Lucas','Gabriel','Matheus','Rafael','João','Pedro','Caio','Davi','Thiago','Bruno'],last=['Silva','Santos','Oliveira','Costa','Souza','Lima','Alves','Rocha','Mendes','Pereira'],positions=['GOL','ZAG','LD','LE','VOL','MC','MEI','PD','PE','ATA'],count=4+c.facilities.youth;c.youthPlayers=Array.from({length:count},(_,index)=>{const seed=stableNumber(c.club.id+':'+c.season+':'+index),overall=clamp(45+c.facilities.youth*3+seed%9,40,72),potential=clamp(overall+8+seed%18,overall,92);return normalizePlayer({id:'youth-'+c.season+'-'+seed,name:first[seed%first.length]+' '+last[(seed>>3)%last.length],pos:positions[(seed>>5)%positions.length],role:'Revelação da academia',overall,potential,age:15+seed%3,salary:2,value:.08,fitness:94,morale:82,personality:['Determinado','Profissional','Ambicioso'][seed%3]},index);});c.youthIntakeSeason=c.season;c.messages.push({id:'youth-'+Date.now(),from:'Diretor da academia',subject:'Nova geração avaliada',body:count+' jovens foram incorporados à academia. A qualidade reflete o nível atual das instalações.',date:new Date().toISOString(),read:false,priority:'high'});unlockAchievement('academy-class','Olheiro de talentos','Avalie sua primeira geração anual da academia.');persist();renderGame(renderTraining());toast('Nova geração da academia disponível.','success');}
@@ -1144,8 +1184,10 @@ function playerReport(id){
   const attrs=Object.entries(p.attributes||{}).map(([key,value])=>'<div><span>'+escapeHtml(({pace:'Velocidade',stamina:'Resistência',strength:'Força',passing:'Passe',technique:'Técnica',vision:'Visão',finishing:'Finalização',tackling:'Desarme',positioning:'Posicionamento',decisions:'Decisões',teamwork:'Trabalho em equipe',leadership:'Liderança'})[key]||key)+'</span><strong>'+value+'</strong></div>').join('');
   const media=licensedPlayerMedia(p),identity=media?'Foto real do Wikimedia Commons · '+escapeHtml(media.license.name)+' · '+escapeHtml(media.credit||'crédito no manifesto'):'Foto genérica provisória criada para o VFM; este jogador ainda não possui correspondência real verificada.';
   const details=[p.nationality,p.foot?('Pé '+p.foot):'',p.height?(p.height+' cm'):''].filter(Boolean).map(escapeHtml).join(' · ');
+  const status=playerStatus(p),roles=Object.entries(p.positionRatings||{}).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([role,rating])=>'<span><b>'+role+'</b><strong>'+rating+'</strong></span>').join('');
+  const performance='<div class="player-performance-grid"><span><small>Rendimento hoje</small><strong>'+effectiveOverall(p,p.pos).toFixed(1)+'</strong></span><span><small>Forma</small><strong>'+Math.round(p.form)+'%</strong></span><span><small>Físico</small><strong>'+Math.round(p.fitness)+'%</strong></span><span><small>Carga</small><strong>'+Math.round(p.workload)+'%</strong></span><span><small>Ritmo</small><strong>'+Math.round(p.sharpness)+'%</strong></span><span><small>Entrosamento</small><strong>'+Math.round(p.chemistry)+'%</strong></span></div><div class="position-ratings"><h4>Nota por posição</h4>'+roles+'</div><div class="medical-status '+status.className+'"><strong>'+escapeHtml(status.label)+'</strong><small>'+p.seasonMinutes+' min · '+p.appearances+' jogos na temporada</small></div>';
   const actions=p.onLoan&&p.purchaseOption?'<button class="btn" data-action="close-modal">Fechar</button><button class="btn btn-primary" data-action="exercise-purchase-option" data-player="'+escapeHtml(p.id)+'">Comprar por '+money(p.purchaseOption)+'</button>':'<button class="btn btn-primary" data-action="close-modal">Fechar</button>';
-  showModal('Relatório · '+p.name,'<div class="player-report"><header>'+playerPortrait(p,'large')+'<div><h3>'+escapeHtml(p.name)+'</h3><p>'+p.pos+' · '+p.age+' anos · '+escapeHtml(p.personality)+'</p><strong>GER '+p.overall+' · POT '+p.potential+'</strong><small>'+details+'</small></div></header><div class="identity-source">'+identity+'</div><div class="attribute-grid">'+attrs+'</div><p>Risco de lesão: '+p.injuryRisk+'% · Conhecimento do scout: '+p.knowledge+'% · Contrato: '+escapeHtml(p.contractUntil)+'</p></div>',actions);
+  showModal('Relatório · '+p.name,'<div class="player-report"><header>'+playerPortrait(p,'large')+'<div><h3>'+escapeHtml(p.name)+'</h3><p>'+p.pos+' · '+p.age+' anos · '+escapeHtml(p.personality)+'</p><strong>GER '+p.overall+' · POT '+p.potential+'</strong><small>'+details+'</small></div></header>'+performance+'<div class="identity-source">'+identity+'</div><div class="attribute-grid">'+attrs+'</div><p>Risco-base de lesão: '+p.injuryRisk+'% · Conhecimento do scout: '+p.knowledge+'% · Contrato: '+escapeHtml(p.contractUntil)+'</p></div>',actions);
 }
 
 function loanPlayer(id){const p=session.market.find(item=>item.id===id);if(!p)return;const fee=Math.max(100000,Math.round(p.value*1000000*.06)),wage=Math.max(10000,p.salary*1000);showModal('Empréstimo · '+p.name,'<p>Proposta de empréstimo até o fim da temporada, com taxa de <strong>'+money(fee)+'</strong> e 70% dos salários.</p><p>Uma opção de compra de '+money(p.value*1000000)+' será registrada.</p>','<button class="btn" data-action="close-modal">Cancelar</button><button class="btn btn-primary" data-action="confirm-loan" data-player="'+p.id+'" data-fee="'+fee+'" data-wage="'+wage+'">Enviar proposta</button>');}
@@ -1218,7 +1260,7 @@ function handleAction(action,target) {
   else if(action==='abandon-match'){closeModal();session.match=null;navigate('match-center');}
   else if(action==='best-lineup'){session.career.lineupIds=pickLineup(session.career.roster).map(p=>p.id);persist();renderGame(renderSquad());}
   else if(action==='reset-tactical-shape'){session.career.tacticalPositions=(FORMATIONS[session.career.tactics.formation]||FORMATIONS['4-3-3']).map(point=>[...point]);persist();renderGame(renderTactics());}
-  else if(action==='toggle-lineup'){const id=target.dataset.player,ids=session.career.lineupIds,index=ids.indexOf(id);if(index>=0)ids.splice(index,1);else if(ids.length<11)ids.push(id);else return toast('Remova um titular antes de escalar outro.','error');persist();renderGame(renderSquad());}
+  else if(action==='toggle-lineup'){const id=target.dataset.player,player=session.career.roster.find(item=>item.id===id),ids=session.career.lineupIds,index=ids.indexOf(id);if(index>=0)ids.splice(index,1);else if(!isPlayerAvailable(player))return toast('Este atleta está indisponível.','error');else if(ids.length<11)ids.push(id);else return toast('Remova um titular antes de escalar outro.','error');persist();renderGame(renderSquad());}
   else if(action==='apply-training')applyTraining(target.dataset.plan);
   else if(action==='youth-intake')createYouthIntake();
   else if(action==='promote-youth')promoteYouth(target.dataset.player);

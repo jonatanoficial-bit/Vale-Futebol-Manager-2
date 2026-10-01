@@ -1,4 +1,4 @@
-export const MATCH_ENGINE_V2_VERSION = '5.0.0';
+export const MATCH_ENGINE_V2_VERSION = '5.1.0';
 
 const POSITION_ORDER = ['GOL','LD','ZAG','ZAG','LE','VOL','MC','MC','PD','ATA','PE'];
 const FORMATION_ROLES = {
@@ -35,6 +35,7 @@ function preparePlayer(player,index,prefix='team'){
   return {
     ...player,id:String(player?.id||`${prefix}-${index}`),name:String(player?.name||`Jogador ${index+1}`),pos,overall,
     fitness:clamp(player?.fitness??90,1,100),morale:clamp(player?.morale??74,1,100),form:clamp(player?.form??70,1,100),
+    sharpness:clamp(player?.sharpness??70,1,100),chemistry:clamp(player?.chemistry??68,1,100),workload:clamp(player?.workload??34,0,100),injuryRisk:clamp(player?.injuryRisk??10,1,40),recurrenceRisk:clamp(player?.recurrenceRisk??0,0,45),
     attributes:{...(player?.attributes||{})}
   };
 }
@@ -82,13 +83,14 @@ function teamMetrics(lineup=[],tactics={},boost=0){
   const players=lineup.length?lineup:genericLineup(66),profile=tacticsProfile(tactics);
   const expected=FORMATION_ROLES[tactics.formation]||FORMATION_ROLES['4-3-3'],fits=players.map((player,index)=>positionalFit(player,expected[index]||player.pos));
   const fitness=average(players.map(player=>player.fitness)),morale=average(players.map(player=>player.morale)),form=average(players.map(player=>player.form));
-  const readiness=(fitness-75)*.13+(morale-70)*.055+(form-70)*.045+Number(boost||0);
+  const sharpness=average(players.map(player=>player.sharpness)),chemistry=average(players.map(player=>player.chemistry)),workload=average(players.map(player=>player.workload));
+  const readiness=(fitness-75)*.13+(morale-70)*.055+(form-70)*.045+(sharpness-70)*.035+(chemistry-68)*.03-Math.max(0,workload-74)*.05+Number(boost||0);
   return {
     attack:average(players.map((player,index)=>playerAttack(player)*(.76+fits[index]*.24)))+profile.attack+readiness,
     control:average(players.map((player,index)=>playerControl(player)*(.7+fits[index]*.3)))+profile.control+readiness*.68,
     defence:average(players.map((player,index)=>playerDefence(player)*(.72+fits[index]*.28)))+profile.defence+readiness*.84,
     goalkeeper:average(players.filter(player=>player.pos==='GOL').map(player=>attribute(player,'positioning')*.4+attribute(player,'decisions')*.3+player.overall*.3))||average(players.map(player=>player.overall)),
-    fitness,morale,form,profile,positionalFit:average(fits)*100
+    fitness,morale,form,sharpness,chemistry,workload,profile,positionalFit:average(fits)*100
   };
 }
 
@@ -171,10 +173,15 @@ function simulateDiscipline(match,homeMetrics,awayMetrics){
 }
 
 function simulateInjury(match){
-  const ownFitness=average(match.ownLineup.map(player=>player.fitness)),risk=.0007+Math.max(0,68-ownFitness)*.00008+(match.ownTactics.pressure>=78?.0008:0);
+  const eligible=match.ownLineup.filter(player=>player&&!player.matchInjured);if(!eligible.length)return;
+  const ownFitness=average(eligible.map(player=>player.fitness)),workload=average(eligible.map(player=>player.workload)),individualRisk=average(eligible.map(player=>player.injuryRisk+player.recurrenceRisk*.6));
+  const risk=.00065+Math.max(0,70-ownFitness)*.000075+Math.max(0,workload-65)*.000018+individualRisk*.000012+(match.ownTactics.pressure>=78?.00055:0);
   if(match.minute<14||match.minute>84||nextRandom(match)>risk)return;
-  const player=pick(match.ownLineup,nextRandom(match));if(!player)return;
-  player.fitness=clamp(player.fitness-16,1,100);ratingAdd(match,player,-.1);addEvent(match,'injury',`Alerta físico: ${player.name} sente desgaste e a comissão recomenda avaliação.`,match.ownHome?'home':'away',{playerId:player.id});
+  const weights=eligible.map(player=>1+Math.max(0,72-player.fitness)*.055+Math.max(0,player.workload-68)*.035+player.injuryRisk*.035+player.recurrenceRisk*.045),total=weights.reduce((sum,value)=>sum+value,0);let cursor=nextRandom(match)*total,player=eligible[0];
+  for(let index=0;index<eligible.length;index++){cursor-=weights[index];if(cursor<=0){player=eligible[index];break;}}
+  player.matchInjured=true;player.fitness=clamp(player.fitness-18,1,100);ratingAdd(match,player,-.16);
+  const incident={playerId:player.id,playerName:player.name,minute:match.minute,minimumDays:ownFitness<58?5:0};match.injuryIncidents.push(incident);
+  addEvent(match,'injury',`Lesão: ${player.name} sente dores e precisará passar por avaliação médica.`,match.ownHome?'home':'away',incident);
 }
 
 function chanceType(match,tactics){
@@ -252,7 +259,7 @@ export function createMatchEngineV2(config={}){
     minute:0,homeGoals:0,awayGoals:0,possessionHome:50,possessionSamples:0,shotsHome:0,shotsAway:0,shotsOnTargetHome:0,shotsOnTargetAway:0,
     xgHome:0,xgAway:0,cardsHome:0,cardsAway:0,cornersHome:0,cornersAway:0,passesHome:0,passesAway:0,completedPassesHome:0,completedPassesAway:0,
     momentum:50,opponentPlan:'Equilibrado',ownLineup,opponentLineup,ownTactics:normalizeTactics(config.ownTactics),opponentTactics,
-    events:[],tacticalSignals:[],playerPerformance:{},managerEffect:null,ball:{x:50,y:50},attacking:'home',running:false,finished:false
+    events:[],tacticalSignals:[],injuryIncidents:[],playerPerformance:{},managerEffect:null,ball:{x:50,y:50},attacking:'home',running:false,finished:false
   };
   ownLineup.forEach(player=>recordFor(match,player));opponentLineup.forEach(player=>recordFor(match,player));
   addEvent(match,'tactical','As equipes estão posicionadas. A simulação considera atributos, funções, fadiga e instruções.','neutral');
@@ -291,7 +298,7 @@ export function buildMatchReport(match){
   if(ownXg>opponentXg+.45)verdict=`A equipe criou chances melhores (${round(ownXg,1)} xG) e o plano ofensivo funcionou.`;
   else if(opponentXg>ownXg+.45)verdict=`O adversário criou chances mais perigosas; a proteção da área precisa evoluir.`;
   else if(ownPossession>=58)verdict='A equipe controlou a posse, mas a qualidade das finalizações decidiu o resultado.';
-  return {engineVersion:MATCH_ENGINE_V2_VERSION,result,verdict,ownGoals,opponentGoals,ownXg:round(ownXg,2),opponentXg:round(opponentXg,2),ownPossession,bestPlayer:performers[0]||null,performers:performers.slice(0,5),signals};
+  return {engineVersion:MATCH_ENGINE_V2_VERSION,result,verdict,ownGoals,opponentGoals,ownXg:round(ownXg,2),opponentXg:round(opponentXg,2),ownPossession,bestPlayer:performers[0]||null,performers:performers.slice(0,5),signals,injuries:(match.injuryIncidents||[]).map(item=>({...item}))};
 }
 
 export function simulateMatchV2(config={},chunk=1){

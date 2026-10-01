@@ -99,7 +99,7 @@ for ref in re.findall(r'(?:href|src)="\./([^"?#]+)', html):
 require("app-v16.js" in html and "ultimate-v16.css" in html, "Entrypoints V16 ausentes")
 
 sw = (ROOT / "sw.js").read_text(encoding="utf-8")
-require("ultimate-v16.6.0-phase6" in sw, "Cache do service worker não corresponde à Fase 6")
+require("ultimate-v16.7.0-phase7" in sw, "Cache do service worker não corresponde à Fase 7")
 for ref in re.findall(r"'\./([^'?]+)(?:\?[^']*)?'", sw):
     if ref:
         require((ROOT / ref).exists(), f"Referência ausente no service worker: {ref}")
@@ -112,12 +112,19 @@ for marker in ["liveTacticsPanel", "yearCalendar", "simulateWorldWeek", "showPos
     require(marker in app_js, f"Módulo V16 ausente: {marker}")
 for marker in ["positionClass", "formation-face", "live-position", "playerPortrait(player,'small')"]:
     require(marker in app_js, f"Interface tática da Fase 6 incompleta: {marker}")
+for marker in ["CAREER_PERFORMANCE_VERSION", "applyMatchConsequences", "applyTrainingWeek", "processSeasonAging", "rosterHealthSummary"]:
+    require(marker in app_js, f"Integração esportiva da Fase 7 incompleta: {marker}")
 premium_css = (ROOT / "css/ultimate-v16.css").read_text(encoding="utf-8")
 for marker in ["Fase 6", "position-gk", "position-def", "position-mid", "position-att", "--nav-accent"]:
     require(marker in premium_css, f"Identidade visual da Fase 6 incompleta: {marker}")
+for marker in ["Fase 7", "performance-command", "player-performance-grid", "medical-status"]:
+    require(marker in premium_css, f"Interface de performance da Fase 7 incompleta: {marker}")
 engine_v2 = (ROOT / "js/systems/matchEngineV2.js").read_text(encoding="utf-8")
 for marker in ["createMatchEngineV2", "advanceMatchEngineV2", "applyManagerShoutV2", "buildMatchReport", "MATCH_ENGINE_V2_VERSION"]:
     require(marker in engine_v2, f"Motor de partida Fase 5 incompleto: {marker}")
+performance_v3 = (ROOT / "js/systems/careerPerformanceV3.js").read_text(encoding="utf-8")
+for marker in ["calculatePositionRating", "selectBestLineup", "advanceRosterDays", "applyMatchConsequences", "applyTrainingWeek", "processSeasonAging"]:
+    require(marker in performance_v3, f"Motor de carreira Fase 7 incompleto: {marker}")
 
 verification_counts = Counter(league.get("rules", {}).get("verification") for league in leagues)
 report = {
@@ -147,7 +154,7 @@ report = {
     "checks": [
         "catalog integrity", "unique club IDs", "club and national roster paths", "six-confederation coverage",
         "league rule status", "manifest adaptive orientation", "index references", "service-worker shell references",
-        "manager face atlas", "national identity flags", "live match tactics", "match engine v2", "phase 6 tactical portraits", "phase 6 navigation identity", "annual calendar", "global simulation", "rating disclosure",
+        "manager face atlas", "national identity flags", "live match tactics", "match engine v2", "phase 6 tactical portraits", "phase 6 navigation identity", "phase 7 positional ratings", "phase 7 injury and recovery", "phase 7 development and aging", "annual calendar", "global simulation", "rating disclosure",
     ],
 }
 
