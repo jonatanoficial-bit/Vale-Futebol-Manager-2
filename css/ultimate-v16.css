@@ -820,3 +820,65 @@ button { -webkit-tap-highlight-color:transparent; }
   .match-competition-mark { width:48px; height:48px; padding:9px; }
   .momentum-meter { right:4px; bottom:4px; left:4px; padding:4px 6px; }
 }
+
+/* Fase 5: motor de partida causal, leitura ao vivo e relatório persistente. */
+.match-scoreboard .clock { display:grid; justify-items:center; min-width:58px; }
+.match-scoreboard .clock small { color:#8fa5b3; font-size:7px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; }
+.match-engine-label { margin-bottom:7px; color:#65e3aa; font-size:7px; font-weight:900; letter-spacing:.12em; }
+.commentary-list li span { display:grid; gap:3px; }
+.commentary-list li small { color:#8296a4; font-size:7px; line-height:1.35; }
+.commentary-panel h3,.stats-panel h3 { margin:12px 0 7px; color:#dbe7eb; font-size:9px; text-transform:uppercase; }
+.causal-list { display:grid; gap:6px; margin:0; padding:0; list-style:none; }
+.causal-list li { display:grid; gap:2px; padding:7px 8px; border:1px solid rgba(255,255,255,.07); border-left:3px solid #e8bb5b; border-radius:8px; background:rgba(255,255,255,.025); }
+.causal-list li.positive { border-left-color:#58e2a4; }
+.causal-list li strong { font-size:8px; }
+.causal-list li span { color:#8fa3af; font-size:7px; line-height:1.4; }
+.live-ratings { display:grid; gap:5px; margin-top:10px; padding-top:8px; border-top:1px solid rgba(255,255,255,.08); }
+.live-ratings > div { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:2px 7px; align-items:center; }
+.live-ratings span { overflow:hidden; font-size:8px; white-space:nowrap; text-overflow:ellipsis; }
+.live-ratings strong { color:#f4d37c; font-size:10px; }
+.live-ratings small { grid-column:1/-1; color:#7f929e; font-size:7px; }
+.live-impact-summary { display:grid; grid-template-columns:repeat(2,1fr); gap:5px; }
+.live-impact-summary span { display:flex; justify-content:space-between; padding:6px 7px; border-radius:8px; color:#8fa3af; background:rgba(255,255,255,.04); font-size:8px; }
+.live-impact-summary b { color:#f3d27b; }
+.quick-instructions { grid-template-columns:repeat(2,1fr); }
+.touchline-shouts { display:grid; grid-template-columns:repeat(3,1fr); gap:5px; padding-top:8px; border-top:1px solid rgba(255,255,255,.08); }
+.touchline-shouts > span { grid-column:1/-1; color:#8296a4; font-size:8px; font-weight:850; letter-spacing:.08em; text-transform:uppercase; }
+.touchline-shouts button { min-height:38px; border:1px solid rgba(88,226,164,.2); border-radius:9px; color:#cff6e3; background:rgba(88,226,164,.07); font-size:8px; }
+.touchline-shouts button:disabled { opacity:.38; }
+.phase5-report { display:grid; gap:12px; }
+.phase5-report > h3 { margin:0; }
+.phase5-report .press-summary { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+.phase5-report .press-summary span { display:grid; gap:2px; padding:8px; border-radius:9px; color:#8ea1ad; background:rgba(255,255,255,.04); font-size:8px; }
+.phase5-report .press-summary strong { color:#f4d37c; font-size:10px; }
+.post-match-causes,.post-match-ratings { display:grid; gap:7px; padding:11px; border:1px solid rgba(255,255,255,.08); border-radius:12px; background:rgba(255,255,255,.025); }
+.post-match-causes h4,.post-match-ratings h4 { margin:0; color:#f2d47d; font-size:9px; text-transform:uppercase; }
+.post-match-causes ul { display:grid; gap:6px; margin:0; padding:0; list-style:none; }
+.post-match-causes li { display:grid; gap:2px; }
+.post-match-causes li strong { font-size:9px; }
+.post-match-causes li span { color:#92a5b1; font-size:8px; }
+.post-match-ratings > div { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:2px 8px; }
+.post-match-ratings > div strong { color:#f2d47d; }
+.post-match-ratings > div small { grid-column:1/-1; color:#81949f; }
+.saved-match-analysis { display:grid; gap:12px; margin-top:14px; }
+.saved-match-analysis > header { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+.saved-match-analysis > header h2 { margin:4px 0 0; }
+.analysis-numbers { display:flex; gap:8px; flex-wrap:wrap; }
+.analysis-numbers span { padding:7px 9px; border-radius:9px; color:#8da1ad; background:rgba(255,255,255,.035); font-size:9px; }
+.analysis-numbers strong { margin-left:5px; color:#f1d27b; }
+.saved-ratings { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; }
+.saved-ratings > div { display:flex; justify-content:space-between; gap:6px; padding:8px; border:1px solid rgba(255,255,255,.07); border-radius:9px; font-size:8px; }
+.saved-ratings strong { color:#65e3aa; }
+
+@media (max-width:680px) and (orientation:portrait) {
+  .match-side:last-child .coach-insight,.match-side:last-child .live-ratings { grid-column:1/-1; }
+  .match-side:last-child .stat-row { min-height:58px; padding:6px; }
+  .match-side:last-child .stat-row span { font-size:7px; text-align:center; }
+  .match-side:last-child .stat-row strong { font-size:9px; }
+  .live-ratings { grid-template-columns:repeat(3,1fr); }
+  .live-ratings h3 { grid-column:1/-1; }
+  .touchline-shouts { grid-template-columns:1fr; }
+  .touchline-shouts > span { grid-column:auto; }
+  .saved-ratings { grid-template-columns:1fr; }
+  .phase5-report .press-summary { grid-template-columns:repeat(2,1fr); }
+}

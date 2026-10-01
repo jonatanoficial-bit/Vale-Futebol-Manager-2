@@ -1,6 +1,19 @@
-# Vale Futebol Manager — Ultimate World 16.4
+# Vale Futebol Manager — Ultimate World 16.5
 
-Manager internacional mobile-first para retrato e paisagem, jogável no computador e instalável como PWA. A V16.4 recupera os cenários cinematográficos, apresenta a carreira a partir da próxima decisão e usa um campo realista compartilhado pelas táticas e partidas.
+Manager internacional mobile-first para retrato e paisagem, jogável no computador e instalável como PWA. A V16.5 introduz um motor de partida determinístico, causal e orientado pelos atributos reais do elenco, preservando a apresentação cinematográfica e o campo realista.
+
+## Fase 5 — motor de partida 2.0
+
+- resultado idêntico em 1×, 3× e 6× para a mesma partida e as mesmas decisões;
+- atributos técnicos, mentais e físicos calculados por posição e função;
+- formação, mentalidade, construção, transição, marcação, pressão, ritmo, largura e linha defensiva com efeitos combinados;
+- IA adversária que adapta o plano aos 28, 55 e 70 minutos conforme placar e qualidade das chances;
+- cansaço individual associado a stamina, intensidade e risco tático;
+- chances descritas com jogador, tipo de jogada, causa tática e xG;
+- orientações à beira do campo, substituições com efeito de energia e notas ao vivo;
+- precisão de passe, escanteios, cartões, melhores jogadores e explicação das decisões no pós-jogo;
+- relatório das últimas 40 partidas preservado no save e disponível no Centro de partida;
+- teste automatizado de equilíbrio com 2.400 partidas comparando cenários táticos, técnicos e adequação posicional.
 
 ## Fase 4 — carreira cinematográfica
 
@@ -97,8 +110,9 @@ Não abra `index.html` diretamente; elencos, dados e funcionamento offline depen
 - 22 jogadores no campo;
 - painel ao vivo com 11 titulares e 12 reservas;
 - substituição por toque e relógio de partida testados;
+- determinismo entre velocidades, adequação posicional, efeito de atributos e diferenças entre plano ofensivo, equilibrado e bloco baixo testados em 2.400 partidas;
 - sintaxe JavaScript aprovada;
 - 833 clubes, 211 seleções e 24.300 registros de jogadores auditados;
 - integridade aprovada com ressalvas documentadas em `QA-WORLD-V16.json`.
 
-Versão 16.0.0 · Ultimate World · 2026-08-04
+Versão 16.5.0 · Ultimate World · 2026-10-01

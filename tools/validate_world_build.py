@@ -99,7 +99,7 @@ for ref in re.findall(r'(?:href|src)="\./([^"?#]+)', html):
 require("app-v16.js" in html and "ultimate-v16.css" in html, "Entrypoints V16 ausentes")
 
 sw = (ROOT / "sw.js").read_text(encoding="utf-8")
-require("ultimate-v16.4.0-phase4" in sw, "Cache do service worker não corresponde à Fase 4")
+require("ultimate-v16.5.0-phase5" in sw, "Cache do service worker não corresponde à Fase 5")
 for ref in re.findall(r"'\./([^'?]+)(?:\?[^']*)?'", sw):
     if ref:
         require((ROOT / ref).exists(), f"Referência ausente no service worker: {ref}")
@@ -110,6 +110,9 @@ app_js = (ROOT / "js/app-v16.js").read_text(encoding="utf-8")
 require(len(set(re.findall(r"avatar-sprite-(\d+)", (ROOT / "css/world-edition-v11.css").read_text(encoding="utf-8")))) == 16, "Sprites de avatar incompletos")
 for marker in ["liveTacticsPanel", "yearCalendar", "simulateWorldWeek", "showPostMatchInterview", "renderFacilitiesCampus", "generateSponsorOffers"]:
     require(marker in app_js, f"Módulo V16 ausente: {marker}")
+engine_v2 = (ROOT / "js/systems/matchEngineV2.js").read_text(encoding="utf-8")
+for marker in ["createMatchEngineV2", "advanceMatchEngineV2", "applyManagerShoutV2", "buildMatchReport", "MATCH_ENGINE_V2_VERSION"]:
+    require(marker in engine_v2, f"Motor de partida Fase 5 incompleto: {marker}")
 
 verification_counts = Counter(league.get("rules", {}).get("verification") for league in leagues)
 report = {
@@ -139,7 +142,7 @@ report = {
     "checks": [
         "catalog integrity", "unique club IDs", "club and national roster paths", "six-confederation coverage",
         "league rule status", "manifest adaptive orientation", "index references", "service-worker shell references",
-        "manager face atlas", "national identity flags", "live match tactics", "annual calendar", "global simulation", "rating disclosure",
+        "manager face atlas", "national identity flags", "live match tactics", "match engine v2", "annual calendar", "global simulation", "rating disclosure",
     ],
 }
 

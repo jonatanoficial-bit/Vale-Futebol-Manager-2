@@ -1,3 +1,14 @@
+# 16.5.0 — Fase 5 Motor de Partida 2.0 — 2026-10-01
+
+- Substituído o sorteio simples da partida por um motor determinístico orientado por atributos, adequação posicional, forma, moral e condição física.
+- Garantido o mesmo resultado em 1×, 3× e 6× quando escalação e decisões são iguais.
+- Integradas mentalidade, pressão, ritmo, largura, linha defensiva, construção, marcação e transição ao cálculo minuto a minuto.
+- Adicionada IA adversária que reage ao placar e à qualidade das chances em três momentos da partida.
+- Adicionados tipos de chance, xG, passes, escanteios, cartões, notas individuais, defesas e causas táticas explicadas.
+- Ampliado o painel ao vivo com cinco seleções táticas, quatro controles, quatro planos rápidos, substituições e três orientações do treinador.
+- Criado relatório pós-jogo persistente com fatores decisivos e melhores jogadores.
+- Validado o equilíbrio em 2.400 partidas automatizadas e o fluxo visual em celular retrato e paisagem.
+
 # 16.4.0 — Fase 4 Carreira Cinematográfica — 2026-10-01
 
 - Restaurados os fundos cinematográficos de cada tela com sobreposição mais leve e painéis translúcidos.
