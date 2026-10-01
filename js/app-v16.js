@@ -1,4 +1,4 @@
-const VERSION = '16.3.0-phase3';
+const VERSION = '16.4.0-phase4';
 const SCHEMA = 1600;
 const STORE_KEY = 'vale-futebol-manager-v16';
 const BACKUP_KEY = 'vale-futebol-manager-v16-backup';
@@ -22,10 +22,20 @@ const session = {
 };
 
 const FORMATIONS = {
-  '4-3-3': [[50,91],[18,75],[39,79],[61,79],[82,75],[28,57],[50,62],[72,57],[18,31],[50,20],[82,31]],
-  '4-4-2': [[50,91],[18,75],[39,79],[61,79],[82,75],[16,51],[38,59],[62,59],[84,51],[36,24],[64,24]],
-  '4-2-3-1': [[50,91],[18,75],[39,79],[61,79],[82,75],[36,62],[64,62],[18,42],[50,43],[82,42],[50,18]],
-  '3-5-2': [[50,91],[25,78],[50,81],[75,78],[12,53],[34,61],[50,50],[66,61],[88,53],[36,24],[64,24]]
+  '4-3-3': [[8,50],[25,15],[27,38],[27,62],[25,85],[45,25],[43,50],[45,75],[69,17],[76,50],[69,83]],
+  '4-4-2': [[8,50],[25,15],[27,38],[27,62],[25,85],[48,14],[47,38],[47,62],[48,86],[73,35],[73,65]],
+  '4-2-3-1': [[8,50],[25,15],[27,38],[27,62],[25,85],[43,36],[43,64],[61,17],[60,50],[61,83],[78,50]],
+  '3-5-2': [[8,50],[27,25],[29,50],[27,75],[47,11],[47,34],[47,66],[59,50],[47,89],[75,35],[75,65]]
+};
+
+const COMPETITION_MEDIA = {
+  'brasileirao-a':'./assets/competitions/real/brasileirao-a.svg',
+  'brasileirao-b':'./assets/competitions/real/brasileirao-b.svg',
+  'champions-league':'./assets/competitions/real/champions-league.svg',
+  'europa-league':'./assets/competitions/real/europa-league.svg',
+  libertadores:'./assets/competitions/real/libertadores.svg',
+  sulamericana:'./assets/competitions/real/sudamericana.svg',
+  'copa-do-brasil':'./assets/competitions/real/copa-do-brasil.svg'
 };
 
 const NAV_ITEMS = [
@@ -55,11 +65,11 @@ const ICON_PATHS = {
 function iconSvg(name, className='ui-icon') { return '<svg class="'+className+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICON_PATHS[name]||ICON_PATHS.more)+'</svg>'; }
 const MORE_SCREENS = new Set(['competitions','calendar','training','market','club','inbox','national','settings','more']);
 const ONBOARDING_STEPS = [
-  ['dashboard','Seu dia em uma tela','O painel Hoje mostra somente as decisões importantes. Use o botão principal para seguir a carreira.'],
-  ['squad','Monte seus onze','Toque em um atleta para escalar ou retirar. O botão Melhor time ajuda quem quer começar rapidamente.'],
-  ['tactics','Defina sua identidade','Escolha uma formação e ajuste o estilo. Você poderá mudar o plano durante a partida.'],
-  ['match-center','Prepare e jogue','Confira adversário e escalação. Quando estiver pronto, inicie a partida por aqui.'],
-  ['more','Tudo organizado','Mercado, calendário, treino, clube, mensagens, seleção e ajustes estão reunidos em Mais.']
+  ['dashboard','.career-command','Continue sua carreira','Este é o comando principal. Ele mostra o próximo adversário, o avanço da temporada e a decisão que faz a carreira continuar.','Toque em Preparar partida quando quiser seguir.'],
+  ['squad','.squad-planner','Monte seus onze','O mapa do elenco mostra carências por setor. Abaixo dele, toque em Escalar ou use Melhor equipe para montar os titulares.','Confira se o contador chegou a 11/11.'],
+  ['tactics','.tactical-board','Organize o time no campo','Os jogadores estão separados em defesa, meio e ataque. Arraste um atleta para reposicioná-lo ou troque a formação no painel ao lado.','Experimente uma formação e observe o desenho mudar.'],
+  ['match-center','.match-prep','Prepare e jogue','Antes do apito, confirme adversário, local, escalação e plano de jogo. O botão dourado abre a partida.','Entre em campo quando os onze estiverem definidos.'],
+  ['more','.more-grid','Encontre cada área','Calendário, competições, treino, mercado, clube, mensagens, seleção e ajustes ficam nesta central.','Cada cartão abre uma área completa da carreira.']
 ];
 
 let store = loadStore();
@@ -137,7 +147,12 @@ function migrateCareer(career) {
   career.weeklyDecisions = career.weeklyDecisions || { training:false, squad:false, tactics:false };
   career.youthIntakeSeason = Number(career.youthIntakeSeason || 0);
   career.youthPlayers = Array.isArray(career.youthPlayers) ? career.youthPlayers.map(normalizePlayer) : [];
-  career.tacticalPositions = Array.isArray(career.tacticalPositions) && career.tacticalPositions.length===11 ? career.tacticalPositions : null;
+  if(Number(career.tacticalLayoutVersion||0)<2){
+    career.tacticalPositions=(FORMATIONS[career.tactics.formation]||FORMATIONS['4-3-3']).map(point=>[...point]);
+    career.tacticalLayoutVersion=2;
+  } else {
+    career.tacticalPositions = Array.isArray(career.tacticalPositions) && career.tacticalPositions.length===11 ? career.tacticalPositions : null;
+  }
   career.roster = Array.isArray(career.roster) ? career.roster.map(normalizePlayer) : [];
   career.onboardingComplete = career.onboardingComplete !== false;
   return career;
@@ -340,13 +355,20 @@ function generateSponsorOffers(club,facilities) {
 }
 
 function showModal(title, body, actions = '<button class="btn" data-action="close-modal">Fechar</button>') {
+  clearTutorialFocus();
   session.modalReturnFocus = document.activeElement;
   modalRoot.innerHTML = '<div class="modal-backdrop"><section class="modal" role="dialog" aria-modal="true" aria-label="' + escapeHtml(title) + '"><header class="modal-header"><div><span>VALE FUTEBOL MANAGER</span><h2>' + escapeHtml(title) + '</h2></div><button class="modal-close" data-action="close-modal" aria-label="Fechar">×</button></header><div class="modal-body">' + body + '</div><div class="modal-actions">' + actions + '</div></section></div>';
   const focus = modalRoot.querySelector('button,input,select');
   if (focus) focus.focus({ preventScroll:true });
 }
 
+function clearTutorialFocus() {
+  document.querySelectorAll('.tutorial-focus').forEach(element=>element.classList.remove('tutorial-focus'));
+  modalRoot.classList.remove('coachmark-mode');
+}
+
 function closeModal() {
+  clearTutorialFocus();
   modalRoot.innerHTML = '';
   if (session.modalReturnFocus?.focus) session.modalReturnFocus.focus({ preventScroll:true });
   session.modalReturnFocus = null;
@@ -357,10 +379,17 @@ function showOnboardingStep(step=0) {
   const current=ONBOARDING_STEPS[step];
   if(!current){session.career.onboardingComplete=true;persist();closeModal();toast('Guia concluído. Boa temporada!','success');return;}
   session.onboardingStep=step;
-  const [screen,title,description]=current;
+  const [screen,selector,title,description,practice]=current;
   navigate(screen,false);
   const progress='<div class="onboarding-progress">'+ONBOARDING_STEPS.map((_,index)=>'<span class="'+(index<=step?'done':'')+'"></span>').join('')+'</div>';
-  showModal(title,progress+'<p>'+escapeHtml(description)+'</p><small>Passo '+(step+1)+' de '+ONBOARDING_STEPS.length+'</small>','<button class="btn" data-action="skip-onboarding">Pular guia</button><button class="btn btn-primary" data-action="onboarding-next">'+(step===ONBOARDING_STEPS.length-1?'Concluir':'Próximo')+'</button>');
+  session.modalReturnFocus=document.activeElement;
+  modalRoot.classList.add('coachmark-mode');
+  modalRoot.innerHTML='<div class="coachmark-stage"><section class="coachmark-card" role="dialog" aria-modal="false" aria-label="'+escapeHtml(title)+'"><header><span>GUIA PRÁTICO · '+(step+1)+'/'+ONBOARDING_STEPS.length+'</span><button class="modal-close" data-action="skip-onboarding" aria-label="Encerrar guia">×</button></header>'+progress+'<h2>'+escapeHtml(title)+'</h2><p>'+escapeHtml(description)+'</p><div class="coachmark-practice"><strong>Faça agora</strong><span>'+escapeHtml(practice)+'</span></div><footer>'+(step?'<button class="btn" data-action="onboarding-prev">Voltar</button>':'<button class="btn" data-action="skip-onboarding">Pular guia</button>')+'<button class="btn btn-primary" data-action="onboarding-next">'+(step===ONBOARDING_STEPS.length-1?'Concluir':'Próximo passo')+'</button></footer></section></div>';
+  requestAnimationFrame(()=>{
+    const target=document.querySelector(selector);
+    if(target){target.classList.add('tutorial-focus');target.scrollIntoView({behavior:store.settings.reducedMotion?'auto':'smooth',block:'center'});}
+    modalRoot.querySelector('.btn-primary')?.focus({preventScroll:true});
+  });
 }
 
 function startOnboarding() { session.onboardingStep=0;showOnboardingStep(0); }
@@ -525,7 +554,7 @@ async function createCareer() {
       roster,lineupIds:pickLineup(roster).map(p=>p.id),tactics:{formation:'4-3-3',mentality:'Equilibrada',pressure:58,tempo:55,width:55,defensiveLine:52,passing:'Misto',marking:'Zona',transition:'Equilibrada'},
       stats:{played:0,wins:0,draws:0,losses:0,gf:0,ga:0,points:0},participants,table:initialTable(participants),fixtures,
       ledger:[{date:new Date().toISOString(),label:'Orçamento da temporada',amount:budget,type:'income'}],messages:initialMessages(session.selectedClub),
-      staff:{assistant:68,fitnessCoach:66,scout:64,medical:65},facilities:{training:2,youth:2,medical:2,scouting:2,stadium:2,commercial:2},transferPolicy:{wageBudget:Math.round(budget*.18),maxSquad:35,foreignLimit:null},transferObligations:[],weeklyDecisions:{training:false,squad:false,tactics:false},seasonHistory:[],jobOffers:[],lastTrainingWeek:0,national:null,seasonSummary:null,sponsor:null,sponsorOffers:generateSponsorOffers(session.selectedClub,{commercial:2}),mediaHistory:[],worldNews:[],worldState:createWorldState(2026),tacticalPositions:(FORMATIONS['4-3-3']).map(point=>[...point]),individualTraining:{},youthIntakeSeason:0,youthPlayers:[]
+      staff:{assistant:68,fitnessCoach:66,scout:64,medical:65},facilities:{training:2,youth:2,medical:2,scouting:2,stadium:2,commercial:2},transferPolicy:{wageBudget:Math.round(budget*.18),maxSquad:35,foreignLimit:null},transferObligations:[],weeklyDecisions:{training:false,squad:false,tactics:false},seasonHistory:[],jobOffers:[],lastTrainingWeek:0,national:null,seasonSummary:null,sponsor:null,sponsorOffers:generateSponsorOffers(session.selectedClub,{commercial:2}),mediaHistory:[],worldNews:[],worldState:createWorldState(2026),tacticalPositions:(FORMATIONS['4-3-3']).map(point=>[...point]),tacticalLayoutVersion:2,individualTraining:{},youthIntakeSeason:0,youthPlayers:[]
     };
     session.career.boardObjectives=createBoardObjectives(session.career);
     persist(); toast('Contrato assinado. O mundo do futebol está ativo.','success'); navigate('dashboard');startOnboarding();
@@ -558,20 +587,40 @@ function renderWeeklyLoop(c){
   return '<section class="weekly-loop panel"><header><p class="eyebrow">SEMANA '+c.week+'</p><strong>Decida, prepare, jogue e veja as consequências</strong></header><div>'+stages.map(([label,status],index)=>'<span class="'+status+'"><i>'+(status==='done'?'✓':index+1)+'</i><b>'+label+'</b></span>').join('')+'</div></section>';
 }
 
+function competitionLogoPath(id,name='') {
+  if(COMPETITION_MEDIA[id])return COMPETITION_MEDIA[id];
+  const text=(id+' '+name).toLowerCase();
+  if(text.includes('brasileir')&&text.includes('série b'))return COMPETITION_MEDIA['brasileirao-b'];
+  if(text.includes('brasileir'))return COMPETITION_MEDIA['brasileirao-a'];
+  if(text.includes('champions league')&&text.includes('uefa'))return COMPETITION_MEDIA['champions-league'];
+  if(text.includes('libertadores'))return COMPETITION_MEDIA.libertadores;
+  if(text.includes('sul-americana')||text.includes('sudamericana'))return COMPETITION_MEDIA.sulamericana;
+  if(text.includes('europa league'))return COMPETITION_MEDIA['europa-league'];
+  if(text.includes('copa do brasil'))return COMPETITION_MEDIA['copa-do-brasil'];
+  if(id==='copa-nacional'&&session.career?.club?.country==='Brasil')return COMPETITION_MEDIA['copa-do-brasil'];
+  return '';
+}
+
+function competitionLogo(id,name='',className='competition-logo-image') {
+  const path=competitionLogoPath(id,name);
+  return path?'<img class="'+className+'" src="'+path+'" alt="Logo '+escapeHtml(name||id)+'">':iconSvg('trophy',className+' ui-icon');
+}
+
 function renderDashboard() {
   const c=session.career, next=nextFixture(), recent=c.fixtures.filter(f=>f.played).slice(-5).reverse();
   const unread=c.messages.filter(m=>!m.read).length;
   const leagueFinished=c.fixtures.filter(f=>f.type==='league').length>0&&c.fixtures.filter(f=>f.type==='league').every(f=>f.played);
+  const seasonFixtures=c.fixtures.filter(f=>!f.cancelled),seasonPlayed=seasonFixtures.filter(f=>f.played).length,seasonProgress=seasonFixtures.length?Math.round(seasonPlayed/seasonFixtures.length*100):0;
   const tasks=[];
   if(c.lineupIds.length<11)tasks.push(['squad','Complete a escalação','Escolha os onze titulares antes da próxima partida.','Definir time']);
   else if(next)tasks.push(['match-center','Prepare o próximo jogo',escapeHtml(next.opponent.name)+' · '+formatDate(next.date),'Preparar']);
   if(unread)tasks.push(['inbox','Leia as mensagens',unread+' '+(unread===1?'mensagem precisa':'mensagens precisam')+' da sua atenção.','Abrir caixa']);
   if(c.lastTrainingWeek!==c.week)tasks.push(['training','Planeje o treino','O elenco ainda não treinou nesta semana.','Escolher treino']);
   const today=tasks.slice(0,3).map(([screen,title,detail,action],index)=>'<article class="today-task"><span>'+String(index+1).padStart(2,'0')+'</span><div><strong>'+title+'</strong><small>'+detail+'</small></div><button class="btn btn-small '+(index===0?'btn-primary':'')+'" data-action="navigate" data-screen="'+screen+'">'+action+'</button></article>').join('');
+  const command=next?'<section class="career-command panel"><div class="career-command-copy"><div class="career-command-kicker"><span class="competition-emblem">'+competitionLogo(next.competitionId,next.competitionName)+'</span><span><small>PRÓXIMA DECISÃO</small><strong>'+escapeHtml(next.competitionName)+'</strong></span></div><h2>'+escapeHtml(c.club.name)+' <b>×</b> '+escapeHtml(next.opponent.name)+'</h2><p>'+formatDate(next.date)+' · '+(next.home?'Em casa':'Fora de casa')+' · Semana '+c.week+'</p><button class="btn btn-primary" data-action="open-next-match">Preparar partida</button></div><div class="career-command-opponent"><img src="./'+escapeHtml(next.opponent.badge)+'" alt="Escudo '+escapeHtml(next.opponent.name)+'" onerror="__vfmFallback(event)"><strong>'+escapeHtml(next.opponent.name)+'</strong><small>GER '+next.opponent.rating+'</small></div><div class="career-command-progress"><span><small>Temporada</small><strong>'+seasonProgress+'%</strong></span><i><em style="width:'+seasonProgress+'%"></em></i><div><span><small>Diretoria</small><strong>'+c.board+'%</strong></span><span><small>Elenco</small><strong>'+c.lineupIds.length+'/11</strong></span><span><small>Forma</small><strong>'+(recent.length?recent.map(resultLetter).join(''):'—')+'</strong></span></div></div></section>':'<section class="career-command panel season-complete"><div><small>TEMPORADA</small><h2>Calendário concluído</h2><p>Revise resultados, objetivos e elenco antes de iniciar a próxima época.</p></div>'+(leagueFinished?'<button class="btn btn-primary" data-action="advance-season">Encerrar temporada</button>':'<span>Ainda há jogos de liga pendentes.</span>')+'</section>';
   return sectionHead('Central do treinador','Todas as decisões do clube e da seleção em um só lugar.','<span class="tag">Nível '+c.manager.level+'</span>') +
-    renderWeeklyLoop(c)+'<section class="today-panel panel"><header><div><p class="eyebrow">HOJE</p><h2>Suas próximas decisões</h2></div><small>Mostramos apenas o que precisa de atenção agora.</small></header><div class="today-list">'+(today||'<article class="today-clear"><strong>Tudo em dia</strong><span>Você pode avançar pelo calendário quando estiver pronto.</span></article>')+'</div></section>'+
-    '<div class="dashboard-world-grid"><article class="hero-fixture panel">'+(next?'<div><span class="competition-pill">'+escapeHtml(next.competitionName)+'</span><h2>Próximo jogo</h2><div class="versus-row"><div><img src="./'+escapeHtml(c.club.badge)+'" alt="" onerror="__vfmFallback(event)"><strong>'+escapeHtml(c.club.name)+'</strong></div><b>VS</b><div><img src="./'+escapeHtml(next.opponent.badge)+'" alt="" onerror="__vfmFallback(event)"><strong>'+escapeHtml(next.opponent.name)+'</strong></div></div><p>'+formatDate(next.date)+' · '+(next.home?'Casa':'Fora')+'</p><button class="btn btn-primary" data-action="open-next-match">Preparar partida</button></div>':'<div class="empty-state"><strong>Calendário concluído</strong>'+(leagueFinished?'<button class="btn btn-primary" data-action="advance-season">Encerrar temporada e aplicar regras</button>':'<span>Ainda há jogos de liga pendentes.</span>')+'</div>')+'</article>' +
-    '<article class="panel"><h2>Desempenho</h2><div class="world-metric-grid"><div><span>Jogos</span><strong>'+c.stats.played+'</strong></div><div><span>Pontos</span><strong>'+c.stats.points+'</strong></div><div><span>Saldo</span><strong>'+(c.stats.gf-c.stats.ga)+'</strong></div><div><span>Diretoria</span><strong>'+c.board+'%</strong></div></div><div class="form-strip">'+(recent.length?recent.map(f=>'<span class="'+resultClass(f)+'">'+resultLetter(f)+'</span>').join(''):'<small>A temporada começa no próximo jogo.</small>')+'</div></article>' +
+    command+renderWeeklyLoop(c)+'<section class="today-panel panel"><header><div><p class="eyebrow">HOJE</p><h2>Suas próximas decisões</h2></div><small>Faça o essencial e avance sem se perder em menus.</small></header><div class="today-list">'+(today||'<article class="today-clear"><strong>Tudo em dia</strong><span>Você pode avançar pelo calendário quando estiver pronto.</span></article>')+'</div></section>'+
+    '<div class="dashboard-world-grid"><article class="panel"><h2>Desempenho</h2><div class="world-metric-grid"><div><span>Jogos</span><strong>'+c.stats.played+'</strong></div><div><span>Pontos</span><strong>'+c.stats.points+'</strong></div><div><span>Saldo</span><strong>'+(c.stats.gf-c.stats.ga)+'</strong></div><div><span>Diretoria</span><strong>'+c.board+'%</strong></div></div><div class="form-strip">'+(recent.length?recent.map(f=>'<span class="'+resultClass(f)+'">'+resultLetter(f)+'</span>').join(''):'<small>A temporada começa no próximo jogo.</small>')+'</div></article>' +
     '<article class="panel"><h2>Caixa de entrada</h2><p class="big-number">'+unread+'</p><p>mensagens aguardando leitura</p><button class="btn" data-action="navigate" data-screen="inbox">Abrir e-mail</button></article>' +
     '<article class="panel"><h2>Carreira internacional</h2>'+(c.national?'<div class="national-mini"><img src="./'+escapeHtml(c.national.team.badge)+'" alt="" onerror="__vfmFallback(event)"><span><strong>'+escapeHtml(c.national.team.name)+'</strong><small>'+escapeHtml(c.national.competitionLabel)+'</small></span></div><button class="btn" data-action="navigate" data-screen="national">Abrir seleção</button>':'<p>Receba propostas de seleções conforme sua reputação cresce.</p><button class="btn" data-action="navigate" data-screen="national">Ver oportunidades</button>')+'</article>' +
     '<article class="panel news-panel"><h2>Mundo do futebol</h2><ul>'+(c.worldNews.length?c.worldNews.slice(0,5).map(item=>'<li><strong>'+formatDate(item.date)+'</strong><span>'+escapeHtml(item.text)+'</span></li>').join(''):'<li><strong>'+escapeHtml(c.club.leagueName)+'</strong><span>A temporada nacional está em andamento.</span></li><li><strong>'+escapeHtml(c.club.confederation)+'</strong><span>'+escapeHtml(confederationClubLabel(c.club.confederation))+' movimenta o continente.</span></li><li><strong>Simulação global</strong><span>'+Object.keys(c.worldState?.leagues||{}).length+' ligas estão sendo processadas a cada rodada.</span></li>')+'</ul></article><article class="panel career-progress"><h2>Jornada do treinador</h2><div class="progress-track"><span style="width:'+((c.manager.xp%500)/5)+'%"></span></div><p>'+c.manager.xp+' XP · Nível '+c.manager.level+' · '+(500-c.manager.xp%500)+' XP para o próximo nível</p><div class="achievement-strip">'+((c.manager.achievements||[]).slice(-4).map(item=>'<span title="'+escapeHtml(item.description)+'">★ '+escapeHtml(item.name)+'</span>').join('')||'<small>Suas conquistas aparecerão aqui.</small>')+'</div></article></div>';
@@ -597,7 +646,8 @@ function renderSquad() {
 function activeTacticalPositions(){const c=session.career,base=FORMATIONS[c.tactics.formation]||FORMATIONS['4-3-3'];if(!c.tacticalPositions||c.tacticalPositions.length!==11)c.tacticalPositions=base.map(point=>[...point]);return c.tacticalPositions;}
 function formationPreview(roster,lineupIds,formation) {
   const players=lineupIds.map(id=>roster.find(p=>p.id===id)).filter(Boolean).slice(0,11),coords=activeTacticalPositions();
-  const pitch='<div class="formation-pitch premium-pitch" data-drop-zone="pitch">'+coords.map(([x,y],i)=>{const player=players[i];return '<button class="formation-player draggable-player drop-player" draggable="true" data-player="'+escapeHtml(player?.id||'')+'" data-slot="'+i+'" style="left:'+x+'%;top:'+y+'%" aria-label="'+escapeHtml(player?.name||'Vaga')+'"><span>'+escapeHtml(player?.pos||'–')+'</span><small>'+escapeHtml((player?.name||'Vaga').split(' ').slice(-1)[0])+'</small><em>'+Number(player?.overall||0)+'</em></button>';}).join('')+'<div class="pitch-drag-hint">Arraste para trocar ou reposicionar</div></div>';
+  const zones='<div class="pitch-zones" aria-hidden="true"><span>DEFESA</span><span>MEIO-CAMPO</span><span>ATAQUE</span></div>';
+  const pitch='<div class="formation-pitch premium-pitch" data-drop-zone="pitch">'+zones+coords.map(([x,y],i)=>{const player=players[i];return '<button class="formation-player draggable-player drop-player" draggable="true" data-player="'+escapeHtml(player?.id||'')+'" data-slot="'+i+'" style="left:'+x+'%;top:'+y+'%" aria-label="'+escapeHtml(player?.name||'Vaga')+'"><span>'+escapeHtml(player?.pos||'–')+'</span><small>'+escapeHtml((player?.name||'Vaga').split(' ').slice(-1)[0])+'</small><em>'+Number(player?.overall||0)+'</em></button>';}).join('')+'<div class="pitch-drag-hint">Arraste para trocar ou reposicionar</div></div>';
   const bench=roster.filter(player=>!lineupIds.includes(player.id)&&!player.suspended&&!player.injuredUntil).sort((a,b)=>b.overall-a.overall).slice(0,12).map(player=>'<button class="bench-player draggable-player drop-player" draggable="true" data-player="'+escapeHtml(player.id)+'"><span class="pos-tag">'+escapeHtml(player.pos)+'</span><strong>'+escapeHtml(player.name)+'</strong><em>'+player.overall+'</em><small>Físico '+player.fitness+'%</small></button>').join('');
   return pitch+'<section class="tactical-bench"><header><h3>Banco e reservas</h3><small>Arraste um reserva sobre um titular</small></header><div>'+bench+'</div></section>';
 }
@@ -644,7 +694,7 @@ function sortedTable() { return session.career.table.slice().sort((a,b)=>b.point
 function renderCompetitions() {
   const c=session.career, league=findLeague(c.club.leagueId), table=sortedTable();
   const compIds=[...new Set(c.fixtures.map(f=>f.competitionId))];
-  const compCards=compIds.map(id=>{const list=currentCompetitionFixtures(id).filter(f=>!f.cancelled),played=list.filter(f=>f.played).length,next=list.find(f=>!f.played&&!f.locked),pending=list.find(f=>!f.played&&f.locked);return '<article class="competition-card"><span class="competition-logo">◆</span><div><strong>'+escapeHtml(list[0]?.competitionName||id)+'</strong><small>'+played+'/'+list.length+' jogos · '+(next?escapeHtml(next.stage||'Rodada '+next.round)+' em '+formatDate(next.date):pending?'aguardando classificação/sorteio':'concluída')+'</small></div></article>';}).join('');
+  const compCards=compIds.map(id=>{const list=currentCompetitionFixtures(id).filter(f=>!f.cancelled),played=list.filter(f=>f.played).length,next=list.find(f=>!f.played&&!f.locked),pending=list.find(f=>!f.played&&f.locked),name=list[0]?.competitionName||id;return '<article class="competition-card"><span class="competition-logo">'+competitionLogo(id,name)+'</span><div><strong>'+escapeHtml(name)+'</strong><small>'+played+'/'+list.length+' jogos · '+(next?escapeHtml(next.stage||'Rodada '+next.round)+' em '+formatDate(next.date):pending?'aguardando classificação/sorteio':'concluída')+'</small></div></article>';}).join('');
   const rows=table.map((row,index)=>'<tr class="'+zoneFor(row,index,table.length,league.rules)+'"><td>'+(index+1)+'</td><td><div class="mini-club"><img src="./'+escapeHtml(row.team.badge)+'" alt="" onerror="__vfmFallback(event)"><strong>'+escapeHtml(row.team.name)+'</strong></div></td><td>'+row.played+'</td><td>'+row.wins+'</td><td>'+row.draws+'</td><td>'+row.losses+'</td><td>'+row.gf+'</td><td>'+row.ga+'</td><td>'+row.gd+'</td><td><strong>'+row.points+'</strong></td></tr>').join('');
   const timeline=c.fixtures.filter(f=>f.type==='cup'||f.phase==='knockout').map(f=>'<div class="stage-node '+(f.played?'done':f.cancelled?'cancelled':f.locked?'locked':'active')+'"><span>'+escapeHtml(f.stage||'Fase')+'</span><strong>'+(f.cancelled?'Eliminado':f.played?(f.score.home+'–'+f.score.away):escapeHtml(f.opponent.name))+'</strong><small>'+formatDate(f.date)+'</small></div>').join('');
   const leaders=Object.entries(c.worldState?.leagues||{}).map(([id,state])=>{const leader=state.table.slice().sort((a,b)=>b.points-a.points||b.gd-a.gd||b.rating-a.rating)[0];return {league:findLeague(id),leader};}).filter(item=>item.league&&item.leader&&item.league.id!==league.id).sort((a,b)=>b.leader.rating-a.leader.rating).slice(0,10).map(item=>'<div class="world-leader"><span>'+escapeHtml(item.league.name)+'</span><strong>'+escapeHtml(item.leader.name)+'</strong><em>'+item.leader.points+' pts · '+item.leader.played+' J</em></div>').join('');
@@ -679,7 +729,7 @@ function openCalendarDay(key){const items=allCareerEvents().filter(event=>dateKe
 
 function renderMatchCenter() {
   const next=nextFixture(),candidate=String(next?.opponent?.stadium||''),stadium=/\.(?:avif|webp|png|jpe?g)$/i.test(candidate)?candidate:'assets/placeholders/stadium-generic.jpg';
-  return sectionHead('Centro de partida','Prepare escalação, formação e estratégia antes do apito inicial.')+(next?'<div class="match-prep"><article class="panel match-poster" style="background-image:linear-gradient(rgba(5,12,22,.82),rgba(5,12,22,.94)),url(\'./'+escapeHtml(stadium)+'\')"><span class="competition-pill">'+escapeHtml(next.competitionName)+'</span><div class="versus-row large"><div><img src="./'+escapeHtml(session.career.club.badge)+'" alt="" onerror="__vfmFallback(event)"><strong>'+escapeHtml(session.career.club.name)+'</strong></div><b>VS</b><div><img src="./'+escapeHtml(next.opponent.badge)+'" alt="" onerror="__vfmFallback(event)"><strong>'+escapeHtml(next.opponent.name)+'</strong></div></div><p>'+formatDate(next.date)+' · '+(next.home?'Em casa':'Fora de casa')+'</p><button class="btn btn-primary" data-action="start-match">Entrar em campo</button></article><article class="panel"><h2>Plano de jogo</h2><p><strong>'+session.career.tactics.formation+'</strong> · '+escapeHtml(session.career.tactics.mentality)+'</p><p>Pressão '+session.career.tactics.pressure+' · Ritmo '+session.career.tactics.tempo+'</p><p>'+session.career.lineupIds.length+' titulares confirmados.</p><button class="btn" data-action="navigate" data-screen="tactics">Ajustar tática</button></article></div>':'<div class="panel empty-state"><strong>Temporada concluída</strong><span>Consulte o resumo e avance para a próxima época.</span></div>');
+  return sectionHead('Centro de partida','Prepare escalação, formação e estratégia antes do apito inicial.')+(next?'<div class="match-prep"><article class="panel match-poster" style="background-image:linear-gradient(rgba(5,12,22,.58),rgba(5,12,22,.88)),url(\'./'+escapeHtml(stadium)+'\')"><span class="competition-pill competition-pill-logo">'+competitionLogo(next.competitionId,next.competitionName,'competition-pill-image')+'<b>'+escapeHtml(next.competitionName)+'</b></span><div class="versus-row large"><div><img src="./'+escapeHtml(session.career.club.badge)+'" alt="" onerror="__vfmFallback(event)"><strong>'+escapeHtml(session.career.club.name)+'</strong></div><b>VS</b><div><img src="./'+escapeHtml(next.opponent.badge)+'" alt="" onerror="__vfmFallback(event)"><strong>'+escapeHtml(next.opponent.name)+'</strong></div></div><p>'+formatDate(next.date)+' · '+(next.home?'Em casa':'Fora de casa')+'</p><button class="btn btn-primary" data-action="start-match">Entrar em campo</button></article><article class="panel"><h2>Plano de jogo</h2><p><strong>'+session.career.tactics.formation+'</strong> · '+escapeHtml(session.career.tactics.mentality)+'</p><p>Pressão '+session.career.tactics.pressure+' · Ritmo '+session.career.tactics.tempo+'</p><p>'+session.career.lineupIds.length+' titulares confirmados.</p><button class="btn" data-action="navigate" data-screen="tactics">Ajustar tática</button></article></div>':'<div class="panel empty-state"><strong>Temporada concluída</strong><span>Consulte o resumo e avance para a próxima época.</span></div>');
 }
 
 function renderTraining() {
@@ -865,7 +915,7 @@ function renderMatch() {
   const visibleEvents=m.events.filter(event=>session.matchEventFilter==='all'||event.type===session.matchEventFilter),commentary=visibleEvents.slice().reverse().slice(0,12).map(e=>'<li class="event-'+escapeHtml(e.type||'info')+'"><strong>'+e.minute+'’</strong><span>'+escapeHtml(e.text)+'</span></li>').join('');
   const ownHome=teamOnHome(),fitness=Math.round(average(m.ownLineup.map(player=>player.fitness))),momentum=ownHome?m.momentum:100-m.momentum;m.coachInsight=matchInsight(m);
   const filters=[['all','Todos'],['goal','Gols'],['chance','Chances'],['tactical','Tática']].map(([id,label])=>'<button class="'+(session.matchEventFilter===id?'active':'')+'" data-action="match-event-filter" data-filter="'+id+'">'+label+'</button>').join('');
-  app.innerHTML='<main class="screen match-screen world-match" onclick="window.__vfmMatchAction(event)"><header class="match-scoreboard"><div><img src="./'+escapeHtml(teams.home.badge)+'" alt="" onerror="__vfmFallback(event)"><strong>'+escapeHtml(teams.home.name)+'</strong></div><span class="score">'+m.homeGoals+' · '+m.awayGoals+'</span><span class="clock">'+m.minute+'’</span><div><strong>'+escapeHtml(teams.away.name)+'</strong><img src="./'+escapeHtml(teams.away.badge)+'" alt="" onerror="__vfmFallback(event)"></div></header><section class="match-world-layout"><aside class="match-side commentary-panel"><h2>Momentos-chave</h2><div class="event-filters">'+filters+'</div><ul class="commentary-list">'+(commentary||'<li><span>Nenhum evento neste filtro.</span></li>')+'</ul></aside><div class="visual-pitch" aria-label="Campo com vinte e dois jogadores"><div class="pitch-markings"></div><div class="pressure-map"><i style="opacity:'+(m.possessionHome/100)+'"></i><b style="opacity:'+((100-m.possessionHome)/100)+'"></b></div>'+pitchPlayers()+'<div class="match-ball" style="left:'+m.ball.x+'%;top:'+m.ball.y+'%"></div><div class="momentum-meter"><span>Pressão do seu time</span><i><em style="width:'+momentum+'%"></em></i><b>'+Math.round(momentum)+'%</b></div></div><aside class="match-side stats-panel"><h2>Leitura da partida</h2><div class="coach-insight"><span>Auxiliar</span><p>'+escapeHtml(m.coachInsight)+'</p></div><div class="stat-row"><strong>'+m.possessionHome+'%</strong><span>Posse</span><strong>'+(100-m.possessionHome)+'%</strong></div><div class="stat-row"><strong>'+m.shotsHome+' ('+m.shotsOnTargetHome+')</strong><span>Finalizações (alvo)</span><strong>'+m.shotsAway+' ('+m.shotsOnTargetAway+')</strong></div><div class="stat-row"><strong>'+m.xgHome.toFixed(1)+'</strong><span>xG</span><strong>'+m.xgAway.toFixed(1)+'</strong></div><div class="stat-row"><strong>'+fitness+'%</strong><span>Físico do seu time</span><strong>'+escapeHtml(m.opponentPlan)+'</strong></div><div class="tactic-live"><span>Formação</span><strong>'+escapeHtml(m.ownTactics.formation)+'</strong><span>Mentalidade</span><strong>'+escapeHtml(m.ownTactics.mentality)+'</strong><span>Substituições</span><strong>'+m.substitutionsUsed+'/'+m.maxSubstitutions+'</strong></div></aside></section><footer class="match-controls"><button class="btn" data-action="exit-match">Sair</button>'+(m.finished?'<button class="btn btn-primary" data-action="finish-match">Entrevista pós-jogo</button>':'<button class="btn" data-action="open-live-tactics">Tática e substituições</button><button class="btn btn-primary" data-action="toggle-match">'+(m.running?'Pausar':'Começar')+'</button><button class="btn '+(m.speed===1?'active':'')+'" data-action="match-speed" data-speed="1">1×</button><button class="btn '+(m.speed===3?'active':'')+'" data-action="match-speed" data-speed="3">3×</button><button class="btn '+(m.speed===6?'active':'')+'" data-action="match-speed" data-speed="6">6×</button>')+'</footer>'+liveTacticsPanel()+'</main>';bindMatchControls();
+  app.innerHTML='<main class="screen match-screen world-match" onclick="window.__vfmMatchAction(event)"><header class="match-scoreboard"><div><img src="./'+escapeHtml(teams.home.badge)+'" alt="" onerror="__vfmFallback(event)"><strong>'+escapeHtml(teams.home.name)+'</strong></div><span class="score">'+m.homeGoals+' · '+m.awayGoals+'</span><span class="clock">'+m.minute+'’</span><div><strong>'+escapeHtml(teams.away.name)+'</strong><img src="./'+escapeHtml(teams.away.badge)+'" alt="" onerror="__vfmFallback(event)"></div></header><section class="match-world-layout"><aside class="match-side commentary-panel"><h2>Momentos-chave</h2><div class="event-filters">'+filters+'</div><ul class="commentary-list">'+(commentary||'<li><span>Nenhum evento neste filtro.</span></li>')+'</ul></aside><div class="visual-pitch" aria-label="Campo com vinte e dois jogadores"><div class="pitch-markings"></div><span class="match-competition-mark">'+competitionLogo(m.fixture.competitionId,m.fixture.competitionName,'match-competition-image')+'</span><div class="pressure-map"><i style="opacity:'+(m.possessionHome/100)+'"></i><b style="opacity:'+((100-m.possessionHome)/100)+'"></b></div>'+pitchPlayers()+'<div class="match-ball" style="left:'+m.ball.x+'%;top:'+m.ball.y+'%"></div><div class="momentum-meter"><span>Pressão do seu time</span><i><em style="width:'+momentum+'%"></em></i><b>'+Math.round(momentum)+'%</b></div></div><aside class="match-side stats-panel"><h2>Leitura da partida</h2><div class="coach-insight"><span>Auxiliar</span><p>'+escapeHtml(m.coachInsight)+'</p></div><div class="stat-row"><strong>'+m.possessionHome+'%</strong><span>Posse</span><strong>'+(100-m.possessionHome)+'%</strong></div><div class="stat-row"><strong>'+m.shotsHome+' ('+m.shotsOnTargetHome+')</strong><span>Finalizações (alvo)</span><strong>'+m.shotsAway+' ('+m.shotsOnTargetAway+')</strong></div><div class="stat-row"><strong>'+m.xgHome.toFixed(1)+'</strong><span>xG</span><strong>'+m.xgAway.toFixed(1)+'</strong></div><div class="stat-row"><strong>'+fitness+'%</strong><span>Físico do seu time</span><strong>'+escapeHtml(m.opponentPlan)+'</strong></div><div class="tactic-live"><span>Formação</span><strong>'+escapeHtml(m.ownTactics.formation)+'</strong><span>Mentalidade</span><strong>'+escapeHtml(m.ownTactics.mentality)+'</strong><span>Substituições</span><strong>'+m.substitutionsUsed+'/'+m.maxSubstitutions+'</strong></div></aside></section><footer class="match-controls"><button class="btn" data-action="exit-match">Sair</button>'+(m.finished?'<button class="btn btn-primary" data-action="finish-match">Entrevista pós-jogo</button>':'<button class="btn" data-action="open-live-tactics">Tática e substituições</button><button class="btn btn-primary" data-action="toggle-match">'+(m.running?'Pausar':'Começar')+'</button><button class="btn '+(m.speed===1?'active':'')+'" data-action="match-speed" data-speed="1">1×</button><button class="btn '+(m.speed===3?'active':'')+'" data-action="match-speed" data-speed="3">3×</button><button class="btn '+(m.speed===6?'active':'')+'" data-action="match-speed" data-speed="6">6×</button>')+'</footer>'+liveTacticsPanel()+'</main>';bindMatchControls();
 }
 
 function startMatchTimer() {
@@ -1122,6 +1172,7 @@ function handleAction(action,target) {
   else if(action==='show-help')showModal('Como jogar','<p>Escolha um clube com elenco completo, monte os onze titulares e administre calendário, finanças e mercado. Resultados elevam sua reputação e liberam seleções nacionais. No campo 2D, os 22 jogadores respeitam a formação escolhida.</p>');
   else if(action==='close-modal')closeModal();
   else if(action==='onboarding-next'){closeModal();showOnboardingStep(session.onboardingStep+1);}
+  else if(action==='onboarding-prev'){closeModal();showOnboardingStep(Math.max(0,session.onboardingStep-1));}
   else if(action==='skip-onboarding'){session.career.onboardingComplete=true;persist();closeModal();toast('Guia encerrado. Você pode jogar no seu ritmo.','success');}
   else if(action==='slot-new'){session.slot=Number(target.dataset.slot);session.selectedClub=null;session.clubFilters={continent:'all',country:'all',league:'all',search:''};closeModal();renderClubSelect();}
   else if(action==='slot-load'){session.slot=Number(target.dataset.slot);session.career=migrateCareer(store.slots[session.slot-1]);if(!session.career.worldState)session.career.worldState=createWorldState(session.career.season);closeModal();persist();navigate('dashboard');if(!session.career.onboardingComplete)startOnboarding();}

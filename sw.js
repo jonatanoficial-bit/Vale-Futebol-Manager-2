@@ -1,9 +1,11 @@
-const CACHE = 'vale-futebol-ultimate-v16.3.0-phase3';
+const CACHE = 'vale-futebol-ultimate-v16.4.0-phase4';
 const SHELL = [
-  './', './index.html', './offline.html', './css/app.css?v=11.0.0-20260804', './css/world-edition.css?v=11.0.0-20260804', './css/world-edition-v11.css?v=11.0.0-20260804-release', './css/ultimate-v16.css?v=16.3.0-phase3', './js/app-v16.js?v=16.3.0-phase3',
+  './', './index.html', './offline.html', './css/app.css?v=11.0.0-20260804', './css/world-edition.css?v=11.0.0-20260804', './css/world-edition-v11.css?v=11.0.0-20260804-release', './css/ultimate-v16.css?v=16.4.0-phase4', './js/app-v16.js?v=16.4.0-phase4',
   './manifest.webmanifest', './assets/icons/app-icon-v9.png', './assets/placeholders/player-generic.png', './assets/placeholders/club-generic.png', './assets/players/generic/player-generic.webp', './assets/players/generic/player-generic-128.webp',
   './assets/backgrounds/bg-cover.jpg', './assets/backgrounds/bg-lobby.jpg',
-  './assets/backgrounds/bg-match.jpg', './assets/backgrounds/bg-team-select.jpg', './data/world-catalog-2026.json', './data/player-media-manifest.json'
+  './assets/backgrounds/bg-match.jpg', './assets/backgrounds/bg-team-select.jpg', './assets/backgrounds/campo-futebol-cinematografico.png',
+  './assets/competitions/real/brasileirao-a.svg', './assets/competitions/real/brasileirao-b.svg', './assets/competitions/real/champions-league.svg', './assets/competitions/real/copa-do-brasil.svg', './assets/competitions/real/europa-league.svg', './assets/competitions/real/libertadores.svg', './assets/competitions/real/sudamericana.svg',
+  './data/world-catalog-2026.json', './data/player-media-manifest.json'
 ];
 
 self.addEventListener('install', event => {

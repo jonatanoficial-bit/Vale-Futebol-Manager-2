@@ -1,3 +1,13 @@
+# 16.4.0 — Fase 4 Carreira Cinematográfica — 2026-10-01
+
+- Restaurados os fundos cinematográficos de cada tela com sobreposição mais leve e painéis translúcidos.
+- Reorganizada a home da carreira em torno do próximo jogo, progresso da temporada, diretoria, escalação e forma recente.
+- Aplicado o campo fornecido pelo autor ao editor tático e à partida 2D.
+- Recalculadas quatro formações para o campo horizontal, com setores claros de defesa, meio-campo e ataque.
+- Substituídos placeholders por marcas reais rastreáveis de sete competições nacionais e continentais.
+- Transformado o tutorial em guia visual: a interface continua aparente, a área explicada recebe destaque e cada passo propõe uma ação prática.
+- Adaptados campo, atletas, tutorial e comando da carreira a celulares em retrato e paisagem.
+
 # 16.3.0 — Fase 3 Interface Internacional — 2026-09-30
 
 - Criado um sistema visual único para botões, campos, painéis, modais, avisos e estados de foco.

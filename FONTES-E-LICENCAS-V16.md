@@ -2,6 +2,10 @@
 
 Data de corte: 04/08/2026.
 
+## Marcas de competições da Fase 4
+
+As marcas de Brasileirão Série A e B, UEFA Champions League, UEFA Europa League, CONMEBOL Libertadores, CONMEBOL Sudamericana e Copa do Brasil foram obtidas nas respectivas páginas de arquivo do Wikimedia Commons. URLs, autores declarados e registros de licença estão reunidos em `assets/competitions/real/README.md`. Nomes e marcas continuam pertencendo aos seus titulares.
+
 ## Dados
 
 - `transfermarkt-datasets` de dcaribou, licença CC0: https://github.com/dcaribou/transfermarkt-datasets
