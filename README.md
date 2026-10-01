@@ -1,4 +1,20 @@
-# Vale Futebol Manager — Ultimate World 16.7
+# Vale Futebol Manager — Ultimate World 16.8
+
+## Fase 8 — mercado, finanças e instalações
+
+- fechamento mensal com salários, comissão técnica, manutenção e receitas comerciais;
+- previsão conservadora de caixa para 90 dias, incluindo parcelas de transferências;
+- campus com seis cartões visuais, cinco níveis e projeto com custo, benefício, prazo e progresso;
+- melhorias entram em operação após a conclusão da obra;
+- mercado adequado ao nível do clube, alcance do scout e filtros de posição e investimento;
+- valor de negociação influenciado por idade, potencial, forma e prazo contratual;
+- propostas de venda com validade, entrada de receita e redução da folha;
+- renovação contratual com salário, duração, luvas e limite de folha;
+- compras e empréstimos validam valores, caixa, salários e vagas;
+- empréstimos de seis meses e termos de contrato preservados ao recarregar;
+- saves anteriores inicializam a contabilidade na data da carreira, sem cobranças retroativas.
+
+As janelas reais por país, simulação financeira de todos os clubes rivais e expiração automática dos contratos permanentes ainda não são reproduzidas. As propostas de venda são uma simplificação da negociação entre clubes.
 
 Manager internacional mobile-first para retrato e paisagem, jogável no computador e instalável como PWA. A V16.7 acrescenta desempenho por posição, forma, ritmo, entrosamento, carga, lesões, recuperação e evolução anual ao motor determinístico e à interface esportiva.
 
@@ -140,4 +156,4 @@ Não abra `index.html` diretamente; elencos, dados e funcionamento offline depen
 - 833 clubes, 211 seleções e 24.300 registros de jogadores auditados;
 - integridade aprovada com ressalvas documentadas em `QA-WORLD-V16.json`.
 
-Versão 16.7.0 · Ultimate World · 2026-10-01
+Versão 16.8.0 · Ultimate World · 2026-10-01

@@ -1,8 +1,9 @@
+import { FACILITIES, ensureEconomy, processEconomy, financeForecast, facilityQuote, startConstruction, marketValue, validateDeal, createSaleOffer, acceptSale } from './systems/clubEconomy.js';
 import { MATCH_ENGINE_V2_VERSION, createMatchEngineV2, advanceMatchEngineV2, applyMatchSubstitutionV2, applyManagerShoutV2, buildMatchReport } from './systems/matchEngineV2.js';
 import { CAREER_PERFORMANCE_VERSION, hydratePlayerPerformance, effectiveOverall, isPlayerAvailable, selectBestLineup, advanceRosterDays, applyMatchConsequences, applyTrainingWeek, processSeasonAging, rosterHealthSummary } from './systems/careerPerformanceV3.js';
 
-const VERSION = '16.7.0-phase7';
-const SCHEMA = 1602;
+const VERSION = '16.8.0-phase8';
+const SCHEMA = 1603;
 const STORE_KEY = 'vale-futebol-manager-v16';
 const BACKUP_KEY = 'vale-futebol-manager-v16-backup';
 const LEGACY_KEY = 'vale-futebol-manager-v11';
@@ -18,7 +19,7 @@ const session = {
   screen: 'cover', slot: null, career: null, catalog: null, selectedClub: null,
   selectedAvatar: 1, clubFilters: { continent: 'all', country: 'all', league: 'all', search: '' },
   nationalFilter: 'official', nationalSearch: '',
-  squadSearch: '', positionFilter: 'TODOS', market: [], marketLoading: false,
+  squadSearch: '', positionFilter: 'TODOS', marketPosition:'TODOS',marketBudget:'all',market: [], marketLoading: false,
   match: null, matchTimer: null, matchWasRunningBeforeGate: false, modalReturnFocus: null,
   calendarView:'month', calendarDate:new Date(2026,3,1), calendarFilter:'all', dragPlayerId:null, dragSlot:null,
   onboardingStep:0, playerMedia:new Map(), matchEventFilter:'all'
@@ -162,6 +163,7 @@ function migrateCareer(career) {
   const validLineup=new Set(career.roster.filter(isPlayerAvailable).map(player=>player.id));
   career.lineupIds=Array.isArray(career.lineupIds)?career.lineupIds.filter((id,index,list)=>validLineup.has(id)&&list.indexOf(id)===index).slice(0,11):[];
   if(career.lineupIds.length<11)career.lineupIds=selectBestLineup(career.roster,career.tactics.formation).map(player=>player.id);
+  ensureEconomy(career);
   career.onboardingComplete = career.onboardingComplete !== false;
   return career;
 }
@@ -246,6 +248,7 @@ function normalizePlayer(player, index = 0) {
   const overall=clamp(player.overall || 60,1,99),seed=stableNumber(String(player.id||player.name||index));
   const variance=(offset,spread=8)=>clamp(overall+((seed>>(offset%16))%(spread*2+1))-spread,1,99);
   return hydratePlayerPerformance({
+    ...player,
     id:String(player.id || 'player-' + index), name:String(player.displayName || player.name || 'Jogador'),
     role:String(player.role || player.positionName || player.pos || 'Jogador'), pos:String(player.pos || player.position || 'MC'),
     overall, potential:clamp(Math.max(overall,Number(player.potential || player.overall || 60)), 1, 99),
@@ -341,6 +344,7 @@ function applyWorldResult(row,gf,ga){row.played++;row.gf+=gf;row.ga+=ga;row.gd=r
 function processCareerDeadlines(career) {
   const current=new Date(career.date);
   if(Number.isNaN(current.getTime()))return;
+  processEconomy(career);
   const obligations=[];
   (career.transferObligations||[]).forEach(item=>{
     let due=new Date(item.nextDue),remaining=Math.max(0,Number(item.remainingBalance)||0),installments=Math.max(0,Number(item.remainingInstallments)||0);
@@ -585,6 +589,7 @@ async function createCareer() {
       ledger:[{date:new Date().toISOString(),label:'Orçamento da temporada',amount:budget,type:'income'}],messages:initialMessages(session.selectedClub),
       staff:{assistant:68,fitnessCoach:66,scout:64,medical:65},facilities:{training:2,youth:2,medical:2,scouting:2,stadium:2,commercial:2},transferPolicy:{wageBudget:Math.round(budget*.18),maxSquad:35,foreignLimit:null},transferObligations:[],weeklyDecisions:{training:false,squad:false,tactics:false},seasonHistory:[],matchReports:[],jobOffers:[],lastTrainingWeek:0,national:null,seasonSummary:null,sponsor:null,sponsorOffers:generateSponsorOffers(session.selectedClub,{commercial:2}),mediaHistory:[],worldNews:[],worldState:createWorldState(2026),tacticalPositions:(FORMATIONS['4-3-3']).map(point=>[...point]),tacticalLayoutVersion:2,individualTraining:{},youthIntakeSeason:0,youthPlayers:[]
     };
+    ensureEconomy(session.career);
     session.career.boardObjectives=createBoardObjectives(session.career);
     persist(); toast('Contrato assinado. O mundo do futebol está ativo.','success'); navigate('dashboard');startOnboarding();
   } catch (error) {
@@ -781,20 +786,29 @@ function renderTraining() {
 async function loadMarket() {
   if(session.market.length||session.marketLoading)return;
   session.marketLoading=true; if(session.screen==='market')renderGame(renderMarket());
-  const candidates=session.catalog.clubs.filter(club=>club.rosterPath&&club.id!==session.career.club.id).sort(()=>Math.random()-.5).slice(0,10);
-  const rosters=await Promise.all(candidates.map(async club=>{try{const data=await fetchJson(club.rosterPath);return (data.players||[]).map(normalizePlayer).filter(p=>p.overall>=72).slice(0,3).map(p=>({...p,sourceClub:club.name}));}catch{return[];}}));
+  const c=session.career,marketSeed=c.club.id+':'+c.season+':'+c.week;
+  const candidates=session.catalog.clubs.filter(club=>club.rosterPath&&club.id!==c.club.id).sort((a,b)=>stableNumber(marketSeed+a.id)-stableNumber(marketSeed+b.id)).slice(0,6+c.facilities.scouting*3);
+  const rosters=await Promise.all(candidates.map(async club=>{try{const data=await fetchJson(club.rosterPath);return (data.players||[]).map(normalizePlayer).sort((a,b)=>Math.abs(a.overall-session.career.club.rating)-Math.abs(b.overall-session.career.club.rating)).slice(0,4).map(p=>({...p,sourceClub:club.name}));}catch{return[];}}));
   const owned=new Set(session.career.roster.map(p=>p.id));
-  session.market=rosters.flat().filter(p=>!owned.has(p.id)).sort((a,b)=>b.overall-a.overall).slice(0,24);
+  session.market=rosters.flat().filter(p=>!owned.has(p.id)).sort((a,b)=>Math.abs(a.overall-c.club.rating)-Math.abs(b.overall-c.club.rating)).slice(0,24);
   session.marketLoading=false;if(session.screen==='market')renderGame(renderMarket());
 }
 
 function renderMarket() {
   const c=session.career,payroll=c.roster.reduce((sum,p)=>sum+Number(p.salary||0)*1000,0),future=(c.transferObligations||[]).reduce((sum,item)=>sum+Number(item.remainingBalance||0),0);
-  const cards=session.market.map(p=>'<article class="market-card"><div class="market-player">'+playerPortrait(p,'medium')+'<div><strong>'+escapeHtml(p.name)+'</strong><small>'+escapeHtml(p.pos)+' · '+p.age+' anos · '+escapeHtml(p.sourceClub||'')+'</small><em>'+escapeHtml(p.personality)+'</em></div></div><div class="market-value"><span>GER <strong>'+p.overall+'</strong></span><span>'+money(p.value*1000000)+'</span><small>Conhecimento '+p.knowledge+'%</small></div><div class="market-actions"><button class="btn btn-small" data-action="player-report" data-player="'+escapeHtml(p.id)+'">Relatório</button><button class="btn btn-small" data-action="loan-player" data-player="'+escapeHtml(p.id)+'">Empréstimo</button><button class="btn btn-primary btn-small" data-action="buy-player" data-player="'+escapeHtml(p.id)+'">Negociar</button></div></article>').join('');
-  return sectionHead('Mercado internacional','Atletas nominais da base 2026, filtrados por desempenho e valor.','<span class="tag">'+money(c.budget)+'</span>')+'<div class="market-budget-strip"><span>Caixa <strong>'+money(c.budget)+'</strong></span><span>Folha <strong>'+money(payroll)+' / '+money(c.transferPolicy.wageBudget)+'</strong></span><span>Parcelas futuras <strong>'+money(future)+'</strong></span><span>Vagas <strong>'+c.roster.length+' / '+c.transferPolicy.maxSquad+'</strong></span></div><div class="market-grid">'+(session.marketLoading?'<div class="panel">Carregando rede mundial…</div>':cards||'<div class="panel">Nenhuma oportunidade disponível.</div>')+'</div>';
+  const marketPlayers=session.market.filter(p=>(session.marketPosition==='TODOS'||p.pos===session.marketPosition)&&(session.marketBudget!=='affordable'||marketValue(p,c.date)*1.05<=c.budget));
+  const filters='<div class="market-filters"><label>Posição<select data-action="market-position">'+options(['TODOS',...new Set(session.market.map(p=>p.pos))],session.marketPosition)+'</select></label><label>Investimento<select data-action="market-budget"><option value="all">Todos os atletas</option><option value="affordable" '+(session.marketBudget==='affordable'?'selected':'')+'>Valor dentro do caixa</option></select></label></div>';
+  const cards=marketPlayers.map(p=>'<article class="market-card"><div class="market-player">'+playerPortrait(p,'medium')+'<div><strong>'+escapeHtml(p.name)+'</strong><small>'+escapeHtml(p.pos)+' · '+p.age+' anos · '+escapeHtml(p.sourceClub||'')+'</small><em>'+escapeHtml(p.personality)+'</em></div></div><div class="market-value"><span>GER <strong>'+p.overall+'</strong></span><span>'+money(marketValue(p,c.date))+'</span><small>Conhecimento '+p.knowledge+'%</small></div><div class="market-actions"><button class="btn btn-small" data-action="player-report" data-player="'+escapeHtml(p.id)+'">Relatório</button><button class="btn btn-small" data-action="loan-player" data-player="'+escapeHtml(p.id)+'">Empréstimo</button><button class="btn btn-primary btn-small" data-action="buy-player" data-player="'+escapeHtml(p.id)+'">Negociar</button></div></article>').join('');
+  return sectionHead('Mercado internacional','Reforços para o nível do clube. Valores variam com idade, potencial, forma e contrato.','<span class="tag">'+money(c.budget)+'</span>')+'<div class="market-budget-strip"><span>Caixa <strong>'+money(c.budget)+'</strong></span><span>Folha <strong>'+money(payroll)+' / '+money(c.transferPolicy.wageBudget)+'</strong></span><span>Parcelas futuras <strong>'+money(future)+'</strong></span><span>Vagas <strong>'+c.roster.length+' / '+c.transferPolicy.maxSquad+'</strong></span></div>'+filters+'<div class="market-grid">'+(session.marketLoading?'<div class="panel">Carregando rede mundial…</div>':cards||'<div class="panel">Nenhuma oportunidade disponível.</div>')+'</div>';
 }
 
-function renderFacilitiesCampus(c){const buildings=[['stadium','Estádio','Arena'],['training','Treinamento','CT'],['youth','Academia','Base'],['medical','Medicina','DM'],['scouting','Scouting','Scout'],['commercial','Comercial','Sede']];return '<section class="club-campus panel"><header><div><p class="eyebrow">CAMPUS DO CLUBE</p><h2>Instalações interativas</h2></div><small>Toque em um prédio para evoluir</small></header><div class="campus-scene"><div class="campus-road"></div>'+buildings.map(([id,name,label],index)=>'<button class="campus-building building-'+id+' level-'+c.facilities[id]+'" data-action="upgrade-facility" data-facility="'+id+'" style="--building-index:'+index+'"><span>'+label+'</span><strong>'+name+'</strong><small>Nível '+c.facilities[id]+'/5</small></button>').join('')+'</div></section>';}
+function renderFacilitiesCampus(c){
+  ensureEconomy(c);
+  return '<section class="club-campus panel phase8-campus"><header><div><p class="eyebrow">PATRIMÔNIO DO CLUBE</p><h2>Construa o futuro</h2></div><small>Compare custo, prazo e benefício antes de investir</small></header><div class="facility-cards">'+Object.entries(FACILITIES).map(([id,spec])=>{
+    const level=c.facilities[id],q=facilityQuote(c,id),project=c.construction.find(p=>p.id===id),progress=project?clamp((new Date(c.date)-new Date(project.startedAt))/(new Date(project.finishAt)-new Date(project.startedAt))*100,0,100):0;
+    return '<article class="facility-card" style="--facility-color:'+spec.color+'"><div class="facility-art level-'+level+'">'+iconSvg(spec.icon)+'<div class="facility-tiers">'+Array.from({length:5},(_,i)=>'<i class="'+(i<level?'built':'')+'"></i>').join('')+'</div></div><div class="facility-copy"><small>NÍVEL '+level+' / 5</small><h3>'+spec.name+'</h3><p>'+spec.benefit+'</p>'+(project?'<strong>Em obras · entrega '+formatDate(project.finishAt)+'</strong><progress max="100" value="'+progress+'" aria-label="Progresso da obra"></progress>':level>=5?'<strong>Estrutura de elite</strong>':'<span>'+money(q.cost)+' · '+q.duration+' dias</span><button class="btn" data-action="upgrade-facility" data-facility="'+id+'">Ver projeto de expansão</button>')+'</div></article>';
+  }).join('')+'</div></section>';
+}
 
 function renderSponsorPanel(c){if(!c.sponsor&&!c.sponsorOffers.length)c.sponsorOffers=generateSponsorOffers(c.club,c.facilities);if(c.sponsor)return '<article class="panel sponsor-panel"><p class="eyebrow">PARCEIRO PRINCIPAL</p><h2>'+escapeHtml(c.sponsor.name)+'</h2><div class="world-metric-grid"><div><span>Contrato</span><strong>'+c.sponsor.years+' anos</strong></div><div><span>Receita anual</span><strong>'+money(c.sponsor.annual)+'</strong></div><div><span>Bônus por vitória</span><strong>'+money(c.sponsor.winBonus)+'</strong></div><div><span>Bônus por título</span><strong>'+money(c.sponsor.titleBonus)+'</strong></div></div></article>';return '<article class="panel sponsor-panel"><p class="eyebrow">NEGOCIAÇÃO COMERCIAL</p><h2>Propostas de patrocínio</h2><div class="sponsor-offers">'+c.sponsorOffers.map(offer=>'<div><strong>'+escapeHtml(offer.name)+'</strong><span>'+money(offer.annual)+'/ano · '+offer.years+' anos</span><small>Título: '+money(offer.titleBonus)+'</small><button class="btn btn-small btn-primary" data-action="accept-sponsor" data-sponsor="'+offer.id+'">Assinar</button></div>').join('')+'</div></article>';}
 
@@ -803,7 +817,7 @@ function renderClub() {
   const ledger=c.ledger.slice().reverse().map(item=>'<tr><td>'+formatDate(item.date)+'</td><td>'+escapeHtml(item.label)+'</td><td class="'+(item.amount>=0?'positive':'negative')+'">'+(item.amount>=0?'+':'')+money(item.amount)+'</td></tr>').join('');
   const facilityNames={training:'Centro de treinamento',youth:'Academia de base',medical:'Departamento médico',scouting:'Rede de observação',stadium:'Estádio e matchday',commercial:'Centro comercial'};
   const offers=c.jobOffers.length?'<article class="panel job-offers"><h2>Propostas de trabalho</h2><p class="muted">Ofertas liberadas pela reputação conquistada na última temporada.</p>'+c.jobOffers.map(club=>'<div class="staff-row"><span><strong>'+escapeHtml(club.name)+'</strong><small>'+escapeHtml(club.leagueName)+' · GER VFM '+club.rating+'</small></span><img class="job-club-badge" src="./'+escapeHtml(club.badge)+'" alt="" onerror="__vfmFallback(event)"><button class="btn btn-small btn-primary" data-action="accept-club-job" data-club="'+escapeHtml(club.id)+'">Aceitar</button></div>').join('')+'</article>':'';
-  return sectionHead('Gestão total do clube','Finanças, diretoria, instalações, patrocínio e carreira executiva.')+'<div class="world-metric-grid club-metrics"><div><span>Saldo</span><strong>'+money(c.budget)+'</strong></div><div><span>Folha mensal</span><strong>'+money(payroll)+'</strong></div><div><span>Valor do elenco</span><strong>'+money(value)+'</strong></div><div><span>Diretoria</span><strong>'+c.board+'%</strong></div></div>'+renderFacilitiesCampus(c)+renderSponsorPanel(c)+'<div class="club-admin-grid"><article class="panel"><h2>Comissão técnica</h2>'+Object.entries(c.staff).map(([id,rating])=>'<div class="staff-row"><span>'+({assistant:'Auxiliar',fitnessCoach:'Preparador físico',scout:'Chefe de scout',medical:'Departamento médico'})[id]+'</span><strong>'+rating+'</strong><button class="btn btn-small" data-action="upgrade-staff" data-staff="'+id+'">Melhorar</button></div>').join('')+'</article><article class="panel"><h2>Instalações e obras</h2>'+Object.entries(c.facilities).map(([id,level])=>'<div class="staff-row"><span>'+facilityNames[id]+'</span><strong>Nível '+level+'/5</strong><button class="btn btn-small" data-action="upgrade-facility" data-facility="'+id+'" '+(level>=5?'disabled':'')+'>Evoluir</button></div>').join('')+'</article><article class="panel"><h2>Carreira do treinador</h2><p><strong>Nível '+c.manager.level+'</strong> · '+escapeHtml(c.manager.license)+'</p><p>'+c.manager.xp+' XP · '+c.manager.awards.length+' prêmio(s)</p><ul class="objective-list">'+c.manager.awards.slice(-4).map(a=>'<li>'+escapeHtml(a)+'</li>').join('')+'</ul></article><article class="panel"><h2>Objetivos da diretoria</h2><div class="board-objectives">'+c.boardObjectives.map(objective=>'<div class="board-objective '+objective.status+'"><span><strong>'+escapeHtml(objective.label)+'</strong><small>'+Math.min(objective.progress,objective.target)+' / '+objective.target+' '+escapeHtml(objective.unit)+'</small></span><i><em style="width:'+clamp(objective.progress/objective.target*100,0,100)+'%"></em></i><b>'+(objective.status==='complete'?'✓':'+'+objective.reward)+'</b></div>').join('')+'</div></article>'+offers+'</div><div class="table-wrap"><table class="data-table"><thead><tr><th>Data</th><th>Movimentação</th><th>Valor</th></tr></thead><tbody>'+ledger+'</tbody></table></div>';
+  return sectionHead('Gestão total do clube','Finanças, diretoria, instalações, patrocínio e carreira executiva.')+'<div class="world-metric-grid club-metrics"><div><span>Saldo</span><strong>'+money(c.budget)+'</strong></div><div><span>Folha mensal</span><strong>'+money(payroll)+'</strong></div><div><span>Valor do elenco</span><strong>'+money(value)+'</strong></div><div><span>Diretoria</span><strong>'+c.board+'%</strong></div></div>'+renderFinance(c)+renderFacilitiesCampus(c)+renderSponsorPanel(c)+'<div class="club-admin-grid"><article class="panel"><h2>Comissão técnica</h2>'+Object.entries(c.staff).map(([id,rating])=>'<div class="staff-row"><span>'+({assistant:'Auxiliar',fitnessCoach:'Preparador físico',scout:'Chefe de scout',medical:'Departamento médico'})[id]+'</span><strong>'+rating+'</strong><button class="btn btn-small" data-action="upgrade-staff" data-staff="'+id+'">Melhorar</button></div>').join('')+'</article><article class="panel"><h2>Instalações e obras</h2>'+Object.entries(c.facilities).map(([id,level])=>'<div class="staff-row"><span>'+facilityNames[id]+'</span><strong>Nível '+level+'/5</strong><button class="btn btn-small" data-action="upgrade-facility" data-facility="'+id+'" '+(level>=5?'disabled':'')+'>Evoluir</button></div>').join('')+'</article><article class="panel"><h2>Carreira do treinador</h2><p><strong>Nível '+c.manager.level+'</strong> · '+escapeHtml(c.manager.license)+'</p><p>'+c.manager.xp+' XP · '+c.manager.awards.length+' prêmio(s)</p><ul class="objective-list">'+c.manager.awards.slice(-4).map(a=>'<li>'+escapeHtml(a)+'</li>').join('')+'</ul></article><article class="panel"><h2>Objetivos da diretoria</h2><div class="board-objectives">'+c.boardObjectives.map(objective=>'<div class="board-objective '+objective.status+'"><span><strong>'+escapeHtml(objective.label)+'</strong><small>'+Math.min(objective.progress,objective.target)+' / '+objective.target+' '+escapeHtml(objective.unit)+'</small></span><i><em style="width:'+clamp(objective.progress/objective.target*100,0,100)+'%"></em></i><b>'+(objective.status==='complete'?'✓':'+'+objective.reward)+'</b></div>').join('')+'</div></article>'+offers+'</div><div class="table-wrap"><table class="data-table"><thead><tr><th>Data</th><th>Movimentação</th><th>Valor</th></tr></thead><tbody>'+ledger+'</tbody></table></div>';
 }
 
 function renderInbox() {
@@ -899,7 +913,7 @@ async function startMatch(source='club') {
   if(!national){
     const elapsed=Math.max(0,Math.floor((new Date(fixture.date)-new Date(c.date))/86400000));
     const recovery=advanceRosterDays(c.roster,elapsed,{medicalLevel:c.facilities.medical,fitnessCoach:c.staff.fitnessCoach});
-    c.date=fixture.date;repairCareerLineup(c);
+    c.date=fixture.date;processCareerDeadlines(c);repairCareerLineup(c);
     if(recovery.recovered.length)c.messages.push({id:'medical-clearance-'+Date.now(),from:'Departamento médico',subject:'Atletas liberados',body:recovery.recovered.join(', ')+' '+(recovery.recovered.length===1?'voltou':'voltaram')+' a ficar disponível(is) para a comissão técnica.',date:new Date().toISOString(),read:false,priority:'normal'});
   }
   let opponentRoster=[];
@@ -1028,7 +1042,7 @@ function finishMatch() {
     const outcome=ownGoals>oppGoals?'win':ownGoals<oppGoals?'loss':'draw',consequences=applyMatchConsequences(c.roster,m,{result:outcome,date:fixture.date,seed:fixture.id+':'+c.season});
     const health=rosterHealthSummary(c.roster);c.fitness=health.fitness;c.morale=Math.round(average(c.roster.map(player=>player.morale)));repairCareerLineup(c);
     if(consequences.injuries.length){const diagnosis=consequences.injuries.map(item=>item.name+' · '+item.type+' ('+item.daysRemaining+' dias)').join('; ');c.messages.push({id:'injury-'+Date.now(),from:'Departamento médico',subject:'Boletim médico pós-jogo',body:diagnosis,date:new Date().toISOString(),read:false,priority:'high'});fixture.engineReport.injuries=consequences.injuries;c.matchReports[0].injuries=consequences.injuries;}
-    const matchRevenue=fixture.type==='continental'?2400000:fixture.type==='cup'?1200000:850000,stadiumRevenue=Math.round(matchRevenue*(1+(c.facilities.stadium-2)*.12)),sponsorBonus=advanced?Number(c.sponsor?.winBonus||0):0,revenue=stadiumRevenue+sponsorBonus;c.budget+=revenue;c.ledger.push({date:new Date().toISOString(),label:'Receita de jogo'+(sponsorBonus?' e bônus do patrocinador':'')+' · '+fixture.competitionName,amount:revenue,type:'income'});
+    const matchRevenue=fixture.type==='continental'?2400000:fixture.type==='cup'?1200000:850000,stadiumRevenue=Math.round(matchRevenue*(fixture.home?1+(c.facilities.stadium-2)*.12:.3)),sponsorBonus=advanced?Number(c.sponsor?.winBonus||0):0,revenue=stadiumRevenue+sponsorBonus;c.budget+=revenue;c.ledger.push({date:new Date().toISOString(),label:'Receita de jogo'+(sponsorBonus?' e bônus do patrocinador':'')+' · '+fixture.competitionName,amount:revenue,type:'income'});
     if(fixture.type==='cup'){if(advanced){const next=c.fixtures.find(f=>f.type==='cup'&&f.locked&&!f.cancelled);if(next)resolveCupDraw(next);}else cancelRemainingKnockout(fixture);}
     if(fixture.type==='continental'&&fixture.phase==='league'){
       const phase=c.fixtures.filter(f=>f.competitionId===fixture.competitionId&&f.phase==='league'),finished=phase.every(f=>f.played);
@@ -1053,7 +1067,7 @@ function finishMatch() {
       c.messages.push({id:'qualification-'+Date.now(),from:'FIFA',subject:n.qualified?'Classificação para a Copa do Mundo':'Fim das Eliminatórias',body:n.qualified?'A seleção garantiu vaga na Copa do Mundo de 2026.':'A campanha terminou abaixo da linha de classificação para a Copa do Mundo.',date:new Date().toISOString(),read:false,priority:'high'});
     }
   }
-  c.manager.level=1+Math.floor(c.manager.xp/500);c.weeklyDecisions={training:false,squad:false,tactics:false};processCareerDeadlines(c);updateBoardObjectives(c);simulateWorldWeek();c.tactics={...m.ownTactics};persist();showPostMatchInterview(ownGoals,oppGoals);
+  c.manager.level=1+Math.floor(c.manager.xp/500);c.weeklyDecisions={training:false,squad:false,tactics:false};session.market=[];processCareerDeadlines(c);updateBoardObjectives(c);simulateWorldWeek();c.tactics={...m.ownTactics};persist();showPostMatchInterview(ownGoals,oppGoals);
 }
 
 function showPostMatchInterview(ownGoals,oppGoals){
@@ -1140,11 +1154,37 @@ function createYouthIntake(){const c=session.career;if(c.youthIntakeSeason===c.s
 
 function promoteYouth(id){const c=session.career,index=c.youthPlayers.findIndex(player=>player.id===id);if(index<0)return;if(c.roster.length>=c.transferPolicy.maxSquad)return toast('Elenco principal sem vaga de registro.','error');const [player]=c.youthPlayers.splice(index,1);c.roster.push(player);c.messages.push({id:'promotion-'+Date.now(),from:'Academia',subject:'Promoção ao elenco principal',body:player.name+' foi promovido e já pode ser escalado.',date:new Date().toISOString(),read:false,priority:'normal'});persist();renderGame(renderTraining());toast(player.name+' promovido ao profissional.','success');}
 
-function upgradeFacility(id) {
-  const c=session.career,level=c.facilities[id]||1,cost=level*6500000;
-  if(level>=5)return toast('Esta instalação já está no nível máximo.','error');
-  if(c.budget<cost)return toast('Saldo insuficiente para a obra.','error');
-  c.budget-=cost;c.facilities[id]=level+1;c.ledger.push({date:new Date().toISOString(),label:'Melhoria de instalação · '+id,amount:-cost,type:'expense'});persist();renderGame(renderClub());toast('Instalação elevada ao nível '+(level+1)+'.','success');
+function upgradeFacility(id){
+  const c=ensureEconomy(session.career),q=facilityQuote(c,id);if(!q)return;
+  if(q.level>5)return toast('Instalação no nível máximo.','error');
+  if(c.construction.some(p=>p.id===id))return toast('Obra em andamento. Consulte o prazo no campus.');
+  showModal('Projeto · '+q.name,'<p>'+escapeHtml(q.benefit)+'.</p><div class="finance-cards"><span>Investimento<strong>'+money(q.cost)+'</strong></span><span>Prazo<strong>'+q.duration+' dias</strong></span><span>Manutenção adicional<strong>'+money(q.maintenance)+'/mês</strong></span></div><p>O nível '+q.level+' entra em operação quando a obra terminar.</p>','<button class="btn" data-action="close-modal">Voltar</button><button class="btn btn-primary" data-action="confirm-facility" data-facility="'+id+'">Iniciar obra</button>');
+}
+
+function renderFinance(c){
+  ensureEconomy(c);const f=financeForecast(c);
+  return '<section class="panel finance-hub"><header><div><p class="eyebrow">CONTROLE FINANCEIRO</p><h2>Planeje os próximos 90 dias</h2></div><span class="tag">'+(f.projected<0?'Atenção ao caixa':'Caixa projetado positivo')+'</span></header><div class="finance-cards"><span>Receita recorrente<strong>'+money(f.recurring)+'/mês</strong></span><span>Salários e operação<strong>'+money(f.expenses)+'/mês</strong></span><span>Parcelas em 90 dias<strong>'+money(f.installments)+'</strong></span><span>Caixa projetado<strong class="'+(f.projected<0?'negative':'positive')+'">'+money(f.projected)+'</strong></span></div><p class="muted">Projeção conservadora: não inclui futuros jogos, vendas, prêmios ou novos patrocínios. O fechamento mensal cobra salários, comissão e manutenção automaticamente.</p></section>';
+}
+
+function salePlayer(id){
+  const c=session.career,p=c.roster.find(p=>p.id===id),clubs=session.catalog.clubs.filter(club=>club.id!==c.club.id&&Math.abs(club.rating-(p?.overall||65))<12);
+  const buyer=clubs[stableNumber(id+c.date)%Math.max(1,clubs.length)]?.name||'Clube interessado';
+  const result=createSaleOffer(c,p,buyer);if(result.error)return toast(result.error,'error');persist();const o=result.offer;
+  showModal('Oferta · '+p.name,'<p><strong>'+escapeHtml(o.buyer)+'</strong> oferece '+money(o.fee)+' por '+escapeHtml(p.name)+'.</p><p>Salário liberado: '+money(p.salary*1000)+'/mês. Proposta válida até '+formatDate(o.expiresAt)+'.</p>','<button class="btn" data-action="close-modal">Decidir depois</button><button class="btn btn-primary" data-action="accept-sale" data-offer="'+escapeHtml(o.id)+'">Aceitar venda</button>');
+}
+
+function renewPlayer(id){
+  const p=session.career.roster.find(p=>p.id===id);if(!p||p.onLoan)return;
+  const salary=Math.max(1000,Math.round(p.salary*1100));
+  showModal('Renovação · '+p.name,'<p>Contrato atual: '+formatDate(p.contractUntil)+'. Expectativa salarial: '+money(salary)+'/mês.</p><div class="negotiation-fields"><label>Salário mensal<input id="renew-salary" type="number" min="1000" value="'+salary+'"></label><label>Temporadas<select id="renew-years"><option>1</option><option selected>2</option><option>3</option></select></label></div><p>Luvas: dois salários. A renovação respeita o limite da folha.</p>','<button class="btn" data-action="close-modal">Voltar</button><button class="btn btn-primary" data-action="confirm-renewal" data-player="'+escapeHtml(id)+'">Renovar</button>');
+}
+function confirmRenewal(id){
+  const c=session.career,p=c.roster.find(p=>p.id===id);if(!p||p.onLoan)return;
+  const salary=Number(document.querySelector('#renew-salary').value),years=Number(document.querySelector('#renew-years').value),signing=salary*2;
+  const invalid=validateDeal(c,p,{fee:0,salary,years,signing,renewal:true});if(invalid)return toast(invalid,'error');
+  if(salary<Math.round(p.salary*1100))return toast('O agente pede pelo menos 10% de reajuste.','error');
+  const end=new Date(Math.max(new Date(c.date).getTime(),new Date(p.contractUntil).getTime()));end.setUTCFullYear(end.getUTCFullYear()+years);
+  p.salary=salary/1000;p.contractUntil=end.toISOString().slice(0,10);c.budget-=signing;c.ledger.push({date:c.date,label:'Luvas de renovação · '+p.name,amount:-signing,type:'expense'});closeModal();persist();renderGame(renderSquad());toast('Contrato renovado.','success');
 }
 
 function acceptSponsor(id){const c=session.career,offer=c.sponsorOffers.find(item=>item.id===id);if(!offer)return;c.sponsor={...offer};c.sponsorOffers=[];c.budget+=offer.annual;c.ledger.push({date:new Date().toISOString(),label:'Patrocínio anual · '+offer.name,amount:offer.annual,type:'income'});c.messages.push({id:'sponsor-'+Date.now(),from:'Diretoria comercial',subject:'Novo patrocinador principal',body:offer.name+' assinou por '+offer.years+' temporadas. Receita anual: '+money(offer.annual)+'.',date:new Date().toISOString(),read:false,priority:'high'});unlockAchievement('commercial-deal','Executivo de mercado','Assine seu primeiro patrocinador principal.');persist();renderGame(renderClub());toast('Contrato de patrocínio assinado.','success');}
@@ -1157,22 +1197,25 @@ async function acceptClubJob(clubId) {
     if(roster.length<11)throw new Error('Elenco insuficiente');
     const previous=c.club.name,participants=selectLeagueParticipants(club);
     const startDate=club.continent==='europe'?new Date(c.season,7,8,15):club.countryId==='brazil'?new Date(c.season,3,11,16):new Date(c.season,1,7,16);
+    c.construction=[];c.transferOffers=[];c.transferObligations=[];c.economy=null;session.market=[];
     c.club={...club};c.roster=roster;c.lineupIds=pickLineup(roster).map(p=>p.id);c.participants=participants;c.table=initialTable(participants);
     c.fixtures=[...buildLeagueFixtures(club,participants,startDate),...buildCupFixtures(club,participants,startDate),...buildContinentalFixtures(club,startDate,participants)].sort((a,b)=>new Date(a.date)-new Date(b.date));
     c.date=startDate.toISOString();c.week=1;c.stats={played:0,wins:0,draws:0,losses:0,gf:0,ga:0,points:0};c.budget=Math.max(c.budget,Math.round((35+(club.rating-65)*3.2)*1000000));c.jobOffers=[];
+    ensureEconomy(c);
     c.messages.push({id:'club-job-'+Date.now(),from:'Diretoria de '+club.name,subject:'Novo contrato assinado',body:'Você deixou '+previous+' e assumiu '+club.name+'. O calendário da nova temporada foi carregado.',date:new Date().toISOString(),read:false,priority:'high'});
     persist();navigate('dashboard');toast('Novo desafio iniciado no '+club.name+'.','success');
   }catch{toast('Não foi possível carregar o elenco do novo clube.','error');}
 }
 
 function buyPlayer(id) {
-  const p=session.market.find(item=>item.id===id);if(!p)return;const fee=Math.round(p.value*1050000),salary=Math.max(25000,p.salary*1000);
+  const p=session.market.find(item=>item.id===id);if(!p)return;const fee=Math.round(marketValue(p,session.career.date)*1.05),salary=Math.max(25000,p.salary*1000);
   if(session.career.roster.length>=session.career.transferPolicy.maxSquad){toast('O elenco atingiu o limite de registro.','error');return;}
   showModal('Mesa de negociação · '+p.name,'<div class="transfer-negotiation"><p><strong>'+escapeHtml(p.sourceClub||'Clube vendedor')+'</strong> aceita analisar condições. O clube e o agente podem rejeitar valores insuficientes.</p><div class="negotiation-fields"><label>Taxa de transferência<input id="neg-fee" type="number" min="0" step="100000" value="'+fee+'"><small>Pedido estimado: '+money(fee)+'</small></label><label>Salário mensal<input id="neg-salary" type="number" min="1000" step="1000" value="'+salary+'"><small>Expectativa do agente: '+money(salary)+'</small></label><label>Duração<select id="neg-years"><option>2</option><option>3</option><option selected>4</option><option>5</option></select></label><label>Luvas<input id="neg-signing" type="number" min="0" step="50000" value="'+Math.round(salary*5)+'"></label><label>Parcelas<select id="neg-installments"><option value="1">À vista</option><option value="2">2 parcelas</option><option value="3" selected>3 parcelas</option></select></label><label>Cláusula de rescisão<input id="neg-release" type="number" min="0" step="1000000" value="'+Math.round(fee*2.2)+'"></label></div><p class="muted">Comissão do agente: 5% da taxa. Parcelas futuras continuam registradas no passivo do clube.</p></div>','<button class="btn" data-action="close-modal">Cancelar</button><button class="btn btn-primary" data-action="confirm-transfer" data-player="'+escapeHtml(id)+'" data-asking="'+fee+'" data-expected-salary="'+salary+'">Enviar proposta</button>');
 }
 
 function confirmTransfer(target) {
   const id=target.dataset.player,p=session.market.find(item=>item.id===id);if(!p)return;const asking=Number(target.dataset.asking),expected=Number(target.dataset.expectedSalary),fee=Number(document.querySelector('#neg-fee')?.value),salary=Number(document.querySelector('#neg-salary')?.value),years=Number(document.querySelector('#neg-years')?.value||4),signing=Number(document.querySelector('#neg-signing')?.value||0),installments=Number(document.querySelector('#neg-installments')?.value||1),releaseClause=Number(document.querySelector('#neg-release')?.value||0),agentFee=Math.round(fee*.05),installmentAmount=Math.ceil(fee/installments),firstInstallment=Math.min(fee,installmentAmount),initial=firstInstallment+agentFee+signing;
+  const invalid=validateDeal(session.career,p,{fee,salary,years,signing,installments,releaseClause});if(invalid)return toast(invalid,'error');
   if(fee<asking*.9){showModal('Contraproposta do clube','<p>'+escapeHtml(p.sourceClub||'O clube vendedor')+' recusou a taxa. A contraproposta é <strong>'+money(Math.round(asking*1.08))+'</strong>.</p><p>Você pode retornar à mesa ou encerrar.</p>','<button class="btn" data-action="close-modal">Encerrar</button><button class="btn btn-primary" data-action="buy-player" data-player="'+escapeHtml(id)+'">Renegociar</button>');return;}
   if(salary<expected*.88){showModal('Exigência do agente','<p>O agente considera o salário insuficiente. A expectativa mínima é <strong>'+money(expected)+'</strong>.</p>','<button class="btn" data-action="close-modal">Encerrar</button><button class="btn btn-primary" data-action="buy-player" data-player="'+escapeHtml(id)+'">Reformular contrato</button>');return;}
   if(session.career.budget<initial){closeModal();toast('Orçamento insuficiente para a primeira parcela, luvas e comissão.','error');return;}
@@ -1186,13 +1229,20 @@ function playerReport(id){
   const details=[p.nationality,p.foot?('Pé '+p.foot):'',p.height?(p.height+' cm'):''].filter(Boolean).map(escapeHtml).join(' · ');
   const status=playerStatus(p),roles=Object.entries(p.positionRatings||{}).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([role,rating])=>'<span><b>'+role+'</b><strong>'+rating+'</strong></span>').join('');
   const performance='<div class="player-performance-grid"><span><small>Rendimento hoje</small><strong>'+effectiveOverall(p,p.pos).toFixed(1)+'</strong></span><span><small>Forma</small><strong>'+Math.round(p.form)+'%</strong></span><span><small>Físico</small><strong>'+Math.round(p.fitness)+'%</strong></span><span><small>Carga</small><strong>'+Math.round(p.workload)+'%</strong></span><span><small>Ritmo</small><strong>'+Math.round(p.sharpness)+'%</strong></span><span><small>Entrosamento</small><strong>'+Math.round(p.chemistry)+'%</strong></span></div><div class="position-ratings"><h4>Nota por posição</h4>'+roles+'</div><div class="medical-status '+status.className+'"><strong>'+escapeHtml(status.label)+'</strong><small>'+p.seasonMinutes+' min · '+p.appearances+' jogos na temporada</small></div>';
+  const owned=session.career.roster.some(item=>item.id===id),management=owned&&!p.onLoan?'<button class="btn" data-action="renew-player" data-player="'+escapeHtml(id)+'">Renovar contrato</button><button class="btn" data-action="sale-player" data-player="'+escapeHtml(id)+'">Ouvir proposta de venda</button>':'';
   const actions=p.onLoan&&p.purchaseOption?'<button class="btn" data-action="close-modal">Fechar</button><button class="btn btn-primary" data-action="exercise-purchase-option" data-player="'+escapeHtml(p.id)+'">Comprar por '+money(p.purchaseOption)+'</button>':'<button class="btn btn-primary" data-action="close-modal">Fechar</button>';
-  showModal('Relatório · '+p.name,'<div class="player-report"><header>'+playerPortrait(p,'large')+'<div><h3>'+escapeHtml(p.name)+'</h3><p>'+p.pos+' · '+p.age+' anos · '+escapeHtml(p.personality)+'</p><strong>GER '+p.overall+' · POT '+p.potential+'</strong><small>'+details+'</small></div></header>'+performance+'<div class="identity-source">'+identity+'</div><div class="attribute-grid">'+attrs+'</div><p>Risco-base de lesão: '+p.injuryRisk+'% · Conhecimento do scout: '+p.knowledge+'% · Contrato: '+escapeHtml(p.contractUntil)+'</p></div>',actions);
+  showModal('Relatório · '+p.name,'<div class="player-report"><header>'+playerPortrait(p,'large')+'<div><h3>'+escapeHtml(p.name)+'</h3><p>'+p.pos+' · '+p.age+' anos · '+escapeHtml(p.personality)+'</p><strong>GER '+p.overall+' · POT '+p.potential+'</strong><small>'+details+'</small></div></header>'+performance+'<div class="identity-source">'+identity+'</div><div class="attribute-grid">'+attrs+'</div><p>Risco-base de lesão: '+p.injuryRisk+'% · Conhecimento do scout: '+p.knowledge+'% · Contrato: '+escapeHtml(p.contractUntil)+'</p></div>',management+actions);
 }
 
-function loanPlayer(id){const p=session.market.find(item=>item.id===id);if(!p)return;const fee=Math.max(100000,Math.round(p.value*1000000*.06)),wage=Math.max(10000,p.salary*1000);showModal('Empréstimo · '+p.name,'<p>Proposta de empréstimo até o fim da temporada, com taxa de <strong>'+money(fee)+'</strong> e 70% dos salários.</p><p>Uma opção de compra de '+money(p.value*1000000)+' será registrada.</p>','<button class="btn" data-action="close-modal">Cancelar</button><button class="btn btn-primary" data-action="confirm-loan" data-player="'+p.id+'" data-fee="'+fee+'" data-wage="'+wage+'">Enviar proposta</button>');}
+function loanPlayer(id){const p=session.market.find(item=>item.id===id);if(!p)return;const fee=Math.max(100000,Math.round(marketValue(p,session.career.date)*.06)),wage=Math.max(10000,p.salary*1000);showModal('Empréstimo · '+p.name,'<p>Proposta de empréstimo por seis meses, com taxa de <strong>'+money(fee)+'</strong> e 70% dos salários.</p><p>Uma opção de compra de '+money(marketValue(p,session.career.date))+' será registrada.</p>','<button class="btn" data-action="close-modal">Cancelar</button><button class="btn btn-primary" data-action="confirm-loan" data-player="'+p.id+'" data-fee="'+fee+'" data-wage="'+wage+'">Enviar proposta</button>');}
 
-function confirmLoan(target){const p=session.market.find(item=>item.id===target.dataset.player),fee=Number(target.dataset.fee),wage=Number(target.dataset.wage);if(!p)return;if(session.career.budget<fee)return toast('Orçamento insuficiente.','error');session.career.budget-=fee;session.career.roster.push({...p,onLoan:true,loanUntil:session.career.season+'-12-31',salary:Math.round(wage*.7/1000),purchaseOption:p.value*1000000});session.career.ledger.push({date:new Date().toISOString(),label:'Empréstimo · '+p.name,amount:-fee,type:'expense'});session.market=session.market.filter(item=>item.id!==p.id);closeModal();persist();renderGame(renderMarket());toast('Empréstimo concluído.','success');}
+function confirmLoan(target){
+  const c=session.career,p=session.market.find(item=>item.id===target.dataset.player);if(!p)return;
+  const fee=Math.max(100000,Math.round(marketValue(p,c.date)*.06)),salary=Math.max(10000,p.salary*1000)*.7;
+  const invalid=validateDeal(c,p,{fee:0,salary,signing:fee});if(invalid)return toast(invalid,'error');
+  c.budget-=fee;c.roster.push({...p,onLoan:true,loanUntil:addDays(c.date,180),salary:salary/1000,purchaseOption:marketValue(p,c.date)});
+  c.ledger.push({date:c.date,label:'Empréstimo · '+p.name,amount:-fee,type:'expense'});session.market=session.market.filter(item=>item.id!==p.id);closeModal();persist();renderGame(renderMarket());toast('Empréstimo de seis meses concluído.','success');
+}
 
 function exercisePurchaseOption(id){const c=session.career,p=c.roster.find(player=>player.id===id&&player.onLoan),cost=Number(p?.purchaseOption||0);if(!p||!cost)return;if(c.budget<cost)return toast('Saldo insuficiente para exercer a opção.','error');c.budget-=cost;p.onLoan=false;p.loanUntil=null;p.purchaseOption=0;p.contractUntil=(c.season+4)+'-12-31';c.ledger.push({date:new Date().toISOString(),label:'Opção de compra · '+p.name,amount:-cost,type:'expense'});c.messages.push({id:'loan-buy-'+Date.now(),from:'Diretor de futebol',subject:'Opção de compra exercida: '+p.name,body:'O atleta agora pertence em definitivo ao clube. Valor pago: '+money(cost)+'.',date:new Date().toISOString(),read:false,priority:'normal'});closeModal();persist();renderGame(renderSquad());toast(p.name+' foi contratado em definitivo.','success');}
 
@@ -1274,6 +1324,11 @@ function handleAction(action,target) {
   else if(action==='accept-national')acceptNationalJob(target.dataset.team);
   else if(action==='accept-club-job')acceptClubJob(target.dataset.club);
   else if(action==='upgrade-staff'){const id=target.dataset.staff,cost=1500000;if(session.career.budget<cost)return toast('Saldo insuficiente.','error');session.career.budget-=cost;session.career.staff[id]=clamp(session.career.staff[id]+2,1,99);session.career.ledger.push({date:new Date().toISOString(),label:'Investimento na comissão técnica',amount:-cost,type:'expense'});persist();renderGame(renderClub());}
+  else if(action==='confirm-facility'){const result=startConstruction(session.career,target.dataset.facility);if(result.error)return toast(result.error,'error');closeModal();persist();renderGame(renderClub());toast('Obra iniciada. Acompanhe a entrega no campus.','success');}
+  else if(action==='sale-player')salePlayer(target.dataset.player);
+  else if(action==='accept-sale'){const result=acceptSale(session.career,target.dataset.offer);if(result.error)return toast(result.error,'error');repairCareerLineup(session.career);closeModal();persist();navigate('squad');toast('Venda concluída e receita recebida.','success');}
+  else if(action==='renew-player')renewPlayer(target.dataset.player);
+  else if(action==='confirm-renewal')confirmRenewal(target.dataset.player);
   else if(action==='upgrade-facility')upgradeFacility(target.dataset.facility);
   else if(action==='accept-sponsor')acceptSponsor(target.dataset.sponsor);
   else if(action==='export-save')exportSave();
@@ -1305,6 +1360,8 @@ app.addEventListener('change',event=>{const target=event.target,action=target.da
   else if(action==='national-filter'){session.nationalFilter=target.value;renderGame(renderNational());}
   else if(action==='calendar-view'){session.calendarView=target.value;renderGame(renderCalendar());}
   else if(action==='calendar-filter'){session.calendarFilter=target.value;renderGame(renderCalendar());}
+  else if(action==='market-position'){session.marketPosition=target.value;renderGame(renderMarket());}
+  else if(action==='market-budget'){session.marketBudget=target.value;renderGame(renderMarket());}
   else if(action==='position-filter'){session.positionFilter=target.value;renderGame(renderSquad());}
   else if(action==='formation-select'){session.career.tactics.formation=target.value;session.career.tacticalPositions=(FORMATIONS[target.value]||FORMATIONS['4-3-3']).map(point=>[...point]);persist();renderGame(renderTactics());}
   else if(action==='mentality-select'){session.career.tactics.mentality=target.value;persist();renderGame(renderTactics());}

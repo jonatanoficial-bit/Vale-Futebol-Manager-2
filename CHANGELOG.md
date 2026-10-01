@@ -1,3 +1,15 @@
+# 16.8.0 — Fase 8 Mercado, Finanças e Instalações — 2026-10-01
+
+- Implementado fechamento mensal idempotente de salários, comissão, manutenção e receitas comerciais.
+- Adicionada previsão de caixa para 90 dias com compromissos de transferências.
+- Criadas obras com investimento inicial, prazo, progresso e entrega com efeito nos sistemas existentes.
+- Reformulado o campus com seis áreas visuais e comparação de níveis.
+- Ampliado o mercado para o nível do clube, com filtros por posição e investimento e alcance ligado ao scouting.
+- Adicionadas ofertas de venda e renovação contratual; valuation considera idade, potencial, forma e contrato.
+- Bloqueadas propostas inválidas, duplicadas, sem vaga ou acima da folha salarial.
+- Corrigida a preservação dos termos de empréstimo e de contrato ao recarregar saves.
+- Diferenciada a receita de jogos em casa e fora; migração para schema 1603 sem cobrança retroativa.
+
 # 16.7.0 — Fase 7 Realismo Esportivo — 2026-10-01
 
 - Criado cálculo de overall por posição a partir dos atributos técnicos, físicos e mentais.

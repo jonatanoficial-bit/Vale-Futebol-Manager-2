@@ -99,7 +99,7 @@ for ref in re.findall(r'(?:href|src)="\./([^"?#]+)', html):
 require("app-v16.js" in html and "ultimate-v16.css" in html, "Entrypoints V16 ausentes")
 
 sw = (ROOT / "sw.js").read_text(encoding="utf-8")
-require("ultimate-v16.7.0-phase7" in sw, "Cache do service worker não corresponde à Fase 7")
+require("ultimate-v16.8.0-phase8" in sw, "Cache do service worker não corresponde à Fase 8")
 for ref in re.findall(r"'\./([^'?]+)(?:\?[^']*)?'", sw):
     if ref:
         require((ROOT / ref).exists(), f"Referência ausente no service worker: {ref}")
@@ -123,6 +123,9 @@ engine_v2 = (ROOT / "js/systems/matchEngineV2.js").read_text(encoding="utf-8")
 for marker in ["createMatchEngineV2", "advanceMatchEngineV2", "applyManagerShoutV2", "buildMatchReport", "MATCH_ENGINE_V2_VERSION"]:
     require(marker in engine_v2, f"Motor de partida Fase 5 incompleto: {marker}")
 performance_v3 = (ROOT / "js/systems/careerPerformanceV3.js").read_text(encoding="utf-8")
+economy = (ROOT / "js/systems/clubEconomy.js").read_text(encoding="utf-8")
+for marker in ["processEconomy", "financeForecast", "startConstruction", "validateDeal", "acceptSale"]:
+    require(marker in economy and marker in app_js, f"Integração econômica incompleta: {marker}")
 for marker in ["calculatePositionRating", "selectBestLineup", "advanceRosterDays", "applyMatchConsequences", "applyTrainingWeek", "processSeasonAging"]:
     require(marker in performance_v3, f"Motor de carreira Fase 7 incompleto: {marker}")
 
@@ -154,7 +157,7 @@ report = {
     "checks": [
         "catalog integrity", "unique club IDs", "club and national roster paths", "six-confederation coverage",
         "league rule status", "manifest adaptive orientation", "index references", "service-worker shell references",
-        "manager face atlas", "national identity flags", "live match tactics", "match engine v2", "phase 6 tactical portraits", "phase 6 navigation identity", "phase 7 positional ratings", "phase 7 injury and recovery", "phase 7 development and aging", "annual calendar", "global simulation", "rating disclosure",
+        "manager face atlas", "national identity flags", "live match tactics", "match engine v2", "phase 6 tactical portraits", "phase 6 navigation identity", "phase 7 positional ratings", "phase 7 injury and recovery", "phase 7 development and aging", "phase 8 economy and construction", "annual calendar", "global simulation", "rating disclosure",
     ],
 }
 
