@@ -1,3 +1,12 @@
+# 16.6.0 — Fase 6 Acabamento Visual Comercial — 2026-10-01
+
+- Adicionados rostos dos jogadores no campo tático, no banco e nas alterações durante a partida.
+- Criados cartões por setor com cores distintas para goleiro, defesa, meio-campo e ataque.
+- Redesenhados os ícones de Elenco, Tática, Jogar e Mercado como símbolos esportivos diretos.
+- Aplicada identidade cromática própria aos cinco destinos principais e aos oito módulos da Central Mais.
+- Reforçada a hierarquia dos botões de escalação, plano de jogo, dia de partida e instruções ao vivo.
+- Validada a leitura dos nomes, notas, físico, posições e fotografias em computador e celular.
+
 # 16.5.0 — Fase 5 Motor de Partida 2.0 — 2026-10-01
 
 - Substituído o sorteio simples da partida por um motor determinístico orientado por atributos, adequação posicional, forma, moral e condição física.

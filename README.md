@@ -1,6 +1,16 @@
-# Vale Futebol Manager — Ultimate World 16.5
+# Vale Futebol Manager — Ultimate World 16.6
 
-Manager internacional mobile-first para retrato e paisagem, jogável no computador e instalável como PWA. A V16.5 introduz um motor de partida determinístico, causal e orientado pelos atributos reais do elenco, preservando a apresentação cinematográfica e o campo realista.
+Manager internacional mobile-first para retrato e paisagem, jogável no computador e instalável como PWA. A V16.6 combina o motor determinístico com uma identidade visual esportiva, rostos na gestão tática e comandos reconhecíveis em computador e celular.
+
+## Fase 6 — acabamento visual comercial
+
+- rostos reais licenciados ou retratos genéricos identificados nos titulares, reservas e substituições;
+- cartões posicionais em quatro cores para goleiro, defesa, meio-campo e ataque;
+- ícone de campo para Tática, grupo de atletas para Elenco, bola para Jogar e negociação de atleta para Mercado;
+- navegação principal com cor própria por área, mantendo texto e ícone para reconhecimento imediato;
+- Central Mais com identidade cromática individual para competição, agenda, treino, mercado, clube, mensagens, seleção e ajustes;
+- botões de escalação, desenho tático, dia de jogo, planos rápidos e controles de partida com hierarquia visual;
+- interface tática revisada para manter nomes, notas, condição física e fotografias legíveis em desktop e mobile.
 
 ## Fase 5 — motor de partida 2.0
 
@@ -109,10 +119,12 @@ Não abra `index.html` diretamente; elencos, dados e funcionamento offline depen
 - celular horizontal 844×390;
 - 22 jogadores no campo;
 - painel ao vivo com 11 titulares e 12 reservas;
+- 11 rostos no campo tático e 23 rostos no painel de alterações;
+- cinco destinos principais e oito módulos secundários com ícones e cores próprios;
 - substituição por toque e relógio de partida testados;
 - determinismo entre velocidades, adequação posicional, efeito de atributos e diferenças entre plano ofensivo, equilibrado e bloco baixo testados em 2.400 partidas;
 - sintaxe JavaScript aprovada;
 - 833 clubes, 211 seleções e 24.300 registros de jogadores auditados;
 - integridade aprovada com ressalvas documentadas em `QA-WORLD-V16.json`.
 
-Versão 16.5.0 · Ultimate World · 2026-10-01
+Versão 16.6.0 · Ultimate World · 2026-10-01
