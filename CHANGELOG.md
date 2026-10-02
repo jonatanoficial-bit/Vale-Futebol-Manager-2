@@ -1,3 +1,16 @@
+# 16.9.0 — Fase 9 Carreira do Treinador — 2026-10-02
+
+- Substituído o desenho abstrato das instalações por seis imagens originais e cinematográficas para estádio, CT, academia, medicina, scouting e centro comercial.
+- Otimizadas as imagens das instalações para carregamento móvel e adicionados níveis visuais sobre cada cenário.
+- Criado contrato do treinador com salário, duração, clube atual e linha do tempo persistente.
+- Adicionadas avaliações da diretoria após cada partida, com influência da força do rival, placar, eliminações, sequência e situação financeira.
+- Implementados estados de prestígio, estabilidade, avaliação, pressão, ultimato e demissão real.
+- Criado período sem clube com navegação própria, propostas contratuais detalhadas e assinatura imediata com uma nova equipe.
+- Adicionadas propostas durante a temporada conforme reputação e desempenho, além das oportunidades entre temporadas.
+- Transformados contatos de seleções em convites formais ligados à reputação e ao histórico do treinador.
+- Preservados carreira, conquistas e seleção nacional nas trocas de clube e na migração para o schema 1604.
+- Validados motor de carreira, migração de save, contratação, instalações e layouts de desktop e celular.
+
 # 16.8.0 — Fase 8 Mercado, Finanças e Instalações — 2026-10-01
 
 - Implementado fechamento mensal idempotente de salários, comissão, manutenção e receitas comerciais.

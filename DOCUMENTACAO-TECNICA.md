@@ -8,6 +8,7 @@ A aplicação usa HTML, CSS e JavaScript nativos. Não há etapa de compilação
 
 - index.html: metadados, shell, splash e overlay de orientação;
 - js/app-v16.js: estado, fluxo, renderização, persistência e sistemas ativos do jogo;
+- js/systems/managerCareer.js: contrato, confiança, demissão, propostas e histórico do treinador;
 - css/app.css, css/world-edition.css, css/world-edition-v11.css e css/ultimate-v16.css: componentes e camadas responsivas;
 - manifest.webmanifest: instalação PWA em retrato ou paisagem;
 - data/player-media-manifest.json: inventário único de fotografias com licença comercial;
@@ -19,7 +20,7 @@ A aplicação usa HTML, CSS e JavaScript nativos. Não há etapa de compilação
 
 ## Estado e salvamento
 
-O armazenamento usa localStorage sob a chave vale-futebol-manager-v16. O schema atual é 1600. Antes de gravar, a versão anterior é preservada na chave vale-futebol-manager-v16-backup. Falhas de gravação são exibidas ao jogador e impedem a saída silenciosa da carreira.
+O armazenamento usa localStorage sob a chave vale-futebol-manager-v16. O schema atual é 1604. Antes de gravar, a versão anterior é preservada na chave vale-futebol-manager-v16-backup. Falhas de gravação são exibidas ao jogador e impedem a saída silenciosa da carreira.
 
 O carregador:
 
@@ -47,6 +48,8 @@ Há três espaços independentes. Decisões importantes acionam autosave. A tela
 - simulação reproduzível por partida com força, tática, posse, pressão, desgaste, reação do adversário, xG, finalizações, gols e momentos-chave;
 - planejador de elenco, impacto visual das táticas e objetivos mensuráveis da diretoria;
 - atualização de pontos, moral, confiança, condição e receita.
+- carreira do treinador com contrato, pressão da diretoria, demissão, período sem clube e propostas de clubes e seleções;
+- campus com seis instalações ilustradas, obras, níveis, custos e efeitos sistêmicos.
 
 ## Identidade dos jogadores
 

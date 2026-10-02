@@ -99,7 +99,7 @@ for ref in re.findall(r'(?:href|src)="\./([^"?#]+)', html):
 require("app-v16.js" in html and "ultimate-v16.css" in html, "Entrypoints V16 ausentes")
 
 sw = (ROOT / "sw.js").read_text(encoding="utf-8")
-require("ultimate-v16.8.0-phase8" in sw, "Cache do service worker não corresponde à Fase 8")
+require("ultimate-v16.9.0-phase9" in sw, "Cache do service worker não corresponde à Fase 9")
 for ref in re.findall(r"'\./([^'?]+)(?:\?[^']*)?'", sw):
     if ref:
         require((ROOT / ref).exists(), f"Referência ausente no service worker: {ref}")
@@ -126,6 +126,12 @@ performance_v3 = (ROOT / "js/systems/careerPerformanceV3.js").read_text(encoding
 economy = (ROOT / "js/systems/clubEconomy.js").read_text(encoding="utf-8")
 for marker in ["processEconomy", "financeForecast", "startConstruction", "validateDeal", "acceptSale"]:
     require(marker in economy and marker in app_js, f"Integração econômica incompleta: {marker}")
+manager_career = (ROOT / "js/systems/managerCareer.js").read_text(encoding="utf-8")
+for marker in ["ensureManagerCareer", "reviewManagerMatch", "createClubJobOffers", "createNationalJobOffers", "recordClubAppointment"]:
+    require(marker in manager_career and marker in app_js, f"Integração da carreira do treinador incompleta: {marker}")
+for facility in ["stadium", "training", "youth", "medical", "scouting", "commercial"]:
+    image = ROOT / f"assets/facilities/{facility}.jpg"
+    require(image.is_file() and 50_000 < image.stat().st_size < 400_000, f"Imagem otimizada da instalação ausente: {facility}")
 for marker in ["calculatePositionRating", "selectBestLineup", "advanceRosterDays", "applyMatchConsequences", "applyTrainingWeek", "processSeasonAging"]:
     require(marker in performance_v3, f"Motor de carreira Fase 7 incompleto: {marker}")
 
@@ -157,7 +163,7 @@ report = {
     "checks": [
         "catalog integrity", "unique club IDs", "club and national roster paths", "six-confederation coverage",
         "league rule status", "manifest adaptive orientation", "index references", "service-worker shell references",
-        "manager face atlas", "national identity flags", "live match tactics", "match engine v2", "phase 6 tactical portraits", "phase 6 navigation identity", "phase 7 positional ratings", "phase 7 injury and recovery", "phase 7 development and aging", "phase 8 economy and construction", "annual calendar", "global simulation", "rating disclosure",
+        "manager face atlas", "national identity flags", "live match tactics", "match engine v2", "phase 6 tactical portraits", "phase 6 navigation identity", "phase 7 positional ratings", "phase 7 injury and recovery", "phase 7 development and aging", "phase 8 economy and construction", "phase 9 manager career", "phase 9 facility imagery", "annual calendar", "global simulation", "rating disclosure",
     ],
 }
 

@@ -1,9 +1,10 @@
 import { FACILITIES, ensureEconomy, processEconomy, financeForecast, facilityQuote, startConstruction, marketValue, validateDeal, createSaleOffer, acceptSale } from './systems/clubEconomy.js';
 import { MATCH_ENGINE_V2_VERSION, createMatchEngineV2, advanceMatchEngineV2, applyMatchSubstitutionV2, applyManagerShoutV2, buildMatchReport } from './systems/matchEngineV2.js';
 import { CAREER_PERFORMANCE_VERSION, hydratePlayerPerformance, effectiveOverall, isPlayerAvailable, selectBestLineup, advanceRosterDays, applyMatchConsequences, applyTrainingWeek, processSeasonAging, rosterHealthSummary } from './systems/careerPerformanceV3.js';
+import { MANAGER_CAREER_VERSION, ensureManagerCareer, careerSecurity, reviewManagerMatch, createClubJobOffers, createNationalJobOffers, careerOfferDue, closeCareerOfferCycle, recordClubAppointment, recordNationalAppointment } from './systems/managerCareer.js';
 
-const VERSION = '16.8.0-phase8';
-const SCHEMA = 1603;
+const VERSION = '16.9.0-phase9';
+const SCHEMA = 1604;
 const STORE_KEY = 'vale-futebol-manager-v16';
 const BACKUP_KEY = 'vale-futebol-manager-v16-backup';
 const LEGACY_KEY = 'vale-futebol-manager-v11';
@@ -40,6 +41,15 @@ const COMPETITION_MEDIA = {
   libertadores:'./assets/competitions/real/libertadores.svg',
   sulamericana:'./assets/competitions/real/sudamericana.svg',
   'copa-do-brasil':'./assets/competitions/real/copa-do-brasil.svg'
+};
+
+const FACILITY_MEDIA = {
+  stadium:'./assets/facilities/stadium.jpg',
+  training:'./assets/facilities/training.jpg',
+  youth:'./assets/facilities/youth.jpg',
+  medical:'./assets/facilities/medical.jpg',
+  scouting:'./assets/facilities/scouting.jpg',
+  commercial:'./assets/facilities/commercial.jpg'
 };
 
 const NAV_ITEMS = [
@@ -164,6 +174,7 @@ function migrateCareer(career) {
   career.lineupIds=Array.isArray(career.lineupIds)?career.lineupIds.filter((id,index,list)=>validLineup.has(id)&&list.indexOf(id)===index).slice(0,11):[];
   if(career.lineupIds.length<11)career.lineupIds=selectBestLineup(career.roster,career.tactics.formation).map(player=>player.id);
   ensureEconomy(career);
+  ensureManagerCareer(career);
   career.onboardingComplete = career.onboardingComplete !== false;
   return career;
 }
@@ -378,7 +389,7 @@ function simulateWorldWeek() {
       if((home.rating>=82||away.rating>=82)&&score.home+score.away>=4)headlines.push(home.name+' '+score.home+'–'+score.away+' '+away.name);
     }
   });
-  c.worldState.updatedAt=new Date().toISOString();c.worldNews.unshift(...headlines.slice(0,4).map(text=>({date:c.date,text,type:'result'})));c.worldNews=c.worldNews.slice(0,60);
+  c.worldState.updatedAt=new Date().toISOString();c.worldNews.unshift(...headlines.slice(0,4).map(text=>({date:c.date,text,type:'result'})));c.worldNews=c.worldNews.slice(0,60);refreshCareerOpportunities(false);
 }
 
 function generateSponsorOffers(club,facilities) {
@@ -590,6 +601,7 @@ async function createCareer() {
       staff:{assistant:68,fitnessCoach:66,scout:64,medical:65},facilities:{training:2,youth:2,medical:2,scouting:2,stadium:2,commercial:2},transferPolicy:{wageBudget:Math.round(budget*.18),maxSquad:35,foreignLimit:null},transferObligations:[],weeklyDecisions:{training:false,squad:false,tactics:false},seasonHistory:[],matchReports:[],jobOffers:[],lastTrainingWeek:0,national:null,seasonSummary:null,sponsor:null,sponsorOffers:generateSponsorOffers(session.selectedClub,{commercial:2}),mediaHistory:[],worldNews:[],worldState:createWorldState(2026),tacticalPositions:(FORMATIONS['4-3-3']).map(point=>[...point]),tacticalLayoutVersion:2,individualTraining:{},youthIntakeSeason:0,youthPlayers:[]
     };
     ensureEconomy(session.career);
+    ensureManagerCareer(session.career);
     session.career.boardObjectives=createBoardObjectives(session.career);
     persist(); toast('Contrato assinado. O mundo do futebol está ativo.','success'); navigate('dashboard');startOnboarding();
   } catch (error) {
@@ -599,14 +611,18 @@ async function createCareer() {
 }
 
 function currentCompetitionFixtures(id) { return session.career.fixtures.filter(f=>f.competitionId===id); }
-function nextFixture() { return session.career.fixtures.find(f=>!f.played&&!f.locked&&!f.cancelled) || null; }
+function nextFixture() {
+  if(ensureManagerCareer(session.career).status==='unemployed')return null;
+  return session.career.fixtures.find(f=>!f.played&&!f.locked&&!f.cancelled) || null;
+}
 
 function renderGame(content) {
   const c = session.career;
+  const managerCareer=ensureManagerCareer(c),employed=managerCareer.status==='employed';
   const unread = c.messages.filter(m=>!m.read).length;
   const activeNav = MORE_SCREENS.has(session.screen) ? 'more' : session.screen;
-  const nav = NAV_ITEMS.map(([screen,icon,label])=>'<button class="world-nav-btn '+(activeNav===screen?'active':'')+'" data-action="navigate" data-screen="'+screen+'" aria-label="'+label+'" '+(activeNav===screen?'aria-current="page"':'')+'><span>'+iconSvg(icon)+'</span><small>'+label+(screen==='more'&&unread?'<b>'+unread+'</b>':'')+'</small></button>').join('');
-  app.innerHTML = '<main class="screen game-screen world-game"><nav class="world-nav" aria-label="Menu principal"><div class="nav-brand"><strong>V</strong><span>FM</span></div><div class="nav-primary">'+nav+'</div><div class="nav-season"><span>Temporada</span><strong>'+c.season+'</strong></div></nav><section class="game-stage"><header class="world-topbar"><div class="club-identity"><span class="club-badge-shell"><img src="./'+escapeHtml(c.club.badge)+'" alt="" onerror="__vfmFallback(event)"></span><span><strong>'+escapeHtml(c.club.name)+'</strong><small>'+escapeHtml(c.manager.name)+' · '+escapeHtml(c.club.leagueName)+'</small></span><i class="manager-face-small avatar-sprite avatar-sprite-'+clamp(c.manager.avatar,1,16)+'" aria-label="Retrato do treinador"></i></div><div class="top-metrics"><span>Data <strong>'+formatDate(c.date)+'</strong></span><span>Reputação <strong>'+c.manager.reputation+'</strong></span><span>Licença <strong>'+escapeHtml(c.manager.license)+'</strong></span><span>Saldo <strong>'+money(c.budget)+'</strong></span></div><button class="btn btn-small top-save" data-action="save">'+iconSvg('save')+'<span>Salvar</span></button></header><div class="game-content world-screen-'+escapeHtml(session.screen)+'">'+content+'</div></section></main>';
+  const nav = NAV_ITEMS.map(([screen,icon,label])=>{const locked=!employed&&['squad','tactics','match-center'].includes(screen);return '<button class="world-nav-btn '+(activeNav===screen?'active ':'')+(locked?'locked':'')+'" data-action="navigate" data-screen="'+screen+'" aria-label="'+label+'" '+(activeNav===screen?'aria-current="page" ':'')+(locked?'disabled':'')+'><span>'+iconSvg(icon)+'</span><small>'+label+(screen==='more'&&unread?'<b>'+unread+'</b>':'')+'</small></button>';}).join('');
+  app.innerHTML = '<main class="screen game-screen world-game"><nav class="world-nav" aria-label="Menu principal"><div class="nav-brand"><strong>V</strong><span>FM</span></div><div class="nav-primary">'+nav+'</div><div class="nav-season"><span>Temporada</span><strong>'+c.season+'</strong></div></nav><section class="game-stage"><header class="world-topbar"><div class="club-identity '+(employed?'':'unemployed')+'"><span class="club-badge-shell"><img src="./'+escapeHtml(c.club.badge)+'" alt="" onerror="__vfmFallback(event)"></span><span><strong>'+(employed?escapeHtml(c.club.name):'Disponível no mercado')+'</strong><small>'+escapeHtml(c.manager.name)+' · '+(employed?escapeHtml(c.club.leagueName):'Treinador sem clube')+'</small></span><i class="manager-face-small avatar-sprite avatar-sprite-'+clamp(c.manager.avatar,1,16)+'" aria-label="Retrato do treinador"></i></div><div class="top-metrics"><span>Data <strong>'+formatDate(c.date)+'</strong></span><span>Reputação <strong>'+c.manager.reputation+'</strong></span><span>Licença <strong>'+escapeHtml(c.manager.license)+'</strong></span><span>'+(employed?'Saldo':'Status')+' <strong>'+(employed?money(c.budget):'Sem clube')+'</strong></span></div><button class="btn btn-small top-save" data-action="save">'+iconSvg('save')+'<span>Salvar</span></button></header><div class="game-content world-screen-'+escapeHtml(session.screen)+'">'+content+'</div></section></main>';
 }
 
 function sectionHead(title,subtitle,extra='') { return '<header class="section-head"><div><p class="eyebrow">Carreira mundial</p><h1>'+escapeHtml(title)+'</h1><p>'+escapeHtml(subtitle)+'</p></div>'+extra+'</header>'; }
@@ -617,6 +633,7 @@ function confederationClubLabel(confederation) {
 }
 
 function renderWeeklyLoop(c){
+  if(ensureManagerCareer(c).status==='unemployed')return '<section class="weekly-loop panel career-search-loop"><header><p class="eyebrow">MERCADO DE TREINADORES</p><strong>Analise propostas e escolha o próximo projeto</strong></header><div><span class="current"><i>1</i><b>Propostas</b></span><span class="pending"><i>2</i><b>Contrato</b></span><span class="pending"><i>3</i><b>Novo clube</b></span></div></section>';
   const stages=[['Decisões',c.messages.some(message=>!message.read)?'pending':'done'],['Treino',c.lastTrainingWeek===c.week?'done':'current'],['Preparação',c.lineupIds.length===11?'done':'pending'],['Partida',nextFixture()?'current':'done']];
   return '<section class="weekly-loop panel"><header><p class="eyebrow">SEMANA '+c.week+'</p><strong>Decida, prepare, jogue e veja as consequências</strong></header><div>'+stages.map(([label,status],index)=>'<span class="'+status+'"><i>'+(status==='done'?'✓':index+1)+'</i><b>'+label+'</b></span>').join('')+'</div></section>';
 }
@@ -640,21 +657,59 @@ function competitionLogo(id,name='',className='competition-logo-image') {
   return path?'<img class="'+className+'" src="'+path+'" alt="Logo '+escapeHtml(name||id)+'">':iconSvg('trophy',className+' ui-icon');
 }
 
+function renderCareerOfferCards(c,compact=false) {
+  const offers=Array.isArray(c.jobOffers)?c.jobOffers:[];
+  if(!offers.length)return '<div class="career-offers-empty"><strong>Nenhuma proposta ativa</strong><span>A rede de contatos procura um projeto compatível com sua reputação.</span></div>';
+  return '<div class="career-offer-grid '+(compact?'compact':'')+'">'+offers.map(club=>{
+    const contract=club.careerOffer||{},objective=contract.objective||'Conduzir o projeto esportivo da temporada';
+    return '<article class="career-job-card"><img src="./'+escapeHtml(club.badge)+'" alt="Escudo '+escapeHtml(club.name)+'" onerror="__vfmFallback(event)"><div><small>'+escapeHtml(club.leagueName||club.country||'Novo desafio')+'</small><h3>'+escapeHtml(club.name)+'</h3><p>'+escapeHtml(objective)+'</p><span>GER '+club.rating+' · '+(contract.years||2)+' anos · '+money(contract.salary||0)+'/mês</span></div><button class="btn btn-primary" data-action="accept-club-job" data-club="'+escapeHtml(club.id)+'">Assinar contrato</button></article>';
+  }).join('')+'</div>';
+}
+
+function renderCareerStatus(c) {
+  const managerCareer=ensureManagerCareer(c),security=careerSecurity(c.board),employed=managerCareer.status==='employed';
+  return '<section class="manager-career-panel panel status-'+security.id+'"><header><div><p class="eyebrow">CARREIRA DO TREINADOR · MOTOR '+MANAGER_CAREER_VERSION+'</p><h2>'+(employed?'Situação contratual':'Disponível no mercado')+'</h2></div><span class="career-security">'+(employed?escapeHtml(security.label):'Sem clube')+'</span></header><div class="manager-contract-grid"><span><small>Clube</small><strong>'+(employed?escapeHtml(c.club.name):'Aguardando proposta')+'</strong></span><span><small>Contrato</small><strong>'+(employed?'até '+managerCareer.contractEndSeason:'Livre')+'</strong></span><span><small>Salário</small><strong>'+(employed?money(managerCareer.salary)+'/mês':'—')+'</strong></span><span><small>Confiança</small><strong>'+(employed?c.board+'%':'—')+'</strong></span></div><p>'+(employed?escapeHtml(security.detail):'Sua reputação, licença e histórico definem os clubes e seleções que podem fazer contato.')+'</p></section>';
+}
+
+function renderCareerHistory(c) {
+  const items=ensureManagerCareer(c).history.slice().reverse().slice(0,8);
+  return '<article class="panel career-timeline"><h2>Linha do tempo</h2><div>'+items.map(item=>'<span class="timeline-'+escapeHtml(item.type)+'"><i></i><strong>'+escapeHtml(item.label)+'</strong><small>'+formatDate(item.date)+'</small></span>').join('')+'</div></article>';
+}
+
+function refreshCareerOpportunities(force=false) {
+  const c=session.career,managerCareer=ensureManagerCareer(c);
+  if(!force&&managerCareer.status==='unemployed'&&(c.jobOffers||[]).length)return false;
+  if(!force&&!careerOfferDue(c))return false;
+  const played=Math.max(1,Number(c.stats?.played)||0),winRate=(Number(c.stats?.wins)||0)/played;
+  const eligible=managerCareer.status==='unemployed'||Number(c.manager?.reputation)>=55||winRate>=.5;
+  const previousClubIds=(c.jobOffers||[]).map(item=>item.id).join(',');
+  if(eligible)c.jobOffers=createClubJobOffers(c,session.catalog.clubs,managerCareer.status==='unemployed'?4:3);
+  else c.jobOffers=[];
+  const previousNational=managerCareer.nationalOffers.join(',');
+  createNationalJobOffers(c,session.catalog.nationalTeams,3);
+  closeCareerOfferCycle(c,managerCareer.status==='unemployed'?4:6);
+  if(c.jobOffers.length&&previousClubIds!==c.jobOffers.map(item=>item.id).join(','))c.messages.push({id:'career-offers-'+Date.now(),from:'Agente do treinador',subject:managerCareer.status==='unemployed'?'Clubes fizeram contato':'Novas propostas de trabalho',body:c.jobOffers.map(item=>item.name).join(', ')+' apresentaram projetos para sua carreira. Consulte a área Clube.',date:c.date,read:false,priority:'high'});
+  if(managerCareer.nationalOffers.length&&previousNational!==managerCareer.nationalOffers.join(','))c.messages.push({id:'national-offers-'+Date.now(),from:'Agente do treinador',subject:'Convites de seleções nacionais',body:managerCareer.nationalOffers.map(id=>session.catalog.nationalTeams.find(team=>team.id===id)?.name).filter(Boolean).join(', ')+' demonstraram interesse. Consulte a central de seleções.',date:c.date,read:false,priority:'high'});
+  return true;
+}
+
 function renderDashboard() {
   const c=session.career, next=nextFixture(), recent=c.fixtures.filter(f=>f.played).slice(-5).reverse(),health=rosterHealthSummary(c.roster);
   const unread=c.messages.filter(m=>!m.read).length;
+  const managerCareer=ensureManagerCareer(c),employed=managerCareer.status==='employed';
   const leagueFinished=c.fixtures.filter(f=>f.type==='league').length>0&&c.fixtures.filter(f=>f.type==='league').every(f=>f.played);
   const seasonFixtures=c.fixtures.filter(f=>!f.cancelled),seasonPlayed=seasonFixtures.filter(f=>f.played).length,seasonProgress=seasonFixtures.length?Math.round(seasonPlayed/seasonFixtures.length*100):0;
   const tasks=[];
-  if(c.lineupIds.length<11)tasks.push(['squad','Complete a escalação','Escolha os onze titulares antes da próxima partida.','Definir time']);
+  if(!employed)tasks.push(['club','Escolha o próximo projeto',(c.jobOffers.length||0)+' proposta(s) de clube disponíveis.','Ver contratos']);
+  else if(c.lineupIds.length<11)tasks.push(['squad','Complete a escalação','Escolha os onze titulares antes da próxima partida.','Definir time']);
   else if(next)tasks.push(['match-center','Prepare o próximo jogo',escapeHtml(next.opponent.name)+' · '+formatDate(next.date),'Preparar']);
   if(unread)tasks.push(['inbox','Leia as mensagens',unread+' '+(unread===1?'mensagem precisa':'mensagens precisam')+' da sua atenção.','Abrir caixa']);
-  if(health.injured.length)tasks.push(['training','Departamento médico',health.injured.length+' atleta(s) em recuperação.','Ver boletim']);
-  if(c.lastTrainingWeek!==c.week)tasks.push(['training','Planeje o treino','O elenco ainda não treinou nesta semana.','Escolher treino']);
+  if(employed&&health.injured.length)tasks.push(['training','Departamento médico',health.injured.length+' atleta(s) em recuperação.','Ver boletim']);
+  if(employed&&c.lastTrainingWeek!==c.week)tasks.push(['training','Planeje o treino','O elenco ainda não treinou nesta semana.','Escolher treino']);
   const today=tasks.slice(0,3).map(([screen,title,detail,action],index)=>'<article class="today-task"><span>'+String(index+1).padStart(2,'0')+'</span><div><strong>'+title+'</strong><small>'+detail+'</small></div><button class="btn btn-small '+(index===0?'btn-primary':'')+'" data-action="navigate" data-screen="'+screen+'">'+action+'</button></article>').join('');
-  const command=next?'<section class="career-command panel"><div class="career-command-copy"><div class="career-command-kicker"><span class="competition-emblem">'+competitionLogo(next.competitionId,next.competitionName)+'</span><span><small>PRÓXIMA DECISÃO</small><strong>'+escapeHtml(next.competitionName)+'</strong></span></div><h2>'+escapeHtml(c.club.name)+' <b>×</b> '+escapeHtml(next.opponent.name)+'</h2><p>'+formatDate(next.date)+' · '+(next.home?'Em casa':'Fora de casa')+' · Semana '+c.week+'</p><button class="btn btn-primary" data-action="open-next-match">Preparar partida</button></div><div class="career-command-opponent"><img src="./'+escapeHtml(next.opponent.badge)+'" alt="Escudo '+escapeHtml(next.opponent.name)+'" onerror="__vfmFallback(event)"><strong>'+escapeHtml(next.opponent.name)+'</strong><small>GER '+next.opponent.rating+'</small></div><div class="career-command-progress"><span><small>Temporada</small><strong>'+seasonProgress+'%</strong></span><i><em style="width:'+seasonProgress+'%"></em></i><div><span><small>Diretoria</small><strong>'+c.board+'%</strong></span><span><small>Elenco</small><strong>'+c.lineupIds.length+'/11</strong></span><span><small>Forma</small><strong>'+(recent.length?recent.map(resultLetter).join(''):'—')+'</strong></span></div></div></section>':'<section class="career-command panel season-complete"><div><small>TEMPORADA</small><h2>Calendário concluído</h2><p>Revise resultados, objetivos e elenco antes de iniciar a próxima época.</p></div>'+(leagueFinished?'<button class="btn btn-primary" data-action="advance-season">Encerrar temporada</button>':'<span>Ainda há jogos de liga pendentes.</span>')+'</section>';
+  const command=!employed?'<section class="career-command panel unemployed-command"><div class="career-command-copy"><div class="career-command-kicker"><span class="competition-emblem">'+iconSvg('club')+'</span><span><small>NOVO CAPÍTULO</small><strong>Mercado de treinadores</strong></span></div><h2>Seu próximo projeto está em negociação</h2><p>Compare objetivos, salário, duração e força do elenco antes de assinar.</p><button class="btn btn-primary" data-action="navigate" data-screen="club">Analisar propostas</button></div><div class="career-command-progress"><span><small>Propostas ativas</small><strong>'+c.jobOffers.length+'</strong></span><i><em style="width:'+Math.min(100,c.jobOffers.length*25)+'%"></em></i><div><span><small>Reputação</small><strong>'+c.manager.reputation+'</strong></span><span><small>Licença</small><strong>'+escapeHtml(c.manager.license.replace('Licença ',''))+'</strong></span><span><small>Último clube</small><strong>'+escapeHtml(managerCareer.previousClub?.name||c.club.name)+'</strong></span></div></div></section>':next?'<section class="career-command panel"><div class="career-command-copy"><div class="career-command-kicker"><span class="competition-emblem">'+competitionLogo(next.competitionId,next.competitionName)+'</span><span><small>PRÓXIMA DECISÃO</small><strong>'+escapeHtml(next.competitionName)+'</strong></span></div><h2>'+escapeHtml(c.club.name)+' <b>×</b> '+escapeHtml(next.opponent.name)+'</h2><p>'+formatDate(next.date)+' · '+(next.home?'Em casa':'Fora de casa')+' · Semana '+c.week+'</p><button class="btn btn-primary" data-action="open-next-match">Preparar partida</button></div><div class="career-command-opponent"><img src="./'+escapeHtml(next.opponent.badge)+'" alt="Escudo '+escapeHtml(next.opponent.name)+'" onerror="__vfmFallback(event)"><strong>'+escapeHtml(next.opponent.name)+'</strong><small>GER '+next.opponent.rating+'</small></div><div class="career-command-progress"><span><small>Temporada</small><strong>'+seasonProgress+'%</strong></span><i><em style="width:'+seasonProgress+'%"></em></i><div><span><small>Diretoria</small><strong>'+c.board+'%</strong></span><span><small>Elenco</small><strong>'+c.lineupIds.length+'/11</strong></span><span><small>Forma</small><strong>'+(recent.length?recent.map(resultLetter).join(''):'—')+'</strong></span></div></div></section>':'<section class="career-command panel season-complete"><div><small>TEMPORADA</small><h2>Calendário concluído</h2><p>Revise resultados, objetivos e elenco antes de iniciar a próxima época.</p></div>'+(leagueFinished?'<button class="btn btn-primary" data-action="advance-season">Encerrar temporada</button>':'<span>Ainda há jogos de liga pendentes.</span>')+'</section>';
   return sectionHead('Central do treinador','Todas as decisões do clube e da seleção em um só lugar.','<span class="tag">Nível '+c.manager.level+'</span>') +
-    command+renderWeeklyLoop(c)+'<section class="today-panel panel"><header><div><p class="eyebrow">HOJE</p><h2>Suas próximas decisões</h2></div><small>Faça o essencial e avance sem se perder em menus.</small></header><div class="today-list">'+(today||'<article class="today-clear"><strong>Tudo em dia</strong><span>Você pode avançar pelo calendário quando estiver pronto.</span></article>')+'</div></section>'+
+    command+renderCareerStatus(c)+renderWeeklyLoop(c)+'<section class="today-panel panel"><header><div><p class="eyebrow">HOJE</p><h2>Suas próximas decisões</h2></div><small>Faça o essencial e avance sem se perder em menus.</small></header><div class="today-list">'+(today||'<article class="today-clear"><strong>Tudo em dia</strong><span>Você pode avançar pelo calendário quando estiver pronto.</span></article>')+'</div></section>'+
     '<div class="dashboard-world-grid"><article class="panel"><h2>Desempenho</h2><div class="world-metric-grid"><div><span>Jogos</span><strong>'+c.stats.played+'</strong></div><div><span>Pontos</span><strong>'+c.stats.points+'</strong></div><div><span>Saldo</span><strong>'+(c.stats.gf-c.stats.ga)+'</strong></div><div><span>Diretoria</span><strong>'+c.board+'%</strong></div></div><div class="form-strip">'+(recent.length?recent.map(f=>'<span class="'+resultClass(f)+'">'+resultLetter(f)+'</span>').join(''):'<small>A temporada começa no próximo jogo.</small>')+'</div></article>' +
     '<article class="panel"><h2>Caixa de entrada</h2><p class="big-number">'+unread+'</p><p>mensagens aguardando leitura</p><button class="btn" data-action="navigate" data-screen="inbox">Abrir e-mail</button></article>' +
     '<article class="panel"><h2>Carreira internacional</h2>'+(c.national?'<div class="national-mini"><img src="./'+escapeHtml(c.national.team.badge)+'" alt="" onerror="__vfmFallback(event)"><span><strong>'+escapeHtml(c.national.team.name)+'</strong><small>'+escapeHtml(c.national.competitionLabel)+'</small></span></div><button class="btn" data-action="navigate" data-screen="national">Abrir seleção</button>':'<p>Receba propostas de seleções conforme sua reputação cresce.</p><button class="btn" data-action="navigate" data-screen="national">Ver oportunidades</button>')+'</article>' +
@@ -804,9 +859,9 @@ function renderMarket() {
 
 function renderFacilitiesCampus(c){
   ensureEconomy(c);
-  return '<section class="club-campus panel phase8-campus"><header><div><p class="eyebrow">PATRIMÔNIO DO CLUBE</p><h2>Construa o futuro</h2></div><small>Compare custo, prazo e benefício antes de investir</small></header><div class="facility-cards">'+Object.entries(FACILITIES).map(([id,spec])=>{
+  return '<section class="club-campus panel phase9-campus"><header><div><p class="eyebrow">PATRIMÔNIO DO CLUBE</p><h2>Campus e instalações</h2></div><small>Veja cada estrutura, compare o impacto e acompanhe sua evolução</small></header><div class="facility-cards">'+Object.entries(FACILITIES).map(([id,spec])=>{
     const level=c.facilities[id],q=facilityQuote(c,id),project=c.construction.find(p=>p.id===id),progress=project?clamp((new Date(c.date)-new Date(project.startedAt))/(new Date(project.finishAt)-new Date(project.startedAt))*100,0,100):0;
-    return '<article class="facility-card" style="--facility-color:'+spec.color+'"><div class="facility-art level-'+level+'">'+iconSvg(spec.icon)+'<div class="facility-tiers">'+Array.from({length:5},(_,i)=>'<i class="'+(i<level?'built':'')+'"></i>').join('')+'</div></div><div class="facility-copy"><small>NÍVEL '+level+' / 5</small><h3>'+spec.name+'</h3><p>'+spec.benefit+'</p>'+(project?'<strong>Em obras · entrega '+formatDate(project.finishAt)+'</strong><progress max="100" value="'+progress+'" aria-label="Progresso da obra"></progress>':level>=5?'<strong>Estrutura de elite</strong>':'<span>'+money(q.cost)+' · '+q.duration+' dias</span><button class="btn" data-action="upgrade-facility" data-facility="'+id+'">Ver projeto de expansão</button>')+'</div></article>';
+    return '<article class="facility-card" style="--facility-color:'+spec.color+'"><div class="facility-art level-'+level+'"><img src="'+FACILITY_MEDIA[id]+'" alt="'+escapeHtml(spec.name)+'" loading="lazy"><span class="facility-icon">'+iconSvg(spec.icon)+'</span><div class="facility-level"><strong>Nível '+level+'</strong><small>'+(level>=5?'Elite':'de 5')+'</small></div><div class="facility-tiers">'+Array.from({length:5},(_,i)=>'<i class="'+(i<level?'built':'')+'"></i>').join('')+'</div></div><div class="facility-copy"><small>'+escapeHtml(spec.name).toUpperCase()+'</small><h3>'+(level>=5?'Referência mundial':'Estrutura em evolução')+'</h3><p>'+spec.benefit+'</p>'+(project?'<strong>Em obras · entrega '+formatDate(project.finishAt)+'</strong><progress max="100" value="'+progress+'" aria-label="Progresso da obra"></progress>':level>=5?'<strong>Estrutura de elite em operação</strong>':'<span>'+money(q.cost)+' · '+q.duration+' dias</span><button class="btn" data-action="upgrade-facility" data-facility="'+id+'">Ver projeto de expansão</button>')+'</div></article>';
   }).join('')+'</div></section>';
 }
 
@@ -814,10 +869,11 @@ function renderSponsorPanel(c){if(!c.sponsor&&!c.sponsorOffers.length)c.sponsorO
 
 function renderClub() {
   const c=session.career,payroll=c.roster.reduce((sum,p)=>sum+p.salary*1000,0),value=c.roster.reduce((sum,p)=>sum+p.value*1000000,0);
+  const managerCareer=ensureManagerCareer(c),employed=managerCareer.status==='employed';
   const ledger=c.ledger.slice().reverse().map(item=>'<tr><td>'+formatDate(item.date)+'</td><td>'+escapeHtml(item.label)+'</td><td class="'+(item.amount>=0?'positive':'negative')+'">'+(item.amount>=0?'+':'')+money(item.amount)+'</td></tr>').join('');
-  const facilityNames={training:'Centro de treinamento',youth:'Academia de base',medical:'Departamento médico',scouting:'Rede de observação',stadium:'Estádio e matchday',commercial:'Centro comercial'};
-  const offers=c.jobOffers.length?'<article class="panel job-offers"><h2>Propostas de trabalho</h2><p class="muted">Ofertas liberadas pela reputação conquistada na última temporada.</p>'+c.jobOffers.map(club=>'<div class="staff-row"><span><strong>'+escapeHtml(club.name)+'</strong><small>'+escapeHtml(club.leagueName)+' · GER VFM '+club.rating+'</small></span><img class="job-club-badge" src="./'+escapeHtml(club.badge)+'" alt="" onerror="__vfmFallback(event)"><button class="btn btn-small btn-primary" data-action="accept-club-job" data-club="'+escapeHtml(club.id)+'">Aceitar</button></div>').join('')+'</article>':'';
-  return sectionHead('Gestão total do clube','Finanças, diretoria, instalações, patrocínio e carreira executiva.')+'<div class="world-metric-grid club-metrics"><div><span>Saldo</span><strong>'+money(c.budget)+'</strong></div><div><span>Folha mensal</span><strong>'+money(payroll)+'</strong></div><div><span>Valor do elenco</span><strong>'+money(value)+'</strong></div><div><span>Diretoria</span><strong>'+c.board+'%</strong></div></div>'+renderFinance(c)+renderFacilitiesCampus(c)+renderSponsorPanel(c)+'<div class="club-admin-grid"><article class="panel"><h2>Comissão técnica</h2>'+Object.entries(c.staff).map(([id,rating])=>'<div class="staff-row"><span>'+({assistant:'Auxiliar',fitnessCoach:'Preparador físico',scout:'Chefe de scout',medical:'Departamento médico'})[id]+'</span><strong>'+rating+'</strong><button class="btn btn-small" data-action="upgrade-staff" data-staff="'+id+'">Melhorar</button></div>').join('')+'</article><article class="panel"><h2>Instalações e obras</h2>'+Object.entries(c.facilities).map(([id,level])=>'<div class="staff-row"><span>'+facilityNames[id]+'</span><strong>Nível '+level+'/5</strong><button class="btn btn-small" data-action="upgrade-facility" data-facility="'+id+'" '+(level>=5?'disabled':'')+'>Evoluir</button></div>').join('')+'</article><article class="panel"><h2>Carreira do treinador</h2><p><strong>Nível '+c.manager.level+'</strong> · '+escapeHtml(c.manager.license)+'</p><p>'+c.manager.xp+' XP · '+c.manager.awards.length+' prêmio(s)</p><ul class="objective-list">'+c.manager.awards.slice(-4).map(a=>'<li>'+escapeHtml(a)+'</li>').join('')+'</ul></article><article class="panel"><h2>Objetivos da diretoria</h2><div class="board-objectives">'+c.boardObjectives.map(objective=>'<div class="board-objective '+objective.status+'"><span><strong>'+escapeHtml(objective.label)+'</strong><small>'+Math.min(objective.progress,objective.target)+' / '+objective.target+' '+escapeHtml(objective.unit)+'</small></span><i><em style="width:'+clamp(objective.progress/objective.target*100,0,100)+'%"></em></i><b>'+(objective.status==='complete'?'✓':'+'+objective.reward)+'</b></div>').join('')+'</div></article>'+offers+'</div><div class="table-wrap"><table class="data-table"><thead><tr><th>Data</th><th>Movimentação</th><th>Valor</th></tr></thead><tbody>'+ledger+'</tbody></table></div>';
+  const offers='<section class="panel career-market"><header><div><p class="eyebrow">MERCADO DE TREINADORES</p><h2>'+(employed?'Clubes interessados':'Escolha o próximo projeto')+'</h2></div><span class="tag">'+c.jobOffers.length+' proposta(s)</span></header>'+renderCareerOfferCards(c)+'</section>';
+  if(!employed)return sectionHead('Carreira do treinador','Propostas, contrato, reputação e próximos desafios.','<span class="tag">Livre no mercado</span>')+renderCareerStatus(c)+offers+'<div class="career-office-grid">'+renderCareerHistory(c)+'<article class="panel"><h2>Carreira internacional</h2><p>O comando de uma seleção continua independente do vínculo com clubes.</p><button class="btn btn-primary" data-action="navigate" data-screen="national">Ver convites de seleções</button></article></div>';
+  return sectionHead('Gestão total do clube','Finanças, diretoria, instalações, patrocínio e carreira executiva.')+renderCareerStatus(c)+(c.jobOffers.length?offers:'')+'<div class="world-metric-grid club-metrics"><div><span>Saldo</span><strong>'+money(c.budget)+'</strong></div><div><span>Folha mensal</span><strong>'+money(payroll)+'</strong></div><div><span>Valor do elenco</span><strong>'+money(value)+'</strong></div><div><span>Diretoria</span><strong>'+c.board+'%</strong></div></div>'+renderFinance(c)+renderFacilitiesCampus(c)+renderSponsorPanel(c)+'<div class="club-admin-grid"><article class="panel"><h2>Comissão técnica</h2>'+Object.entries(c.staff).map(([id,rating])=>'<div class="staff-row"><span>'+({assistant:'Auxiliar',fitnessCoach:'Preparador físico',scout:'Chefe de scout',medical:'Departamento médico'})[id]+'</span><strong>'+rating+'</strong><button class="btn btn-small" data-action="upgrade-staff" data-staff="'+id+'">Melhorar</button></div>').join('')+'</article><article class="panel"><h2>Perfil do treinador</h2><p><strong>Nível '+c.manager.level+'</strong> · '+escapeHtml(c.manager.license)+'</p><p>'+c.manager.xp+' XP · '+c.manager.awards.length+' prêmio(s)</p><ul class="objective-list">'+c.manager.awards.slice(-4).map(a=>'<li>'+escapeHtml(a)+'</li>').join('')+'</ul></article><article class="panel"><h2>Objetivos da diretoria</h2><div class="board-objectives">'+c.boardObjectives.map(objective=>'<div class="board-objective '+objective.status+'"><span><strong>'+escapeHtml(objective.label)+'</strong><small>'+Math.min(objective.progress,objective.target)+' / '+objective.target+' '+escapeHtml(objective.unit)+'</small></span><i><em style="width:'+clamp(objective.progress/objective.target*100,0,100)+'%"></em></i><b>'+(objective.status==='complete'?'✓':'+'+objective.reward)+'</b></div>').join('')+'</div></article>'+renderCareerHistory(c)+'</div><div class="table-wrap"><table class="data-table"><thead><tr><th>Data</th><th>Movimentação</th><th>Valor</th></tr></thead><tbody>'+ledger+'</tbody></table></div>';
 }
 
 function renderInbox() {
@@ -855,7 +911,8 @@ async function acceptNationalJob(teamId) {
   try{
     const data=await fetchJson(team.rosterPath),roster=(data.players||[]).map(normalizePlayer);
     session.career.national={team,roster,lineupIds:pickLineup(roster).map(p=>p.id),fixtures:buildNationalFixtures(team),stats:{played:0,wins:0,draws:0,losses:0,gf:0,ga:0,points:0},qualified:false,competitionLabel:nationalCompetitionLabel(team)};
-    session.career.messages.push({id:'national-'+Date.now(),from:team.name,subject:'Contrato de seleção assinado',body:'Você agora acumula o comando do clube e da seleção. As Datas FIFA aparecem no centro internacional.',date:new Date().toISOString(),read:false,priority:'high'});
+    recordNationalAppointment(session.career,team);
+    session.career.messages.push({id:'national-'+Date.now(),from:team.name,subject:'Contrato de seleção assinado',body:'Você agora comanda '+team.name+'. As Datas FIFA aparecem no centro internacional e o vínculo é independente da carreira em clubes.',date:new Date().toISOString(),read:false,priority:'high'});
     persist();renderGame(renderNational());toast('Você assumiu '+team.name+'.','success');
   }catch{toast('Não foi possível carregar a convocação.','error');}
 }
@@ -863,10 +920,13 @@ async function acceptNationalJob(teamId) {
 function renderNational() {
   const c=session.career,n=c.national;
   if(!n){
+    const inviteIds=new Set(ensureManagerCareer(c).nationalOffers||[]);
     const filters=[['official','48 listas oficiais da Copa'],['all','Todas as 211'],['CONMEBOL','CONMEBOL'],['UEFA','UEFA'],['CONCACAF','CONCACAF'],['AFC','AFC'],['CAF','CAF'],['OFC','OFC']];
     const shown=session.catalog.nationalTeams.filter(team=>(session.nationalFilter==='official'?team.officialSquad:session.nationalFilter==='all'||team.confederation===session.nationalFilter)&&(!session.nationalSearch||team.name.toLowerCase().includes(session.nationalSearch.toLowerCase())));
-    const offers=shown.map(team=>{const sourced=Boolean(team.rosterPath),available=sourced&&c.manager.reputation>=team.reputationRequired,label=!sourced?'Simulação':available?'Assumir':'Bloqueada';return '<article class="national-offer '+(available?'available':'locked')+'"><img src="./'+escapeHtml(team.badge)+'" alt="" onerror="__vfmFallback(event)"><div><strong>'+escapeHtml(team.name)+'</strong><small>'+escapeHtml(team.confederation)+' · GER VFM '+team.rating+'</small><span>'+(sourced?'Reputação exigida: '+team.reputationRequired:'Participa das eliminatórias pela IA')+'</span></div><button class="btn btn-small '+(available?'btn-primary':'')+'" data-action="accept-national" data-team="'+team.id+'" '+(available?'':'disabled')+'>'+label+'</button></article>';}).join('');
-    return sectionHead('Seleções nacionais','211 associações em seis confederações, com eliminatórias e carreira dupla.','<span class="tag">Sua reputação: '+c.manager.reputation+'</span>')+'<div class="notice">Todas participam da simulação; '+session.catalog.stats.commandableNationalTeams+' possuem lista nominal comandável. As 48 listas oficiais da Copa são preservadas e os demais pools usam profissionais atuais da base CC0. GER é índice próprio do VFM.</div><div class="toolbar"><select data-action="national-filter" aria-label="Filtrar seleções">'+filters.map(([id,label])=>'<option value="'+id+'" '+(session.nationalFilter===id?'selected':'')+'>'+label+'</option>').join('')+'</select><input data-action="national-search" aria-label="Buscar seleção" placeholder="Buscar seleção" value="'+escapeHtml(session.nationalSearch)+'"><span class="tag">'+shown.length+' seleções</span></div><div class="national-grid">'+offers+'</div>';
+    const nationalCard=team=>{const sourced=Boolean(team.rosterPath),available=sourced&&c.manager.reputation>=team.reputationRequired,invited=inviteIds.has(team.id),label=!sourced?'Simulação':invited?'Aceitar convite':available?'Demonstrar interesse':'Bloqueada';return '<article class="national-offer '+(available?'available':'locked')+' '+(invited?'invited':'')+'"><img src="./'+escapeHtml(team.badge)+'" alt="" onerror="__vfmFallback(event)"><div><strong>'+escapeHtml(team.name)+'</strong><small>'+escapeHtml(team.confederation)+' · GER VFM '+team.rating+'</small><span>'+(invited?'Convite formal recebido':sourced?'Reputação exigida: '+team.reputationRequired:'Participa das eliminatórias pela IA')+'</span></div><button class="btn btn-small '+(available?'btn-primary':'')+'" data-action="accept-national" data-team="'+team.id+'" '+(available?'':'disabled')+'>'+label+'</button></article>';};
+    const invited=session.catalog.nationalTeams.filter(team=>inviteIds.has(team.id));
+    const offers=shown.map(nationalCard).join('');
+    return sectionHead('Seleções nacionais','211 associações em seis confederações, com eliminatórias e carreira internacional.','<span class="tag">Sua reputação: '+c.manager.reputation+'</span>')+(invited.length?'<section class="panel national-invitations"><header><div><p class="eyebrow">CONVITES RECEBIDOS</p><h2>Federações querem conversar</h2></div><span class="tag">'+invited.length+' convite(s)</span></header><div class="national-grid">'+invited.map(nationalCard).join('')+'</div></section>':'')+'<div class="notice">Todas participam da simulação; '+session.catalog.stats.commandableNationalTeams+' possuem lista nominal comandável. Reputação, licença e desempenho liberam convites reais durante a carreira.</div><div class="toolbar"><select data-action="national-filter" aria-label="Filtrar seleções">'+filters.map(([id,label])=>'<option value="'+id+'" '+(session.nationalFilter===id?'selected':'')+'>'+label+'</option>').join('')+'</select><input data-action="national-search" aria-label="Buscar seleção" placeholder="Buscar seleção" value="'+escapeHtml(session.nationalSearch)+'"><span class="tag">'+shown.length+' seleções</span></div><div class="national-grid">'+offers+'</div>';
   }
   const next=n.fixtures.find(f=>!f.played&&!f.locked),played=n.fixtures.filter(f=>f.played).length;
   const roster=n.roster.slice().sort((a,b)=>b.overall-a.overall).slice(0,26).map(p=>'<tr><td>'+escapeHtml(p.name)+'</td><td>'+p.pos+'</td><td><strong>'+p.overall+'</strong></td><td>'+escapeHtml(p.clubName||'—')+'</td><td>'+(n.lineupIds.includes(p.id)?'Titular':'Convocado')+'</td></tr>').join('');
@@ -875,7 +935,12 @@ function renderNational() {
 
 function renderMore() {
   const c=session.career,unread=c.messages.filter(message=>!message.read).length;
-  const items=[
+  const items=ensureManagerCareer(c).status==='unemployed' ? [
+    ['club','club','Carreira','Propostas, contrato e histórico'],
+    ['inbox','inbox','Mensagens',unread?unread+' não '+(unread===1?'lida':'lidas'):'Tudo lido'],
+    ['national','national','Seleção',c.national?c.national.team.name:'Convites internacionais'],
+    ['settings','settings','Ajustes','Salvar, importar e acessibilidade']
+  ] : [
     ['competitions','trophy','Competições','Tabelas, fases e líderes mundiais'],
     ['calendar','calendar','Agenda','Semana, mês e temporada'],
     ['training','training','Treino','Planos, evolução e academia'],
@@ -895,6 +960,8 @@ function renderSettings() {
 
 function navigate(screen,push=true) {
   if(!session.career){renderCover();return;}
+  const clubOnlyScreens=new Set(['squad','tactics','match-center','competitions','calendar','training','market']);
+  if(ensureManagerCareer(session.career).status==='unemployed'&&clubOnlyScreens.has(screen))screen='club';
   if(screen!=='match')stopMatchTimer();
   session.screen=screen;
   if(push)history.pushState({screen},'', '#/'+screen);
@@ -907,6 +974,7 @@ function lineupFor(roster,ids) { return ids.map(id=>roster.find(p=>p.id===id)).f
 
 async function startMatch(source='club') {
   const c=session.career;
+  if(source==='club'&&ensureManagerCareer(c).status==='unemployed'){toast('Assine com um clube antes de disputar partidas.','error');navigate('club');return;}
   const national=source==='national' ? c.national : null;
   const fixture=national ? national.fixtures.find(f=>!f.played&&!f.locked) : nextFixture();
   if(!fixture){toast('Não há partida disponível.','error');return;}
@@ -1034,7 +1102,7 @@ function finishMatch() {
   targetStats.played++;targetStats.gf+=ownGoals;targetStats.ga+=oppGoals;
   if(ownGoals>oppGoals){targetStats.wins++;targetStats.points+=3;c.manager.xp+=120;c.manager.reputation=clamp(c.manager.reputation+1,1,100);}
   else if(ownGoals===oppGoals){targetStats.draws++;targetStats.points++;c.manager.xp+=55;}
-  else{targetStats.losses++;c.manager.xp+=25;if(m.source==='club')c.board=clamp(c.board-2,0,100);}
+  else{targetStats.losses++;c.manager.xp+=25;}
   c.manager.level=1+Math.floor(c.manager.xp/500);
   c.manager.license=managerLicense(c.manager.reputation);
   if(m.source==='club'){
@@ -1048,6 +1116,10 @@ function finishMatch() {
       const phase=c.fixtures.filter(f=>f.competitionId===fixture.competitionId&&f.phase==='league'),finished=phase.every(f=>f.played);
       if(finished){const points=phase.reduce((sum,item)=>sum+(resultClass(item)==='win'?3:resultClass(item)==='draw'?1:0),0),qualified=points>=Math.ceil(phase.length*1.25),next=c.fixtures.find(f=>f.competitionId===fixture.competitionId&&f.phase==='knockout'&&!f.cancelled);if(qualified&&next)resolveTournamentDraw(next);else c.fixtures.filter(f=>f.competitionId===fixture.competitionId&&f.phase==='knockout').forEach(f=>{f.cancelled=true;f.locked=true;});c.messages.push({id:'continental-phase-'+Date.now(),from:'Confederação continental',subject:qualified?'Classificação ao mata-mata':'Eliminação continental',body:qualified?'A campanha garantiu vaga nas oitavas; o sorteio foi realizado.':'A equipe não alcançou a pontuação de corte da fase inicial.',date:new Date().toISOString(),read:false,priority:'high'});}
     } else if(fixture.type==='continental'&&fixture.phase==='knockout') {if(advanced){const next=c.fixtures.find(f=>f.competitionId===fixture.competitionId&&f.phase==='knockout'&&f.locked&&!f.cancelled&&new Date(f.date)>new Date(fixture.date));if(next)resolveTournamentDraw(next);}else cancelRemainingKnockout(fixture);}
+    const careerReview=reviewManagerMatch(c,{result:outcome,goalDiff:ownGoals-oppGoals,opponentRating:fixture.opponent.rating,competitionType:fixture.type,knockedOut:(fixture.type==='cup'||fixture.phase==='knockout')&&!advanced});
+    c.pendingCareerReview=careerReview;
+    if(careerReview.warning&&!careerReview.dismissed){const title=careerReview.warning==='critical'?'Ultimato da diretoria':careerReview.warning==='pressure'?'Pressão por resultados':'Trabalho em avaliação';c.messages.push({id:'board-warning-'+Date.now(),from:'Presidência',subject:title,body:'A confiança está em '+c.board+'%. '+careerReview.security.detail,date:c.date,read:false,priority:'high'});}
+    if(careerReview.dismissed){c.messages.push({id:'dismissal-'+Date.now(),from:'Presidência de '+c.club.name,subject:'Encerramento do contrato',body:'A diretoria decidiu interromper o trabalho após a sequência de resultados. Seu histórico, reputação e licença foram preservados; o agente já abriu conversas com novos clubes.',date:c.date,read:false,priority:'high'});refreshCareerOpportunities(true);}
     if(c.stats.wins>=1)unlockAchievement('first-win','Primeira vitória','Conquiste sua primeira vitória como treinador principal.');
     if(c.stats.wins>=5)unlockAchievement('five-wins','Sequência de respeito','Alcance cinco vitórias na carreira.');
     if(oppGoals===0)unlockAchievement('clean-sheet','Muralha tática','Termine uma partida oficial sem sofrer gols.');
@@ -1079,7 +1151,7 @@ function showPostMatchInterview(ownGoals,oppGoals){
   showModal('Análise e entrevista pós-jogo','<div class="press-room phase5-report"><p class="eyebrow">MOTOR '+MATCH_ENGINE_V2_VERSION+' · '+escapeHtml(m.fixture.competitionName)+'</p><h3>'+escapeHtml(report.verdict)+'</h3><div class="press-summary"><span>Placar <strong>'+ownGoals+'–'+oppGoals+'</strong></span><span>xG <strong>'+report.ownXg.toFixed(1)+'–'+report.opponentXg.toFixed(1)+'</strong></span><span>Posse <strong>'+report.ownPossession+'%</strong></span><span>Alterações <strong>'+m.substitutionsUsed+'</strong></span></div>'+(reasons?'<div class="post-match-causes"><h4>O que decidiu a partida</h4><ul>'+reasons+'</ul></div>':'')+(performers?'<div class="post-match-ratings"><h4>Destaques</h4>'+performers+'</div>':'')+(diagnoses?'<div class="post-match-medical"><h4>Boletim médico</h4>'+diagnoses+'</div>':'')+'<h3>“Como você avalia a '+result+' e as decisões tomadas durante a partida?”</h3><p>Suas palavras afetam elenco, diretoria, torcida e reputação.</p></div>','<button class="btn" data-action="post-interview" data-tone="calm">Valorizar o coletivo</button><button class="btn" data-action="post-interview" data-tone="demanding">Cobrar evolução</button><button class="btn btn-primary" data-action="post-interview" data-tone="protective">Proteger os jogadores</button>');
 }
 
-function completePostMatchInterview(tone){const c=session.career,m=session.match;if(!m)return;const effects={calm:[2,1,1],demanding:[-1,2,0],protective:[3,0,1]},[morale,board,reputation]=effects[tone]||[0,0,0];c.morale=clamp(c.morale+morale,1,100);c.board=clamp(c.board+board,1,100);c.manager.reputation=clamp(c.manager.reputation+reputation,1,100);c.roster.forEach(player=>player.morale=clamp(player.morale+morale,1,100));c.mediaHistory.push({date:c.date,competition:m.fixture.competitionName,tone,minute:m.minute,score:m.homeGoals+'-'+m.awayGoals});c.messages.push({id:'press-'+Date.now(),from:'Assessoria de imprensa',subject:'Repercussão da entrevista pós-jogo',body:tone==='protective'?'O elenco aprovou sua postura de proteção.':tone==='demanding'?'A cobrança elevou a pressão por desempenho.':'A mensagem coletiva foi recebida com equilíbrio.',date:new Date().toISOString(),read:false,priority:'normal'});const destination=m.source==='national'?'national':'dashboard';closeModal();session.match=null;persist();navigate(destination);toast('Entrevista publicada e impactos aplicados.','success');}
+function completePostMatchInterview(tone){const c=session.career,m=session.match;if(!m)return;const effects={calm:[2,1,1],demanding:[-1,2,0],protective:[3,0,1]},[morale,board,reputation]=effects[tone]||[0,0,0],dismissed=Boolean(c.pendingCareerReview?.dismissed);c.morale=clamp(c.morale+morale,1,100);if(!dismissed)c.board=clamp(c.board+board,1,100);c.manager.reputation=clamp(c.manager.reputation+reputation,1,100);c.roster.forEach(player=>player.morale=clamp(player.morale+morale,1,100));c.mediaHistory.push({date:c.date,competition:m.fixture.competitionName,tone,minute:m.minute,score:m.homeGoals+'-'+m.awayGoals});c.messages.push({id:'press-'+Date.now(),from:'Assessoria de imprensa',subject:'Repercussão da entrevista pós-jogo',body:tone==='protective'?'O elenco aprovou sua postura de proteção.':tone==='demanding'?'A cobrança elevou a pressão por desempenho.':'A mensagem coletiva foi recebida com equilíbrio.',date:new Date().toISOString(),read:false,priority:'normal'});const destination=m.source==='national'?'national':'dashboard';delete c.pendingCareerReview;closeModal();session.match=null;persist();navigate(destination);toast(dismissed?'Contrato encerrado. Novas propostas já estão disponíveis.':'Entrevista publicada e impactos aplicados.',dismissed?'error':'success');}
 
 function competitionForRank(rules,rank) {
   for(const [id,range] of Object.entries(rules.continental||{}))if(rank>=Number(range[0])&&rank<=Number(range[1]))return id;
@@ -1136,7 +1208,7 @@ function advanceSeason() {
   if(continentalId)fixtures.push(...buildContinentalFixtures(c.club,startDate,participants,continentalId));
   if(continentalChampion)fixtures.push(...buildWorldFixtures(c.club,startDate));
   c.participants=participants;c.table=initialTable(participants);c.fixtures=fixtures.sort((a,b)=>new Date(a.date)-new Date(b.date));c.date=startDate.toISOString();processCareerDeadlines(c);
-  c.jobOffers=session.catalog.clubs.filter(club=>club.rosterPath&&club.id!==c.club.id&&club.rating<=Math.round(c.manager.reputation*1.08)).sort((a,b)=>b.rating-a.rating).slice(0,5);
+  const managerCareer=ensureManagerCareer(c);if(managerCareer.contractEndSeason<=c.season&&c.board>=35){managerCareer.contractEndSeason=c.season+2;managerCareer.history.push({type:'renewed',date:c.date,season:c.season,clubName:c.club.name,label:'Contrato renovado pelo '+c.club.name});}refreshCareerOpportunities(true);
   c.messages.push({id:'season-'+Date.now(),from:'Diretoria e federação',subject:'Temporada '+c.season+' iniciada',body:'Posição anterior: '+rank+'º. '+(linked?'O clube agora disputará '+newLeague.name+'. ':'')+(continentalId?'Vaga continental confirmada: '+continentalId+'. ':'')+'Premiação: '+money(prize)+'. Evolução anual: '+aging.improved.length+' jogador(es) subiram de GER e '+aging.declined.length+' tiveram declínio.',date:new Date().toISOString(),read:false,priority:'high'});
   persist();navigate('dashboard');toast('Nova temporada criada com acesso, rebaixamento e vagas aplicados.','success');
 }
@@ -1195,13 +1267,19 @@ async function acceptClubJob(clubId) {
   try{
     const data=await fetchJson(club.rosterPath),roster=(data.players||[]).map(normalizePlayer);
     if(roster.length<11)throw new Error('Elenco insuficiente');
-    const previous=c.club.name,participants=selectLeagueParticipants(club);
-    const startDate=club.continent==='europe'?new Date(c.season,7,8,15):club.countryId==='brazil'?new Date(c.season,3,11,16):new Date(c.season,1,7,16);
+    const managerCareer=ensureManagerCareer(c),previous=managerCareer.status==='employed'?c.club.name:(managerCareer.previousClub?.name||c.club.name),participants=selectLeagueParticipants(club);
+    const startDate=new Date(c.date);if(Number.isNaN(startDate.getTime()))startDate.setTime(new Date(c.season,1,7,16).getTime());startDate.setDate(startDate.getDate()+2);startDate.setHours(16,0,0,0);
+    const tier=clamp(Math.round((Number(club.rating)-52)/10),1,4),newBudget=Math.max(12000000,Math.round((35+(club.rating-65)*3.2)*1000000));
     c.construction=[];c.transferOffers=[];c.transferObligations=[];c.economy=null;session.market=[];
     c.club={...club};c.roster=roster;c.lineupIds=pickLineup(roster).map(p=>p.id);c.participants=participants;c.table=initialTable(participants);
     c.fixtures=[...buildLeagueFixtures(club,participants,startDate),...buildCupFixtures(club,participants,startDate),...buildContinentalFixtures(club,startDate,participants)].sort((a,b)=>new Date(a.date)-new Date(b.date));
-    c.date=startDate.toISOString();c.week=1;c.stats={played:0,wins:0,draws:0,losses:0,gf:0,ga:0,points:0};c.budget=Math.max(c.budget,Math.round((35+(club.rating-65)*3.2)*1000000));c.jobOffers=[];
+    c.date=startDate.toISOString();c.week=Math.max(1,Number(c.week)||1);c.stats={played:0,wins:0,draws:0,losses:0,gf:0,ga:0,points:0};c.budget=newBudget;c.board=68;c.morale=72;c.fitness=88;c.jobOffers=[];
+    c.facilities={training:tier,youth:Math.max(1,tier-1),medical:tier,scouting:tier,stadium:Math.min(5,tier+1),commercial:tier};
+    c.staff={assistant:clamp(club.rating-3,55,88),fitnessCoach:clamp(club.rating-5,55,88),scout:clamp(club.rating-4,55,88),medical:clamp(club.rating-5,55,88)};
+    c.transferPolicy={wageBudget:Math.round(newBudget*.18),maxSquad:35,foreignLimit:null};c.sponsor=null;c.sponsorOffers=generateSponsorOffers(club,c.facilities);c.lastTrainingWeek=0;c.weeklyDecisions={training:false,squad:false,tactics:false};c.individualTraining={};
+    c.ledger.push({date:c.date,label:'Orçamento do novo projeto · '+club.name,amount:newBudget,type:'income'});
     ensureEconomy(c);
+    recordClubAppointment(c,club);c.boardObjectives=createBoardObjectives(c);
     c.messages.push({id:'club-job-'+Date.now(),from:'Diretoria de '+club.name,subject:'Novo contrato assinado',body:'Você deixou '+previous+' e assumiu '+club.name+'. O calendário da nova temporada foi carregado.',date:new Date().toISOString(),read:false,priority:'high'});
     persist();navigate('dashboard');toast('Novo desafio iniciado no '+club.name+'.','success');
   }catch{toast('Não foi possível carregar o elenco do novo clube.','error');}

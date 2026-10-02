@@ -152,8 +152,10 @@ Não abra `index.html` diretamente; elencos, dados e funcionamento offline depen
 - substituição por toque e relógio de partida testados;
 - determinismo entre velocidades, adequação posicional, efeito de atributos, lesões e diferenças entre plano ofensivo, equilibrado e bloco baixo testados em 2.400 partidas;
 - overall por posição, disponibilidade, carga, recuperação, treino, evolução e envelhecimento cobertos por teste automatizado;
+- confiança da diretoria, alertas, demissão, propostas de clubes e convites de seleções cobertos por teste automatizado;
+- seis instalações com imagens originais responsivas e carregamento validado em desktop e celular;
 - sintaxe JavaScript aprovada;
 - 833 clubes, 211 seleções e 24.300 registros de jogadores auditados;
 - integridade aprovada com ressalvas documentadas em `QA-WORLD-V16.json`.
 
-Versão 16.8.0 · Ultimate World · 2026-10-01
+Versão 16.9.0 · Ultimate World · 2026-10-02

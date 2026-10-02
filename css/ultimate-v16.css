@@ -1001,6 +1001,55 @@ button { -webkit-tap-highlight-color:transparent; }
 @media(max-width:1000px){.facility-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.finance-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:520px){.facility-cards{grid-template-columns:1fr}.facility-art{height:115px}.finance-cards>span{padding:10px;font-size:10px}.finance-cards strong{font-size:14px}.finance-hub header,.phase8-campus>header{align-items:flex-start;flex-direction:column}.world-game .club-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));overflow:visible}.world-game .club-metrics>div{min-width:0}}
 
+/* Fase 9: instalações visuais e carreira viva do treinador. */
+.phase9-campus{margin-block:16px;display:grid;gap:16px;background:linear-gradient(145deg,rgba(8,17,26,.95),rgba(5,12,18,.9))}
+.phase9-campus>header,.manager-career-panel>header,.career-market>header,.national-invitations>header{display:flex;justify-content:space-between;align-items:center;gap:14px}
+.phase9-campus>header h2,.manager-career-panel h2,.career-market h2,.national-invitations h2{margin:.15rem 0 0}
+.phase9-campus .facility-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.phase9-campus .facility-card{position:relative;border-color:color-mix(in srgb,var(--facility-color) 36%,transparent);background:#08121c;box-shadow:0 18px 40px rgba(0,0,0,.27);transition:transform .2s ease,border-color .2s ease}
+.phase9-campus .facility-card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--facility-color) 68%,transparent)}
+.phase9-campus .facility-art{position:relative;height:190px;padding:0;overflow:hidden;background:#07111a}
+.phase9-campus .facility-art::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(4,10,16,.18) 55%,rgba(4,10,16,.94)),linear-gradient(90deg,rgba(4,10,16,.25),transparent 50%)}
+.phase9-campus .facility-art>img{width:100%;height:100%;object-fit:cover;filter:saturate(.94) contrast(1.04);transition:transform .5s ease}
+.phase9-campus .facility-card:hover .facility-art>img{transform:scale(1.025)}
+.facility-icon{position:absolute;z-index:2;top:14px;left:14px;display:grid;place-items:center;width:42px;height:42px;border:1px solid color-mix(in srgb,var(--facility-color) 55%,transparent);border-radius:13px;color:var(--facility-color);background:rgba(4,10,16,.78);backdrop-filter:blur(10px)}
+.facility-icon .ui-icon{width:23px;height:23px}
+.facility-level{position:absolute;z-index:2;top:14px;right:14px;display:grid;padding:8px 11px;border:1px solid rgba(255,255,255,.16);border-radius:11px;text-align:right;background:rgba(4,10,16,.76);backdrop-filter:blur(10px)}
+.facility-level strong{color:#fff;font-size:12px}.facility-level small{color:#a8bbc8;font-size:8px;text-transform:uppercase}
+.phase9-campus .facility-tiers{position:absolute;z-index:2;right:14px;bottom:12px;height:auto;transform:none}
+.phase9-campus .facility-tiers i,.phase9-campus .facility-tiers i:nth-child(n){width:24px;height:5px;border:0;border-radius:99px;background:#ffffff2b;box-shadow:none}
+.phase9-campus .facility-tiers i.built{background:var(--facility-color);box-shadow:0 0 12px color-mix(in srgb,var(--facility-color) 50%,transparent)}
+.phase9-campus .facility-copy{grid-template-columns:1fr auto;align-items:start;gap:7px 12px;padding:16px 18px 18px}
+.phase9-campus .facility-copy>small,.phase9-campus .facility-copy h3,.phase9-campus .facility-copy p{grid-column:1/-1}
+.phase9-campus .facility-copy h3{font-size:18px}.phase9-campus .facility-copy p{min-height:0}
+.phase9-campus .facility-copy .btn{grid-column:1/-1;width:100%}
+
+.manager-career-panel{position:relative;overflow:hidden;display:grid;gap:14px;margin-bottom:16px;border-left:4px solid #67d9a4;background:linear-gradient(120deg,rgba(13,34,41,.96),rgba(7,15,23,.92))}
+.manager-career-panel.status-watch{border-left-color:#e7c264}.manager-career-panel.status-pressure{border-left-color:#f39a59}.manager-career-panel.status-critical{border-left-color:#ff6875}
+.career-security{padding:8px 12px;border:1px solid currentColor;border-radius:999px;color:#8ce9b7;font-size:10px;font-weight:850;text-transform:uppercase;letter-spacing:.08em}
+.status-watch .career-security{color:#f0cf76}.status-pressure .career-security{color:#ffad69}.status-critical .career-security{color:#ff7d88}
+.manager-contract-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.manager-contract-grid>span{display:grid;gap:4px;padding:11px;border:1px solid rgba(255,255,255,.08);border-radius:11px;background:rgba(255,255,255,.025)}
+.manager-contract-grid small{color:#8ea3b2;font-size:8px;text-transform:uppercase;letter-spacing:.1em}.manager-contract-grid strong{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.manager-career-panel>p{margin:0;color:#9fb1bc;font-size:11px}
+.career-market{display:grid;gap:14px;margin-bottom:16px}
+.career-offer-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.career-job-card{display:grid;grid-template-columns:58px minmax(0,1fr) auto;align-items:center;gap:12px;padding:14px;border:1px solid rgba(243,201,105,.17);border-radius:15px;background:linear-gradient(135deg,rgba(16,29,40,.92),rgba(7,15,23,.9))}
+.career-job-card>img{width:54px;height:54px;object-fit:contain;filter:drop-shadow(0 8px 14px rgba(0,0,0,.35))}
+.career-job-card h3{margin:2px 0;font-size:15px}.career-job-card p{margin:3px 0;color:#a4b5bf;font-size:10px}.career-job-card small,.career-job-card span{display:block;color:#7f96a5;font-size:8px}
+.career-job-card .btn{min-height:42px;white-space:nowrap}
+.career-offers-empty{display:grid;gap:4px;padding:18px;border:1px dashed rgba(255,255,255,.14);border-radius:13px;color:#a7b7c1}.career-offers-empty strong{color:#edf4f5}
+.career-office-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}
+.career-timeline>div{display:grid;margin-top:10px}.career-timeline span{position:relative;display:grid;grid-template-columns:14px minmax(0,1fr) auto;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+.career-timeline i{width:8px;height:8px;border-radius:50%;background:#65daa4;box-shadow:0 0 0 4px rgba(101,218,164,.1)}.career-timeline .timeline-warning i{background:#f2b35f}.career-timeline .timeline-dismissed i{background:#ff6c78}.career-timeline small{color:#8399a7;font-size:8px}
+.unemployed-command{grid-template-columns:minmax(0,1.35fr) minmax(240px,.65fr)}
+.club-identity.unemployed .club-badge-shell{filter:grayscale(1);opacity:.58}.world-nav-btn.locked{opacity:.32}
+.national-invitations{display:grid;gap:13px;margin-bottom:14px;border-color:rgba(83,218,160,.3);background:linear-gradient(135deg,rgba(10,35,31,.92),rgba(7,15,23,.9))}
+.national-offer.invited{border-color:rgba(83,218,160,.72);box-shadow:0 0 0 1px rgba(83,218,160,.14),0 15px 30px rgba(0,0,0,.2)}
+
+@media(max-width:1000px){.career-offer-grid{grid-template-columns:1fr}.career-job-card{grid-template-columns:52px minmax(0,1fr) auto}.manager-contract-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.career-office-grid{grid-template-columns:1fr}.unemployed-command{grid-template-columns:1fr}}
+@media(max-width:680px){.phase9-campus .facility-cards{grid-template-columns:1fr}.phase9-campus .facility-art{height:165px}.phase9-campus>header,.manager-career-panel>header,.career-market>header,.national-invitations>header{align-items:flex-start;flex-direction:column}.career-job-card{grid-template-columns:46px minmax(0,1fr)}.career-job-card>img{width:44px;height:44px}.career-job-card .btn{grid-column:1/-1;width:100%}.manager-contract-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.career-timeline span{grid-template-columns:14px minmax(0,1fr)}.career-timeline small{grid-column:2}.career-security{align-self:flex-start}}
+
 /* Fase 7: desempenho por posição, carga, evolução e departamento médico. */
 .rating-cell,.condition-cell { display:grid; gap:1px; }
 .rating-cell strong { color:#f4d173; font-size:13px; }
