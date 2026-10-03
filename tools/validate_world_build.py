@@ -99,7 +99,7 @@ for ref in re.findall(r'(?:href|src)="\./([^"?#]+)', html):
 require("app-v16.js" in html and "ultimate-v16.css" in html, "Entrypoints V16 ausentes")
 
 sw = (ROOT / "sw.js").read_text(encoding="utf-8")
-require("ultimate-v16.9.0-phase9" in sw, "Cache do service worker não corresponde à Fase 9")
+require("ultimate-v16.10.0-phase10" in sw, "Cache do service worker não corresponde à Fase 10")
 for ref in re.findall(r"'\./([^'?]+)(?:\?[^']*)?'", sw):
     if ref:
         require((ROOT / ref).exists(), f"Referência ausente no service worker: {ref}")
@@ -129,6 +129,9 @@ for marker in ["processEconomy", "financeForecast", "startConstruction", "valida
 manager_career = (ROOT / "js/systems/managerCareer.js").read_text(encoding="utf-8")
 for marker in ["ensureManagerCareer", "reviewManagerMatch", "createClubJobOffers", "createNationalJobOffers", "recordClubAppointment"]:
     require(marker in manager_career and marker in app_js, f"Integração da carreira do treinador incompleta: {marker}")
+competition_career = (ROOT / "js/systems/competitionCareer.js").read_text(encoding="utf-8")
+for marker in ["deriveCompetitionTable", "competitionKind", "nextCareerEvent", "seasonTrophies", "managerCareerScore"]:
+    require(marker in competition_career and marker in app_js, f"Integração da carreira competitiva incompleta: {marker}")
 for facility in ["stadium", "training", "youth", "medical", "scouting", "commercial"]:
     image = ROOT / f"assets/facilities/{facility}.jpg"
     require(image.is_file() and 50_000 < image.stat().st_size < 400_000, f"Imagem otimizada da instalação ausente: {facility}")
@@ -163,7 +166,7 @@ report = {
     "checks": [
         "catalog integrity", "unique club IDs", "club and national roster paths", "six-confederation coverage",
         "league rule status", "manifest adaptive orientation", "index references", "service-worker shell references",
-        "manager face atlas", "national identity flags", "live match tactics", "match engine v2", "phase 6 tactical portraits", "phase 6 navigation identity", "phase 7 positional ratings", "phase 7 injury and recovery", "phase 7 development and aging", "phase 8 economy and construction", "phase 9 manager career", "phase 9 facility imagery", "annual calendar", "global simulation", "rating disclosure",
+        "manager face atlas", "national identity flags", "live match tactics", "match engine v2", "phase 6 tactical portraits", "phase 6 navigation identity", "phase 7 positional ratings", "phase 7 injury and recovery", "phase 7 development and aging", "phase 8 economy and construction", "phase 9 manager career", "phase 9 facility imagery", "unified club and national calendar", "continental and national tables", "trophy room and career XP", "global simulation", "rating disclosure",
     ],
 }
 

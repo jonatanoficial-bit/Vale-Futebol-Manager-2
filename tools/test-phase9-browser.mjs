@@ -53,6 +53,6 @@ try{
   const saved=await read();
   await page.evaluate(()=>{const store=JSON.parse(localStorage.getItem('vale-futebol-manager-v16')),career=store.slots[0];career.schema=1603;career.version='16.8.0-phase8';delete career.managerCareer;localStorage.setItem('vale-futebol-manager-v16',JSON.stringify(store));});
   await page.reload({waitUntil:'domcontentloaded'});await action('load-career').click();await action('slot-load').first().click();const migrated=await read();
-  assert.equal(migrated.schema,1604);assert.equal(migrated.managerCareer.status,'employed');assert.equal(migrated.budget,saved.budget);assert.deepEqual(migrated.construction,saved.construction);assert.deepEqual(errors,[]);
+  assert.equal(migrated.schema,1605);assert.equal(migrated.managerCareer.status,'employed');assert.equal(migrated.budget,saved.budget);assert.deepEqual(migrated.construction,saved.construction);assert.deepEqual(errors,[]);
   console.log(JSON.stringify({status:'ok',version:migrated.version,checks:['six facility images','career status','unemployed UI','job appointment','save migration','mobile portrait','mobile landscape'],errors}));
 }finally{await browser.close();}

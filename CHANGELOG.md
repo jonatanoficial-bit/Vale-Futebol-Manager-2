@@ -1,3 +1,16 @@
+# 16.10.0 — Fase 10 Calendário Mundial e Legado — 2026-10-03
+
+- Unificado o comando da agenda de clube e seleção: a partida cronologicamente mais próxima é mostrada no painel inicial, na agenda e no centro de jogo.
+- Datas FIFA passam a abrir automaticamente a partida da seleção quando ela for o próximo compromisso, sem exigir que o usuário procure outra tela.
+- Adicionados amistosos internacionais e rótulos claros para amistosos, Eliminatórias, Copa continental e Copa do Mundo.
+- Criadas agenda completa e tabelas de classificação para as seleções, incluindo a projeção das fases ainda bloqueadas.
+- Adicionadas classificações para fases de liga continentais de clubes, além da tabela nacional já existente.
+- Reformulada a caixa de entrada com prioridade, categorias visuais, prévia, indicador de mensagens novas e destaque dourado para decisões importantes.
+- Criados pontuação de carreira, faixa de XP visível na central do treinador e XP no topo da interface.
+- Criada sala de troféus persistente, registrando competição, clube, temporada, pontuação e XP de cada conquista.
+- Implementado popup de campeão ao fechar a temporada, com logo da competição, clube campeão e recompensa de XP.
+- Migrados saves existentes para o schema 1605 sem apagar carreira, seleção, calendário ou títulos anteriores.
+
 # 16.9.0 — Fase 9 Carreira do Treinador — 2026-10-02
 
 - Substituído o desenho abstrato das instalações por seis imagens originais e cinematográficas para estádio, CT, academia, medicina, scouting e centro comercial.
