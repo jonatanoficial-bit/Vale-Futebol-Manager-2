@@ -1,4 +1,15 @@
-# Vale Futebol Manager — Ultimate World 16.8
+# Vale Futebol Manager — Ultimate World 16.10
+
+## Fase 10 — calendário mundial e legado do treinador
+
+- agenda sincronizada entre clube e seleção, com encaminhamento automático à partida da Data FIFA;
+- amistosos, eliminatórias, copa continental e Copa do Mundo identificados em todo o calendário;
+- tabelas de classificação para a seleção e fases de liga continentais de clubes;
+- e-mails com prioridade, categoria, prévia e indicação visual de decisões importantes;
+- XP, nível e pontuação de carreira em destaque na central do treinador;
+- sala de troféus persistente e popup de campeão ao concluir uma temporada vitoriosa.
+
+Os resultados dos adversários em tabelas que ainda não possuem todas as rodadas persistidas são determinísticos. A próxima etapa persistirá cada rodada completa junto com os regulamentos detalhados de cada torneio.
 
 ## Fase 8 — mercado, finanças e instalações
 
@@ -158,4 +169,4 @@ Não abra `index.html` diretamente; elencos, dados e funcionamento offline depen
 - 833 clubes, 211 seleções e 24.300 registros de jogadores auditados;
 - integridade aprovada com ressalvas documentadas em `QA-WORLD-V16.json`.
 
-Versão 16.9.0 · Ultimate World · 2026-10-02
+Versão 16.10.0 · Ultimate World · 2026-10-03
