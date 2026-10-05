@@ -1,6 +1,6 @@
-const CACHE = 'vale-futebol-ultimate-v16.10.0-phase10';
+const CACHE = 'vale-futebol-ultimate-v17.0.0-phase11';
 const SHELL = [
-  './', './index.html', './offline.html', './css/app.css?v=11.0.0-20260804', './css/world-edition.css?v=11.0.0-20260804', './css/world-edition-v11.css?v=11.0.0-20260804-release', './css/ultimate-v16.css?v=16.10.0-phase10', './js/app-v16.js?v=16.10.0-phase10', './js/systems/matchEngineV2.js', './js/systems/careerPerformanceV3.js', './js/systems/clubEconomy.js', './js/systems/managerCareer.js', './js/systems/competitionCareer.js',
+  './', './index.html', './offline.html', './css/app.css?v=11.0.0-20260804', './css/world-edition.css?v=11.0.0-20260804', './css/world-edition-v11.css?v=11.0.0-20260804-release', './css/ultimate-v16.css?v=17.0.0-phase11', './js/app-v16.js?v=17.0.0-phase11', './js/systems/matchEngineV2.js', './js/systems/careerPerformanceV3.js', './js/systems/clubEconomy.js', './js/systems/managerCareer.js', './js/systems/competitionCareer.js', './js/systems/competitionWorldV2.js', './js/systems/careerRelations.js', './js/systems/tacticalRoles.js',
   './manifest.webmanifest', './assets/icons/app-icon-v9.png', './assets/placeholders/player-generic.png', './assets/placeholders/club-generic.png', './assets/players/generic/player-generic.webp', './assets/players/generic/player-generic-128.webp',
   './assets/backgrounds/bg-cover.jpg', './assets/backgrounds/bg-lobby.jpg',
   './assets/backgrounds/bg-match.jpg', './assets/backgrounds/bg-team-select.jpg', './assets/backgrounds/campo-futebol-cinematografico.png',

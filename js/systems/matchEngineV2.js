@@ -79,16 +79,16 @@ function tacticsProfile(tactics={}){
   };
 }
 
-function teamMetrics(lineup=[],tactics={},boost=0){
+function teamMetrics(lineup=[],tactics={},boost=0,roleBonus={}){
   const players=lineup.length?lineup:genericLineup(66),profile=tacticsProfile(tactics);
   const expected=FORMATION_ROLES[tactics.formation]||FORMATION_ROLES['4-3-3'],fits=players.map((player,index)=>positionalFit(player,expected[index]||player.pos));
   const fitness=average(players.map(player=>player.fitness)),morale=average(players.map(player=>player.morale)),form=average(players.map(player=>player.form));
   const sharpness=average(players.map(player=>player.sharpness)),chemistry=average(players.map(player=>player.chemistry)),workload=average(players.map(player=>player.workload));
   const readiness=(fitness-75)*.13+(morale-70)*.055+(form-70)*.045+(sharpness-70)*.035+(chemistry-68)*.03-Math.max(0,workload-74)*.05+Number(boost||0);
   return {
-    attack:average(players.map((player,index)=>playerAttack(player)*(.76+fits[index]*.24)))+profile.attack+readiness,
-    control:average(players.map((player,index)=>playerControl(player)*(.7+fits[index]*.3)))+profile.control+readiness*.68,
-    defence:average(players.map((player,index)=>playerDefence(player)*(.72+fits[index]*.28)))+profile.defence+readiness*.84,
+    attack:average(players.map((player,index)=>playerAttack(player)*(.76+fits[index]*.24)))+profile.attack+readiness+Number(roleBonus.attack||0),
+    control:average(players.map((player,index)=>playerControl(player)*(.7+fits[index]*.3)))+profile.control+readiness*.68+Number(roleBonus.control||0),
+    defence:average(players.map((player,index)=>playerDefence(player)*(.72+fits[index]*.28)))+profile.defence+readiness*.84+Number(roleBonus.defence||0),
     goalkeeper:average(players.filter(player=>player.pos==='GOL').map(player=>attribute(player,'positioning')*.4+attribute(player,'decisions')*.3+player.overall*.3))||average(players.map(player=>player.overall)),
     fitness,morale,form,sharpness,chemistry,workload,profile,positionalFit:average(fits)*100
   };
@@ -231,7 +231,7 @@ function simulateMinute(match){
   updateOpponentAI(match);
   fatigueMinute(match,match.ownLineup,match.ownTactics,true);fatigueMinute(match,match.opponentLineup,match.opponentTactics,false);
   const ownBoost=match.managerEffect?.until>=match.minute?Number(match.managerEffect.tactical||0):0;
-  const ownMetrics=teamMetrics(match.ownLineup,match.ownTactics,ownBoost),opponentMetrics=teamMetrics(match.opponentLineup,match.opponentTactics,0);
+  const ownMetrics=teamMetrics(match.ownLineup,match.ownTactics,ownBoost,match.ownRoleEffects),opponentMetrics=teamMetrics(match.opponentLineup,match.opponentTactics,0,match.opponentRoleEffects);
   const homeMetrics=match.ownHome?ownMetrics:opponentMetrics,awayMetrics=match.ownHome?opponentMetrics:ownMetrics;
   const controlDiff=homeMetrics.control-awayMetrics.control,homePossession=clamp(50+3.2+controlDiff*.38+(nextRandom(match)-.5)*8,27,73);
   match.possessionSamples++;match.possessionHome=Math.round(((match.possessionHome*(match.possessionSamples-1))+homePossession)/match.possessionSamples);
@@ -258,11 +258,12 @@ export function createMatchEngineV2(config={}){
     engineVersion:MATCH_ENGINE_V2_VERSION,randomState:Number(config.seed)||1,ownHome,homeName,awayName,ownName:config.ownName||'Seu time',opponentName:config.opponentName||'Adversário',
     minute:0,homeGoals:0,awayGoals:0,possessionHome:50,possessionSamples:0,shotsHome:0,shotsAway:0,shotsOnTargetHome:0,shotsOnTargetAway:0,
     xgHome:0,xgAway:0,cardsHome:0,cardsAway:0,cornersHome:0,cornersAway:0,passesHome:0,passesAway:0,completedPassesHome:0,completedPassesAway:0,
-    momentum:50,opponentPlan:'Equilibrado',ownLineup,opponentLineup,ownTactics:normalizeTactics(config.ownTactics),opponentTactics,
+    momentum:50,opponentPlan:'Equilibrado',ownLineup,opponentLineup,ownTactics:normalizeTactics(config.ownTactics),opponentTactics,ownRoleEffects:{...(config.ownRoleEffects||{})},opponentRoleEffects:{...(config.opponentRoleEffects||{})},
     events:[],tacticalSignals:[],injuryIncidents:[],playerPerformance:{},managerEffect:null,ball:{x:50,y:50},attacking:'home',running:false,finished:false
   };
   ownLineup.forEach(player=>recordFor(match,player));opponentLineup.forEach(player=>recordFor(match,player));
-  addEvent(match,'tactical','As equipes estão posicionadas. A simulação considera atributos, funções, fadiga e instruções.','neutral');
+  const rolesActive=Object.values(match.ownRoleEffects).some(value=>Number(value));
+  addEvent(match,'tactical','As equipes estão posicionadas. A simulação considera atributos, '+(rolesActive?'funções individuais, ':'')+'fadiga e instruções.','neutral');
   return match;
 }
 

@@ -1,3 +1,14 @@
+# 17.0.0 — Fase 11 Fundação de Competições e Carreira — 2026-10-05
+
+- Substituída a simulação avulsa do mundo por agendas persistentes de turno e returno para todas as ligas, armazenadas de forma compacta no save.
+- Integrado o placar do clube à rodada mundial correta; os demais confrontos da mesma rodada passam a ser resolvidos e gravados juntos.
+- Formalizada a ordem de desempate por pontos, vitórias, saldo de gols e gols pró nas competições de liga.
+- Adicionadas funções individuais aos titulares, com impacto direto nos cálculos de ataque, controle e defesa do motor de jogo.
+- Criados vestiário persistente, líderes, moral coletiva, confiança da torcida, pressão da imprensa, memória de decisões e promessas de minutos.
+- Adicionada convocação de seleção editável entre 23 e 26 atletas, respeitada na escalação e na partida.
+- Adicionados restauração do último backup local e diagnóstico local de eventos/erros.
+- Migrados saves existentes para o schema 1700 preservando a tabela do clube e convertendo o restante da temporada para o novo calendário.
+
 # 16.10.0 — Fase 10 Calendário Mundial e Legado — 2026-10-03
 
 - Unificado o comando da agenda de clube e seleção: a partida cronologicamente mais próxima é mostrada no painel inicial, na agenda e no centro de jogo.

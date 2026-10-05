@@ -1,15 +1,16 @@
-# Vale Futebol Manager — Ultimate World 16.10
+# Vale Futebol Manager — Ultimate World 17.0
 
-## Fase 10 — calendário mundial e legado do treinador
+## Fase 11 — fundação de competições e carreira
 
-- agenda sincronizada entre clube e seleção, com encaminhamento automático à partida da Data FIFA;
-- amistosos, eliminatórias, copa continental e Copa do Mundo identificados em todo o calendário;
-- tabelas de classificação para a seleção e fases de liga continentais de clubes;
-- e-mails com prioridade, categoria, prévia e indicação visual de decisões importantes;
-- XP, nível e pontuação de carreira em destaque na central do treinador;
-- sala de troféus persistente e popup de campeão ao concluir uma temporada vitoriosa.
+- cada liga passa a ter uma grade persistente de turno e returno, com rodadas completas para todos os clubes;
+- resultado do usuário entra no seu confronto real e a tabela mundial é atualizada junto dos demais jogos daquela rodada;
+- desempates de liga seguem pontos, vitórias, saldo de gols e gols pró;
+- titulares recebem funções individuais que afetam ataque, controle e defesa durante o jogo;
+- vestiário persistente com líderes, promessas, torcida, imprensa e memória das decisões;
+- convocação de seleção editável entre 23 e 26 atletas;
+- backup local recuperável e diagnóstico de erros guardado no próprio save.
 
-Os resultados dos adversários em tabelas que ainda não possuem todas as rodadas persistidas são determinísticos. A próxima etapa persistirá cada rodada completa junto com os regulamentos detalhados de cada torneio.
+O roteiro técnico e comercial das próximas fases está em [PLANO-FASES-11-A-14.md](PLANO-FASES-11-A-14.md).
 
 ## Fase 8 — mercado, finanças e instalações
 
@@ -169,4 +170,4 @@ Não abra `index.html` diretamente; elencos, dados e funcionamento offline depen
 - 833 clubes, 211 seleções e 24.300 registros de jogadores auditados;
 - integridade aprovada com ressalvas documentadas em `QA-WORLD-V16.json`.
 
-Versão 16.10.0 · Ultimate World · 2026-10-03
+Versão 17.0.0 · Ultimate World · 2026-10-05
