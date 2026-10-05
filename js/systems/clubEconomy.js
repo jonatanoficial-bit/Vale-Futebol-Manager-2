@@ -69,11 +69,11 @@ export function marketValue(p,date){
   const form=1+(clamp(p.form??70,0,100)-70)*.003;
   return Math.max(50000,Math.round(Math.max(.05,finite(p.value,1))*1000000*ageFactor*potential*contract*form/1000)*1000);
 }
-export function validateDeal(c,p,{fee,salary,years=1,signing=0,installments=1,releaseClause=0,renewal=false}){
-  if(![fee,salary,years,signing,installments,releaseClause].every(Number.isFinite)||fee<0||salary<1000||signing<0||releaseClause<0||!Number.isInteger(years)||years<1||years>5||![1,2,3].includes(installments))return 'Condições inválidas. Revise os valores da proposta.';
+export function validateDeal(c,p,{fee,salary,years=1,signing=0,installments=1,releaseClause=0,agentFeeRate=.05,renewal=false}){
+  if(![fee,salary,years,signing,installments,releaseClause,agentFeeRate].every(Number.isFinite)||fee<0||salary<1000||signing<0||releaseClause<0||agentFeeRate<0||agentFeeRate>.15||!Number.isInteger(years)||years<1||years>5||![1,2,3].includes(installments))return 'Condições inválidas. Revise os valores da proposta.';
   if(!renewal&&(c.roster.some(item=>item.id===p.id)||c.roster.length>=c.transferPolicy.maxSquad))return 'Sem vaga no elenco ou jogador já contratado.';
   if(payroll(c)+salary-(renewal?finite(p.salary)*1000:0)>c.transferPolicy.wageBudget)return 'A proposta ultrapassa o limite da folha salarial.';
-  if(c.budget<Math.ceil(fee/installments)+Math.round(fee*.05)+signing)return 'Saldo insuficiente para entrada, luvas e comissão.';
+  if(c.budget<Math.ceil(fee/installments)+Math.round(fee*agentFeeRate)+signing)return 'Saldo insuficiente para entrada, luvas e comissão.';
   return null;
 }
 export function createSaleOffer(c,p,buyer){

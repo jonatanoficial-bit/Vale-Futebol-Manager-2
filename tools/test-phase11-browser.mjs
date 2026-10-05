@@ -16,7 +16,7 @@ try {
   await page.locator('#manager-name').fill('QA Fase 11'); await action('start-career').click();
   await action('skip-onboarding').waitFor({state:'visible'}); await action('skip-onboarding').click();
   let career=await read();
-  assert.equal(career.schema,1700);
+  assert.equal(career.schema,1800);
   assert.equal(career.worldState.version,'2.0.0');
   const league=career.worldState.leagues[career.club.leagueId];
   assert.ok(league.rounds.length>0&&league.rounds.every(round=>Array.isArray(round)),'A liga deve conter rodadas completas persistidas.');
@@ -41,7 +41,7 @@ try {
     localStorage.setItem('vale-futebol-manager-v16',JSON.stringify(store));
   });
   await page.reload({waitUntil:'domcontentloaded'}); await action('load-career').click(); await action('slot-load').click(); await nav('more'); await nav('national');
-  assert.match(await page.locator('.national-roster').innerText(),/CONVOCAÇÃO EDITÁVEL/);
+  assert.match(await page.locator('.national-roster').innerText(),/POOL NACIONAL|CONVOCAÇÃO EDITÁVEL/);
   await action('toggle-national-callup').first().click();
   career=await read(); assert.equal(career.national.calledUpIds.length,25);
 

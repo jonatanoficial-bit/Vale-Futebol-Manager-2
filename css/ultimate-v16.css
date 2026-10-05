@@ -769,8 +769,21 @@ button { -webkit-tap-highlight-color:transparent; }
 .coachmark-card p { margin:0; color:#a9b7c0; font-size:11px; line-height:1.55; }
 .coachmark-practice { display:grid; gap:3px; margin:13px 0; padding:10px 12px; border-left:3px solid var(--vfm-accent); border-radius:0 11px 11px 0; background:rgba(88,226,164,.075); }
 .coachmark-practice strong { color:#82efbc; font-size:9px; text-transform:uppercase; }
+.coachmark-practice.complete { border-left-color:#f3c969; background:rgba(243,201,105,.12); }
+.coachmark-practice.complete strong { color:#f3c969; }
 .coachmark-practice span { font-size:10px; line-height:1.45; }
 .coachmark-card footer { display:flex; justify-content:flex-end; gap:8px; }
+.market-scout-network { margin:0 0 14px; padding:15px; }
+.market-scout-network header { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:12px; }
+.market-scout-network h2 { margin:2px 0 0; font-size:15px; }
+.market-scout-network > div { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+.scout-region { display:grid; grid-template-columns:1fr auto; gap:5px 8px; align-items:center; padding:9px; text-align:left; color:#dce8eb; border:1px solid rgba(106,182,213,.2); border-radius:10px; background:rgba(3,12,21,.55); }
+.scout-region:hover,.scout-region.focused { border-color:rgba(86,226,164,.7); background:rgba(86,226,164,.09); }
+.scout-region strong { font-size:10px; }
+.scout-region em { grid-column:2; grid-row:1; color:#f3c969; font-style:normal; font-size:10px; }
+.scout-region span { grid-column:1 / -1; height:4px; overflow:hidden; border-radius:99px; background:#132534; }
+.scout-region i { display:block; height:100%; border-radius:inherit; background:linear-gradient(90deg,#42cfff,#58e2a4); }
+.market-scout-network > small { display:block; margin-top:10px; color:#9cadb9; font-size:10px; }
 .tutorial-focus { position:relative; z-index:45; outline:3px solid rgba(88,226,164,.94); outline-offset:4px; box-shadow:0 0 0 9999px rgba(1,5,8,.48),0 0 35px rgba(88,226,164,.34) !important; }
 
 @media (max-width:1100px) {
@@ -809,6 +822,7 @@ button { -webkit-tap-highlight-color:transparent; }
   .coachmark-card { width:100%; padding:14px; border-radius:17px; }
   .coachmark-card h2 { font-size:17px; }
   .coachmark-card footer .btn { flex:1; }
+  .market-scout-network > div { grid-template-columns:repeat(2,minmax(0,1fr)); }
   .competition-logo { width:52px; height:52px; }
 }
 

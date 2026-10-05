@@ -1,4 +1,4 @@
-export const MATCH_ENGINE_V2_VERSION = '5.1.0';
+export const MATCH_ENGINE_V2_VERSION = '5.2.0';
 
 const POSITION_ORDER = ['GOL','LD','ZAG','ZAG','LE','VOL','MC','MC','PD','ATA','PE'];
 const FORMATION_ROLES = {
@@ -10,12 +10,20 @@ const FORMATION_ROLES = {
 const ATTACK_POSITIONS = new Set(['ATA','PE','PD','MEI','SA']);
 const MIDFIELD_POSITIONS = new Set(['VOL','MC','MEI','MD','ME']);
 const DEFENCE_POSITIONS = new Set(['GOL','ZAG','LD','LE','ALA']);
+const OPPONENT_STYLES = [
+  {id:'possession',label:'Posse paciente',formation:'4-3-3',mentality:'Equilibrada',pressure:57,tempo:49,width:62,defensiveLine:58,passing:'Curto',marking:'Zona',transition:'Equilibrada'},
+  {id:'pressing',label:'Pressão agressiva',formation:'4-2-3-1',mentality:'Ofensiva',pressure:74,tempo:68,width:58,defensiveLine:67,passing:'Misto',marking:'Híbrida',transition:'Contra-atacar'},
+  {id:'counter',label:'Bloco e contra-ataque',formation:'4-4-2',mentality:'Equilibrada',pressure:43,tempo:66,width:61,defensiveLine:43,passing:'Direto',marking:'Zona',transition:'Contra-atacar'},
+  {id:'pragmatic',label:'Equilíbrio pragmático',formation:'3-5-2',mentality:'Equilibrada',pressure:52,tempo:53,width:54,defensiveLine:49,passing:'Misto',marking:'Híbrida',transition:'Reagrupar'}
+];
 
 function clamp(value,min,max){const number=Number(value);return Math.min(max,Math.max(min,Number.isFinite(number)?number:min));}
 function average(values=[]){return values.length?values.reduce((sum,value)=>sum+Number(value||0),0)/values.length:0;}
 function round(value,digits=0){const factor=10**digits;return Math.round(Number(value||0)*factor)/factor;}
 function nextRandom(match){match.randomState=(Math.imul(match.randomState||1,1664525)+1013904223)>>>0;return match.randomState/4294967296;}
 function pick(list,random){return list[Math.min(list.length-1,Math.floor(random*list.length))];}
+
+export function opponentCoachProfile(seed='',rating=68){let value=2166136261;for(const char of String(seed)){value^=char.charCodeAt(0);value=Math.imul(value,16777619);}const style=OPPONENT_STYLES[(value>>>0)%OPPONENT_STYLES.length];return {...style,rating:clamp(rating,45,96),adaptability:clamp(50+((value>>>7)%40),45,92),name:['Renato Valença','Marcos Ávila','Sergio Duarte','Paulo Ramires','André Siqueira'][(value>>>13)%5]};}
 
 function attribute(player,key){
   const fallback=Number(player?.overall||68);
@@ -143,15 +151,24 @@ function tacticalMatchup(attacking,defending,attackMetrics,defenceMetrics){
   return {value,reason};
 }
 
+function makeOpponentSubstitution(match,reason){
+  if((match.opponentSubstitutions||0)>=5||!match.opponentBench?.length)return false;
+  const candidates=match.opponentLineup.map((player,index)=>({player,index})).filter(item=>item.player?.pos!=='GOL').sort((a,b)=>(a.player.fitness+a.player.overall*.04)-(b.player.fitness+b.player.overall*.04));
+  const outgoing=candidates[0],incoming=match.opponentBench.slice().sort((a,b)=>(b.fitness+b.overall*.05)-(a.fitness+a.overall*.05))[0];if(!outgoing||!incoming)return false;
+  match.opponentLineup[outgoing.index]=incoming;match.opponentBench=match.opponentBench.filter(player=>player.id!==incoming.id);match.opponentBench.push(outgoing.player);match.opponentSubstitutions=(match.opponentSubstitutions||0)+1;recordFor(match,incoming);ratingAdd(match,incoming,.05);
+  const side=match.ownHome?'away':'home';addEvent(match,'substitution',`SUBSTITUIÇÃO: ${match.opponentName} troca ${outgoing.player.name} por ${incoming.name} (${reason}).`,side);addSignal(match,side,'Banco rival',`${incoming.name} entra para ${reason}.`,61);return true;
+}
+
 function updateOpponentAI(match){
   if(![28,55,70].includes(match.minute))return;
   const ownSide=match.ownHome?'home':'away',opponentSide=match.ownHome?'away':'home';
   const opponentGoals=opponentSide==='home'?match.homeGoals:match.awayGoals,ownGoals=ownSide==='home'?match.homeGoals:match.awayGoals;
   const opponentXg=opponentSide==='home'?match.xgHome:match.xgAway,ownXg=ownSide==='home'?match.xgHome:match.xgAway;
-  let plan='Equilibrado',reason='equilibrar território e proteger o meio';
-  if(opponentGoals<ownGoals||(match.minute>=55&&opponentXg+0.35<ownXg)){plan='Ofensivo';reason='buscar o resultado com pressão e linha mais alta';match.opponentTactics={...match.opponentTactics,mentality:'Ofensiva',pressure:clamp(match.opponentTactics.pressure+12,20,90),tempo:clamp(match.opponentTactics.tempo+10,20,90),defensiveLine:clamp(match.opponentTactics.defensiveLine+8,20,85)};}
-  else if(match.minute>=70&&opponentGoals>ownGoals){plan='Conservador';reason='proteger a vantagem com bloco mais baixo';match.opponentTactics={...match.opponentTactics,mentality:'Defensiva',pressure:clamp(match.opponentTactics.pressure-9,20,90),tempo:clamp(match.opponentTactics.tempo-12,20,90),defensiveLine:clamp(match.opponentTactics.defensiveLine-10,20,85),transition:'Contra-atacar'};}
-  else if(match.minute===28){plan='Pressão alta';reason='dificultar a primeira construção';match.opponentTactics={...match.opponentTactics,pressure:clamp(match.opponentTactics.pressure+8,20,90),defensiveLine:clamp(match.opponentTactics.defensiveLine+5,20,85)};}
+  const coach=match.opponentCoach||opponentCoachProfile(match.opponentName,68);let plan=coach.label,reason='aplicar a identidade do treinador rival';
+  if(opponentGoals<ownGoals||(match.minute>=55&&opponentXg+0.35<ownXg)){plan='Tudo ao ataque';reason='buscar o resultado com pressão, linha alta e um segundo atacante';match.opponentTactics={...match.opponentTactics,formation:'4-4-2',mentality:'Ofensiva',pressure:clamp(match.opponentTactics.pressure+12,20,90),tempo:clamp(match.opponentTactics.tempo+10,20,90),defensiveLine:clamp(match.opponentTactics.defensiveLine+8,20,85)};if(match.minute>=55)makeOpponentSubstitution(match,'dar mais presença ofensiva');}
+  else if(match.minute>=70&&opponentGoals>ownGoals){plan='Fechar espaços';reason='proteger a vantagem com bloco baixo e contra-ataque';match.opponentTactics={...match.opponentTactics,formation:'3-5-2',mentality:'Defensiva',pressure:clamp(match.opponentTactics.pressure-9,20,90),tempo:clamp(match.opponentTactics.tempo-12,20,90),defensiveLine:clamp(match.opponentTactics.defensiveLine-10,20,85),transition:'Contra-atacar'};makeOpponentSubstitution(match,'reforçar a proteção defensiva');}
+  else if(match.minute===28){plan=coach.label;reason='impor a identidade do treinador no meio-campo';match.opponentTactics={...match.opponentTactics,formation:coach.formation,pressure:clamp(match.opponentTactics.pressure+(coach.pressure-55)*.45,20,90),defensiveLine:clamp(match.opponentTactics.defensiveLine+(coach.defensiveLine-52)*.3,20,85)};}
+  else if(match.minute===70)makeOpponentSubstitution(match,'renovar a intensidade');
   match.opponentPlan=plan;addEvent(match,'tactical',`${match.opponentName} muda o plano para ${plan.toLowerCase()}: ${reason}.`,opponentSide);addSignal(match,opponentSide,`IA: ${plan}`,reason,64);
 }
 
@@ -253,12 +270,14 @@ export function createMatchEngineV2(config={}){
   const ownLineup=(config.ownLineup||[]).map((player,index)=>preparePlayer(player,index,'own'));
   const opponentLineup=(config.opponentLineup||[]).length?(config.opponentLineup||[]).map((player,index)=>preparePlayer(player,index,'rival')):genericLineup(config.opponentRating||68,'rival');
   const ownHome=config.ownHome!==false,homeName=ownHome?(config.ownName||'Seu time'):(config.opponentName||'Adversário'),awayName=ownHome?(config.opponentName||'Adversário'):(config.ownName||'Seu time');
-  const opponentTactics=normalizeTactics(config.opponentTactics||{formation:'4-2-3-1',mentality:'Equilibrada',pressure:52,tempo:54,width:56,defensiveLine:51,passing:'Misto',marking:'Zona',transition:'Equilibrada'});
+  const opponentCoach=config.opponentCoach||opponentCoachProfile(config.opponentName||'Adversário',config.opponentRating||68);
+  const opponentTactics=normalizeTactics(config.opponentTactics||opponentCoach);
+  const opponentBench=(config.opponentBench||genericLineup(config.opponentRating||68,'rival-bench')).map((player,index)=>preparePlayer(player,index,'rival-bench'));
   const match={
     engineVersion:MATCH_ENGINE_V2_VERSION,randomState:Number(config.seed)||1,ownHome,homeName,awayName,ownName:config.ownName||'Seu time',opponentName:config.opponentName||'Adversário',
     minute:0,homeGoals:0,awayGoals:0,possessionHome:50,possessionSamples:0,shotsHome:0,shotsAway:0,shotsOnTargetHome:0,shotsOnTargetAway:0,
     xgHome:0,xgAway:0,cardsHome:0,cardsAway:0,cornersHome:0,cornersAway:0,passesHome:0,passesAway:0,completedPassesHome:0,completedPassesAway:0,
-    momentum:50,opponentPlan:'Equilibrado',ownLineup,opponentLineup,ownTactics:normalizeTactics(config.ownTactics),opponentTactics,ownRoleEffects:{...(config.ownRoleEffects||{})},opponentRoleEffects:{...(config.opponentRoleEffects||{})},
+    momentum:50,opponentPlan:opponentCoach.label,opponentCoach,opponentSubstitutions:0,opponentBench,ownLineup,opponentLineup,ownTactics:normalizeTactics(config.ownTactics),opponentTactics,ownRoleEffects:{...(config.ownRoleEffects||{})},opponentRoleEffects:{...(config.opponentRoleEffects||{})},
     events:[],tacticalSignals:[],injuryIncidents:[],playerPerformance:{},managerEffect:null,ball:{x:50,y:50},attacking:'home',running:false,finished:false
   };
   ownLineup.forEach(player=>recordFor(match,player));opponentLineup.forEach(player=>recordFor(match,player));

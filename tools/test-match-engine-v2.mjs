@@ -23,7 +23,7 @@ assert.deepEqual(result(oneByOne),result(sixAtOnce),'A velocidade não pode alte
 assert.equal(oneByOne.minute,90);
 assert.equal(oneByOne.finished,true);
 assert.equal(oneByOne.engineVersion,MATCH_ENGINE_V2_VERSION);
-assert.equal(Object.keys(oneByOne.playerPerformance).length,22);
+assert.ok(Object.keys(oneByOne.playerPerformance).length>=22&&Object.keys(oneByOne.playerPerformance).length<=27,'Titulares e reservas utilizados precisam constar no relatório.');
 assert.ok(oneByOne.postMatchReport?.verdict);
 
 const shout=createMatchEngineV2(config(14));

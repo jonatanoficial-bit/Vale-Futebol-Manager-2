@@ -170,4 +170,8 @@ Não abra `index.html` diretamente; elencos, dados e funcionamento offline depen
 - 833 clubes, 211 seleções e 24.300 registros de jogadores auditados;
 - integridade aprovada com ressalvas documentadas em `QA-WORLD-V16.json`.
 
-Versão 17.0.0 · Ultimate World · 2026-10-05
+## Fase 12
+
+A versão 18.0.0 adiciona formato de copas por país, grupos continentais em ida e volta, chaves por agregado, mercado com empresários e rede regional de scout, pool ampliado de seleção, fases finais internacionais, IA rival com treinadores e tutorial guiado por ações. A página de produto está em `loja.html`; o roteiro de beta, trailer e auditoria pré-venda estão nos arquivos `BETA-MOBILE-FASE12.md`, `TRAILER-ROTEIRO-FASE12.md` e `AUDITORIA-PRE-VENDA-LICENCAS.md`.
+
+Versão 18.0.0 · Ultimate World · 2026-10-05

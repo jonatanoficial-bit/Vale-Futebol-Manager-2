@@ -99,7 +99,7 @@ for ref in re.findall(r'(?:href|src)="\./([^"?#]+)', html):
 require("app-v16.js" in html and "ultimate-v16.css" in html, "Entrypoints V16 ausentes")
 
 sw = (ROOT / "sw.js").read_text(encoding="utf-8")
-require("ultimate-v17.0.0-phase11" in sw, "Cache do service worker não corresponde à Fase 11")
+require("ultimate-v18.0.0-phase12" in sw, "Cache do service worker não corresponde à Fase 12")
 for ref in re.findall(r"'\./([^'?]+)(?:\?[^']*)?'", sw):
     if ref:
         require((ROOT / ref).exists(), f"Referência ausente no service worker: {ref}")
@@ -135,6 +135,8 @@ for marker in ["deriveCompetitionTable", "competitionKind", "nextCareerEvent", "
 competition_world = (ROOT / "js/systems/competitionWorldV2.js").read_text(encoding="utf-8")
 relations = (ROOT / "js/systems/careerRelations.js").read_text(encoding="utf-8")
 tactical_roles = (ROOT / "js/systems/tacticalRoles.js").read_text(encoding="utf-8")
+competition_formats = (ROOT / "js/systems/competitionFormatsV3.js").read_text(encoding="utf-8")
+market_intelligence = (ROOT / "js/systems/marketIntelligenceV3.js").read_text(encoding="utf-8")
 for marker in ["createCompetitionWorld", "buildRoundRobinRounds", "recordManagedCompetitionResult", "simulateCompetitionRound"]:
     require(marker in competition_world, f"Motor de calendário Fase 11 incompleto: {marker}")
 for marker in ["createCompetitionWorld", "recordManagedCompetitionResult", "simulateCompetitionRound"]:
@@ -143,6 +145,11 @@ for marker in ["ensureCareerRelations", "makeCareerPromise", "resolveCareerRelat
     require(marker in relations and marker in app_js, f"Relações de carreira Fase 11 incompletas: {marker}")
 for marker in ["ensureTacticalRoles", "roleEffects", "rolesForPosition"]:
     require(marker in tactical_roles and marker in app_js, f"Funções táticas Fase 11 incompletas: {marker}")
+for marker in ["buildDomesticCupPath", "buildContinentalPath", "tieOutcome", "groupProgress"]:
+    require(marker in competition_formats and marker in app_js, f"Formatos de competição Fase 12 incompletos: {marker}")
+for marker in ["ensureMarketIntelligence", "marketNegotiationProfile", "scoutInvestment", "applyContractMatchBonuses"]:
+    require(marker in market_intelligence and marker in app_js, f"Mercado profissional Fase 12 incompleto: {marker}")
+require((ROOT / "loja.html").is_file(), "Página de loja Fase 12 ausente")
 for facility in ["stadium", "training", "youth", "medical", "scouting", "commercial"]:
     image = ROOT / f"assets/facilities/{facility}.jpg"
     require(image.is_file() and 50_000 < image.stat().st_size < 400_000, f"Imagem otimizada da instalação ausente: {facility}")
