@@ -1,6 +1,7 @@
 import { WORLD_TOURNAMENT_VERSION, buildWorldTournaments, hydrateWorldTournaments, deriveWorldQualifications } from './worldTournamentV3.js';
+import { REGULATION_ENGINE_VERSION, regulationForLeague, fixtureDates, resolveRelegationTable } from './regulationEngineV4.js';
 
-export const COMPETITION_WORLD_VERSION = '3.0.0';
+export const COMPETITION_WORLD_VERSION = '4.0.0';
 
 const clamp = (value, min, max) => Math.min(max, Math.max(min, Number(value) || 0));
 const hash = value => { let state=2166136261; for(const char of String(value)){state^=char.charCodeAt(0);state=Math.imul(state,16777619);} return state>>>0; };
@@ -52,6 +53,17 @@ export function buildSingleRoundRobinRounds(teams = []) {
   return full.slice(0,Math.max(0,(teams.length%2?teams.length:teams.length-1)));
 }
 
+/** 2026 MLS: 15 clubs per conference, 28 intra-conference games and six cross-conference games. */
+export function buildMlsRounds(teams = []) {
+  if(teams.length!==30)return buildSingleRoundRobinRounds(teams);
+  const east=teams.slice(0,15),west=teams.slice(15,30);
+  const local=(offset,list)=>buildRoundRobinRounds(list).map(round=>round.map(([home,away])=>[home+offset,away+offset,null,null]));
+  const eastRounds=local(0,east),westRounds=local(15,west),rounds=[];
+  for(let round=0;round<eastRounds.length;round++)rounds.push([...(eastRounds[round]||[]),...(westRounds[round]||[])]);
+  for(let round=0;round<6;round++)rounds.push(Array.from({length:15},(_,index)=>{const home=round%2===0?index:15+((index+round)%15),away=round%2===0?15+((index+round)%15):index;return [home,away,null,null];}));
+  return rounds;
+}
+
 export function leagueRegulationProfile(rules = {}) {
   const format=String(rules.format||'double-round-robin');
   const profiles={
@@ -81,12 +93,13 @@ export function sortCompetitionTable(table = [], tiebreakers = ['points','wins',
   });
 }
 
-function leagueState(league, clubs, managedClub) {
+function leagueState(league, clubs, managedClub, season=2026) {
   const teams = selectTeams(league, clubs, managedClub);
   const format = league?.rules?.format || 'double-round-robin';
   const single=buildSingleRoundRobinRounds(teams),double=buildRoundRobinRounds(teams);
-  const rounds=format==='conferences-playoffs'?single:format==='triple-round-split'?double.concat(single):double;
-  const profile=leagueRegulationProfile(league.rules||{});
+  const externalProfile=regulationForLeague(league,season);
+  const rounds=format==='conferences-playoffs'?buildMlsRounds(teams):format==='triple-round-split'?double.concat(single):double;
+  const profile={...leagueRegulationProfile(league.rules||{}),...externalProfile,playoffs:externalProfile.system!=='league'};
   return {
     version:COMPETITION_WORLD_VERSION,
     id:league.id,
@@ -95,7 +108,9 @@ function leagueState(league, clubs, managedClub) {
     format,
     rules:{ ...(league.rules || {}), tiebreakers:profile.tiebreakers },
     regulation:profile,
-    calendar:{regularRounds:rounds.length,phases:format==='triple-round-split'?['Fase regular','Turno final/split']:format==='conferences-playoffs'?['Conferências','Playoffs']:format.startsWith('apertura-')?['Apertura','Clausura','Fase final']:['Temporada regular']},
+    calendar:{regularRounds:rounds.length,phases:profile.phases,window:profile.calendar},
+    fixtureDates:fixtureDates(profile,rounds.length),
+    regulationVersion:REGULATION_ENGINE_VERSION,
     teams,
     table:tableFromTeams(teams),
     rounds,
@@ -107,7 +122,7 @@ function leagueState(league, clubs, managedClub) {
 
 export function createCompetitionWorld({ season = 2026, leagues = [], clubs = [], managedClub = null, qualificationSeeds = null } = {}) {
   const states = {};
-  leagues.forEach(league => { states[league.id] = leagueState(league, clubs, managedClub); });
+  leagues.forEach(league => { states[league.id] = leagueState(league, clubs, managedClub, season); });
   const qualifications=qualificationSeeds||deriveWorldQualifications({leagues,clubs,leagueStates:states});
   return { version:COMPETITION_WORLD_VERSION, season:Number(season) || 2026, week:0, leagues:states, tournaments:buildWorldTournaments({season,leagues,clubs,leagueStates:states,qualificationSeeds:qualifications}), transfers:[], champions:[], updatedAt:new Date().toISOString() };
 }
@@ -215,7 +230,8 @@ export function managedLeagueFixtures(world, leagueId, managedId, competitionNam
   return state.rounds.flatMap((matches, round) => matches.map((match, matchIndex) => ({ match, round, matchIndex })).filter(({ match }) => state.teams[match[0]]?.id === managedId || state.teams[match[1]]?.id === managedId).map(({ match, round, matchIndex }) => {
     const home = state.teams[match[0]]?.id === managedId;
     const opponent = state.teams[home ? match[1] : match[0]];
-    return { id:'league-'+(round + 1), worldFixtureRef:leagueId+':'+round+':'+matchIndex, competitionId:leagueId, competitionName, type:'league', round:round + 1, date:new Date(start.getTime() + round * 7 * 86400000).toISOString(), opponent, home, played:match[2] !== null && match[3] !== null, score:match[2] === null ? null : { home:match[2], away:match[3] } };
+    const scheduledDate=state.fixtureDates?.[round];
+    return { id:'league-'+(round + 1), worldFixtureRef:leagueId+':'+round+':'+matchIndex, competitionId:leagueId, competitionName, type:'league', round:round + 1, date:scheduledDate||new Date(start.getTime() + round * 7 * 86400000).toISOString(), opponent, home, played:match[2] !== null && match[3] !== null, score:match[2] === null ? null : { home:match[2], away:match[3] } };
   })).sort((a,b) => a.round - b.round);
 }
 
@@ -250,5 +266,7 @@ export function competitionRuleSummary(state) {
   if (rules.relegation) items.push('Rebaixamento: '+rules.relegation);
   if (state.regulation?.calendar) items.push(state.regulation.calendar);
   if (state.regulation?.playoffs) items.push('Chave e classificação persistidas no calendário mundial');
+  if (state.regulation?.relegationMethod==='promedio') items.push('Rebaixamento por média de pontos por jogo');
+  if (state.calendar?.window?.start) items.push('Janela: '+state.calendar.window.start+' a '+state.calendar.window.end);
   return items;
 }

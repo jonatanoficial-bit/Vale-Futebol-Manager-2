@@ -6,7 +6,7 @@ import { ensureNationalCareer, observeNationalRegion, callUpByPerformance, recor
 const clubs=Array.from({length:16},(_,index)=>({id:`club-${index+1}`,name:`Clube ${index+1}`,leagueId:'liga-a',countryId:'brazil',country:'Brasil',confederation:'CONMEBOL',rating:84-index,badge:''}));
 const league={id:'liga-a',name:'Liga QA',country:'Brasil',rules:{teams:16,format:'conferences-playoffs',relegation:2,continental:{libertadores:[1,8]}}};
 const world=createCompetitionWorld({season:2026,leagues:[league],clubs,managedClub:clubs[0]});
-assert.equal(world.version,'3.0.0');
+assert.equal(world.version,'4.0.0');
 assert.ok(world.tournaments?.domestic?.['cup-brazil'],'Toda nação com clubes precisa receber chave de copa persistida.');
 assert.ok(world.tournaments?.continental?.libertadores,'Vagas continentais precisam gerar torneio de grupos persistido.');
 assert.equal(clubWorldQualification(world.tournaments,'club-1').competition,'libertadores');

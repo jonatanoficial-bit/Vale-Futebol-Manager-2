@@ -10,9 +10,11 @@ import { TACTICAL_ROLES_VERSION, ensureTacticalRoles, roleEffects, roleLabel, ro
 import { COMPETITION_FORMATS_VERSION, buildDomesticCupPath, buildContinentalPath, domesticCupFormat, tieOutcome, groupProgress, describeFixtureFormat } from './systems/competitionFormatsV3.js';
 import { MARKET_INTELLIGENCE_VERSION, ensureMarketIntelligence, hydrateMarketProfile, marketNegotiationProfile, scoutRegions, scoutInvestment, applyContractMatchBonuses, updateContractMood } from './systems/marketIntelligenceV3.js';
 import { NATIONAL_CAREER_VERSION, ensureNationalCareer, nationalSelectionRanking, nationalSelectionBrief, observeNationalRegion, callUpByPerformance, recordNationalPerformance, recordNationalTournament } from './systems/nationalCareerV3.js';
+import { RIVAL_CAREER_VERSION, ensureRivalCareer, simulateRivalMarketWeek, settleRivalSeason, rivalMarketBrief } from './systems/rivalCareerV4.js';
+import { REGULATION_ENGINE_VERSION, regulationForLeague, resolveRelegationTable, regulationCalendarSummary } from './systems/regulationEngineV4.js';
 
-const VERSION = '19.0.0-phase13';
-const SCHEMA = 1900;
+const VERSION = '20.0.0-phase14';
+const SCHEMA = 2000;
 const STORE_KEY = 'vale-futebol-manager-v16';
 const BACKUP_KEY = 'vale-futebol-manager-v16-backup';
 const LEGACY_KEY = 'vale-futebol-manager-v11';
@@ -164,6 +166,7 @@ function migrateCareer(career) {
   career.mediaHistory = Array.isArray(career.mediaHistory) ? career.mediaHistory : [];
   career.worldNews = Array.isArray(career.worldNews) ? career.worldNews : [];
   career.worldState = career.worldState || null;
+  if(session.catalog)ensureRivalCareer(career,session.catalog);
   career.telemetry = Array.isArray(career.telemetry) ? career.telemetry.slice(-120) : [];
   career.individualTraining = career.individualTraining || {};
   career.matchReports = Array.isArray(career.matchReports) ? career.matchReports.slice(-40) : [];
@@ -366,6 +369,7 @@ function syncCareerTableFromWorld(career, leagueId=career.club?.leagueId) {
 
 function ensureWorldState(career) {
   if(!session.catalog)return career.worldState;
+  ensureRivalCareer(career,session.catalog);
   const previousWorldVersion=career.worldState?.version;
   career.worldState=hydrateCompetitionWorld(career.worldState,{season:career.season,leagues:session.catalog.leagues,clubs:session.catalog.clubs,managedClub:career.club});
   const league=career.worldState.leagues?.[career.club?.leagueId];
@@ -429,6 +433,8 @@ function simulateWorldWeek(managed={}) {
     result.results.filter(item=>(item.homeTeam.rating>=82||item.awayTeam.rating>=82)&&item.homeGoals+item.awayGoals>=4).forEach(item=>headlines.push(item.homeTeam.name+' '+item.homeGoals+'–'+item.awayGoals+' '+item.awayTeam.name));
   });
   const tournamentUpdates=simulateWorldTournamentWeek(c.worldState.tournaments,c.season+':'+c.worldState.week);
+  const rivalWindow=simulateRivalMarketWeek(c,session.catalog,c.worldState.week);
+  rivalWindow.moves.slice(0,2).forEach(move=>headlines.push('MERCADO · '+move.to+' contrata '+move.player+' de '+move.from));
   tournamentUpdates.filter(item=>item.champion).forEach(item=>headlines.push('CAMPEÃO · '+item.champion.name+' conquista '+item.id.replaceAll('-',' ')));
   syncCareerTableFromWorld(c);
   c.worldState.updatedAt=new Date().toISOString();c.worldNews.unshift(...headlines.slice(0,4).map(text=>({date:c.date,text,type:'result'})));c.worldNews=c.worldNews.slice(0,60);refreshCareerOpportunities(false);
@@ -657,6 +663,7 @@ async function createCareer() {
     ensureTacticalRoles(session.career);
     ensureCareerRelations(session.career);
     ensureMarketIntelligence(session.career);
+    ensureRivalCareer(session.career,session.catalog);
     syncCareerTableFromWorld(session.career);
     session.career.boardObjectives=createBoardObjectives(session.career);
     persist(); toast('Contrato assinado. O mundo do futebol está ativo.','success'); navigate('dashboard');startOnboarding();
@@ -908,7 +915,7 @@ function renderCompetitions() {
 }
 
 function rulesText(league) {
-  const rules=league.rules||{}, result=[];
+  const rules=league.rules||{},profile=regulationForLeague(league,session.career?.season),calendar=regulationCalendarSummary(profile),result=[];
   const regulation=league?.rules?.format||'double-round-robin';
   if(regulation==='double-round-robin')result.push('Turno e returno · rodadas persistidas');
   else result.push(regulation.replaceAll('-',' ')+' · calendário e classificação persistidos');
@@ -918,6 +925,10 @@ function rulesText(league) {
   if(rules.promotionPlayoff)result.push(rules.promotionPlayoff[0]+'º–'+rules.promotionPlayoff[1]+'º: playoff de acesso');
   if(rules.continental)Object.entries(rules.continental).forEach(([id,range])=>result.push(range[0]+'º–'+range[1]+'º: '+id.replaceAll('-',' ')));
   if(rules.relegation)result.push('Últimos '+rules.relegation+': rebaixamento');
+  if(profile.relegationMethod==='promedio')result.push('Descenso: média de pontos por jogo');
+  if(profile.playIn)result.push('Play-in: '+profile.playIn[0]+'º ao '+profile.playIn[1]+'º');
+  if(calendar.start)result.push('Calendário: '+calendar.start+' → '+calendar.end);
+  if(calendar.breaks?.length)result.push('Pausa oficial integrada ao calendário');
   if(rules.verification)result.push('Regra: '+rules.verification.replaceAll('-',' '));
   return result;
 }
@@ -974,8 +985,10 @@ function renderMarket() {
   const marketPlayers=session.market.filter(p=>(session.marketPosition==='TODOS'||p.pos===session.marketPosition)&&(session.marketBudget!=='affordable'||marketValue(p,c.date)*1.05<=c.budget)&&(session.marketRegion==='all'||p.marketRegion===session.marketRegion));
   const filters='<div class="market-filters"><label>Posição<select data-action="market-position">'+options(['TODOS',...new Set(session.market.map(p=>p.pos))],session.marketPosition)+'</select></label><label>Região<select data-action="market-region"><option value="all">Rede completa</option>'+scoutRegions().map(region=>'<option value="'+region.id+'" '+(session.marketRegion===region.id?'selected':'')+'>'+region.label+' · '+network.regions[region.id]+'%</option>').join('')+'</select></label><label>Investimento<select data-action="market-budget"><option value="all">Todos os atletas</option><option value="affordable" '+(session.marketBudget==='affordable'?'selected':'')+'>Valor dentro do caixa</option></select></label></div>';
   const scouts='<section class="market-scout-network panel"><header><div><p class="eyebrow">REDE DE OBSERVAÇÃO</p><h2>Conhecimento por região</h2></div><span class="tag">Foco: '+escapeHtml(scoutRegions().find(r=>r.id===network.focus)?.label||'América do Sul')+'</span></header><div>'+scoutRegions().map(region=>'<button class="scout-region '+(network.focus===region.id?'focused':'')+'" data-action="invest-scout" data-region="'+region.id+'"><strong>'+escapeHtml(region.label)+'</strong><span><i style="width:'+network.regions[region.id]+'%"></i></span><em>'+network.regions[region.id]+'%</em></button>').join('')+'</div><small>Toque numa região para investir R$ 650 mil e ampliar relatórios, conhecimento e oportunidades.</small></section>';
+  const rival=ensureRivalCareer(c,session.catalog),brief=rivalMarketBrief(c),rivalMoves=brief.moves.map(move=>'<li><strong>'+escapeHtml(move.to)+'</strong><span>'+escapeHtml(move.player)+' · '+money(move.fee)+'</span><small>de '+escapeHtml(move.from)+' · '+escapeHtml(move.reason)+'</small></li>').join('')||'<li><span>Os rivais preparam seus primeiros movimentos de janela.</span></li>',spenders=brief.biggestSpenders.map(club=>'<span>'+escapeHtml(club.name)+' · '+money(club.budget)+'</span>').join('');
+  const rivalPanel='<section class="panel rival-market-panel"><header><div><p class="eyebrow">MERCADO DOS RIVAIS · '+RIVAL_CAREER_VERSION+'</p><h2>Clubes também planejam a próxima janela</h2><p>'+brief.clubs+' clubes têm orçamento, carências de elenco, estilo e ambição persistidos entre temporadas.</p></div><span class="tag">'+brief.moves.length+' movimentos recentes</span></header><div class="rival-market-grid"><article><h3>Últimas negociações</h3><ul>'+rivalMoves+'</ul></article><article><h3>Caixa para investir</h3><div class="rival-spenders">'+spenders+'</div><small>O desempenho da temporada recalcula recursos, força e necessidade de cada adversário.</small></article></div></section>';
   const cards=marketPlayers.map(p=>'<article class="market-card"><div class="market-player">'+playerPortrait(p,'medium')+'<div><strong>'+escapeHtml(p.name)+'</strong><small>'+escapeHtml(p.pos)+' · '+p.age+' anos · '+escapeHtml(p.sourceClub||'')+'</small><em>'+escapeHtml(p.personality)+' · '+escapeHtml(scoutRegions().find(r=>r.id===p.marketRegion)?.label||p.marketRegion)+'</em></div></div><div class="market-value"><span>GER <strong>'+p.overall+'</strong></span><span>'+money(marketValue(p,c.date))+'</span><small>Scout '+p.knowledge+'% · interesse '+p.marketInterest+'%</small></div><div class="market-actions"><button class="btn btn-small" data-action="player-report" data-player="'+escapeHtml(p.id)+'">Relatório</button><button class="btn btn-small" data-action="loan-player" data-player="'+escapeHtml(p.id)+'">Empréstimo</button><button class="btn btn-primary btn-small" data-action="buy-player" data-player="'+escapeHtml(p.id)+'">Negociar</button></div></article>').join('');
-  return sectionHead('Mercado internacional','Empresários, cláusulas, bônus, interesse e uma rede de scouts regional orientam cada contratação.','<span class="tag">'+money(c.budget)+'</span>')+'<div class="market-budget-strip"><span>Caixa <strong>'+money(c.budget)+'</strong></span><span>Folha <strong>'+money(payroll)+' / '+money(c.transferPolicy.wageBudget)+'</strong></span><span>Parcelas futuras <strong>'+money(future)+'</strong></span><span>Vagas <strong>'+c.roster.length+' / '+c.transferPolicy.maxSquad+'</strong></span></div>'+scouts+filters+'<div class="market-grid">'+(session.marketLoading?'<div class="panel">Carregando rede mundial…</div>':cards||'<div class="panel">Nenhuma oportunidade disponível.</div>')+'</div>';
+  return sectionHead('Mercado internacional','Empresários, cláusulas, bônus, interesse e uma rede de scouts regional orientam cada contratação.','<span class="tag">'+money(c.budget)+'</span>')+'<div class="market-budget-strip"><span>Caixa <strong>'+money(c.budget)+'</strong></span><span>Folha <strong>'+money(payroll)+' / '+money(c.transferPolicy.wageBudget)+'</strong></span><span>Parcelas futuras <strong>'+money(future)+'</strong></span><span>Vagas <strong>'+c.roster.length+' / '+c.transferPolicy.maxSquad+'</strong></span></div>'+rivalPanel+scouts+filters+'<div class="market-grid">'+(session.marketLoading?'<div class="panel">Carregando rede mundial…</div>':cards||'<div class="panel">Nenhuma oportunidade disponível.</div>')+'</div>';
 }
 
 function renderFacilitiesCampus(c){
@@ -1453,7 +1466,9 @@ function advanceSeason() {
   const c=session.career,league=findLeague(c.club.leagueId),leagueGames=c.fixtures.filter(f=>f.type==='league');
   if(!leagueGames.length||!leagueGames.every(f=>f.played)){toast('Conclua os jogos da liga antes de encerrar a temporada.','error');return;}
   const table=sortedTable(),rank=table.findIndex(row=>row.team.id===c.club.id)+1,rules=league.rules||{};
-  const relegated=Boolean(rules.relegation&&rank>table.length-rules.relegation);
+  const regulation=regulationForLeague(league,c.season),worldLeague=c.worldState?.leagues?.[league.id];
+  const relegatedIds=resolveRelegationTable(worldLeague?.table||table.map(row=>({...row,id:row.team.id,rating:row.team.rating})),regulation);
+  const relegated=relegatedIds.includes(c.club.id);
   const promoted=league.division>1&&resolvePromotion(rules,rank,table,c.club);
   const champion=rank===1;
   const continentalId=competitionForRank(rules,rank);
@@ -1482,6 +1497,7 @@ function advanceSeason() {
   advanceRosterDays(c.roster,35,{medicalLevel:c.facilities.medical,fitnessCoach:c.staff.fitnessCoach});repairCareerLineup(c);
   const status=promoted?'promoted':relegated?'relegated':'stayed',linked=linkedLeagueFor(league,status);
   const qualificationSeeds=deriveWorldQualifications({leagues:session.catalog.leagues,clubs:session.catalog.clubs,leagueStates:c.worldState?.leagues||{}});
+  const rivalSettlement=settleRivalSeason(c,c.worldState,session.catalog);
   if(linked){c.club.leagueId=linked.id;c.club.leagueName=linked.name;c.club.division=linked.division;}
   c.season+=1;c.week=1;c.stats={played:0,wins:0,draws:0,losses:0,gf:0,ga:0,points:0};c.lastTrainingWeek=0;c.worldState=createWorldState(c.season,{managedClub:c.club,qualificationSeeds});if(c.sponsor){c.sponsor.years--;if(c.sponsor.years<=0){c.sponsor=null;c.sponsorOffers=generateSponsorOffers(c.club,c.facilities);}else{c.budget+=c.sponsor.annual;c.ledger.push({date:new Date().toISOString(),label:'Patrocínio anual · '+c.sponsor.name,amount:c.sponsor.annual,type:'income'});}}
   const newLeague=findLeague(c.club.leagueId),participants=selectLeagueParticipants(c.club);
@@ -1491,7 +1507,7 @@ function advanceSeason() {
   if(continentalChampion)fixtures.push(...buildWorldFixtures(c.club,startDate));
   c.participants=participants;c.fixtures=fixtures.sort((a,b)=>new Date(a.date)-new Date(b.date));syncCareerTableFromWorld(c);c.date=startDate.toISOString();processCareerDeadlines(c);
   const managerCareer=ensureManagerCareer(c);if(managerCareer.contractEndSeason<=c.season&&c.board>=35){managerCareer.contractEndSeason=c.season+2;managerCareer.history.push({type:'renewed',date:c.date,season:c.season,clubName:c.club.name,label:'Contrato renovado pelo '+c.club.name});}refreshCareerOpportunities(true);
-  c.messages.push({id:'season-'+Date.now(),from:'Diretoria e federação',subject:'Temporada '+c.season+' iniciada',body:'Posição anterior: '+rank+'º. '+(linked?'O clube agora disputará '+newLeague.name+'. ':'')+(continentalId?'Vaga continental confirmada: '+continentalId+'. ':'')+'Premiação: '+money(prize)+'. Evolução anual: '+aging.improved.length+' jogador(es) subiram de GER e '+aging.declined.length+' tiveram declínio.',date:new Date().toISOString(),read:false,priority:'high'});
+  c.messages.push({id:'season-'+Date.now(),from:'Diretoria e federação',subject:'Temporada '+c.season+' iniciada',body:'Posição anterior: '+rank+'º. '+(linked?'O clube agora disputará '+newLeague.name+'. ':'')+(continentalId?'Vaga continental confirmada: '+continentalId+'. ':'')+'Premiação: '+money(prize)+'. Evolução anual: '+aging.improved.length+' jogador(es) subiram de GER e '+aging.declined.length+' tiveram declínio. '+rivalSettlement.summaries.length+' clubes rivais atualizaram orçamento, elenco e ambição.',date:new Date().toISOString(),read:false,priority:'high'});
   persist();navigate('dashboard');if(newTitles.length)showChampionCelebration(newTitles);else toast('Nova temporada criada com acesso, rebaixamento e vagas aplicados.','success');
 }
 

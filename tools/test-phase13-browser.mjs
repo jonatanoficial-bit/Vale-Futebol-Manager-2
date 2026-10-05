@@ -13,7 +13,7 @@ const read=()=>page.evaluate(()=>JSON.parse(localStorage.getItem('vale-futebol-m
 try {
   await page.goto(process.env.VFM_TEST_URL||'http://127.0.0.1:8765/',{waitUntil:'domcontentloaded'});
   await action('new-career').click();await action('slot-new').click();await action('select-world-club').first().click();await action('club-next').click();await page.locator('#manager-name').fill('QA Fase 13');await action('start-career').click();await action('skip-onboarding').waitFor({state:'visible'});await action('skip-onboarding').click();
-  let career=await read();assert.equal(career.schema,1900);assert.equal(career.worldState.version,'3.0.0');assert.ok(Object.keys(career.worldState.tournaments.domestic).length>0);assert.ok(Object.keys(career.worldState.tournaments.continental).length>0);
+  let career=await read();assert.equal(career.schema,2000);assert.equal(career.worldState.version,'4.0.0');assert.ok(Object.keys(career.worldState.tournaments.domestic).length>0);assert.ok(Object.keys(career.worldState.tournaments.continental).length>0);
   await nav('more');await nav('competitions');await page.locator('.world-tournaments').waitFor();assert.ok(await page.locator('.world-tournament-card').count()>3);
   await page.evaluate(async()=>{
     const store=JSON.parse(localStorage.getItem('vale-futebol-manager-v16')),career=store.slots[0],catalog=await fetch('./data/world-catalog-2026.json').then(response=>response.json());

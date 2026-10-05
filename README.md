@@ -1,4 +1,13 @@
-# Vale Futebol Manager — Ultimate World 19.0
+# Vale Futebol Manager — Ultimate World 20.0
+
+## Fase 14 — regulamentos e mercado rival
+
+- cada liga recebe perfil executável de regulamento, desempates, acesso, rebaixamento, playoff e janela anual de calendário;
+- a MLS de 2026 usa 34 partidas por clube, duas conferências, pausa entre 25 de maio e 16 de julho pela Copa do Mundo e calendário de playoffs registrado;
+- Liga MX, Argentina, Colômbia e K League recebem estruturas específicas de Apertura/Clausura, play-in, grupos, quadrangulares, split e descenso por promedio quando aplicável;
+- as datas das partidas de liga vêm da janela persistida no save, em vez de uma sequência genérica fixa;
+- rivais passaram a ter caixa, profundidade, necessidades de elenco, estilo e movimentos de mercado persistentes;
+- desempenho anual de todos os clubes recalcula orçamento, força e ambição para a temporada seguinte.
 
 ## Fase 13 — mundo persistente e seleção por desempenho
 

@@ -99,7 +99,7 @@ for ref in re.findall(r'(?:href|src)="\./([^"?#]+)', html):
 require("app-v16.js" in html and "ultimate-v16.css" in html, "Entrypoints V16 ausentes")
 
 sw = (ROOT / "sw.js").read_text(encoding="utf-8")
-require("ultimate-v19.0.0-phase13" in sw, "Cache do service worker não corresponde à Fase 13")
+require("ultimate-v20.0.0-phase14" in sw, "Cache do service worker não corresponde à Fase 14")
 for ref in re.findall(r"'\./([^'?]+)(?:\?[^']*)?'", sw):
     if ref:
         require((ROOT / ref).exists(), f"Referência ausente no service worker: {ref}")
@@ -139,6 +139,8 @@ competition_formats = (ROOT / "js/systems/competitionFormatsV3.js").read_text(en
 market_intelligence = (ROOT / "js/systems/marketIntelligenceV3.js").read_text(encoding="utf-8")
 world_tournaments = (ROOT / "js/systems/worldTournamentV3.js").read_text(encoding="utf-8")
 national_career = (ROOT / "js/systems/nationalCareerV3.js").read_text(encoding="utf-8")
+regulations = (ROOT / "js/systems/regulationEngineV4.js").read_text(encoding="utf-8")
+rival_career = (ROOT / "js/systems/rivalCareerV4.js").read_text(encoding="utf-8")
 for marker in ["createCompetitionWorld", "buildRoundRobinRounds", "recordManagedCompetitionResult", "simulateCompetitionRound"]:
     require(marker in competition_world, f"Motor de calendário Fase 11 incompleto: {marker}")
 for marker in ["createCompetitionWorld", "recordManagedCompetitionResult", "simulateCompetitionRound"]:
@@ -157,6 +159,10 @@ for marker in ["simulateWorldTournamentWeek", "deriveWorldQualifications", "club
     require(marker in app_js, f"Integração das chaves mundiais Fase 13 incompleta: {marker}")
 for marker in ["ensureNationalCareer", "nationalSelectionRanking", "observeNationalRegion", "recordNationalTournament"]:
     require(marker in national_career and marker in app_js, f"Seleções por desempenho Fase 13 incompletas: {marker}")
+for marker in ["regulationForLeague", "fixtureDates", "resolveRelegationTable", "REGULATION_ENGINE_VERSION"]:
+    require(marker in regulations, f"Regulamentos Fase 14 incompletos: {marker}")
+for marker in ["ensureRivalCareer", "simulateRivalMarketWeek", "settleRivalSeason", "RIVAL_CAREER_VERSION"]:
+    require(marker in rival_career and marker in app_js, f"Mercado rival Fase 14 incompleto: {marker}")
 require((ROOT / "loja.html").is_file(), "Página de loja Fase 12 ausente")
 for facility in ["stadium", "training", "youth", "medical", "scouting", "commercial"]:
     image = ROOT / f"assets/facilities/{facility}.jpg"

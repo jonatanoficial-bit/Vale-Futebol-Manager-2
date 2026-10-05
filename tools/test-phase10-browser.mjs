@@ -50,6 +50,6 @@ try{
   const saved=await read();
   await page.evaluate(()=>{const store=JSON.parse(localStorage.getItem('vale-futebol-manager-v16'));store.slots[0].schema=1604;store.slots[0].version='16.9.0-phase9';delete store.slots[0].trophies;localStorage.setItem('vale-futebol-manager-v16',JSON.stringify(store));});
   await page.reload({waitUntil:'domcontentloaded'});await action('load-career').click();await action('slot-load').click();const migrated=await read();
-  assert.equal(migrated.schema,1900);assert.deepEqual(migrated.trophies,[]);assert.equal(migrated.national.team.id,saved.national.team.id);assert.deepEqual(errors,[]);
+  assert.equal(migrated.schema,2000);assert.deepEqual(migrated.trophies,[]);assert.equal(migrated.national.team.id,saved.national.team.id);assert.deepEqual(errors,[]);
   console.log(JSON.stringify({status:'ok',version:migrated.version,checks:['unified next match','national match routing','national calendar and tables','calendar synchronization','priority inbox','trophy room','mobile portrait and landscape','schema migration'],errors}));
 }finally{await browser.close();}
