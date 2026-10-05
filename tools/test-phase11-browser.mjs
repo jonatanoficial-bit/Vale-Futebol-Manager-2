@@ -16,8 +16,8 @@ try {
   await page.locator('#manager-name').fill('QA Fase 11'); await action('start-career').click();
   await action('skip-onboarding').waitFor({state:'visible'}); await action('skip-onboarding').click();
   let career=await read();
-  assert.equal(career.schema,1800);
-  assert.equal(career.worldState.version,'2.0.0');
+  assert.equal(career.schema,1900);
+  assert.equal(career.worldState.version,'3.0.0');
   const league=career.worldState.leagues[career.club.leagueId];
   assert.ok(league.rounds.length>0&&league.rounds.every(round=>Array.isArray(round)),'A liga deve conter rodadas completas persistidas.');
 

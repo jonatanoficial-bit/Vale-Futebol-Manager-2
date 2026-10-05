@@ -1,7 +1,7 @@
 Vale Futebol Manager — Ultimate World
-Version: 16.10.0-phase10
-Build date: 2026-10-03
-Schema: 1605
+Version: 19.0.0-phase13
+Build date: 2026-10-05
+Schema: 1900
 
 Catalog:
 - 833 simulation clubs / 625 playable clubs
@@ -18,6 +18,8 @@ Application: js/app-v16.js
 Career performance: js/systems/careerPerformanceV3.js
 Manager career: js/systems/managerCareer.js
 Competition career: js/systems/competitionCareer.js
+World tournaments: js/systems/worldTournamentV3.js
+National career: js/systems/nationalCareerV3.js
 Premium styles: css/ultimate-v16.css
 World catalog: data/world-catalog-2026.json
 Rules catalog: data/rules-2026.json

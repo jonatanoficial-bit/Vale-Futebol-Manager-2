@@ -15,7 +15,7 @@ try {
   await action('new-career').click();await action('slot-new').click();await action('select-world-club').first().click();await action('club-next').click();await page.locator('#manager-name').fill('QA Fase 12');await action('start-career').click();
   await action('onboarding-next').waitFor({state:'visible'});assert.equal(await action('onboarding-next').isDisabled(),true);
   await nav('squad');assert.equal(await action('onboarding-next').isDisabled(),false);await action('skip-onboarding').click();
-  let career=await read();assert.equal(career.schema,1800);assert.ok(career.scoutingNetwork?.regions?.europe>=48);
+  let career=await read();assert.equal(career.schema,1900);assert.ok(career.scoutingNetwork?.regions?.europe>=48);
   const cup=career.fixtures.filter(item=>item.type==='cup'),continental=career.fixtures.filter(item=>item.type==='continental');
   assert.ok(cup.some(item=>item.twoLegged),'A copa precisa manter chaves de ida e volta quando a regra exige.');
   if(continental.length)assert.equal(continental.filter(item=>item.phase==='group').length,6,'O clube classificado precisa disputar seis jogos na fase de grupos continental.');

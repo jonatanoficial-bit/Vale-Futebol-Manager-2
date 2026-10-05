@@ -4,13 +4,15 @@ import { CAREER_PERFORMANCE_VERSION, hydratePlayerPerformance, effectiveOverall,
 import { MANAGER_CAREER_VERSION, ensureManagerCareer, careerSecurity, reviewManagerMatch, createClubJobOffers, createNationalJobOffers, careerOfferDue, closeCareerOfferCycle, recordClubAppointment, recordNationalAppointment } from './systems/managerCareer.js';
 import { COMPETITION_CAREER_VERSION, deriveCompetitionTable, competitionKind, nextCareerEvent, managerCareerScore, seasonTrophies } from './systems/competitionCareer.js';
 import { COMPETITION_WORLD_VERSION, createCompetitionWorld, hydrateCompetitionWorld, managedLeagueFixtures, recordManagedCompetitionResult, simulateCompetitionRound, sortCompetitionTable } from './systems/competitionWorldV2.js';
+import { WORLD_TOURNAMENT_VERSION, simulateWorldTournamentWeek, worldTournamentSummary, clubWorldQualification, deriveWorldQualifications } from './systems/worldTournamentV3.js';
 import { CAREER_RELATIONS_VERSION, ensureCareerRelations, makeCareerPromise, recordPressDecision, relationsSnapshot, resolveCareerRelationsAfterMatch } from './systems/careerRelations.js';
 import { TACTICAL_ROLES_VERSION, ensureTacticalRoles, roleEffects, roleLabel, rolesForPosition } from './systems/tacticalRoles.js';
 import { COMPETITION_FORMATS_VERSION, buildDomesticCupPath, buildContinentalPath, domesticCupFormat, tieOutcome, groupProgress, describeFixtureFormat } from './systems/competitionFormatsV3.js';
 import { MARKET_INTELLIGENCE_VERSION, ensureMarketIntelligence, hydrateMarketProfile, marketNegotiationProfile, scoutRegions, scoutInvestment, applyContractMatchBonuses, updateContractMood } from './systems/marketIntelligenceV3.js';
+import { NATIONAL_CAREER_VERSION, ensureNationalCareer, nationalSelectionRanking, nationalSelectionBrief, observeNationalRegion, callUpByPerformance, recordNationalPerformance, recordNationalTournament } from './systems/nationalCareerV3.js';
 
-const VERSION = '18.0.0-phase12';
-const SCHEMA = 1800;
+const VERSION = '19.0.0-phase13';
+const SCHEMA = 1900;
 const STORE_KEY = 'vale-futebol-manager-v16';
 const BACKUP_KEY = 'vale-futebol-manager-v16-backup';
 const LEGACY_KEY = 'vale-futebol-manager-v11';
@@ -181,6 +183,7 @@ function migrateCareer(career) {
     career.national.roster=career.national.roster.map(normalizePlayer);
     career.national.fixtures=Array.isArray(career.national.fixtures)?career.national.fixtures:[];
     ensureNationalCallup(career.national);
+    ensureNationalCareer(career.national,career);
   }
   const validLineup=new Set(career.roster.filter(isPlayerAvailable).map(player=>player.id));
   career.lineupIds=Array.isArray(career.lineupIds)?career.lineupIds.filter((id,index,list)=>validLineup.has(id)&&list.indexOf(id)===index).slice(0,11):[];
@@ -352,7 +355,7 @@ function findClub(id, leagueId) { return session.catalog.clubs.find(club => club
 function findLeague(id) { return session.catalog.leagues.find(league => league.id === id); }
 
 function createWorldState(season, options={}) {
-  return createCompetitionWorld({season,leagues:session.catalog?.leagues||[],clubs:session.catalog?.clubs||[],managedClub:options.managedClub||session.career?.club||null});
+  return createCompetitionWorld({season,leagues:session.catalog?.leagues||[],clubs:session.catalog?.clubs||[],managedClub:options.managedClub||session.career?.club||null,qualificationSeeds:options.qualificationSeeds||null});
 }
 
 function syncCareerTableFromWorld(career, leagueId=career.club?.leagueId) {
@@ -425,6 +428,8 @@ function simulateWorldWeek(managed={}) {
     const result=simulateCompetitionRound(c.worldState,leagueId,requested,c.season+':'+c.worldState.week);
     result.results.filter(item=>(item.homeTeam.rating>=82||item.awayTeam.rating>=82)&&item.homeGoals+item.awayGoals>=4).forEach(item=>headlines.push(item.homeTeam.name+' '+item.homeGoals+'–'+item.awayGoals+' '+item.awayTeam.name));
   });
+  const tournamentUpdates=simulateWorldTournamentWeek(c.worldState.tournaments,c.season+':'+c.worldState.week);
+  tournamentUpdates.filter(item=>item.champion).forEach(item=>headlines.push('CAMPEÃO · '+item.champion.name+' conquista '+item.id.replaceAll('-',' ')));
   syncCareerTableFromWorld(c);
   c.worldState.updatedAt=new Date().toISOString();c.worldNews.unshift(...headlines.slice(0,4).map(text=>({date:c.date,text,type:'result'})));c.worldNews=c.worldNews.slice(0,60);refreshCareerOpportunities(false);
 }
@@ -573,15 +578,16 @@ function resolveCupDraw(fixture) {
   c.messages.push({id:'draw-'+Date.now(),from:'Federação',subject:'Sorteio: '+fixture.stage,body:'O adversário definido para '+fixture.stage+' é '+fixture.opponent.name+'. A agenda foi atualizada automaticamente.',date:new Date().toISOString(),read:false,priority:'high'});
 }
 
-function buildContinentalFixtures(club, startDate, participants, forcedCompetitionId=null) {
+function buildContinentalFixtures(club, startDate, participants, forcedCompetitionId=null, worldState=null) {
   const leaguePool = session.catalog.clubs.filter(item=>item.confederation===club.confederation&&item.leagueId!==club.leagueId);
   const rated = leaguePool.sort((a,b)=>b.rating-a.rating);
   const league=findLeague(club.leagueId),ranking=[...participants].sort((a,b)=>b.rating-a.rating),seed=ranking.findIndex(team=>team.id===club.id)+1;
   const allocations=league?.rules?.continental||{};
-  const id=forcedCompetitionId||Object.entries(allocations).find(([,range])=>seed>=Number(range[0])&&seed<=Number(range[1]))?.[0];
+  const persisted=clubWorldQualification(worldState?.tournaments,club.id);
+  const id=forcedCompetitionId||persisted?.competition||Object.entries(allocations).find(([,range])=>seed>=Number(range[0])&&seed<=Number(range[1]))?.[0];
   if(!id)return [];
   const names = {'champions-league':'UEFA Champions League','europa-league':'UEFA Europa League','libertadores':'CONMEBOL Libertadores','sulamericana':'CONMEBOL Sul-Americana','concacaf-champions-cup':'CONCACAF Champions Cup','afc-champions-league':'AFC Champions League Elite','caf-champions-league':'CAF Champions League','ofc-champions-league':'OFC Champions League','continental-cup':'Copa continental'};
-  return buildContinentalPath({club,startDate,candidates:rated,competitionId:id,competitionName:names[id]||'Copa continental'}).fixtures.map(item=>({...item,qualificationSeed:seed}));
+  return buildContinentalPath({club,startDate,candidates:rated,competitionId:id,competitionName:names[id]||'Copa continental'}).fixtures.map(item=>({...item,qualificationSeed:persisted?.rank||seed,qualificationSource:persisted?'vaga mundial persistida':'ranking da liga'}));
 }
 
 function buildWorldFixtures(club, startDate) {
@@ -634,7 +640,7 @@ async function createCareer() {
     const participants = selectLeagueParticipants(session.selectedClub);
     const startDate = session.selectedClub.continent==='europe' ? new Date(2026,7,8,15) : session.selectedClub.countryId==='brazil' ? new Date(2026,3,11,16) : new Date(2026,1,7,16);
     const worldState=createWorldState(2026,{managedClub:session.selectedClub});
-    const fixtures = [...buildLeagueFixtures(session.selectedClub,participants,startDate,worldState),...buildCupFixtures(session.selectedClub,participants,startDate),...buildContinentalFixtures(session.selectedClub,startDate,participants)].sort((a,b)=>new Date(a.date)-new Date(b.date));
+    const fixtures = [...buildLeagueFixtures(session.selectedClub,participants,startDate,worldState),...buildCupFixtures(session.selectedClub,participants,startDate),...buildContinentalFixtures(session.selectedClub,startDate,participants,null,worldState)].sort((a,b)=>new Date(a.date)-new Date(b.date));
     const reputation = clamp(Math.round(session.selectedClub.rating*.78),45,72);
     const budget = Math.round((35 + (session.selectedClub.rating-65)*3.2)*1000000);
     session.career = {
@@ -883,6 +889,13 @@ function renderContinentalTables(c) {
   return ids.map(id=>{const fixtures=c.fixtures.filter(f=>f.competitionId===id&&(f.phase==='league'||f.phase==='group')&&!f.cancelled),name=fixtures[0]?.competitionName||'Competição continental',table=deriveCompetitionTable(c.club,fixtures,c.season+':'+id),rule=fixtures[0]?.formatRule||'Fase de grupos';return standingsTableMarkup(table,name,c.club.id,'GRUPO '+(fixtures[0]?.group||'')+' · '+rule);}).join('');
 }
 
+function renderWorldTournaments(c) {
+  const all=worldTournamentSummary(c.worldState?.tournaments),continental=all.filter(item=>item.kind==='continental').slice(0,8),cups=all.filter(item=>item.kind==='domestic-cup').slice(0,8);
+  const cards=list=>list.map(item=>'<article class="world-tournament-card"><div><span>'+escapeHtml(item.kind==='continental'?'CONTINENTAL':'COPA NACIONAL')+'</span><strong>'+escapeHtml(item.name)+'</strong><small>'+escapeHtml(item.stage)+' · '+item.participants+' clubes</small></div><b>'+escapeHtml(item.champion?.name||'Em disputa')+'</b></article>').join('');
+  const qualification=clubWorldQualification(c.worldState?.tournaments,c.club.id);
+  return '<section class="panel world-tournaments"><header><div><p class="eyebrow">MUNDO PERSISTENTE · '+WORLD_TOURNAMENT_VERSION+'</p><h2>Chaves, sorteios e vagas continentais</h2><p>Cada torneio evolui para todos os clubes a cada semana. Os resultados e campeões ficam gravados no save.</p></div><span class="tag">'+(qualification?escapeHtml(qualification.competition.replaceAll('-',' ')):'vaga em disputa')+'</span></header><div class="world-tournament-grid"><div><h3>Competições continentais</h3>'+cards(continental)+'</div><div><h3>Copas nacionais</h3>'+cards(cups)+'</div></div></section>';
+}
+
 function renderCompetitions() {
   const c=session.career, league=findLeague(c.club.leagueId), table=sortedTable();
   const compIds=[...new Set(c.fixtures.map(f=>f.competitionId))];
@@ -891,12 +904,14 @@ function renderCompetitions() {
   const timeline=c.fixtures.filter(f=>f.type==='cup'||f.phase==='knockout').map(f=>'<div class="stage-node '+(f.played?'done':f.cancelled?'cancelled':f.locked?'locked':'active')+'"><span>'+escapeHtml(f.stage||'Fase')+'</span><strong>'+(f.cancelled?'Eliminado':f.played?(f.score.home+'–'+f.score.away):escapeHtml(f.opponent.name))+'</strong><small>'+escapeHtml(describeFixtureFormat(f))+' · '+formatDate(f.date)+'</small></div>').join('');
   const leaders=Object.entries(c.worldState?.leagues||{}).map(([id,state])=>{const leader=state.table.slice().sort((a,b)=>b.points-a.points||b.gd-a.gd||b.rating-a.rating)[0];return {league:findLeague(id),leader};}).filter(item=>item.league&&item.leader&&item.league.id!==league.id).sort((a,b)=>b.leader.rating-a.leader.rating).slice(0,10).map(item=>'<div class="world-leader"><span>'+escapeHtml(item.league.name)+'</span><strong>'+escapeHtml(item.leader.name)+'</strong><em>'+item.leader.points+' pts · '+item.leader.played+' J</em></div>').join('');
   const cupRule=domesticCupFormat(c.club.countryId).label;
-  return sectionHead('Competições','Liga, grupos, mata-mata, sorteios e cinquenta campeonatos simulados em paralelo.')+'<div class="competition-grid">'+compCards+'</div><div class="rules-strip">'+rulesText(league).map(item=>'<span>'+escapeHtml(item)+'</span>').join('')+'<span>'+escapeHtml(cupRule)+'</span></div><div class="competition-hub"><div class="table-wrap"><table class="data-table standings-table"><thead><tr><th>#</th><th>'+escapeHtml(league.name)+'</th><th>J</th><th>V</th><th>E</th><th>D</th><th>GP</th><th>GC</th><th>SG</th><th>PTS</th></tr></thead><tbody>'+rows+'</tbody></table></div><aside class="panel world-leaders"><h2>Líderes pelo mundo</h2>'+leaders+'</aside></div>'+renderContinentalTables(c)+(timeline?'<section class="panel competition-timeline"><h2>Caminho nas copas</h2><div>'+timeline+'</div></section>':'');
+  return sectionHead('Competições','Liga, grupos, mata-mata, sorteios e chaves persistidas para todos os clubes.')+'<div class="competition-grid">'+compCards+'</div><div class="rules-strip">'+rulesText(league).map(item=>'<span>'+escapeHtml(item)+'</span>').join('')+'<span>'+escapeHtml(cupRule)+'</span></div>'+renderWorldTournaments(c)+'<div class="competition-hub"><div class="table-wrap"><table class="data-table standings-table"><thead><tr><th>#</th><th>'+escapeHtml(league.name)+'</th><th>J</th><th>V</th><th>E</th><th>D</th><th>GP</th><th>GC</th><th>SG</th><th>PTS</th></tr></thead><tbody>'+rows+'</tbody></table></div><aside class="panel world-leaders"><h2>Líderes pelo mundo</h2>'+leaders+'</aside></div>'+renderContinentalTables(c)+(timeline?'<section class="panel competition-timeline"><h2>Caminho nas copas</h2><div>'+timeline+'</div></section>':'');
 }
 
 function rulesText(league) {
   const rules=league.rules||{}, result=[];
-  if(rules.format==='double-round-robin')result.push('Turno e returno · rodadas persistidas');
+  const regulation=league?.rules?.format||'double-round-robin';
+  if(regulation==='double-round-robin')result.push('Turno e returno · rodadas persistidas');
+  else result.push(regulation.replaceAll('-',' ')+' · calendário e classificação persistidos');
   result.push('Desempate: pontos, vitórias, saldo e gols pró');
   if(rules.promotionDirect)result.push('1º–'+rules.promotionDirect+'º: acesso direto');
   else if(rules.promotion)result.push('1º–'+rules.promotion+'º: acesso');
@@ -1051,6 +1066,7 @@ function ensureNationalCalendar(national) {
 
 function ensureNationalCallup(national) {
   if(!national?.roster)return national;
+  ensureNationalCareer(national,session.career||{});
   national.selectionPoolIds=Array.isArray(national.selectionPoolIds)&&national.selectionPoolIds.length?national.selectionPoolIds:[...new Set(national.roster.map(player=>player.id))];
   const valid=new Set(national.selectionPoolIds);
   const selected=Array.isArray(national.calledUpIds)?national.calledUpIds.filter((id,index,list)=>valid.has(id)&&list.indexOf(id)===index):[];
@@ -1058,6 +1074,20 @@ function ensureNationalCallup(national) {
   national.lineupIds=(national.lineupIds||[]).filter(id=>national.calledUpIds.includes(id)).slice(0,11);
   if(national.lineupIds.length<11)national.lineupIds=selectBestLineup(national.roster.filter(player=>national.calledUpIds.includes(player.id)),'4-3-3').map(player=>player.id);
   return national;
+}
+
+function selectNationalRegion(region) {
+  const n=session.career?.national;if(!n)return;
+  const report=observeNationalRegion(n,region,session.career.date);
+  session.career.messages.push({id:'national-scout-'+Date.now(),from:'Departamento de observação nacional',subject:'Relatório de '+report.region,body:report.updated+' atletas foram atualizados; conhecimento da região em '+report.knowledge+'%.',date:session.career.date,read:false,priority:'normal'});
+  persist();renderGame(renderNational());toast('Relatório nacional atualizado.','success');
+}
+
+function callUpNationalByForm() {
+  const n=session.career?.national;if(!n)return;
+  const result=callUpByPerformance(n,26);ensureNationalCallup(n);
+  session.career.messages.push({id:'national-callup-'+Date.now(),from:'Comissão técnica da seleção',subject:'Convocação por rendimento concluída',body:'A lista foi ordenada por forma, minutos, impacto e condição física. Destaque: '+(result.ranking[0]?.name||'sem dados')+'.',date:session.career.date,read:false,priority:'high'});
+  persist();renderGame(renderNational());toast('Convocação ajustada pelo desempenho recente.','success');
 }
 
 function toggleNationalCallup(playerId) {
@@ -1085,12 +1115,13 @@ function progressNationalTournament(national, fixture) {
     const points=group.reduce((sum,item)=>sum+(resultClass(item)==='win'?3:resultClass(item)==='draw'?1:0),0),qualified=points>=3;
     const next=national.fixtures.find(item=>item.competitionId===fixture.competitionId&&item.phase==='knockout'&&!item.cancelled);
     if(qualified&&next){resolveNationalTournamentDraw(national,next);session.career.messages.push({id:'national-group-'+Date.now(),from:national.team.name,subject:'Classificação confirmada',body:'A seleção somou '+points+' pontos no grupo e avançou para '+next.stage+'.',date:session.career.date,read:false,priority:'high'});}
-    else {national.fixtures.filter(item=>item.competitionId===fixture.competitionId&&item.phase==='knockout').forEach(item=>{item.cancelled=true;item.locked=true;});session.career.messages.push({id:'national-group-'+Date.now(),from:national.team.name,subject:'Eliminação na fase de grupos',body:'A seleção somou '+points+' pontos e não alcançou o mata-mata.',date:session.career.date,read:false,priority:'high'});}
+    else {national.fixtures.filter(item=>item.competitionId===fixture.competitionId&&item.phase==='knockout').forEach(item=>{item.cancelled=true;item.locked=true;});recordNationalTournament(national,{id:fixture.competitionId+':'+session.career.season,season:session.career.season,name:fixture.competitionName,stage:'Fase de grupos',result:'Eliminada',date:session.career.date});session.career.messages.push({id:'national-group-'+Date.now(),from:national.team.name,subject:'Eliminação na fase de grupos',body:'A seleção somou '+points+' pontos e não alcançou o mata-mata.',date:session.career.date,read:false,priority:'high'});}
   } else if(phase==='knockout') {
     if(resultClass(fixture)==='win'){
       const next=national.fixtures.find(item=>item.competitionId===fixture.competitionId&&item.phase==='knockout'&&item.locked&&!item.cancelled&&new Date(item.date)>new Date(fixture.date));
       if(next)resolveNationalTournamentDraw(national,next);
-    } else national.fixtures.filter(item=>item.competitionId===fixture.competitionId&&item.phase==='knockout'&&!item.played&&new Date(item.date)>new Date(fixture.date)).forEach(item=>{item.cancelled=true;item.locked=true;});
+    } else {national.fixtures.filter(item=>item.competitionId===fixture.competitionId&&item.phase==='knockout'&&!item.played&&new Date(item.date)>new Date(fixture.date)).forEach(item=>{item.cancelled=true;item.locked=true;});recordNationalTournament(national,{id:fixture.competitionId+':'+session.career.season,season:session.career.season,name:fixture.competitionName,stage:fixture.stage,result:'Eliminada por '+fixture.opponent.name,opponent:fixture.opponent.name,date:session.career.date});}
+    if(fixture.stage==='Final'&&resultClass(fixture)==='win')recordNationalTournament(national,{id:fixture.competitionId+':'+session.career.season,season:session.career.season,name:fixture.competitionName,stage:'Final',result:'Campeã',opponent:fixture.opponent.name,date:session.career.date});
   }
 }
 
@@ -1102,6 +1133,7 @@ async function acceptNationalJob(teamId) {
     const data=await fetchJson(team.rosterPath),roster=(data.players||[]).map(normalizePlayer);
     session.career.national={team,roster,selectionPoolIds:roster.map(p=>p.id),calledUpIds:roster.slice(0,Math.min(26,roster.length)).map(p=>p.id),lineupIds:pickLineup(roster).map(p=>p.id),fixtures:buildNationalFixtures(team),stats:{played:0,wins:0,draws:0,losses:0,gf:0,ga:0,points:0},qualified:false,competitionLabel:nationalCompetitionLabel(team)};
     ensureNationalCallup(session.career.national);
+    ensureNationalCareer(session.career.national,session.career);
     recordNationalAppointment(session.career,team);
     session.career.messages.push({id:'national-'+Date.now(),from:team.name,subject:'Contrato de seleção assinado',body:'Você agora comanda '+team.name+'. As Datas FIFA aparecem no centro internacional e o vínculo é independente da carreira em clubes.',date:new Date().toISOString(),read:false,priority:'high'});
     persist();renderGame(renderNational());toast('Você assumiu '+team.name+'.','success');
@@ -1118,6 +1150,11 @@ function renderNationalTables(n) {
   return '<div class="national-table-stack">'+competitions.map(id=>{const all=n.fixtures.filter(f=>f.competitionId===id&&!f.cancelled),fixtures=all.filter(f=>!f.phase||f.phase==='group'),name=all[0]?.competitionName||id;if(!fixtures.length)return '';const table=deriveCompetitionTable(n.team,fixtures,n.team.id+':'+id),knockout=all.filter(f=>f.phase==='knockout'),nextKnockout=knockout.find(f=>!f.played&&!f.locked);return standingsTableMarkup(table,name,n.team.id,id==='world-cup-qualifiers'?'CLASSIFICAÇÃO DAS ELIMINATÓRIAS':fixtures.some(f=>!f.locked)?'FASE DE GRUPOS · MATA-MATA '+(nextKnockout?'aguardando':'em andamento'):'TABELA PROJETADA · AINDA BLOQUEADA');}).join('')+'</div>';
 }
 
+function renderNationalIntelligence(n) {
+  const brief=nationalSelectionBrief(n),top=brief.ranking.map(player=>'<li><span>'+escapeHtml(player.name)+' · '+escapeHtml(player.pos)+'</span><strong>'+player.nationalForm+'</strong><small>GER '+player.overall+' · observado '+player.knowledge+'%</small></li>').join(''),regions=Object.entries(brief.regions).map(([id,value])=>'<button class="btn btn-small" data-action="national-scout" data-region="'+escapeHtml(id)+'">'+escapeHtml(id)+' '+value+'%</button>').join(''),history=brief.history.slice(0,4).map(item=>'<li><strong>'+escapeHtml(item.name)+'</strong><span>'+escapeHtml(item.stage)+' · '+escapeHtml(item.result)+'</span></li>').join('')||'<li><span>O histórico será registrado a cada torneio encerrado.</span></li>',objectives=brief.objectives.map(item=>'<li><span>'+escapeHtml(item.label)+'</span><b>'+escapeHtml(item.target)+'</b></li>').join('');
+  return '<section class="panel national-intelligence"><header><div><p class="eyebrow">OBSERVAÇÃO E CICLO INTERNACIONAL · '+NATIONAL_CAREER_VERSION+'</p><h2>Seleção por desempenho</h2><p>Forma, minutos, gols, assistência, condição e conhecimento regional alteram a ordem de convocação.</p></div><button class="btn btn-primary btn-small" data-action="national-callup-form">Convocar por desempenho</button></header><div class="national-intelligence-grid"><article><h3>Regiões observadas</h3><div class="national-scout-actions">'+regions+'</div><ul class="national-form-list">'+top+'</ul></article><article><h3>Objetivos da federação</h3><ul class="national-history">'+objectives+'</ul><h3>Histórico internacional</h3><ul class="national-history">'+history+'</ul></article></div></section>';
+}
+
 function renderNational() {
   const c=session.career,n=c.national;
   if(!n){
@@ -1132,8 +1169,9 @@ function renderNational() {
   ensureNationalCalendar(n);
   ensureNationalCallup(n);
   const next=n.fixtures.filter(f=>!f.played&&!f.locked&&!f.cancelled).sort((a,b)=>new Date(a.date)-new Date(b.date))[0],played=n.fixtures.filter(f=>f.played).length;
-  const roster=n.roster.filter(p=>n.selectionPoolIds.includes(p.id)).slice().sort((a,b)=>b.overall-a.overall).map(p=>{const called=n.calledUpIds.includes(p.id);return '<tr><td><button class="btn btn-small '+(called?'btn-primary':'')+'" data-action="toggle-national-callup" data-player="'+escapeHtml(p.id)+'">'+(called?'Convocado':'Chamar')+'</button></td><td>'+escapeHtml(p.name)+'</td><td>'+p.pos+'</td><td><strong>'+p.overall+'</strong></td><td>'+escapeHtml(p.clubName||'—')+'</td><td>'+(n.lineupIds.includes(p.id)?'Titular':called?'Convocado':'Disponível')+'</td></tr>';}).join('');
-  return sectionHead(n.team.name,'Agenda, competição, classificação e convocação internacional.','<span class="tag">'+escapeHtml(n.team.confederation)+'</span>')+'<div class="national-hero panel"><img src="./'+escapeHtml(n.team.badge)+'" alt="" onerror="__vfmFallback(event)"><div><p class="eyebrow">COMANDO INTERNACIONAL</p><h2>'+escapeHtml(n.competitionLabel)+'</h2><p>'+played+' jogos · '+n.stats.wins+' vitórias · '+n.stats.points+' pontos</p>'+(next?'<p>Próximo: <strong>'+escapeHtml(next.opponent.name)+'</strong> · '+escapeHtml(competitionKind(next).label)+' · '+formatDate(next.date)+'</p><button class="btn btn-primary" data-action="start-national-match">Avançar para a partida</button>':'<p>Calendário internacional concluído.</p>')+'</div></div>'+renderNationalAgenda(n)+renderNationalTables(n)+'<section class="panel national-roster"><header><div><p class="eyebrow">POOL NACIONAL E CONVOCAÇÃO EDITÁVEL</p><h2>Lista da Data FIFA</h2><p>O pool federativo contém '+n.selectionPoolIds.length+' atletas. Monte uma lista de 23 a 26 atletas; a escalação usa apenas os convocados.</p></div><span class="tag">'+n.calledUpIds.length+'/26 · pool '+n.selectionPoolIds.length+'</span></header><div class="table-wrap"><table class="data-table"><thead><tr><th>Lista</th><th>Jogador</th><th>Pos.</th><th>GER</th><th>Clube</th><th>Status</th></tr></thead><tbody>'+roster+'</tbody></table></div></section>';
+  const formById=new Map(nationalSelectionRanking(n,99).map(player=>[player.id,player]));
+  const roster=n.roster.filter(p=>n.selectionPoolIds.includes(p.id)).slice().sort((a,b)=>(formById.get(b.id)?.nationalForm||0)-(formById.get(a.id)?.nationalForm||0)).map(p=>{const called=n.calledUpIds.includes(p.id),form=formById.get(p.id)?.nationalForm||p.overall;return '<tr><td><button class="btn btn-small '+(called?'btn-primary':'')+'" data-action="toggle-national-callup" data-player="'+escapeHtml(p.id)+'">'+(called?'Convocado':'Chamar')+'</button></td><td>'+escapeHtml(p.name)+'</td><td>'+p.pos+'</td><td><strong>'+p.overall+'</strong></td><td><strong>'+form+'</strong></td><td>'+escapeHtml(p.clubName||'—')+'</td><td>'+(n.lineupIds.includes(p.id)?'Titular':called?'Convocado':'Disponível')+'</td></tr>';}).join('');
+  return sectionHead(n.team.name,'Agenda, competição, classificação e convocação internacional.','<span class="tag">'+escapeHtml(n.team.confederation)+'</span>')+'<div class="national-hero panel"><img src="./'+escapeHtml(n.team.badge)+'" alt="" onerror="__vfmFallback(event)"><div><p class="eyebrow">COMANDO INTERNACIONAL</p><h2>'+escapeHtml(n.competitionLabel)+'</h2><p>'+played+' jogos · '+n.stats.wins+' vitórias · '+n.stats.points+' pontos</p>'+(next?'<p>Próximo: <strong>'+escapeHtml(next.opponent.name)+'</strong> · '+escapeHtml(competitionKind(next).label)+' · '+formatDate(next.date)+'</p><button class="btn btn-primary" data-action="start-national-match">Avançar para a partida</button>':'<p>Calendário internacional concluído.</p>')+'</div></div>'+renderNationalAgenda(n)+renderNationalTables(n)+renderNationalIntelligence(n)+'<section class="panel national-roster"><header><div><p class="eyebrow">POOL NACIONAL E CONVOCAÇÃO EDITÁVEL</p><h2>Lista da Data FIFA</h2><p>O pool federativo contém '+n.selectionPoolIds.length+' atletas. Monte uma lista de 23 a 26 atletas; a escalação usa apenas os convocados.</p></div><span class="tag">'+n.calledUpIds.length+'/26 · pool '+n.selectionPoolIds.length+'</span></header><div class="table-wrap"><table class="data-table"><thead><tr><th>Lista</th><th>Jogador</th><th>Pos.</th><th>GER</th><th>Forma</th><th>Clube</th><th>Status</th></tr></thead><tbody>'+roster+'</tbody></table></div></section>';
 }
 
 function renderMore() {
@@ -1356,6 +1394,7 @@ function finishMatch() {
     const n=c.national,playedQualifiers=n.fixtures.filter(f=>f.competitionId==='world-cup-qualifiers'&&f.played).length;
     const totalQualifiers=n.fixtures.filter(f=>f.competitionId==='world-cup-qualifiers').length;
     const nationalOutcome=ownGoals>oppGoals?'win':ownGoals<oppGoals?'loss':'draw',nationalConsequences=applyMatchConsequences(n.roster,m,{result:nationalOutcome,date:fixture.date,seed:'national:'+fixture.id+':'+c.season});
+    recordNationalPerformance(n,{playerPerformance:m.playerPerformance||{},date:fixture.date});
     ensureNationalCallup(n);n.lineupIds=selectBestLineup(n.roster.filter(player=>n.calledUpIds.includes(player.id)),'4-3-3').map(player=>player.id);
     if(nationalConsequences.injuries.length)c.messages.push({id:'national-injury-'+Date.now(),from:'Departamento médico da seleção',subject:'Boletim médico pós-jogo',body:nationalConsequences.injuries.map(item=>item.name+' · '+item.type+' ('+item.daysRemaining+' dias)').join('; '),date:new Date().toISOString(),read:false,priority:'high'});
     c.date=addDays(fixture.date,1);
@@ -1442,12 +1481,13 @@ function advanceSeason() {
   processSeasonAging(c.youthPlayers||[],{season:c.season,seed:'academy:'+c.club.id+':'+c.season});
   advanceRosterDays(c.roster,35,{medicalLevel:c.facilities.medical,fitnessCoach:c.staff.fitnessCoach});repairCareerLineup(c);
   const status=promoted?'promoted':relegated?'relegated':'stayed',linked=linkedLeagueFor(league,status);
+  const qualificationSeeds=deriveWorldQualifications({leagues:session.catalog.leagues,clubs:session.catalog.clubs,leagueStates:c.worldState?.leagues||{}});
   if(linked){c.club.leagueId=linked.id;c.club.leagueName=linked.name;c.club.division=linked.division;}
-  c.season+=1;c.week=1;c.stats={played:0,wins:0,draws:0,losses:0,gf:0,ga:0,points:0};c.lastTrainingWeek=0;c.worldState=createWorldState(c.season,{managedClub:c.club});if(c.sponsor){c.sponsor.years--;if(c.sponsor.years<=0){c.sponsor=null;c.sponsorOffers=generateSponsorOffers(c.club,c.facilities);}else{c.budget+=c.sponsor.annual;c.ledger.push({date:new Date().toISOString(),label:'Patrocínio anual · '+c.sponsor.name,amount:c.sponsor.annual,type:'income'});}}
+  c.season+=1;c.week=1;c.stats={played:0,wins:0,draws:0,losses:0,gf:0,ga:0,points:0};c.lastTrainingWeek=0;c.worldState=createWorldState(c.season,{managedClub:c.club,qualificationSeeds});if(c.sponsor){c.sponsor.years--;if(c.sponsor.years<=0){c.sponsor=null;c.sponsorOffers=generateSponsorOffers(c.club,c.facilities);}else{c.budget+=c.sponsor.annual;c.ledger.push({date:new Date().toISOString(),label:'Patrocínio anual · '+c.sponsor.name,amount:c.sponsor.annual,type:'income'});}}
   const newLeague=findLeague(c.club.leagueId),participants=selectLeagueParticipants(c.club);
   const startDate=c.club.continent==='europe'?new Date(c.season,7,8,15):c.club.countryId==='brazil'?new Date(c.season,3,11,16):new Date(c.season,1,7,16);
   let fixtures=[...buildLeagueFixtures(c.club,participants,startDate,c.worldState),...buildCupFixtures(c.club,participants,startDate)];
-  if(continentalId)fixtures.push(...buildContinentalFixtures(c.club,startDate,participants,continentalId));
+  if(continentalId||clubWorldQualification(c.worldState.tournaments,c.club.id))fixtures.push(...buildContinentalFixtures(c.club,startDate,participants,continentalId,c.worldState));
   if(continentalChampion)fixtures.push(...buildWorldFixtures(c.club,startDate));
   c.participants=participants;c.fixtures=fixtures.sort((a,b)=>new Date(a.date)-new Date(b.date));syncCareerTableFromWorld(c);c.date=startDate.toISOString();processCareerDeadlines(c);
   const managerCareer=ensureManagerCareer(c);if(managerCareer.contractEndSeason<=c.season&&c.board>=35){managerCareer.contractEndSeason=c.season+2;managerCareer.history.push({type:'renewed',date:c.date,season:c.season,clubName:c.club.name,label:'Contrato renovado pelo '+c.club.name});}refreshCareerOpportunities(true);
@@ -1647,6 +1687,8 @@ function handleAction(action,target) {
   else if(action==='open-mail')openMail(target.dataset.mail);
   else if(action==='accept-national')acceptNationalJob(target.dataset.team);
   else if(action==='toggle-national-callup')toggleNationalCallup(target.dataset.player);
+  else if(action==='national-scout')selectNationalRegion(target.dataset.region);
+  else if(action==='national-callup-form')callUpNationalByForm();
   else if(action==='accept-club-job')acceptClubJob(target.dataset.club);
   else if(action==='upgrade-staff'){const id=target.dataset.staff,cost=1500000;if(session.career.budget<cost)return toast('Saldo insuficiente.','error');session.career.budget-=cost;session.career.staff[id]=clamp(session.career.staff[id]+2,1,99);session.career.ledger.push({date:new Date().toISOString(),label:'Investimento na comissão técnica',amount:-cost,type:'expense'});persist();renderGame(renderClub());}
   else if(action==='confirm-facility'){const result=startConstruction(session.career,target.dataset.facility);if(result.error)return toast(result.error,'error');closeModal();persist();renderGame(renderClub());toast('Obra iniciada. Acompanhe a entrega no campus.','success');}

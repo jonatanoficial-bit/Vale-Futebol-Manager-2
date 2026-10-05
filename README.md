@@ -1,4 +1,13 @@
-# Vale Futebol Manager — Ultimate World 17.0
+# Vale Futebol Manager — Ultimate World 19.0
+
+## Fase 13 — mundo persistente e seleção por desempenho
+
+- copas nacionais completas agora são simuladas para todos os países que possuem clubes na base, com sorteio, ida e volta quando aplicável, pênaltis e campeão persistido no save;
+- vagas continentais são geradas a partir da tabela mundial e reaproveitadas na temporada seguinte, sem depender apenas do clube controlado;
+- torneios continentais têm grupos, classificação de cada grupo, mata-mata e histórico de campeão para todos os participantes da simulação;
+- formatos de liga passam a expor o perfil de regulamento e calendário: turno e returno, conferências/playoffs, Apertura/Clausura, play-in, grupos e quadrangulares;
+- seleção ganhou painel de observação nacional, conhecimento por região, ranking por forma/minutos/impacto/físico e convocação automática por desempenho;
+- objetivos da federação e histórico de torneios passam a permanecer na carreira internacional.
 
 ## Fase 11 — fundação de competições e carreira
 
