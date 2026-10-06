@@ -22,7 +22,7 @@ try {
 
   await nav('more');await nav('market');await page.locator('.market-scout-network').waitFor();
   await page.locator('[data-action="invest-scout"][data-region="europe"]').click();career=await read();assert.equal(career.scoutingNetwork.focus,'europe');
-  await nav('more');await nav('competitions');assert.match(await page.locator('.rules-strip').innerText(),/ida e volta|jogo único/i);
+  await nav('more');await nav('competitions');const cupId=await page.locator('[data-action="competition-select"] option').evaluateAll(options=>options.find(option=>/cup/i.test(option.textContent||''))?.value);assert.ok(cupId,'A central precisa listar a copa nacional.');await page.locator('[data-action="competition-select"]').selectOption(cupId);await page.locator('[data-action="competition-tab"][data-tab="rules"]').click();assert.match(await page.locator('.competition-rules-panel').innerText(),/ida e volta|jogo único/i);
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'A Fase 12 não pode transbordar em tela móvel.');
 
   await page.goto((process.env.VFM_TEST_URL||'http://127.0.0.1:8765/')+'loja.html',{waitUntil:'domcontentloaded'});

@@ -1,4 +1,12 @@
-# Vale Futebol Manager — Ultimate World 20.0
+# Vale Futebol Manager — Ultimate World 21.0
+
+## Fase 15 — central mobile e navegação por decisão
+
+- a home foi reduzida à próxima partida, uma pendência prioritária, campanha, caixa de entrada, agenda curta e quatro atalhos de ação;
+- emblemas, indicadores e botões ganharam escala mais compacta para manter o conteúdo legível em uma única tela de celular;
+- competições agora usam uma central com seletor de torneio e abas para visão geral, tabela ou chave, jogos e regulamento;
+- as chaves mundiais continuam disponíveis sob demanda, sem transformar a página de competição em uma sequência de painéis longos;
+- fundos cinematográficos, fotos de atletas, telas de tática e instalações existentes foram preservados.
 
 ## Fase 14 — regulamentos e mercado rival
 
