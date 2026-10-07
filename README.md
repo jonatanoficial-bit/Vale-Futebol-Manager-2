@@ -1,4 +1,13 @@
-# Vale Futebol Manager — Ultimate World 22.0
+# Vale Futebol Manager — Ultimate World 23.0
+
+## Fase 17 — mercado rival, empresários e pressão contratual
+
+- cada clube rival mantém orçamento, carências por posição, ambição, estilo de treinador e planejamento entre temporadas;
+- a janela mostra quando os rivais podem concluir negócios e o mercado mundial passa a registrar reforços com destino, valor e motivo tático;
+- a mesa de negociação exibe os concorrentes que estão interessados no mesmo atleta, com taxa projetada e prioridade do clube;
+- propostas que não vencem a concorrência fazem o jogador seguir para outro clube e deixam uma notícia persistida na carreira;
+- contratos curtos, pouca satisfação, interesse externo e empresários influentes compõem uma pressão contratual visível, com alertas após as partidas;
+- a ficha do jogador agora explica a origem do risco e oferece os caminhos de gestão já existentes: renovar, prometer minutos ou negociar a venda.
 
 ## Fase 16 — calendário brasileiro e acesso jogável
 

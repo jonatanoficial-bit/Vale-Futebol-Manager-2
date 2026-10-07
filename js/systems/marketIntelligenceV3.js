@@ -1,9 +1,10 @@
-export const MARKET_INTELLIGENCE_VERSION = '3.0.0';
+export const MARKET_INTELLIGENCE_VERSION = '4.0.0';
 
 const REGIONS = [
   ['south-america','América do Sul'],['europe','Europa'],['north-america','América do Norte'],['africa','África'],['asia','Ásia'],['oceania','Oceania']
 ];
 const AGENCIES=['Atlas Sports','Ponto de Jogo','Prime Eleven','Orbe Football','Nexo Talentos','Vértice Agency'];
+const DAY=86400000;
 const hash = (value='') => { let n=2166136261; for(const c of String(value)){n^=c.charCodeAt(0);n=Math.imul(n,16777619);} return n>>>0; };
 const clamp=(value,min,max)=>Math.min(max,Math.max(min,Number(value)||min));
 
@@ -14,8 +15,30 @@ export function ensureMarketIntelligence(career={}) {
   career.scoutingNetwork.regions ??= {};
   REGIONS.forEach(([id])=>{career.scoutingNetwork.regions[id]=clamp(career.scoutingNetwork.regions[id]??(id==='south-america'?58:id==='europe'?48:22),1,100);});
   career.marketHistory=Array.isArray(career.marketHistory)?career.marketHistory.slice(-50):[];
+  career.marketPressure=Array.isArray(career.marketPressure)?career.marketPressure.slice(-18):[];
   (career.roster||[]).forEach(player=>hydrateMarketProfile(player,career));
   return career.scoutingNetwork;
+}
+
+export function contractRisk(player={},career={}) {
+  hydrateMarketProfile(player,career);
+  const now=new Date(career.date||Date.now()).getTime(),contract=new Date(player.contractUntil||'').getTime(),days=Number.isFinite(contract)?Math.round((contract-now)/DAY):730,satisfaction=Number(player.contractSatisfaction||70),interest=Number(player.marketInterest||50),influence=Number(player.agentInfluence||55);
+  const contractRisk=days<0?38:days<120?30:days<240?18:days<365?8:0,satisfactionRisk=Math.max(0,55-satisfaction)*1.15,interestRisk=Math.max(0,interest-52)*.72,agentRisk=Math.max(0,influence-65)*.28,risk=clamp(Math.round(contractRisk+satisfactionRisk+interestRisk+agentRisk),0,100);
+  const level=risk>=72?'crítico':risk>=52?'alto':risk>=32?'atenção':'estável',reasons=[];
+  if(days<240)reasons.push(days<0?'contrato vencido':'contrato perto do fim');
+  if(satisfaction<48)reasons.push('insatisfação com o papel');
+  if(interest>65)reasons.push('mercado atento');
+  if(influence>78)reasons.push('agente pressiona por condições melhores');
+  return {risk,level,days,reasons:reasons.length?reasons:['situação contratual controlada'],renewalPriority:risk>=52};
+}
+
+export function refreshMarketPressure(career={},week=0) {
+  ensureMarketIntelligence(career);
+  const previous=new Map((career.marketPressure||[]).map(item=>[item.playerId,item]));
+  const entries=(career.roster||[]).map(player=>{const status=contractRisk(player,career);return {playerId:player.id,playerName:player.name,position:player.pos,risk:status.risk,level:status.level,reasons:status.reasons,renewalPriority:status.renewalPriority,lastWeek:Number(week)||0};}).filter(item=>item.risk>=32).sort((a,b)=>b.risk-a.risk).slice(0,18);
+  const alerts=entries.filter(item=>{const old=previous.get(item.playerId);return item.risk>=52&&(!old||item.risk>=old.risk+12||old.level!==item.level);});
+  career.marketPressure=entries;
+  return {entries,alerts};
 }
 
 export function regionFor(player={}, club={}) {
@@ -58,12 +81,13 @@ export function scoutInvestment(career, region, amount=1) {
 
 export function marketNegotiationProfile(player={}, career={}) {
   hydrateMarketProfile(player,career);
-  const influence=Number(player.agentInfluence||55),satisfaction=Number(player.contractSatisfaction||70),interest=Number(player.marketInterest||55);
+  const influence=Number(player.agentInfluence||55),satisfaction=Number(player.contractSatisfaction||70),interest=Number(player.marketInterest||55),risk=contractRisk(player,career);
   return {
     agentFeeRate:Math.round((.035+influence/2500)*1000)/1000,
     minimumSalaryMultiplier:Math.round((.86+influence/900-interest/2600)*100)/100,
     clubFlexibility:clamp(1-(satisfaction-50)/190,0.55,1.18),
-    summary:`${player.agent} · influência ${influence}/100 · interesse ${interest}/100`
+    summary:`${player.agent} · influência ${influence}/100 · interesse ${interest}/100 · risco ${risk.level}`,
+    contractRisk:risk
   };
 }
 
@@ -85,4 +109,5 @@ export function updateContractMood(career,{result='draw',lineupIds=[]}={}) {
     player.contractSatisfaction=clamp(Number(player.contractSatisfaction||70)+(minutes?1:-.8)+resultShift,1,100);
     if(!minutes&&Number(player.contractSatisfaction)<38)player.marketInterest=clamp(Number(player.marketInterest||50)+5,1,100);
   });
+  return refreshMarketPressure(career,career.week);
 }
