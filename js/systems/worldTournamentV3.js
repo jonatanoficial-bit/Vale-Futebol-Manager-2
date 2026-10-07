@@ -3,7 +3,7 @@
  * It deliberately stores every draw, result and winner in the save rather than
  * resolving competitions only around the club controlled by the player.
  */
-export const WORLD_TOURNAMENT_VERSION = '3.0.0';
+export const WORLD_TOURNAMENT_VERSION = '4.0.0';
 
 const hash = value => { let n=2166136261; for(const c of String(value)){ n^=c.charCodeAt(0); n=Math.imul(n,16777619); } return n>>>0; };
 const clean = team => ({id:String(team?.id||''),name:String(team?.name||'Clube'),rating:Number(team?.rating)||60,badge:team?.badge||'',countryId:String(team?.countryId||''),confederation:String(team?.confederation||'')});
@@ -15,7 +15,11 @@ const score = (home,away,seed) => { const edge=(Number(home?.rating||60)-Number(
 
 function cupLegs(countryId, remaining) {
   const country=String(countryId||'').toLowerCase();
-  if(country==='brazil') return remaining>=16?2:2;
+  // Copa do Brasil 2026: até a 4ª fase em jogo único, da 5ª fase à
+  // semifinal em ida e volta, e final em jogo único. O torneio mundial usa
+  // a chave persistida disponível no catálogo, por isso aplica a regra a
+  // partir das 32 equipes (5ª fase) e preserva a decisão única.
+  if(country==='brazil') return remaining===2?1:remaining<=32?2:1;
   if(country==='italy') return remaining===4?2:1;
   if(['england','argentina','chile','uruguay','colombia','ecuador'].includes(country)) return 1;
   return remaining===2?1:2;

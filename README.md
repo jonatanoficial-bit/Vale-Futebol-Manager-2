@@ -1,4 +1,12 @@
-# Vale Futebol Manager — Ultimate World 21.0
+# Vale Futebol Manager — Ultimate World 22.0
+
+## Fase 16 — calendário brasileiro e acesso jogável
+
+- Brasileirão Série A de 2026 começa em 28 de janeiro, tem 38 rodadas persistidas e termina em 2 de dezembro;
+- Brasileirão Série B começa em 21 de março, encerra a fase regular em 14 de novembro e leva o 3º ao 6º para playoffs de acesso em ida e volta, em 21 e 28 de novembro;
+- a Copa do Brasil usa 126 clubes e nove fases: Série A entra na 5ª fase, da 5ª à semifinal há ida e volta, e a final é única em 6 de dezembro;
+- sorteios, jogos, agregado, pênaltis e a promoção pelo playoff ficam gravados no save da carreira;
+- o novo calendário vale para carreiras novas e temporadas novas, sem reescrever compromissos que já estejam em andamento em saves existentes.
 
 ## Fase 15 — central mobile e navegação por decisão
 

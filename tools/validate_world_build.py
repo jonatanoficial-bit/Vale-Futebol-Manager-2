@@ -99,7 +99,7 @@ for ref in re.findall(r'(?:href|src)="\./([^"?#]+)', html):
 require("app-v16.js" in html and "ultimate-v16.css" in html, "Entrypoints V16 ausentes")
 
 sw = (ROOT / "sw.js").read_text(encoding="utf-8")
-require("ultimate-v21.0.0-phase15" in sw, "Cache do service worker não corresponde à Fase 15")
+require("ultimate-v22.0.0-phase16" in sw, "Cache do service worker não corresponde à Fase 16")
 for ref in re.findall(r"'\./([^'?]+)(?:\?[^']*)?'", sw):
     if ref:
         require((ROOT / ref).exists(), f"Referência ausente no service worker: {ref}")
@@ -161,6 +161,12 @@ for marker in ["ensureNationalCareer", "nationalSelectionRanking", "observeNatio
     require(marker in national_career and marker in app_js, f"Seleções por desempenho Fase 13 incompletas: {marker}")
 for marker in ["regulationForLeague", "fixtureDates", "resolveRelegationTable", "REGULATION_ENGINE_VERSION"]:
     require(marker in regulations, f"Regulamentos Fase 14 incompletos: {marker}")
+for marker in ["brasileirao-a", "brasileirao-b", "promotionPlayoffLegs", "regularEnd"]:
+    require(marker in regulations, f"Calendário brasileiro Fase 16 incompleto: {marker}")
+for marker in ["brazil-cup-2026", "Copa do Brasil 2026", "brazilCupDates"]:
+    require(marker in competition_formats, f"Copa do Brasil Fase 16 incompleta: {marker}")
+for marker in ["careerStartDate", "scheduleBrazilAccessPlayoff", "promotion-playoff"]:
+    require(marker in app_js, f"Integração brasileira Fase 16 incompleta: {marker}")
 for marker in ["ensureRivalCareer", "simulateRivalMarketWeek", "settleRivalSeason", "RIVAL_CAREER_VERSION"]:
     require(marker in rival_career and marker in app_js, f"Mercado rival Fase 14 incompleto: {marker}")
 require((ROOT / "loja.html").is_file(), "Página de loja Fase 12 ausente")

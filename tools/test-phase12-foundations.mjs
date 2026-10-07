@@ -3,11 +3,13 @@ import { buildDomesticCupPath, buildContinentalPath, groupProgress, tieOutcome }
 import { ensureMarketIntelligence, hydrateMarketProfile, marketNegotiationProfile, scoutInvestment, applyContractMatchBonuses } from '../js/systems/marketIntelligenceV3.js';
 import { createMatchEngineV2, advanceMatchEngineV2 } from '../js/systems/matchEngineV2.js';
 
-const club={id:'club-a',countryId:'brazil',confederation:'CONMEBOL',rating:75};
+const club={id:'club-a',countryId:'brazil',leagueId:'brasileirao-a',confederation:'CONMEBOL',rating:75};
 const teams=[club,...Array.from({length:15},(_,index)=>({id:'club-'+index,name:'Clube '+index,rating:60+index,badge:''}))];
 const cup=buildDomesticCupPath({club,participants:teams,startDate:'2026-04-01T12:00:00Z',competitionName:'Copa do Brasil'});
-assert.equal(cup.fixtures.length,8,'Copa brasileira deve usar quatro chaves de ida e volta');
-assert.ok(cup.fixtures.every(fixture=>fixture.tieId&&fixture.legs===2));
+assert.equal(cup.fixtures.length,9,'Série A deve entrar na 5ª fase da Copa do Brasil de 2026');
+assert.equal(cup.fixtures[0].stage,'5ª Fase');
+assert.ok(cup.fixtures.slice(0,-1).every(fixture=>fixture.tieId&&fixture.legs===2));
+assert.equal(cup.fixtures.at(-1).legs,1,'A final da Copa do Brasil de 2026 é em jogo único');
 
 const continental=buildContinentalPath({club,startDate:'2026-04-01T12:00:00Z',competitionId:'libertadores',competitionName:'Libertadores',candidates:teams});
 assert.equal(continental.fixtures.filter(fixture=>fixture.phase==='group').length,6,'Grupo continental deve ter ida e volta contra três adversários');

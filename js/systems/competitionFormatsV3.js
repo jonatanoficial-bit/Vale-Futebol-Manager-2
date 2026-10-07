@@ -1,4 +1,4 @@
-export const COMPETITION_FORMATS_VERSION = '3.0.0';
+export const COMPETITION_FORMATS_VERSION = '4.0.0';
 
 const DAY = 86400000;
 const hash = (value='') => {
@@ -9,9 +9,36 @@ const hash = (value='') => {
 const addDays = (date, days) => new Date(new Date(date).getTime() + days * DAY).toISOString();
 const pendingOpponent = (badge='assets/placeholders/club-generic.png') => ({ id:'draw-pending', name:'Adversário definido por sorteio', badge, rating:68 });
 
+const isoAt = (season, month, day) => new Date(Date.UTC(Number(season)||2026, month-1, day, 16)).toISOString();
+
+function brazilCupDates(season) {
+  // Datas-base do PGA da CBF 2026. Cada confronto recebe uma das datas-base
+  // da sua fase; a tela deixa claro que mando/horário são confirmados no sorteio.
+  return [
+    [isoAt(season,2,18)],
+    [isoAt(season,2,25)],
+    [isoAt(season,3,11)],
+    [isoAt(season,3,18)],
+    [isoAt(season,4,22),isoAt(season,5,13)],
+    [isoAt(season,8,1),isoAt(season,8,5)],
+    [isoAt(season,8,26),isoAt(season,9,2)],
+    [isoAt(season,11,1),isoAt(season,11,8)],
+    [isoAt(season,12,6)]
+  ];
+}
+
 export function domesticCupFormat(countryId='') {
   const key = String(countryId).toLowerCase();
-  if (key === 'brazil') return { id:'brazil-cup', label:'Regulamento nacional · ida e volta a partir das oitavas', stages:[['Oitavas de final',2],['Quartas de final',2],['Semifinal',2],['Final',2]] };
+  if (key === 'brazil') return {
+    id:'brazil-cup-2026',
+    label:'Copa do Brasil 2026 · 126 clubes · 9 fases; 1ª–4ª e final em jogo único, 5ª–8ª em ida e volta.',
+    stages:[['1ª Fase',1],['2ª Fase',1],['3ª Fase',1],['4ª Fase',1],['5ª Fase',2],['Oitavas de final',2],['Quartas de final',2],['Semifinal',2],['Final',1]],
+    // A Série A entra na 5ª fase. Para clubes fora dela, o modo carreira
+    // começa na 4ª fase: as eliminatórias estaduais anteriores já pertencem
+    // ao calendário antes da estreia do treinador.
+    entryStage:club=>club?.leagueId==='brasileirao-a'?4:3,
+    dates:brazilCupDates
+  };
   if (['england','argentina','chile','uruguay','colombia','ecuador'].includes(key)) return { id:'single-leg-cup', label:'Regulamento nacional · eliminatória em jogo único', stages:[['Oitavas de final',1],['Quartas de final',1],['Semifinal',1],['Final',1]] };
   if (key === 'italy') return { id:'italy-cup', label:'Regulamento nacional · semifinal em ida e volta', stages:[['Oitavas de final',1],['Quartas de final',1],['Semifinal',2],['Final',1]] };
   return { id:'standard-cup', label:'Regulamento nacional · mata-mata com ida e volta', stages:[['Oitavas de final',2],['Quartas de final',2],['Semifinal',2],['Final',1]] };
@@ -23,13 +50,17 @@ export function buildDomesticCupPath({ club, participants=[], startDate, competi
   const firstOpponent = pool[0] || pendingOpponent();
   let dayOffset = 18;
   const fixtures = [];
-  format.stages.forEach(([stage, legs], stageIndex) => {
-    const tieId = `${competitionId}-tie-${stageIndex + 1}`;
+  const season=new Date(startDate||Date.now()).getUTCFullYear()||2026;
+  const entryStage=Math.max(0,Math.min(format.stages.length-1,Number(typeof format.entryStage==='function'?format.entryStage(club):format.entryStage)||0));
+  format.stages.slice(entryStage).forEach(([stage, legs], localStageIndex) => {
+    const stageIndex=entryStage+localStageIndex,tieId = `${competitionId}-tie-${stageIndex + 1}`;
     for (let leg=1; leg<=legs; leg++) {
-      const isFirst = stageIndex === 0;
+      const isFirst = localStageIndex === 0;
+      const officialDate=typeof format.dates==='function'?format.dates(season)?.[stageIndex]?.[leg-1]:null;
+      const date=isFirst&&officialDate&&new Date(officialDate)<new Date(startDate)?addDays(startDate,3):(officialDate||addDays(startDate,dayOffset));
       fixtures.push({
         id:`${competitionId}-${stageIndex + 1}-${leg}`, competitionId, competitionName, type:'cup', phase:'knockout', stage,
-        round:stageIndex + 1, tieId, leg, legs, twoLegged:legs===2, date:addDays(startDate,dayOffset),
+        round:stageIndex + 1, tieId, leg, legs, twoLegged:legs===2, date,
         opponent:isFirst ? firstOpponent : pendingOpponent(), drawPool:pool.map(team=>team.id), drawStatus:isFirst?'confirmed':'provisional',
         home:leg===1 ? stageIndex % 2 === 0 : stageIndex % 2 !== 0, played:false, locked:!isFirst, score:null, formatRule:format.label
       });
