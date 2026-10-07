@@ -1,4 +1,13 @@
-# Vale Futebol Manager — Ultimate World 23.0
+# Vale Futebol Manager — Ultimate World 24.0
+
+## Fase 18 — elencos rivais e virada de temporada
+
+- cada atleta observado recebe um vínculo persistente com o clube de origem e segue para o novo clube quando uma disputa é perdida;
+- um jogador transferido deixa a vitrine do antigo clube e pode reaparecer pela rede de scouts quando seu novo clube for observado;
+- jogadores contratados pelo usuário também deixam de figurar como alvo de seus antigos clubes;
+- a virada de temporada processa renovações e liberações dos vínculos rivais rastreados, expondo atletas livres na central de mercado;
+- clubes que terminam mal podem trocar de treinador, mudando o estilo de jogo que orienta suas prioridades futuras;
+- a central compacta mostra atletas livres e mudanças técnicas junto ao caixa, às negociações e às disputas recentes.
 
 ## Fase 17 — mercado rival, empresários e pressão contratual
 
