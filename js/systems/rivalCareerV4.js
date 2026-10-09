@@ -1,5 +1,5 @@
 /** Persistent rival squads, coaches, planning, negotiation pressure and transfer windows. */
-export const RIVAL_CAREER_VERSION='8.0.0';
+export const RIVAL_CAREER_VERSION='9.0.0';
 
 const clamp=(value,min,max)=>Math.max(min,Math.min(max,Number(value)||0));
 const hash=value=>{let n=2166136261;for(const c of String(value)){n^=c.charCodeAt(0);n=Math.imul(n,16777619);}return n>>>0;};
@@ -8,6 +8,7 @@ const ambitions=['sobrevivência','consolidação','vaga continental','disputa d
 const positions=['GOL','ZAG','LD','LE','VOL','MC','MEI','PD','PE','ATA'];
 const valueOf=player=>Math.max(250000,Number(player?.value||1)*1000000);
 const playerIdentity=(player={},fallbackOwner='free-agents')=>String(player.marketIdentity||player.rivalId||`${player.sourceClubId||fallbackOwner}:${player.basePlayerId||player.id||player.name||'player'}`);
+const afterDays=(date,days)=>new Date(new Date(date||Date.now()).getTime()+Number(days||0)*86400000).toISOString();
 const COACH_BLUEPRINTS={
   'posse e construção':{label:'Posse paciente',formation:'4-3-3',mentality:'Equilibrada',pressure:57,tempo:49,width:62,defensiveLine:58,passing:'Curto',marking:'Zona',transition:'Equilibrada'},
   'transição vertical':{label:'Transição vertical',formation:'4-4-2',mentality:'Equilibrada',pressure:48,tempo:70,width:59,defensiveLine:45,passing:'Direto',marking:'Zona',transition:'Contra-atacar'},
@@ -36,6 +37,7 @@ export function ensureRivalCareer(career={},catalog={}){
   const current=career.rivalWorld||{},clubs=Array.isArray(catalog.clubs)?catalog.clubs:[],clubsState={...(current.clubs||{})};
   clubs.forEach(club=>{clubsState[club.id]=mergeProfile(club,clubsState[club.id],career.season);});
   career.rivalWorld={version:RIVAL_CAREER_VERSION,season:Number(career.season)||2026,clubs:clubsState,players:{...(current.players||{})},moves:Array.isArray(current.moves)?current.moves.slice(-220):[],news:Array.isArray(current.news)?current.news.slice(-100):[],negotiations:Array.isArray(current.negotiations)?current.negotiations.slice(-80):[],windows:Array.isArray(current.windows)?current.windows.slice(-24):[],loans:Array.isArray(current.loans)?current.loans.slice(-100):[],contractEvents:Array.isArray(current.contractEvents)?current.contractEvents.slice(-80):[],managerChanges:Array.isArray(current.managerChanges)?current.managerChanges.slice(-80):[],lastWeek:Number(current.lastWeek)||0};
+  career.transferTalks=Array.isArray(career.transferTalks)?career.transferTalks.slice(-50):[];
   return career.rivalWorld;
 }
 
@@ -107,6 +109,43 @@ export function resolveRivalLoans(career={},catalog={}){
   const world=ensureRivalCareer(career,catalog),now=new Date(career.date||Date.now()).getTime(),ended=[];
   Object.values(world.players||{}).forEach(record=>{if(!record.loanClubId||new Date(record.loanUntil||0).getTime()>now)return;const agreement=world.loans.find(loan=>loan.playerId===record.id&&loan.status==='active');if(agreement){agreement.status='encerrado';agreement.completedAt=career.date;}ended.push({player:record.name,from:record.ownerName||'Clube de origem',to:record.loanClubName||'Clube de destino'});delete record.loanClubId;delete record.loanClubName;delete record.loanUntil;delete record.loanOptionFee;delete record.loanWageShare;delete record.loanAgreementId;});
   if(ended.length){world.news.unshift({season:career.season,text:ended.map(item=>item.player).join(', ')+' retornou de empréstimo.'});world.news=world.news.slice(0,100);}return {world,ended};
+}
+
+function talkMessage(career,talk,subject,body,priority='normal'){
+  career.messages??=[];career.messages.push({id:`talk-${talk.id}-${talk.status}-${Date.now()}`,from:'Diretor de futebol',subject,body,date:career.date||new Date().toISOString(),read:false,priority});career.messages=career.messages.slice(-160);
+}
+
+export function openTransferTalk(career={},catalog={},player={},proposal={}){
+  ensureRivalCareer(career,catalog);const active=['pending','countered','accepted'],identity=playerIdentity(player,player.sourceClubId),current=(career.transferTalks||[]).find(talk=>talk.playerId===identity&&active.includes(talk.status));
+  if(current?.status==='pending')return {talk:current,unchanged:true};
+  const offer={fee:Math.max(0,Number(proposal.fee)||0),salary:Math.max(0,Number(proposal.salary)||0),years:Number(proposal.years)||4,signing:Math.max(0,Number(proposal.signing)||0),installments:Number(proposal.installments)||1,releaseClause:Math.max(0,Number(proposal.releaseClause)||0),appearanceBonus:Math.max(0,Number(proposal.appearanceBonus)||0),goalBonus:Math.max(0,Number(proposal.goalBonus)||0),agentFeeRate:Number(proposal.agentFeeRate)||.05,asking:Math.max(0,Number(proposal.asking)||0),expectedSalary:Math.max(1000,Number(proposal.expectedSalary)||Math.max(1000,Number(player.salary||10)*1000))};
+  const id=current?.id||`talk-${career.season}-${career.week||0}-${identity}`,talk={...(current||{}),id,playerId:identity,player:{...player,id:identity,marketIdentity:identity},playerName:player.name,sourceClubId:player.sourceClubId,sourceClub:player.sourceClub||'Clube vendedor',offer,status:'pending',round:Number(current?.round||0)+1,submittedAt:career.date,responseAt:afterDays(career.date,current?2:3),expiresAt:null,counter:null,history:[...(current?.history||[]),{round:Number(current?.round||0)+1,status:'enviada',at:career.date,fee:offer.fee,salary:offer.salary}]};
+  career.transferTalks=(career.transferTalks||[]).filter(item=>item.id!==id);career.transferTalks.unshift(talk);career.transferTalks=career.transferTalks.slice(0,50);talkMessage(career,talk,'Proposta enviada: '+talk.playerName,'A proposta foi enviada a '+talk.sourceClub+'. Resposta prevista até '+String(talk.responseAt).slice(0,10)+'.');return {talk,unchanged:false};
+}
+
+export function resolveTransferTalks(career={},catalog={}){
+  ensureRivalCareer(career,catalog);const now=new Date(career.date||Date.now()).getTime(),results=[];
+  (career.transferTalks||[]).forEach(talk=>{
+    if(talk.status==='pending'&&new Date(talk.responseAt||0).getTime()<=now){
+      const offer=talk.offer||{},asking=Math.max(0,Number(offer.asking)||0),expected=Math.max(1000,Number(offer.expectedSalary)||Math.max(1000,Number(talk.player?.salary||10)*1000));
+      if(asking>0&&Number(offer.fee||0)<asking*.9){
+        talk.status='countered';talk.counter={...offer,fee:Math.max(Math.round(asking*1.02),Math.round(Number(offer.fee||0)*1.1)),salary:Math.max(expected,Number(offer.salary||0))};talk.expiresAt=afterDays(career.date,7);talk.history=[...(talk.history||[]),{status:'contraproposta',at:career.date,fee:talk.counter.fee,salary:talk.counter.salary}];talkMessage(career,talk,'Contraproposta: '+talk.playerName,talk.sourceClub+' pede '+talk.counter.fee+' pela transferência. A resposta expira em '+String(talk.expiresAt).slice(0,10)+'.','high');results.push({talk,status:talk.status});return;
+      }
+      if(Number(offer.salary||0)<expected*.88){
+        talk.status='countered';talk.counter={...offer,fee:Number(offer.fee)||0,salary:expected};talk.expiresAt=afterDays(career.date,7);talk.history=[...(talk.history||[]),{status:'contraproposta',at:career.date,fee:talk.counter.fee,salary:talk.counter.salary}];talkMessage(career,talk,'Exigência do agente: '+talk.playerName,'O agente pede salário mensal de '+expected+'. A resposta expira em '+String(talk.expiresAt).slice(0,10)+'.','high');results.push({talk,status:talk.status});return;
+      }
+      const competition=transferCompetition(career,catalog,talk.player,{fee:offer.fee,salary:offer.salary,expectedSalary:expected});
+      if(!competition.playerWins){const move=recordRivalTransfer(career,catalog,talk.player,competition);talk.status='lost';talk.winner=move?.to||competition.best?.name||'Um rival';talk.history=[...(talk.history||[]),{status:'perdida',at:career.date,winner:talk.winner}];talkMessage(career,talk,'Negociação perdida: '+talk.playerName,talk.winner+' superou sua proposta. O atleta saiu do mercado.','high');results.push({talk,status:talk.status,move});return;}
+      talk.status='accepted';talk.expiresAt=afterDays(career.date,7);talk.history=[...(talk.history||[]),{status:'aceita',at:career.date,fee:offer.fee,salary:offer.salary}];talkMessage(career,talk,'Proposta aceita: '+talk.playerName,talk.sourceClub+' aceitou os termos. Assine até '+String(talk.expiresAt).slice(0,10)+' para concluir a contratação.','high');results.push({talk,status:talk.status});return;
+    }
+    if(['countered','accepted'].includes(talk.status)&&new Date(talk.expiresAt||0).getTime()<=now){talk.status='expired';talk.history=[...(talk.history||[]),{status:'expirada',at:career.date}];talkMessage(career,talk,'Negociação encerrada: '+talk.playerName,'O prazo de resposta terminou e a negociação foi encerrada.');results.push({talk,status:talk.status});}
+  });
+  return results;
+}
+
+export function withdrawTransferTalk(career={},talkId=''){
+  const talk=(career.transferTalks||[]).find(item=>item.id===talkId);if(!talk||!['pending','countered','accepted'].includes(talk.status))return null;
+  talk.status='withdrawn';talk.withdrawnAt=career.date;talk.history=[...(talk.history||[]),{status:'retirada',at:career.date}];talkMessage(career,talk,'Proposta retirada: '+talk.playerName,'A negociação foi encerrada a seu pedido.');return talk;
 }
 
 function priorityScore(club,player,seed){const needed=(club.needs||[]).includes(player.pos)?22:0,ageFit=player.age<=27?8:player.age<=31?4:0;return needed+ageFit+Number(club.transferAggression||50)*.4+Number(club.rating||60)*.3+(hash(`${seed}:${club.id}:${player.id}`)%18);}

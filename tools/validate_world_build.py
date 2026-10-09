@@ -99,7 +99,7 @@ for ref in re.findall(r'(?:href|src)="\./([^"?#]+)', html):
 require("app-v16.js" in html and "ultimate-v16.css" in html, "Entrypoints V16 ausentes")
 
 sw = (ROOT / "sw.js").read_text(encoding="utf-8")
-require("ultimate-v26.0.0-phase20" in sw, "Cache do service worker não corresponde à Fase 20")
+require("ultimate-v27.0.0-phase21" in sw, "Cache do service worker não corresponde à Fase 21")
 for ref in re.findall(r"'\./([^'?]+)(?:\?[^']*)?'", sw):
     if ref:
         require((ROOT / ref).exists(), f"Referência ausente no service worker: {ref}")
@@ -186,6 +186,10 @@ for marker in ["opponentTactics.width", "coach.adaptability", "MATCH_ENGINE_V2_V
 for marker in ["loanTerms", "recordUserLoan", "completeLoanPurchase", "resolveRivalLoans"]:
     require(marker in rival_career and marker in app_js, f"Empréstimos persistentes Fase 20 incompletos: {marker}")
 require("loanClubId" in rival_career, "Estado de empréstimo persistente ausente na Fase 20")
+for marker in ["openTransferTalk", "resolveTransferTalks", "withdrawTransferTalk"]:
+    require(marker in rival_career and marker in app_js, f"Mesa de negociação da Fase 21 incompleta: {marker}")
+for marker in ["transferTalks", "transfer-talks-panel", "signTransferTalk"]:
+    require(marker in app_js or marker in premium_css, f"Interface de negociação da Fase 21 incompleta: {marker}")
 require((ROOT / "loja.html").is_file(), "Página de loja Fase 12 ausente")
 for facility in ["stadium", "training", "youth", "medical", "scouting", "commercial"]:
     image = ROOT / f"assets/facilities/{facility}.jpg"

@@ -1,4 +1,12 @@
-# Vale Futebol Manager — Ultimate World 26.0
+# Vale Futebol Manager — Ultimate World 27.0
+
+## Fase 21 — mesa de negociação persistente
+
+- uma proposta deixa de contratar o atleta no mesmo toque: clube, empresário e concorrentes analisam os termos ao longo dos dias da carreira;
+- propostas baixas ou salários fora da expectativa retornam como contrapropostas com prazo definido;
+- acordos aceitos exigem assinatura antes de expirarem, e o caixa só é comprometido quando o contrato é efetivamente fechado;
+- a concorrência dos rivais é resolvida no momento da resposta, podendo retirar o atleta do mercado de forma persistente;
+- a central do mercado reúne todas as conversas ativas, com status, data-limite e ações para revisar, assinar ou retirar cada proposta.
 
 ## Fase 20 — empréstimos que afetam o mundo
 
