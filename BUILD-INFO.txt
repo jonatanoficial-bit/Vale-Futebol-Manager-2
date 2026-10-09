@@ -1,5 +1,5 @@
 Vale Futebol Manager — Ultimate World
-Version: 25.0.0-phase19
+Version: 26.0.0-phase20
 Build date: 2026-10-09
 Schema: 2000
 

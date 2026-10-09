@@ -1,5 +1,5 @@
 /** Persistent rival squads, coaches, planning, negotiation pressure and transfer windows. */
-export const RIVAL_CAREER_VERSION='7.0.0';
+export const RIVAL_CAREER_VERSION='8.0.0';
 
 const clamp=(value,min,max)=>Math.max(min,Math.min(max,Number(value)||0));
 const hash=value=>{let n=2166136261;for(const c of String(value)){n^=c.charCodeAt(0);n=Math.imul(n,16777619);}return n>>>0;};
@@ -35,7 +35,7 @@ export function transferWindow(date,club={}){
 export function ensureRivalCareer(career={},catalog={}){
   const current=career.rivalWorld||{},clubs=Array.isArray(catalog.clubs)?catalog.clubs:[],clubsState={...(current.clubs||{})};
   clubs.forEach(club=>{clubsState[club.id]=mergeProfile(club,clubsState[club.id],career.season);});
-  career.rivalWorld={version:RIVAL_CAREER_VERSION,season:Number(career.season)||2026,clubs:clubsState,players:{...(current.players||{})},moves:Array.isArray(current.moves)?current.moves.slice(-220):[],news:Array.isArray(current.news)?current.news.slice(-100):[],negotiations:Array.isArray(current.negotiations)?current.negotiations.slice(-80):[],windows:Array.isArray(current.windows)?current.windows.slice(-24):[],contractEvents:Array.isArray(current.contractEvents)?current.contractEvents.slice(-80):[],managerChanges:Array.isArray(current.managerChanges)?current.managerChanges.slice(-80):[],lastWeek:Number(current.lastWeek)||0};
+  career.rivalWorld={version:RIVAL_CAREER_VERSION,season:Number(career.season)||2026,clubs:clubsState,players:{...(current.players||{})},moves:Array.isArray(current.moves)?current.moves.slice(-220):[],news:Array.isArray(current.news)?current.news.slice(-100):[],negotiations:Array.isArray(current.negotiations)?current.negotiations.slice(-80):[],windows:Array.isArray(current.windows)?current.windows.slice(-24):[],loans:Array.isArray(current.loans)?current.loans.slice(-100):[],contractEvents:Array.isArray(current.contractEvents)?current.contractEvents.slice(-80):[],managerChanges:Array.isArray(current.managerChanges)?current.managerChanges.slice(-80):[],lastWeek:Number(current.lastWeek)||0};
   return career.rivalWorld;
 }
 
@@ -65,8 +65,9 @@ export function reconcileRivalRoster(career={},catalog={},club={},roster=[]){
   const clubId=club.id;
   const base=(roster||[]).map(player=>{const identity=playerIdentity(player,clubId);return {...player,id:identity,marketIdentity:identity,basePlayerId:player.basePlayerId||player.id,sourceClubId:clubId,sourceClub:club.name};});
   const world=registerRivalPlayers(career,catalog,base,clubId);
-  const retained=base.filter(player=>{const record=world.players[player.marketIdentity||player.id];return !record||record.ownerId===clubId;});
-  const arrivals=Object.values(world.players||{}).filter(player=>player.ownerId===clubId&&player.originClubId!==clubId).map(player=>({...player,id:player.id,marketIdentity:player.id,sourceClubId:clubId,sourceClub:club.name,marketRegion:club.continent||'south-america',freeAgent:false}));
+  const current=new Date(career.date||Date.now()).getTime(),loanActive=player=>Boolean(player.loanClubId)&&new Date(player.loanUntil||0).getTime()>current;
+  const retained=base.filter(player=>{const record=world.players[player.marketIdentity||player.id];return !record||(record.ownerId===clubId&&!loanActive(record));});
+  const arrivals=Object.values(world.players||{}).filter(player=>(player.ownerId===clubId&&player.originClubId!==clubId)||loanActive(player)&&player.loanClubId===clubId).map(player=>({...player,id:player.id,marketIdentity:player.id,sourceClubId:clubId,sourceClub:club.name,marketRegion:club.continent||'south-america',freeAgent:false,loanedIn:player.loanClubId===clubId}));
   const byId=new Map();[...retained,...arrivals].forEach(player=>{if(!byId.has(player.id))byId.set(player.id,player);});
   return [...byId.values()].slice(0,40);
 }
@@ -80,6 +81,32 @@ export function recordUserTransfer(career={},catalog={},player={}){
   const world=ensureRivalCareer(career,catalog),record=trackedPlayer(world,player,player.sourceClubId,career),from=record.ownerId;
   record.ownerId=career.club?.id||'user';record.ownerName=career.club?.name||'Seu clube';record.freeAgent=false;record.lastMoveSeason=career.season;record.lastMoveWeek=career.week;
   return {record,from};
+}
+
+export function loanTerms(career={},player={},proposal={}){
+  const durationDays=[180,360].includes(Number(proposal.durationDays))?Number(proposal.durationDays):180,wageShare=clamp(Number(proposal.wageShare??70),50,100),value=valueOf(player),interest=Number(player.marketInterest||50),feeRate=durationDays===360?.095:.06,fee=Math.max(75000,Math.round(value*feeRate/1000)*1000),optionMultiplier=interest>=72?1.06:interest<=42?.88:.96,optionFee=Math.max(250000,Math.round(value*optionMultiplier/1000)*1000),monthlySalary=Math.max(1000,Math.round(Number(player.salary||10)*1000*wageShare/100));
+  return {durationDays,wageShare,fee,optionFee,monthlySalary,loanUntil:new Date(new Date(career.date||Date.now()).getTime()+durationDays*86400000).toISOString(),mandatory:false};
+}
+
+export function recordUserLoan(career={},catalog={},player={},terms={}){
+  const world=ensureRivalCareer(career,catalog),record=trackedPlayer(world,player,player.sourceClubId,career),sourceId=record.ownerId||player.sourceClubId,userId=career.club?.id||'user',id=`loan-${career.season}-${career.week||0}-${record.id}-${userId}`,existing=world.loans.find(loan=>loan.id===id&&loan.status==='active');if(existing)return existing;
+  const agreement={id,playerId:record.id,player:record.name,fromId:sourceId,from:record.ownerName||player.sourceClub||'Clube de origem',toId:userId,to:career.club?.name||'Seu clube',fee:Number(terms.fee)||0,wageShare:Number(terms.wageShare)||70,optionFee:Number(terms.optionFee)||0,endsAt:terms.loanUntil,status:'active',season:career.season,week:Number(career.week)||0};
+  record.loanClubId=userId;record.loanClubName=agreement.to;record.loanUntil=agreement.endsAt;record.loanOptionFee=agreement.optionFee;record.loanWageShare=agreement.wageShare;record.loanAgreementId=id;world.loans.unshift(agreement);world.loans=world.loans.slice(0,100);world.news.unshift({week:agreement.week,season:career.season,text:agreement.to+' recebe '+record.name+' por empréstimo até '+String(agreement.endsAt).slice(0,10)+'.'});world.news=world.news.slice(0,100);return agreement;
+}
+
+export function completeLoanPurchase(career={},catalog={},player={},fee=0){
+  const world=ensureRivalCareer(career,catalog),id=playerIdentity(player,player.sourceClubId),record=world.players[id]||trackedPlayer(world,player,player.sourceClubId,career),agreement=world.loans.find(loan=>loan.playerId===record.id&&loan.status==='active'),buyerId=career.club?.id||'user',seller=world.clubs[record.ownerId],buyer=world.clubs[buyerId],amount=Math.max(0,Number(fee||agreement?.optionFee||record.loanOptionFee||0)),moveId=`loan-buy-${career.season}-${career.week||0}-${record.id}`;
+  record.ownerId=buyerId;record.ownerName=career.club?.name||'Seu clube';record.freeAgent=false;record.lastMoveSeason=career.season;record.lastMoveWeek=career.week;delete record.loanClubId;delete record.loanClubName;delete record.loanUntil;delete record.loanOptionFee;delete record.loanWageShare;delete record.loanAgreementId;
+  if(agreement){agreement.status='comprado';agreement.completedAt=career.date;agreement.purchaseFee=amount;}
+  const move={id:moveId,week:Number(career.week)||0,season:career.season,player:record.name,position:record.pos,from:seller?.name||player.sourceClub||'Clube vendedor',to:career.club?.name||'Seu clube',fee:amount,status:'concluído',reason:'opção de compra exercida',kind:'loan-option'};
+  if(!world.moves.some(item=>item.id===moveId)){world.moves.unshift(move);world.moves=world.moves.slice(0,220);if(seller){seller.budget+=amount;seller.squadDepth=Math.max(16,Number(seller.squadDepth)-1);seller.out.unshift(move);}if(buyer){buyer.budget=Math.max(0,Number(buyer.budget)-amount);buyer.squadDepth=Math.min(34,Number(buyer.squadDepth)+1);buyer.in.unshift(move);}world.news.unshift({week:move.week,season:career.season,text:move.to+' exerceu a opção de compra por '+move.player+'.'});world.news=world.news.slice(0,100);}
+  return {record,agreement,move};
+}
+
+export function resolveRivalLoans(career={},catalog={}){
+  const world=ensureRivalCareer(career,catalog),now=new Date(career.date||Date.now()).getTime(),ended=[];
+  Object.values(world.players||{}).forEach(record=>{if(!record.loanClubId||new Date(record.loanUntil||0).getTime()>now)return;const agreement=world.loans.find(loan=>loan.playerId===record.id&&loan.status==='active');if(agreement){agreement.status='encerrado';agreement.completedAt=career.date;}ended.push({player:record.name,from:record.ownerName||'Clube de origem',to:record.loanClubName||'Clube de destino'});delete record.loanClubId;delete record.loanClubName;delete record.loanUntil;delete record.loanOptionFee;delete record.loanWageShare;delete record.loanAgreementId;});
+  if(ended.length){world.news.unshift({season:career.season,text:ended.map(item=>item.player).join(', ')+' retornou de empréstimo.'});world.news=world.news.slice(0,100);}return {world,ended};
 }
 
 function priorityScore(club,player,seed){const needed=(club.needs||[]).includes(player.pos)?22:0,ageFit=player.age<=27?8:player.age<=31?4:0;return needed+ageFit+Number(club.transferAggression||50)*.4+Number(club.rating||60)*.3+(hash(`${seed}:${club.id}:${player.id}`)%18);}
@@ -125,4 +152,4 @@ function resolveRivalContracts(career,world){
 
 export function settleRivalSeason(career={},worldState={},catalog={}){const world=ensureRivalCareer(career,catalog),summaries=[],managerChanges=[];Object.values(worldState.leagues||{}).forEach(league=>{const table=(league.table||[]).slice().sort((a,b)=>b.points-a.points||b.gd-a.gd||b.rating-a.rating);table.forEach((row,index)=>{const club=world.clubs[row.id];if(!club)return;const swing=index===0?2:index<Math.ceil(table.length*.25)?1:index>=table.length-Number(league.rules?.relegation||0)?-2:-.25;club.rating=clamp(club.rating+swing,45,95);club.budget=Math.max(2_000_000,Math.round(club.budget+(index===0?8_000_000:index<table.length/2?1_500_000:-900_000)));club.seasonForm=Math.round((row.points/Math.max(1,row.played*3))*100);club.needs=positions.filter((_,needIndex)=>(hash(`${career.season}:${club.id}:${needIndex}`)%5)===0).slice(0,3);const poorFinish=index>=Math.max(1,table.length-Number(league.rules?.relegation||2)),changeCoach=poorFinish&&(hash(`${career.season}:${club.id}:coach`)%100)<38;if(changeCoach){const previous=club.managerStyle;club.managerStyle=styles[(styles.indexOf(previous)+1+hash(club.id)%4)%styles.length];club.managerTenure=1;managerChanges.push({id:`manager-${career.season}-${club.id}`,club:club.name,previous,next:club.managerStyle,season:career.season});}else club.managerTenure=Number(club.managerTenure||0)+1;summaries.push({club:club.name,league:league.name,rank:index+1,form:club.seasonForm});});});const contractEvents=resolveRivalContracts(career,world);world.managerChanges=[...managerChanges,...(world.managerChanges||[])].slice(0,80);world.season=Number(career.season||world.season)+1;world.lastWeek=0;world.news.unshift({season:career.season,text:'Mercado rival recalculado com premiações, desempenho, elencos, contratos e estratégia de cada clube.'});return {world,summaries,contractEvents,managerChanges};}
 
-export function rivalMarketBrief(career={}){const world=career.rivalWorld||{},moves=(world.moves||[]).slice(0,5),clubs=Object.values(world.clubs||[]),window=transferWindow(career.date,career.club),freeAgents=Object.values(world.players||{}).filter(player=>!player.ownerId).sort((a,b)=>b.overall-a.overall).slice(0,4);return {version:RIVAL_CAREER_VERSION,moves,clubs:clubs.length,biggestSpenders:clubs.slice().sort((a,b)=>b.budget-a.budget).slice(0,3),news:(world.news||[]).slice(0,3),negotiations:(world.negotiations||[]).slice(0,3),contractEvents:(world.contractEvents||[]).slice(0,4),managerChanges:(world.managerChanges||[]).slice(0,4),freeAgents,window};}
+export function rivalMarketBrief(career={}){const world=career.rivalWorld||{},moves=(world.moves||[]).slice(0,5),clubs=Object.values(world.clubs||[]),window=transferWindow(career.date,career.club),freeAgents=Object.values(world.players||{}).filter(player=>!player.ownerId).sort((a,b)=>b.overall-a.overall).slice(0,4),loans=(world.loans||[]).filter(loan=>loan.status==='active').slice(0,4);return {version:RIVAL_CAREER_VERSION,moves,clubs:clubs.length,biggestSpenders:clubs.slice().sort((a,b)=>b.budget-a.budget).slice(0,3),news:(world.news||[]).slice(0,3),negotiations:(world.negotiations||[]).slice(0,3),loans,contractEvents:(world.contractEvents||[]).slice(0,4),managerChanges:(world.managerChanges||[]).slice(0,4),freeAgents,window};}

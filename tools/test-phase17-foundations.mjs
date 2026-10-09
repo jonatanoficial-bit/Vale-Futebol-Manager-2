@@ -22,7 +22,7 @@ updateContractMood(career,{result:'loss',lineupIds:[]});
 assert.ok(atRisk.marketInterest>=92,'Reserva insatisfeito deve manter ou elevar o interesse externo.');
 
 const world=ensureRivalCareer(career,catalog);
-assert.equal(world.version,'7.0.0');
+assert.equal(world.version,'8.0.0');
 assert.equal(transferWindow(career.date,user).active,true,'Janeiro deve permitir a janela sul-americana.');
 const competition=transferCompetition(career,catalog,target,{fee:1_000_000,salary:10_000,expectedSalary:50_000});
 assert.ok(competition.rivals.length>0,'O mercado precisa produzir concorrentes plausíveis.');

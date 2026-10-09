@@ -1,4 +1,11 @@
-# Vale Futebol Manager — Ultimate World 25.0
+# Vale Futebol Manager — Ultimate World 26.0
+
+## Fase 20 — empréstimos que afetam o mundo
+
+- o empréstimo agora permite escolher prazo de seis ou doze meses e a participação do clube na folha salarial;
+- cada cessão registra taxa, salário assumido, opção de compra e data de retorno no mercado persistente;
+- o atleta deixa a escalação do clube de origem durante a cessão, retorna quando o vínculo termina e muda de dono de forma definitiva quando a opção é exercida;
+- a central de mercado acompanha empréstimos ativos dos rivais junto das transferências, atletas livres e mudanças de treinador.
 
 ## Fase 19 — treinadores rivais em campo
 
