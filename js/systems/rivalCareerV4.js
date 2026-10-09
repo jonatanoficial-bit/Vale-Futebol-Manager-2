@@ -1,5 +1,5 @@
-/** Persistent rival squads, planning, negotiation pressure and transfer windows. */
-export const RIVAL_CAREER_VERSION='6.0.0';
+/** Persistent rival squads, coaches, planning, negotiation pressure and transfer windows. */
+export const RIVAL_CAREER_VERSION='7.0.0';
 
 const clamp=(value,min,max)=>Math.max(min,Math.min(max,Number(value)||0));
 const hash=value=>{let n=2166136261;for(const c of String(value)){n^=c.charCodeAt(0);n=Math.imul(n,16777619);}return n>>>0;};
@@ -8,6 +8,13 @@ const ambitions=['sobrevivência','consolidação','vaga continental','disputa d
 const positions=['GOL','ZAG','LD','LE','VOL','MC','MEI','PD','PE','ATA'];
 const valueOf=player=>Math.max(250000,Number(player?.value||1)*1000000);
 const playerIdentity=(player={},fallbackOwner='free-agents')=>String(player.marketIdentity||player.rivalId||`${player.sourceClubId||fallbackOwner}:${player.basePlayerId||player.id||player.name||'player'}`);
+const COACH_BLUEPRINTS={
+  'posse e construção':{label:'Posse paciente',formation:'4-3-3',mentality:'Equilibrada',pressure:57,tempo:49,width:62,defensiveLine:58,passing:'Curto',marking:'Zona',transition:'Equilibrada'},
+  'transição vertical':{label:'Transição vertical',formation:'4-4-2',mentality:'Equilibrada',pressure:48,tempo:70,width:59,defensiveLine:45,passing:'Direto',marking:'Zona',transition:'Contra-atacar'},
+  'pressão alta':{label:'Pressão agressiva',formation:'4-2-3-1',mentality:'Ofensiva',pressure:75,tempo:68,width:58,defensiveLine:68,passing:'Misto',marking:'Híbrida',transition:'Contra-atacar'},
+  'bloco compacto':{label:'Bloco compacto',formation:'3-5-2',mentality:'Defensiva',pressure:43,tempo:50,width:52,defensiveLine:41,passing:'Misto',marking:'Zona',transition:'Reagrupar'},
+  'jogo pelas pontas':{label:'Amplitude e cruzamentos',formation:'4-3-3',mentality:'Ofensiva',pressure:61,tempo:62,width:76,defensiveLine:56,passing:'Misto',marking:'Híbrida',transition:'Equilibrada'}
+};
 
 function profile(club={},season=2026){
   const key=`${season}:${club.id}`,rating=Number(club.rating)||65,budget=Math.round(Math.max(4_000_000,(rating-50)**2*18_000));
@@ -52,6 +59,21 @@ export function registerRivalPlayers(career={},catalog={},players=[],fallbackOwn
 export function rivalMarketCandidates(career={},catalog={},candidateClubIds=[]){
   const world=ensureRivalCareer(career,catalog),clubs=new Map((catalog.clubs||[]).map(club=>[club.id,club])),candidates=new Set(candidateClubIds),userId=career.club?.id;
   return Object.values(world.players||{}).filter(player=>player.ownerId!==userId&&(!player.ownerId||((player.ownerId!==player.originClubId)&&candidates.has(player.ownerId)))).sort((a,b)=>b.overall-a.overall||a.age-b.age).slice(0,18).map(player=>{const club=clubs.get(player.ownerId),freeAgent=!player.ownerId;return {...player,id:player.id,marketIdentity:player.id,sourceClubId:player.ownerId||'free-agents',sourceClub:freeAgent?'Agente livre':club?.name||'Clube rival',marketRegion:club?.continent||'south-america',freeAgent};});
+}
+
+export function reconcileRivalRoster(career={},catalog={},club={},roster=[]){
+  const clubId=club.id;
+  const base=(roster||[]).map(player=>{const identity=playerIdentity(player,clubId);return {...player,id:identity,marketIdentity:identity,basePlayerId:player.basePlayerId||player.id,sourceClubId:clubId,sourceClub:club.name};});
+  const world=registerRivalPlayers(career,catalog,base,clubId);
+  const retained=base.filter(player=>{const record=world.players[player.marketIdentity||player.id];return !record||record.ownerId===clubId;});
+  const arrivals=Object.values(world.players||{}).filter(player=>player.ownerId===clubId&&player.originClubId!==clubId).map(player=>({...player,id:player.id,marketIdentity:player.id,sourceClubId:clubId,sourceClub:club.name,marketRegion:club.continent||'south-america',freeAgent:false}));
+  const byId=new Map();[...retained,...arrivals].forEach(player=>{if(!byId.has(player.id))byId.set(player.id,player);});
+  return [...byId.values()].slice(0,40);
+}
+
+export function rivalCoachProfile(career={},catalog={},club={}){
+  const world=ensureRivalCareer(career,catalog),rival=world.clubs?.[club.id],style=rival?.managerStyle||rival?.style||'posse e construção',blueprint=COACH_BLUEPRINTS[style]||COACH_BLUEPRINTS['posse e construção'],tenure=Math.max(1,Number(rival?.managerTenure)||1),rating=Number(rival?.rating||club.rating||65),form=Number(rival?.seasonForm||50);
+  return {...blueprint,id:`coach:${club.id||'rival'}:${tenure}`,name:'Comissão técnica de '+(club.name||rival?.name||'rival'),managerStyle:style,managerTenure:tenure,rating:clamp(rating,45,96),adaptability:clamp(42+tenure*5+form*.16,45,92)};
 }
 
 export function recordUserTransfer(career={},catalog={},player={}){

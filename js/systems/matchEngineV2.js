@@ -1,4 +1,4 @@
-export const MATCH_ENGINE_V2_VERSION = '5.2.0';
+export const MATCH_ENGINE_V2_VERSION = '5.3.0';
 
 const POSITION_ORDER = ['GOL','LD','ZAG','ZAG','LE','VOL','MC','MC','PD','ATA','PE'];
 const FORMATION_ROLES = {
@@ -164,10 +164,11 @@ function updateOpponentAI(match){
   const ownSide=match.ownHome?'home':'away',opponentSide=match.ownHome?'away':'home';
   const opponentGoals=opponentSide==='home'?match.homeGoals:match.awayGoals,ownGoals=ownSide==='home'?match.homeGoals:match.awayGoals;
   const opponentXg=opponentSide==='home'?match.xgHome:match.xgAway,ownXg=ownSide==='home'?match.xgHome:match.xgAway;
-  const coach=match.opponentCoach||opponentCoachProfile(match.opponentName,68);let plan=coach.label,reason='aplicar a identidade do treinador rival';
-  if(opponentGoals<ownGoals||(match.minute>=55&&opponentXg+0.35<ownXg)){plan='Tudo ao ataque';reason='buscar o resultado com pressão, linha alta e um segundo atacante';match.opponentTactics={...match.opponentTactics,formation:'4-4-2',mentality:'Ofensiva',pressure:clamp(match.opponentTactics.pressure+12,20,90),tempo:clamp(match.opponentTactics.tempo+10,20,90),defensiveLine:clamp(match.opponentTactics.defensiveLine+8,20,85)};if(match.minute>=55)makeOpponentSubstitution(match,'dar mais presença ofensiva');}
+  const coach=match.opponentCoach||opponentCoachProfile(match.opponentName,68),urgency=clamp(7+Number(coach.adaptability||60)*.08,8,15);let plan=coach.label,reason='aplicar a identidade do treinador rival';
+  if(opponentGoals<ownGoals||(match.minute>=55&&opponentXg+0.35<ownXg)){plan='Tudo ao ataque';reason='buscar o resultado com pressão, linha alta e um segundo atacante';match.opponentTactics={...match.opponentTactics,formation:'4-4-2',mentality:'Ofensiva',pressure:clamp(match.opponentTactics.pressure+urgency,20,90),tempo:clamp(match.opponentTactics.tempo+urgency*.8,20,90),defensiveLine:clamp(match.opponentTactics.defensiveLine+urgency*.6,20,85)};if(match.minute>=55)makeOpponentSubstitution(match,'dar mais presença ofensiva');}
   else if(match.minute>=70&&opponentGoals>ownGoals){plan='Fechar espaços';reason='proteger a vantagem com bloco baixo e contra-ataque';match.opponentTactics={...match.opponentTactics,formation:'3-5-2',mentality:'Defensiva',pressure:clamp(match.opponentTactics.pressure-9,20,90),tempo:clamp(match.opponentTactics.tempo-12,20,90),defensiveLine:clamp(match.opponentTactics.defensiveLine-10,20,85),transition:'Contra-atacar'};makeOpponentSubstitution(match,'reforçar a proteção defensiva');}
-  else if(match.minute===28){plan=coach.label;reason='impor a identidade do treinador no meio-campo';match.opponentTactics={...match.opponentTactics,formation:coach.formation,pressure:clamp(match.opponentTactics.pressure+(coach.pressure-55)*.45,20,90),defensiveLine:clamp(match.opponentTactics.defensiveLine+(coach.defensiveLine-52)*.3,20,85)};}
+  else if(match.minute===28){plan=coach.label;reason='impor a identidade do treinador no meio-campo';match.opponentTactics={...match.opponentTactics,formation:coach.formation,mentality:coach.mentality,pressure:clamp(match.opponentTactics.pressure+(coach.pressure-match.opponentTactics.pressure)*.65,20,90),tempo:clamp(match.opponentTactics.tempo+(coach.tempo-match.opponentTactics.tempo)*.65,20,90),width:clamp(match.opponentTactics.width+(coach.width-match.opponentTactics.width)*.65,25,85),defensiveLine:clamp(match.opponentTactics.defensiveLine+(coach.defensiveLine-match.opponentTactics.defensiveLine)*.65,20,85),passing:coach.passing,marking:coach.marking,transition:coach.transition};}
+  else if(match.minute===55&&coach.transition==='Contra-atacar'){plan='Transição preparada';reason='convidar o adversário e atacar o espaço com velocidade';match.opponentTactics={...match.opponentTactics,tempo:clamp(match.opponentTactics.tempo+5,20,90),defensiveLine:clamp(match.opponentTactics.defensiveLine-4,20,85),transition:'Contra-atacar'};}
   else if(match.minute===70)makeOpponentSubstitution(match,'renovar a intensidade');
   match.opponentPlan=plan;addEvent(match,'tactical',`${match.opponentName} muda o plano para ${plan.toLowerCase()}: ${reason}.`,opponentSide);addSignal(match,opponentSide,`IA: ${plan}`,reason,64);
 }

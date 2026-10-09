@@ -1,4 +1,11 @@
-# Vale Futebol Manager — Ultimate World 24.0
+# Vale Futebol Manager — Ultimate World 25.0
+
+## Fase 19 — treinadores rivais em campo
+
+- o técnico persistente de cada clube rival leva sua identidade para as partidas, com formação, mentalidade, pressão, ritmo, amplitude, linha defensiva, passe, marcação e transição próprios;
+- atletas que saem de um rival deixam sua escalação, enquanto reforços rastreados passam a compor o elenco e o banco do novo clube nas partidas futuras;
+- a IA adversária reafirma o estilo do técnico no meio-campo, usa a capacidade de adaptação para reagir ao placar e ajusta a transição para explorar o contexto da partida;
+- a tela ao vivo identifica o plano do técnico rival, deixando claro por que cada adversário se comporta de modo diferente.
 
 ## Fase 18 — elencos rivais e virada de temporada
 

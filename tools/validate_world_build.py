@@ -99,7 +99,7 @@ for ref in re.findall(r'(?:href|src)="\./([^"?#]+)', html):
 require("app-v16.js" in html and "ultimate-v16.css" in html, "Entrypoints V16 ausentes")
 
 sw = (ROOT / "sw.js").read_text(encoding="utf-8")
-require("ultimate-v24.0.0-phase18" in sw, "Cache do service worker não corresponde à Fase 18")
+require("ultimate-v25.0.0-phase19" in sw, "Cache do service worker não corresponde à Fase 19")
 for ref in re.findall(r"'\./([^'?]+)(?:\?[^']*)?'", sw):
     if ref:
         require((ROOT / ref).exists(), f"Referência ausente no service worker: {ref}")
@@ -178,6 +178,11 @@ for marker in ["renderMarketPressure", "transfer-rival-interest", "market-pressu
     require(marker in app_js or marker in premium_css, f"Interface de mercado Fase 17 incompleta: {marker}")
 for marker in ["registerRivalPlayers", "rivalMarketCandidates", "recordUserTransfer", "contractEvents", "managerChanges"]:
     require(marker in rival_career and marker in app_js, f"Elencos rivais Fase 18 incompletos: {marker}")
+require("COACH_BLUEPRINTS" in rival_career, "Perfis táticos dos treinadores rivais ausentes na Fase 19")
+for marker in ["reconcileRivalRoster", "rivalCoachProfile"]:
+    require(marker in rival_career and marker in app_js, f"Treinadores rivais Fase 19 incompletos: {marker}")
+for marker in ["opponentTactics.width", "coach.adaptability", "MATCH_ENGINE_V2_VERSION"]:
+    require(marker in engine_v2, f"IA adversária Fase 19 incompleta: {marker}")
 require((ROOT / "loja.html").is_file(), "Página de loja Fase 12 ausente")
 for facility in ["stadium", "training", "youth", "medical", "scouting", "commercial"]:
     image = ROOT / f"assets/facilities/{facility}.jpg"

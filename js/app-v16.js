@@ -10,10 +10,10 @@ import { TACTICAL_ROLES_VERSION, ensureTacticalRoles, roleEffects, roleLabel, ro
 import { COMPETITION_FORMATS_VERSION, buildDomesticCupPath, buildContinentalPath, domesticCupFormat, tieOutcome, groupProgress, describeFixtureFormat } from './systems/competitionFormatsV3.js';
 import { MARKET_INTELLIGENCE_VERSION, ensureMarketIntelligence, hydrateMarketProfile, marketNegotiationProfile, scoutRegions, scoutInvestment, applyContractMatchBonuses, updateContractMood, contractRisk, refreshMarketPressure } from './systems/marketIntelligenceV3.js';
 import { NATIONAL_CAREER_VERSION, ensureNationalCareer, nationalSelectionRanking, nationalSelectionBrief, observeNationalRegion, callUpByPerformance, recordNationalPerformance, recordNationalTournament } from './systems/nationalCareerV3.js';
-import { RIVAL_CAREER_VERSION, ensureRivalCareer, simulateRivalMarketWeek, settleRivalSeason, rivalMarketBrief, transferCompetition, recordRivalTransfer, registerRivalPlayers, rivalMarketCandidates, recordUserTransfer } from './systems/rivalCareerV4.js';
+import { RIVAL_CAREER_VERSION, ensureRivalCareer, simulateRivalMarketWeek, settleRivalSeason, rivalMarketBrief, transferCompetition, recordRivalTransfer, registerRivalPlayers, rivalMarketCandidates, recordUserTransfer, reconcileRivalRoster, rivalCoachProfile } from './systems/rivalCareerV4.js';
 import { REGULATION_ENGINE_VERSION, regulationForLeague, resolveRelegationTable, regulationCalendarSummary } from './systems/regulationEngineV4.js';
 
-const VERSION = '24.0.0-phase18';
+const VERSION = '25.0.0-phase19';
 const SCHEMA = 2000;
 const STORE_KEY = 'vale-futebol-manager-v16';
 const BACKUP_KEY = 'vale-futebol-manager-v16-backup';
@@ -1298,7 +1298,7 @@ async function startMatch(source='club') {
     if(recovery.recovered.length)c.messages.push({id:'medical-clearance-'+Date.now(),from:'Departamento médico',subject:'Atletas liberados',body:recovery.recovered.join(', ')+' '+(recovery.recovered.length===1?'voltou':'voltaram')+' a ficar disponível(is) para a comissão técnica.',date:new Date().toISOString(),read:false,priority:'normal'});
   }
   let opponentRoster=[];
-  if(fixture.opponent.rosterPath){try{opponentRoster=(await fetchJson(fixture.opponent.rosterPath)).players.map(normalizePlayer);}catch{}}
+  if(fixture.opponent.rosterPath){try{const rawOpponent=(await fetchJson(fixture.opponent.rosterPath)).players.map(normalizePlayer).map(player=>{const identity=fixture.opponent.id+':'+player.id;return {...player,id:identity,basePlayerId:player.id,marketIdentity:identity,sourceClubId:fixture.opponent.id,sourceClub:fixture.opponent.name,marketRegion:fixture.opponent.continent||''};});opponentRoster=reconcileRivalRoster(c,session.catalog,fixture.opponent,rawOpponent).map(normalizePlayer);}catch{}}
   if(national)ensureNationalCallup(national);
   const ownRoster=national?national.roster.filter(player=>national.calledUpIds.includes(player.id)):c.roster, ownIds=national?national.lineupIds:c.lineupIds;
   let ownLineup=lineupFor(ownRoster,ownIds);
@@ -1307,12 +1307,12 @@ async function startMatch(source='club') {
   const selectedIds=new Set(ownLineup.map(player=>player.id)),ownBench=ownRoster.filter(player=>!selectedIds.has(player.id)&&isPlayerAvailable(player)).sort((a,b)=>effectiveOverall(b,b.pos)-effectiveOverall(a,a.pos)).slice(0,12).map(player=>({...player,attributes:{...(player.attributes||{})}}));
   const ownTeam=national?national.team:c.club;
   const ownRoleEffects=national?{}:roleEffects(ownLineup,ensureTacticalRoles(c));
-  const opponentLineup=opponentRoster.length?selectBestLineup(opponentRoster,'4-2-3-1'):[];
+  const rivalCoach=national?opponentCoachProfile(fixture.opponent.id+':'+fixture.opponent.name,fixture.opponent.rating):rivalCoachProfile(c,session.catalog,fixture.opponent);
+  const opponentLineup=opponentRoster.length?selectBestLineup(opponentRoster,rivalCoach.formation):[];
   const opponentStarterIds=new Set(opponentLineup.map(player=>player.id)),opponentBench=opponentRoster.filter(player=>!opponentStarterIds.has(player.id)&&isPlayerAvailable(player)).sort((a,b)=>effectiveOverall(b,b.pos)-effectiveOverall(a,a.pos)).slice(0,9);
-  const rivalCoach=opponentCoachProfile(fixture.opponent.id+':'+fixture.opponent.name,fixture.opponent.rating);
   const engine=createMatchEngineV2({
     seed:stableNumber(fixture.id+':'+c.season+':'+c.club.id),ownHome:Boolean(fixture.home),ownName:ownTeam.name,opponentName:fixture.opponent.name,
-    ownLineup,opponentLineup,opponentBench,opponentCoach:rivalCoach,opponentRating:fixture.opponent.rating,ownTactics:c.tactics,ownRoleEffects
+    ownLineup,opponentLineup,opponentBench,opponentCoach:rivalCoach,opponentTactics:rivalCoach,opponentRating:fixture.opponent.rating,ownTactics:c.tactics,ownRoleEffects
   });
   session.match={source,fixture,...engine,speed:1,running:false,tacticalOpen:false,tacticalWasRunning:false,liveSelectedPlayer:null,substitutionsUsed:0,maxSubstitutions:5,substitutionHistory:[],substitutedOut:[],ownBench,tacticalPositions:(c.tacticalPositions||FORMATIONS[c.tactics.formation]||FORMATIONS['4-3-3']).map(point=>[...point]),coachInsight:'O jogo começa equilibrado. Observe posse, desgaste e qualidade das chances.'};
   session.matchEventFilter='all';
@@ -1383,7 +1383,7 @@ function renderMatch() {
   const statRows=app.querySelectorAll('.stats-panel .stat-row'),cardRow=statRows[5];
   if(cardRow){
     cardRow.innerHTML='<strong>'+m.cardsHome+'</strong><span>Cartões</span><strong>'+m.cardsAway+'</strong>';
-    cardRow.insertAdjacentHTML('afterend','<div class="stat-row"><strong>'+fitness+'%</strong><span>Físico / plano rival</span><strong>'+escapeHtml(m.opponentPlan)+'</strong></div>');
+    cardRow.insertAdjacentHTML('afterend','<div class="stat-row"><strong>'+fitness+'%</strong><span>Rival · '+escapeHtml(m.opponentCoach?.label||'Plano')+'</span><strong>'+escapeHtml(m.opponentPlan)+'</strong></div>');
   }
 }
 
