@@ -1,4 +1,12 @@
-# Vale Futebol Manager — Ultimate World 27.0
+# Vale Futebol Manager — Ultimate World 28.0
+
+## Fase 22 — rivais com ciclo de reconstrução
+
+- cada rival monta um plano persistente para a temporada seguinte a partir da posição final, do caixa, da pressão da diretoria e das carências do elenco;
+- os planos determinam objetivo, teto de investimento, controle de folha, posições prioritárias e se o clube precisa vender antes de contratar;
+- clubes em crise podem vender atletas rastreados para equilibrar o orçamento, atualizando dono, caixa e elenco no mundo persistente;
+- renovações consideram a folha planejada e a estabilidade da diretoria, enquanto mudanças de treinador passam a registrar se vieram de pressão ou reconstrução;
+- a central de mercado mostra os planos dos rivais e as vendas financeiras realizadas, sem poluir a navegação principal.
 
 ## Fase 21 — mesa de negociação persistente
 
